@@ -1,0 +1,105 @@
+{% comment %}
+  Product reviews
+  Reviews come from the Shop app. The left column shows the average rating
+  and count from the standard reviews.rating / reviews.rating_count
+  metafields (when the app fills them). Add the Shop app's reviews block to
+  list the reviews. The section is hidden until it has one or the other.
+{% endcomment %}
+{%- liquid
+  assign rating = product.metafields.reviews.rating.value
+  assign rating_count = product.metafields.reviews.rating_count.value | default: 0
+  assign apps = section.blocks | where: 'type', '@app'
+-%}
+{%- if rating != blank or apps.size > 0 -%}
+  <section class="page product-reviews space-{{ section.settings.spacing }}" id="Reviews">
+    {%- capture caption -%}{%- if rating_count > 0 -%}{{ 'products.reviews.count' | t: count: rating_count }}{%- endif -%}{%- endcapture -%}
+    {%- render 'section-head', label: section.settings.label, color: 'blue', caption: caption -%}
+    <div class="product-reviews__grid">
+      <div class="product-reviews__summary">
+        {%- if rating != blank -%}
+          <p class="product-reviews__score">{{ rating.rating | round: 1 }}</p>
+          {%- render 'stars', rating: rating.rating, max: rating.scale_max, class: 'product-reviews__stars' -%}
+        {%- endif -%}
+      </div>
+      <div class="product-reviews__list">
+        {%- for block in apps -%}
+          {% render block %}
+        {%- endfor -%}
+      </div>
+    </div>
+  </section>
+{%- elsif request.design_mode -%}
+  <p class="page label product-reviews__empty">{{ 'products.reviews.empty' | t }}</p>
+{%- endif -%}
+
+{% stylesheet %}
+  .product-reviews__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--grid-gap);
+    padding-top: 8px;
+  }
+
+  .product-reviews__summary {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .product-reviews__score {
+    font: 500 clamp(80px, 12vw, 200px) / 0.85 var(--font-display);
+    letter-spacing: -0.05em;
+  }
+
+  .product-reviews__stars {
+    font-size: 22px;
+  }
+
+  .product-reviews__list {
+    grid-column: span 2;
+    padding-left: 12px;
+    border-top: var(--border);
+  }
+
+  .product-reviews__empty {
+    padding-block: 20px;
+  }
+
+  @media screen and (max-width: 749px) {
+    .product-reviews__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .product-reviews__list {
+      grid-column: auto;
+      padding-left: 0;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Product reviews",
+  "class": "section-product-reviews",
+  "tag": "div",
+  "settings": [
+    { "type": "paragraph", "content": "Add the Shop app's reviews block below. The average rating shows when the app fills the reviews.rating metafield." },
+    { "type": "text", "id": "label", "label": "Label", "default": "Reviews" },
+    {
+      "type": "select",
+      "id": "spacing",
+      "label": "Top spacing",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "large"
+    }
+  ],
+  "blocks": [{ "type": "@app" }],
+  "enabled_on": { "templates": ["product"] },
+  "presets": [{ "name": "Product reviews" }]
+}
+{% endschema %}

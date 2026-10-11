@@ -1,0 +1,146 @@
+{% comment %}
+  The artist
+  Portrait, name, short bio, longer text and a details list, from the
+  product's custom.artist metaobject. Hidden when the product has no artist.
+
+  Artist metaobject fields (all optional except name): name, portrait (file),
+  bio (single or multi-line text), story (rich text), practice, based_in,
+  elsewhere (text), since (integer or text), collection (collection).
+  "See all editions" links to the artist page when the metaobject has web
+  pages enabled, otherwise to the artist's collection.
+{% endcomment %}
+{%- assign artist = product.metafields.custom.artist.value -%}
+{%- if artist != blank -%}
+  {%- liquid
+    assign artist_collection = artist.collection.value
+    assign artist_url = artist.system.url | default: artist_collection.url
+    assign since_caption = ''
+    if artist.since.value != blank
+      assign since_caption = 'products.artist.since' | t: year: artist.since.value
+    endif
+  -%}
+  <section class="page artist-block space-{{ section.settings.spacing }}">
+    {%- render 'section-head', label: section.settings.label, color: 'red', caption: since_caption -%}
+    <div class="artist-block__grid">
+      <div class="media artist-block__portrait" style="--ratio: 3 / 4; --media-bg: var(--color-red);">
+        {%- render 'image', image: artist.portrait.value, sizes: '(min-width: 750px) 33vw, 100vw', alt_fallback: artist.name.value, placeholder: 'image' -%}
+      </div>
+      <div class="artist-block__body">
+        <h2 class="artist-block__name">{{ artist.name.value | escape }}<span class="dot">.</span></h2>
+        {%- if artist.bio.value != blank -%}
+          <p class="artist-block__bio">{{ artist.bio.value | escape }}</p>
+        {%- endif -%}
+        {%- if artist.story.value != blank -%}
+          <div class="rte artist-block__story">{{ artist.story | metafield_tag }}</div>
+        {%- endif -%}
+        <dl class="spec-list artist-block__details">
+          {%- if artist.practice.value != blank -%}<dt>{{ 'products.artist.practice' | t }}</dt><dd>{{ artist.practice.value | escape }}</dd>{%- endif -%}
+          {%- if artist.based_in.value != blank -%}<dt>{{ 'products.artist.based_in' | t }}</dt><dd>{{ artist.based_in.value | escape }}</dd>{%- endif -%}
+          {%- if artist_collection != blank -%}<dt>{{ 'products.artist.editions' | t }}</dt><dd>{{ 'products.artist.editions_count' | t: count: artist_collection.products_count, shop: shop.name }}</dd>{%- endif -%}
+          {%- if artist.elsewhere.value != blank -%}<dt>{{ 'products.artist.elsewhere' | t }}</dt><dd>{{ artist.elsewhere.value | escape }}</dd>{%- endif -%}
+        </dl>
+        {%- if artist_url != blank -%}
+          <a class="button button--small artist-block__link" href="{{ artist_url }}">
+            {%- if artist_collection != blank -%}
+              {{ 'products.artist.see_all' | t: count: artist_collection.products_count }}
+            {%- else -%}
+              {{ 'products.artist.view' | t }}
+            {%- endif -%}
+          </a>
+        {%- endif -%}
+      </div>
+    </div>
+  </section>
+{%- endif -%}
+
+{% stylesheet %}
+  .artist-block__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--grid-gap);
+  }
+
+  .artist-block__portrait {
+    margin-top: 8px;
+  }
+
+  .artist-block__body {
+    grid-column: span 2;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 8px 0 0 12px;
+  }
+
+  .artist-block__name {
+    font: 500 clamp(48px, 6vw, 96px) / 0.9 var(--font-display);
+    letter-spacing: -0.05em;
+  }
+
+  .artist-block__bio {
+    max-width: 44ch;
+    font: 400 clamp(20px, 1.8vw, 28px) / 1.2 var(--font-display);
+    letter-spacing: -0.02em;
+  }
+
+  .artist-block__story {
+    max-width: 52ch;
+  }
+
+  .artist-block__details {
+    gap: 6px 24px;
+    max-width: 520px;
+    padding-top: 12px;
+    border-top: var(--border);
+  }
+
+  .artist-block__details:not(:has(dt)) {
+    display: none;
+  }
+
+  .artist-block__details dd {
+    margin: 0;
+  }
+
+  .artist-block__link {
+    align-self: flex-start;
+    padding: 14px 18px;
+  }
+
+  @media screen and (max-width: 749px) {
+    .artist-block__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .artist-block__body {
+      grid-column: auto;
+      padding-left: 0;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "The artist",
+  "class": "section-artist-block",
+  "tag": "div",
+  "settings": [
+    { "type": "paragraph", "content": "Shown when the product's custom.artist metafield points to an artist." },
+    { "type": "text", "id": "label", "label": "Label", "default": "The artist" },
+    {
+      "type": "select",
+      "id": "spacing",
+      "label": "Top spacing",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "large"
+    }
+  ],
+  "enabled_on": { "templates": ["product"] },
+  "presets": [{ "name": "The artist" }]
+}
+{% endschema %}
