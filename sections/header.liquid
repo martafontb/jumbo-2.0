@@ -76,7 +76,7 @@
     <div class="site-header__logo nav-in" style="--delay: 0s;">
       <span class="nav-in__inner">
         {%- if is_home -%}<h1 class="site-header__logo-heading">{%- endif -%}
-        <a href="{{ routes.root_url }}" class="site-header__logo-link">
+        <a href="{{ routes.root_url }}" class="site-header__logo-link tap-target">
           {%- if settings.logo != blank -%}
             {{
               settings.logo

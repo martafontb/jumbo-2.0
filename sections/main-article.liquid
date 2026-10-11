@@ -17,7 +17,7 @@
   <div class="main-article__progress" aria-hidden="true"><span data-progress></span></div>
 
   <nav class="label label--sm main-article__crumb" aria-label="{{ 'products.breadcrumb' | t }}">
-    <a href="{{ blog.url }}">{{ blog.title | escape }}</a>
+    <a class="tap-target" href="{{ blog.url }}">{{ blog.title | escape }}</a>
     {%- if article.tags.first != blank -%}<span aria-hidden="true"> / </span>{{ article.tags.first | escape }}{%- endif -%}
   </nav>
   <h1 class="main-article__title">{{ article.title | escape }}</h1>

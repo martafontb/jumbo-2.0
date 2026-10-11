@@ -52,7 +52,7 @@
         {%- if section.settings.card_label != blank -%}<span class="pill pill--blue">{{ section.settings.card_label | escape }}</span>{%- endif -%}
         {%- if section.settings.card_text != blank -%}<p class="faq__card-text">{{ section.settings.card_text | escape }}</p>{%- endif -%}
         {%- if contact_email != blank -%}
-          <a class="faq__card-link" href="mailto:{{ contact_email }}">{{ contact_email }} →</a>
+          <a class="faq__card-link tap-target" href="mailto:{{ contact_email }}">{{ contact_email }} →</a>
         {%- endif -%}
       </aside>
     {%- endif -%}

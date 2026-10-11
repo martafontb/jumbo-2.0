@@ -66,7 +66,7 @@
         {%- for block in hotspots -%}
           {%- assign product = block.settings.product -%}
           <li>
-            <button type="button" class="shop-look__item" data-spot-trigger="{{ forloop.index0 }}" style="--item-color: var(--color-{{ block.settings.color }});">
+            <button type="button" class="shop-look__item tap-target" data-spot-trigger="{{ forloop.index0 }}" style="--item-color: var(--color-{{ block.settings.color }});">
               <span class="shop-look__item-name">
                 <span class="label label--sm">{{ forloop.index | prepend: '0' }}</span>
                 <span class="shop-look__item-title">{{ product.title | default: block.settings.title | default: placeholder_title | escape }}</span>

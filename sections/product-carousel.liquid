@@ -61,7 +61,7 @@
             <div class="product-carousel__note label label--sm">{{ section.settings.end_note }}</div>
           {%- endif -%}
           {%- if section.settings.end_button_label != blank -%}
-            <a class="product-carousel__cta" href="{{ section.settings.end_button_link | default: collection.url | default: routes.all_products_collection_url }}">
+            <a class="product-carousel__cta tap-target" href="{{ section.settings.end_button_link | default: collection.url | default: routes.all_products_collection_url }}">
               {{- section.settings.end_button_label | escape -}}
             </a>
           {%- endif -%}

@@ -28,7 +28,7 @@
 -%}
 <div class="page main-artist">
   <nav class="label label--sm main-artist__crumb" aria-label="{{ 'products.breadcrumb' | t }}">
-    <a href="{{ section.settings.index_link | default: '/pages/artists' }}">{{ section.settings.index_label | escape }}</a>
+    <a class="tap-target" href="{{ section.settings.index_link | default: '/pages/artists' }}">{{ section.settings.index_label | escape }}</a>
     <span aria-hidden="true"> / </span>{{ artist.name.value | escape }}
   </nav>
   <h1 class="main-artist__name">{{ artist.name.value | escape }}<span class="dot">.</span></h1>

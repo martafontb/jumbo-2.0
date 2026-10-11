@@ -404,16 +404,35 @@ a {
   color: var(--color-white);
 }
 
-/* Larger hit area on touch screens without changing the visual size. */
+/*
+  Touch targets: on touch screens, small controls get an invisible 44px-tall
+  hit area (a centred ::after) without changing their visual size. Dense
+  text-link lists (footer columns) keep their spacing and meet the WCAG 2.2
+  AA 24px minimum instead.
+*/
 @media (pointer: coarse) {
-  .chip {
+  .chip,
+  .button,
+  .link-mono,
+  .tap-target {
     position: relative;
   }
 
-  .chip::after {
+  .chip::after,
+  .button::after,
+  .link-mono::after,
+  .tap-target::after {
     content: '';
     position: absolute;
-    inset: -8px -2px;
+    top: 50%;
+    left: 50%;
+    width: max(100%, 44px);
+    height: max(100%, 44px);
+    translate: -50% -50%;
+  }
+
+  input[type='range'] {
+    height: 44px;
   }
 }
 
@@ -596,8 +615,10 @@ a {
   text-transform: uppercase;
 }
 
-.form-message--error {
-  color: var(--color-red);
+.form-message--error::before {
+  content: '● ';
+  content: '● ' / ''; /* decorative: not read out where alt text for content is supported */
+  color: var(--color-red); /* red text on the page background is below 4.5:1, so only the marker is red */
 }
 
 /* ---------- Overlays (dialog-based drawers, modals, sheets) ---------- */

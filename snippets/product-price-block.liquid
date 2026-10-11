@@ -29,11 +29,11 @@
     {%- endif -%}
   </p>
   {%- if variant.available == false -%}
-    <p class="price-block__stock price-block__stock--out">● {{ 'products.sold_out' | t }}</p>
+    <p class="price-block__stock price-block__stock--out"><span class="price-block__dot" aria-hidden="true">●</span> {{ 'products.sold_out' | t }}</p>
   {%- elsif show_edition -%}
-    <p class="price-block__stock price-block__stock--edition">● {{ 'products.edition_remaining' | t: remaining: remaining, size: edition_size }}</p>
+    <p class="price-block__stock price-block__stock--edition"><span class="price-block__dot" aria-hidden="true">●</span> {{ 'products.edition_remaining' | t: remaining: remaining, size: edition_size }}</p>
   {%- elsif block.settings.show_in_stock -%}
-    <p class="price-block__stock price-block__stock--in">● {{ 'products.in_stock' | t }}</p>
+    <p class="price-block__stock price-block__stock--in"><span class="price-block__dot" aria-hidden="true">●</span> {{ 'products.in_stock' | t }}</p>
   {%- endif -%}
 </div>
 {%- if variant.unit_price_measurement -%}
@@ -87,8 +87,9 @@
     text-transform: uppercase;
   }
 
-  .price-block__stock--edition { color: var(--color-red); }
-  .price-block__stock--in { color: var(--color-blue); }
+  /* Colour on the marker only: red and blue text on the page background fall below 4.5:1. */
+  .price-block__stock--edition .price-block__dot { color: var(--color-red); }
+  .price-block__stock--in .price-block__dot { color: var(--color-blue); }
 
   .price-block__progress {
     border: 1px solid var(--color-grey);

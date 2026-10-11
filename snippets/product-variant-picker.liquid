@@ -82,7 +82,7 @@
                 </span>
               </label>
             {%- else -%}
-              <label for="{{ input_id }}" class="variant-picker__pill{% unless value.available %} is-unavailable{% endunless %}">
+              <label for="{{ input_id }}" class="tap-target variant-picker__pill{% unless value.available %} is-unavailable{% endunless %}">
                 {{- value | escape -}}
                 {%- unless value.available -%}<span class="visually-hidden">, {{ 'products.sold_out' | t }}</span>{%- endunless -%}
               </label>
