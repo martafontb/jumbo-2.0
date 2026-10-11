@@ -15,7 +15,7 @@ See `CLAUDE.md` for coding rules and `docs/phase-1-audit.md` for the architectur
 | 1 | Audit and plan | Done |
 | 2 | Foundation: tokens, fonts, layout, announcement bar, header (mega menus, mobile menu, predictive search), footer, baseline templates | Done |
 | 3 | Homepage: hero, statement, reviews strip, product carousel, studio note, video grid, shop the look, packs, events, stories | Done |
-| 4 | Collection, product, cart (drawer + page), content pages | Next. Collection, product, cart, blog and article currently use working baseline sections |
+| 4 | Collection, product (editions + merch), cart drawer and cart page | Done. Content pages (artists, journal, print guide, FAQ, policies, about) are next | |
 | 5 | Interactions and polish | Planned |
 | 6–7 | Validation and handover | Planned |
 
@@ -64,15 +64,36 @@ Reviews come from the Shop app. The theme never invents review content:
 
 ### Metafields and metaobjects
 
-The theme reads these product metafields when present. All are optional; create them in Settings > Custom data > Products.
+All optional. Create product metafields in Settings > Custom data > Products, and the `artist` metaobject in Settings > Custom data > Metaobjects.
+
+**Product metafields**
 
 | Namespace.key | Type | Used for |
 |---|---|---|
-| `custom.card_meta` | Single line text | Caption under product cards, e.g. "edition of 120 · 3 colours" |
-| `custom.card_tag` | Single line text | Tag pill on product cards in the collection grid (Phase 4) |
-| `reviews.rating` | Rating (set by the reviews app) | Stars on product cards |
+| `custom.card_meta` | Single line text | Caption under product cards, add-on blurbs |
+| `custom.card_tag` | Single line text | Tag pill on collection cards and "Complete the set" cards |
+| `custom.card_span` | Integer (1 or 2) | Card width in the collection grid |
+| `custom.card_ground` | Single line text (blue, red, grey, ink, bg) | Card background colour override |
+| `custom.artist` | Metaobject reference (artist) | Breadcrumb, artist line, "The artist" block, "Also from …" |
+| `custom.year` | Integer or text | Artist line, e.g. "Mara Oyelaran · 2026" |
+| `custom.edition_size` | Integer | "38 of 120 remaining" and the stock bar (needs Shopify-tracked inventory) |
+| `custom.edition_detail` | Single line text | Edition spec, e.g. "signed and numbered" |
+| `custom.inks` | List of single line text (or ink metaobjects with `name`) | Inks spec |
+| `custom.paper`, `custom.dimensions`, `custom.format`, `custom.material` | Single line text | Spec list |
+| `custom.size_chart` | Multi-line text | Merch size chart. First line is the header, e.g. `Size \| Chest \| Length \| Sleeve`, then one row per size |
+| `custom.short_title` | Single line text | Label in the merch product switcher (e.g. "Tee") |
+| `custom.pairs_with` | List of products | "Complete the set" |
+| `reviews.rating`, `reviews.rating_count` | Set by the reviews app | Stars on cards, product reviews summary |
 
-Further definitions planned for Phase 4 are listed in `docs/phase-1-audit.md` §3.
+**Artist metaobject (`artist`)**, with web pages turned on for artist URLs: `name` (single line text, required), `portrait` (file), `bio` (text), `story` (rich text), `practice`, `based_in`, `elsewhere` (single line text), `since` (integer), `collection` (collection reference: the artist's products).
+
+### Products, collections and cart
+
+- **Templates:** editions use the default product template. Assign **product.merch** to tees, totes and cushions (product page > Theme template). Merch colour options show as swatches when the option values are linked to Shopify's colour swatches; otherwise they show as pills.
+- **Collection chips:** set a "Filter chips menu" on the Collection section (e.g. All, Editions, Zines, Books). Without one, the chips use the first list filter from the Search & Discovery app (e.g. Product type). Sorting uses Shopify's sort options.
+- **Studio notes** in the collection grid are blocks on the Collection section ("Show after product" sets the position).
+- **Cart drawer:** Theme settings > Cart chooses the drawer or the cart page. The drawer's add-ons come from a collection set on the Cart drawer section (Theme editor > any page > Cart drawer). The free-shipping bar uses the threshold in Theme settings > Cart.
+- **Size & shipping guide:** content lives on the Product section (sizes, shipping zones, returns text). Keep the shipping zones in sync with Settings > Shipping.
 
 ### Homepage content
 
@@ -106,6 +127,9 @@ Shared JS: feature modules import from `@theme/global` (an import map in `snippe
 
 - The design's photography, logo and hero video weren't supplied. Empty image slots show Shopify placeholder illustrations.
 - The prototype's copy is used as editable defaults. Prices, shipping thresholds, events and policies are placeholders to replace.
+- The free-shipping bar is hidden when a customer shops in a currency other than the store's, because Liquid has no exchange rate to convert the threshold.
+- The product reviews area shows the average from the `reviews.*` metafields plus the Shop app's block. The design's per-star distribution bars need data the theme can't read, so they aren't built.
+- Collection filtering and sorting reload the page, using Shopify's URL parameters. This is deliberate: it works without JS.
 - Without JS, desktop mega menus don't open. Their top-level links still work, and the footer carries the same links.
 
 ## Credits

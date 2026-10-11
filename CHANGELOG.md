@@ -5,6 +5,11 @@ All notable changes to this theme are documented here. The format follows [Keep 
 ## [Unreleased]
 
 ### Added
+- Collection page: title with count, sticky filter bar (menu or Search & Discovery chips, sort), gap-free mixed-span grid driven by `custom.card_span`, studio-note tiles, empty state.
+- Product page (`main-product`): stacked or grid gallery, sticky info column built from blocks (breadcrumb, switcher, accented title, artist line, price with edition stock, specs from metafields, variant picker with swatches and size chart, buy buttons with quantity, live total and "View cart", guide link, description, text, app blocks), size & shipping guide drawer, Section Rendering on variant change, no-JS variant fallback.
+- Product sections: related products (artist collection or recommendations), "Complete the set" (`custom.pairs_with`), product reviews (Shop app blocks + `reviews.*` metafields), "The artist" (artist metaobject). New `product.merch` template.
+- Cart drawer (static section, re-rendered through the Section Rendering API) with steppers, removal, add-on upsells and free-shipping progress; designed cart page with ink summary card. Both work as plain forms without JS.
+- `cart-items`, `product-info`, `quantity-input` and `product-related` modules; `formatMoney` helper.
 - Homepage sections: hero (video or image, side image, rotating review card), statement, reviews strip (Shop app blocks + optional real quotes), product carousel with drag-to-scroll and an end card, studio note, video grid, shop the look (hotspots with add to cart), packs (savings from compare-at prices), events (featured countdown, kind filters, .ics reminders, auto-hiding past events) and stories (9:16 viewer with auto-advance).
 - Shared snippets: product card, price, stars, section head, add-to-cart form; `product-form`, `drag-scroller`, `quote-rotator`, `video-tile`, `event-list`, `story-viewer` and `hero` modules.
 - Theme foundation on Shopify Skeleton v1.0.0: layout, password layout, Theme Check config, `.shopifyignore`.
