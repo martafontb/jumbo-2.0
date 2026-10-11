@@ -8,14 +8,14 @@
   @param {object} link - Shopify menu link
   @param {string} [color] - Palette token: blue | red | grey | ink | white | bg
   @param {string} [pill] - Pill text override
-  @param {string} [size] - 'lg' (default) or 'md' (mobile "info" rows with an arrow)
+  @param {string} [style] - 'lg' (default) or 'md' (mobile "info" rows with an arrow)
 {% enddoc %}
 {%- liquid
   assign color = color | default: 'grey' | strip
-  assign size = size | default: 'lg'
+  assign row_style = style | default: 'lg'
   assign pill_text = pill | strip
 
-  if pill_text == blank and size == 'lg'
+  if pill_text == blank and row_style == 'lg'
     case link.type
       when 'collection_link'
         assign pill_text = link.object.products_count
@@ -27,7 +27,7 @@
   endif
 -%}
 <a
-  class="menu-row menu-row--{{ size }}"
+  class="menu-row menu-row--{{ row_style }}"
   href="{{ link.url }}"
   style="--row-color: var(--color-{{ color }}); --row-fg: {% if color == 'ink' %}var(--color-white){% else %}var(--color-ink){% endif %};"
   {% if link.current %}
@@ -35,12 +35,12 @@
   {% endif %}
 >
   <span class="menu-row__label">
-    {%- if size == 'lg' -%}
+    {%- if row_style == 'lg' -%}
       <span class="dot-swatch" style="--swatch: var(--color-{{ color }});" aria-hidden="true"></span>
     {%- endif -%}
     {{- link.title | escape -}}
   </span>
-  {%- if size == 'lg' -%}
+  {%- if row_style == 'lg' -%}
     {%- if pill_text != blank -%}
       <span class="pill pill--grey">{{ pill_text }}</span>
     {%- endif -%}

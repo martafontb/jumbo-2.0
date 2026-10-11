@@ -71,8 +71,9 @@
     outline: none;
   }
 
+  /* Focus indicator: the rule thickens from 2px to 4px (same ink colour). */
   .main-search__form:focus-within {
-    border-bottom-color: var(--color-blue);
+    box-shadow: 0 2px 0 0 var(--color-ink);
   }
 {% endstylesheet %}
 

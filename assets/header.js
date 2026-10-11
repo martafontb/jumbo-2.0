@@ -153,7 +153,42 @@ class SiteHeader extends HTMLElement {
 
   /* ----- Shared ----- */
 
+  /**
+   * Panels live after the header in the DOM (outside the blend), so route Tab
+   * explicitly: trigger → panel → next header item, and Shift+Tab back out.
+   */
+  routeTab(event) {
+    if (!this.openPanel) return;
+    const focusables = [...this.openPanel.querySelectorAll('a[href], button:not([disabled])')];
+    if (!focusables.length) return;
+    const first = focusables[0];
+    const last = focusables[focusables.length - 1];
+    const target = event.target;
+
+    if (target === this.openTrigger && !event.shiftKey) {
+      event.preventDefault();
+      first.focus();
+    } else if (target === first && event.shiftKey) {
+      event.preventDefault();
+      this.openTrigger.focus();
+    } else if (target === last && !event.shiftKey) {
+      const headerItems = [...this.header.querySelectorAll('a[href], button:not([disabled])')].filter(
+        (el) => el.offsetParent !== null
+      );
+      const next = headerItems[headerItems.indexOf(this.openTrigger) + 1];
+      if (next) {
+        event.preventDefault();
+        this.closeMega();
+        next.focus();
+      }
+    }
+  }
+
   onKeydown = (event) => {
+    if (event.key === 'Tab') {
+      this.routeTab(event);
+      return;
+    }
     if (event.key !== 'Escape') return;
     if (this.openPanel) {
       const trigger = this.openTrigger;

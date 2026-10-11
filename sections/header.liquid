@@ -56,7 +56,7 @@
                       aria-controls="MegaMenu-{{ block.id }}"
                       data-mega-trigger="MegaMenu-{{ block.id }}"
                     >
-                      {%- capture label -%}{{ block.settings.label | escape }} <span class="site-header__caret">▾</span>{%- endcapture -%}
+                      {%- capture label -%}{{ block.settings.label | escape }} <span class="site-header__caret" aria-hidden="true">▾</span>{%- endcapture -%}
                       {%- render 'roll-text', text: label -%}
                     </button>
                   {%- else -%}
@@ -156,7 +156,7 @@
           {%- endif -%}
           <div class="mobile-menu__rows">
             {%- for link in section.settings.mobile_menu.links -%}
-              {%- render 'menu-row', link: link, size: 'md' -%}
+              {%- render 'menu-row', link: link, style: 'md' -%}
             {%- endfor -%}
             {%- if section.settings.show_search -%}
               <a class="menu-row menu-row--md" href="{{ routes.search_url }}" data-search-trigger aria-haspopup="dialog">
@@ -327,8 +327,10 @@
     display: block;
   }
 
-  .has-animations .nav-in__inner {
-    animation: nav-in var(--duration-nav-in) var(--ease-out-expo) var(--delay, 0s) both;
+  @media (prefers-reduced-motion: no-preference) {
+    .has-animations .nav-in__inner {
+      animation: nav-in var(--duration-nav-in) var(--ease-out-expo) var(--delay, 0s) both;
+    }
   }
 
   /* Mega menus */
