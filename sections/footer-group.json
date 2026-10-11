@@ -1,0 +1,37 @@
+{
+  "type": "footer",
+  "name": "Footer group",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "shop": {
+          "type": "menu",
+          "settings": { "heading": "Shop", "pill_color": "red", "menu": "footer" }
+        },
+        "info": {
+          "type": "menu",
+          "settings": { "heading": "Info", "pill_color": "grey", "menu": "footer-info" }
+        },
+        "visit": {
+          "type": "text",
+          "settings": {
+            "heading": "Visit",
+            "pill_color": "blue",
+            "text": "<p>Unit 4, Canal Yard</p><p>Workshop: Two-colour printing<br/>Sat 24 Oct · 10:00</p>"
+          }
+        },
+        "follow": {
+          "type": "social",
+          "settings": { "heading": "Follow", "pill_color": "blue", "newsletter_label": "Newsletter" }
+        }
+      },
+      "block_order": ["shop", "info", "visit", "follow"],
+      "settings": {
+        "statement": "<p><strong>Jumbo Press</strong> is a risograph studio and print shop.</p>",
+        "copyright": ""
+      }
+    }
+  },
+  "order": ["footer"]
+}

@@ -1,0 +1,308 @@
+{% comment %}
+  Footer
+  Statement on the left (spans two of four columns on desktop), link/text
+  columns on the right, each headed by a coloured pill. Bottom row: legal
+  links (a chosen menu, or the store's policies) and copyright.
+  A "Follow" column lists the social links from Theme settings and can show a
+  link that opens the newsletter popup.
+{% endcomment %}
+<footer class="site-footer">
+  <div class="site-footer__top">
+    {%- if section.settings.statement != blank -%}
+      <div class="site-footer__statement">{{ section.settings.statement }}</div>
+    {%- endif -%}
+
+    <div class="site-footer__columns">
+      {%- for block in section.blocks -%}
+        <div class="site-footer__column" {{ block.shopify_attributes }}>
+          {%- if block.settings.heading != blank -%}
+            <h2 class="pill pill--{{ block.settings.pill_color }} site-footer__heading">{{ block.settings.heading | escape }}</h2>
+          {%- endif -%}
+
+          {%- case block.type -%}
+            {%- when 'menu' -%}
+              {%- if block.settings.menu.links.size > 0 -%}
+                <ul class="site-footer__links" role="list">
+                  {%- for link in block.settings.menu.links -%}
+                    <li>
+                      <a href="{{ link.url }}" {% if link.current %}aria-current="page"{% endif %}>{{ link.title | escape }}</a>
+                    </li>
+                  {%- endfor -%}
+                </ul>
+              {%- endif -%}
+
+            {%- when 'text' -%}
+              <div class="site-footer__text">{{ block.settings.text }}</div>
+
+            {%- when 'social' -%}
+              <ul class="site-footer__links" role="list">
+                {%- if settings.social_instagram_link != blank -%}
+                  <li><a href="{{ settings.social_instagram_link }}" rel="noopener" target="_blank">Instagram<span class="visually-hidden"> {{ 'accessibility.opens_new_window' | t }}</span></a></li>
+                {%- endif -%}
+                {%- if settings.social_tiktok_link != blank -%}
+                  <li><a href="{{ settings.social_tiktok_link }}" rel="noopener" target="_blank">TikTok<span class="visually-hidden"> {{ 'accessibility.opens_new_window' | t }}</span></a></li>
+                {%- endif -%}
+                {%- if settings.social_facebook_link != blank -%}
+                  <li><a href="{{ settings.social_facebook_link }}" rel="noopener" target="_blank">Facebook<span class="visually-hidden"> {{ 'accessibility.opens_new_window' | t }}</span></a></li>
+                {%- endif -%}
+                {%- if block.settings.newsletter_label != blank -%}
+                  <li>
+                    <a href="#Newsletter" data-overlay-open="NewsletterPopup">{{ block.settings.newsletter_label | escape }}</a>
+                  </li>
+                {%- endif -%}
+              </ul>
+          {%- endcase -%}
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+
+  <div class="site-footer__bottom">
+    <ul class="site-footer__legal" role="list">
+      {%- if section.settings.legal_menu.links.size > 0 -%}
+        {%- for link in section.settings.legal_menu.links -%}
+          <li><a href="{{ link.url }}">{{ link.title | escape }}</a></li>
+        {%- endfor -%}
+      {%- else -%}
+        {%- for policy in shop.policies -%}
+          <li><a href="{{ policy.url }}">{{ policy.title | escape }}</a></li>
+        {%- endfor -%}
+      {%- endif -%}
+    </ul>
+    <p>
+      {%- if section.settings.copyright != blank -%}
+        {{ section.settings.copyright | escape }}
+      {%- else -%}
+        &copy; {{ 'now' | date: '%Y' }} {{ shop.name | escape }}
+      {%- endif -%}
+    </p>
+  </div>
+</footer>
+
+{% stylesheet %}
+  .site-footer {
+    display: flex;
+    flex-direction: column;
+    gap: 64px;
+    margin-top: var(--footer-gap);
+    padding: 56px var(--page-pad-x) 24px;
+    border-top: var(--border);
+    background: var(--color-bg);
+    color: var(--color-ink);
+    font: 400 var(--text-label) / 1.5 var(--font-mono);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+  }
+
+  .site-footer a {
+    color: var(--color-ink);
+    text-decoration: none;
+  }
+
+  .site-footer a:hover {
+    color: var(--color-ink);
+    text-decoration: underline;
+  }
+
+  .site-footer__top {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px var(--grid-gap);
+  }
+
+  .site-footer__statement {
+    max-width: 16ch;
+    font: 500 clamp(32px, 4.4vw, 72px) / 0.95 var(--font-display);
+    letter-spacing: -0.04em;
+    text-transform: none;
+  }
+
+  .site-footer__statement strong,
+  .site-footer__statement b {
+    font: inherit;
+  }
+
+  .site-footer__columns {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px var(--grid-gap);
+    align-content: start;
+  }
+
+  .site-footer__column {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .site-footer__heading {
+    margin: 0;
+    font-size: var(--text-label);
+  }
+
+  .site-footer__links {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .site-footer__text p + p {
+    margin-top: 6px;
+  }
+
+  .site-footer__bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px 24px;
+  }
+
+  .site-footer__legal {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 20px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  @media screen and (max-width: 749px) {
+    .site-footer {
+      gap: 40px;
+      padding-top: 40px;
+    }
+
+    .site-footer__top {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 28px;
+    }
+
+    .site-footer__columns {
+      gap: 28px 12px;
+    }
+
+    .site-footer__links a,
+    .site-footer__legal a {
+      display: inline-block;
+      padding: 4px 0;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Footer",
+  "class": "section-footer",
+  "max_blocks": 8,
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "statement",
+      "label": "Statement",
+      "default": "<p><strong>Jumbo Press</strong> is a risograph studio and print shop.</p>"
+    },
+    {
+      "type": "link_list",
+      "id": "legal_menu",
+      "label": "Legal links",
+      "info": "Leave empty to list your store policies automatically."
+    },
+    {
+      "type": "text",
+      "id": "copyright",
+      "label": "Copyright text",
+      "info": "Leave empty for “© year store name”."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "menu",
+      "name": "Link list",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Shop" },
+        {
+          "type": "select",
+          "id": "pill_color",
+          "label": "Heading colour",
+          "options": [
+            { "value": "red", "label": "Red" },
+            { "value": "blue", "label": "Blue" },
+            { "value": "grey", "label": "Grey" }
+          ],
+          "default": "red"
+        },
+        { "type": "link_list", "id": "menu", "label": "Menu", "default": "footer" }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Text",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Visit" },
+        {
+          "type": "select",
+          "id": "pill_color",
+          "label": "Heading colour",
+          "options": [
+            { "value": "red", "label": "Red" },
+            { "value": "blue", "label": "Blue" },
+            { "value": "grey", "label": "Grey" }
+          ],
+          "default": "blue"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Unit 4, Canal Yard</p><p>Workshop: Two-colour printing<br/>Sat 24 Oct · 10:00</p>"
+        }
+      ]
+    },
+    {
+      "type": "social",
+      "name": "Social and newsletter",
+      "limit": 1,
+      "settings": [
+        { "type": "paragraph", "content": "Social links are set in Theme settings > Social media." },
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Follow" },
+        {
+          "type": "select",
+          "id": "pill_color",
+          "label": "Heading colour",
+          "options": [
+            { "value": "red", "label": "Red" },
+            { "value": "blue", "label": "Blue" },
+            { "value": "grey", "label": "Grey" }
+          ],
+          "default": "blue"
+        },
+        {
+          "type": "text",
+          "id": "newsletter_label",
+          "label": "Newsletter link label",
+          "info": "Opens the newsletter popup. Leave empty to hide.",
+          "default": "Newsletter"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Footer",
+      "blocks": [
+        { "type": "menu", "settings": { "heading": "Shop", "pill_color": "red" } },
+        { "type": "menu", "settings": { "heading": "Info", "pill_color": "grey" } },
+        { "type": "text" },
+        { "type": "social" }
+      ]
+    }
+  ],
+  "enabled_on": {
+    "groups": ["footer"]
+  }
+}
+{% endschema %}
