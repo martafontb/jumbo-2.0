@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "main": {
@@ -13,13 +22,20 @@
           }
         }
       },
-      "block_order": ["note-1"],
+      "block_order": [
+        "note-1"
+      ],
       "settings": {
+        "title": "",
+        "intro": "",
+        "chip_menu": "collections",
         "show_sort": true,
         "grounds": "blue, grey, red, ink, blue, red",
         "per_page": 24
       }
     }
   },
-  "order": ["main"]
+  "order": [
+    "main"
+  ]
 }
