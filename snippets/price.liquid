@@ -1,0 +1,52 @@
+{% doc %}
+  Product or variant price in mono: "From" for varying prices, struck-through
+  compare-at price on sale, "Sold out" when unavailable.
+
+  @param {object} product - Product
+  @param {object} [variant] - Variant; when set, its price is shown instead
+  @param {boolean} [show_sold_out] - Show "Sold out" instead of the price when unavailable
+  @param {string} [class] - Extra classes
+{% enddoc %}
+{%- liquid
+  assign target = variant | default: product.selected_or_first_available_variant
+  assign price = target.price
+  assign compare = target.compare_at_price
+  if variant == blank and product.price_varies
+    assign price = product.price_min
+  endif
+  assign available = product.available
+  if variant != blank
+    assign available = variant.available
+  endif
+-%}
+<span class="price {{ class }}">
+  {%- if show_sold_out and available == false -%}
+    {{ 'products.sold_out' | t }}
+  {%- else -%}
+    {%- if compare > price -%}
+      <span class="visually-hidden">{{ 'products.price.regular' | t }}</span>
+      <s class="price__compare">{{ compare | money }}</s>
+      <span class="visually-hidden">{{ 'products.price.sale' | t }}</span>
+    {%- endif -%}
+    {%- if variant == blank and product.price_varies -%}
+      {%- assign formatted = price | money -%}
+      {{ 'products.price.from' | t: price: formatted }}
+    {%- else -%}
+      {{ price | money }}
+    {%- endif -%}
+  {%- endif -%}
+</span>
+
+{% stylesheet %}
+  .price {
+    font: 400 var(--text-label) / 1.35 var(--font-mono);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .price__compare {
+    opacity: 0.55;
+    margin-right: 4px;
+  }
+{% endstylesheet %}

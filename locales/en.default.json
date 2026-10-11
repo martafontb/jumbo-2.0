@@ -71,6 +71,51 @@
     },
     "blog": {
       "empty": "No stories yet."
+    },
+    "hero": {
+      "play": "Play video",
+      "pause": "Pause video"
+    },
+    "studio_note": {
+      "empty": "Studio note: add a quote in the theme editor to show this section."
+    },
+    "reviews": {
+      "previous": "Previous review",
+      "next": "Next review",
+      "empty": "Reviews strip: add a rating, a review quote or the Shop app block to show this section."
+    },
+    "carousel": {
+      "label": "Products"
+    },
+    "video": {
+      "play": "Play {{ title }}",
+      "pause": "Pause {{ title }}"
+    },
+    "shop_the_look": {
+      "add": "+ Add to cart"
+    },
+    "events": {
+      "reminder_set": "Reminder set ✓",
+      "set": "Set ✓",
+      "countdown": "Time until the event",
+      "units": {
+        "days": "Days",
+        "hours": "Hrs",
+        "minutes": "Min",
+        "seconds": "Sec"
+      },
+      "directions": "Get directions →",
+      "remind": "Remind me",
+      "filter": "Filter events",
+      "all": "All",
+      "details": "Details →"
+    },
+    "stories": {
+      "watch": "Watch",
+      "viewer": "Stories",
+      "close": "Close stories",
+      "previous": "Previous story",
+      "next": "Next story"
     }
   },
   "products": {
@@ -83,7 +128,13 @@
     "unavailable": "Unavailable",
     "add_to_cart": "Add to cart",
     "quantity": "Quantity",
-    "variant": "Option"
+    "variant": "Option",
+    "placeholder_title": "Product title",
+    "added": "Added ✓",
+    "save": "Save {{ amount }}",
+    "rating": {
+      "label": "Rated {{ rating }} out of {{ max }}"
+    }
   },
   "cart": {
     "title": "Cart",

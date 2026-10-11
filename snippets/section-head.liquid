@@ -1,0 +1,28 @@
+{% doc %}
+  Section divider: ink rule, a pill label on the left and a mono caption on
+  the right. Renders nothing when both are blank.
+
+  @param {string} [label] - Pill text
+  @param {string} [color] - Pill colour token: blue | red | grey | bg
+  @param {string} [caption] - Right-hand caption
+  @param {string} [tag] - Heading element for the label, default 'h2'
+{% enddoc %}
+{%- if label != blank or caption != blank -%}
+  {%- assign heading_tag = tag | default: 'h2' -%}
+  <div class="section-head">
+    {%- if label != blank -%}
+      <{{ heading_tag }} class="pill pill--{{ color | default: 'blue' }} section-head__label">{{ label | escape }}</{{ heading_tag }}>
+    {%- else -%}
+      <span></span>
+    {%- endif -%}
+    {%- if caption != blank -%}
+      <span class="label label--sm">{{ caption | escape }}</span>
+    {%- endif -%}
+  </div>
+{%- endif -%}
+
+{% stylesheet %}
+  .section-head__label {
+    margin: 0;
+  }
+{% endstylesheet %}

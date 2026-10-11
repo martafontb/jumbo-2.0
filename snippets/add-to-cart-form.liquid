@@ -1,0 +1,43 @@
+{% doc %}
+  Compact add-to-cart form for cards (hotspots, packs, add-ons). Adds the
+  product's first available variant. Works without JS as a normal POST to
+  /cart/add; <product-form> upgrades it to the Cart API.
+
+  For products with several purchasable variants, link to the product page
+  instead: this form can't choose an option.
+
+  @param {object} product - Product
+  @param {string} [label] - Button label, default "Add to cart"
+  @param {string} [class] - Extra classes on the button
+{% enddoc %}
+{%- liquid
+  assign variant = product.selected_or_first_available_variant
+  assign button_label = 'products.add_to_cart' | t
+  if label != blank
+    assign button_label = label
+  endif
+-%}
+<product-form class="add-to-cart">
+  {%- form 'product', product, class: 'add-to-cart__form', novalidate: 'novalidate' -%}
+    <input type="hidden" name="id" value="{{ variant.id }}">
+    <input type="hidden" name="quantity" value="{{ variant.quantity_rule.min | default: 1 }}">
+    <button
+      type="submit"
+      name="add"
+      class="button button--small add-to-cart__button {{ class }}"
+      {% unless variant.available %}
+        disabled
+      {% endunless %}
+    >
+      <span data-label>
+        {%- if variant.available -%}
+          {{ button_label | escape }}
+        {%- else -%}
+          {{ 'products.sold_out' | t }}
+        {%- endif -%}
+      </span>
+    </button>
+    <p class="form-message form-message--error" role="alert" data-error hidden></p>
+  {%- endform -%}
+</product-form>
+<script src="{{ 'product-form.js' | asset_url }}" type="module"></script>

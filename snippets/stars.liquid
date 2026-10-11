@@ -1,0 +1,24 @@
+{% doc %}
+  Star rating as text glyphs (filled ★, empty ☆) with an accessible label.
+
+  @param {number} rating - Rating value, e.g. 4.8
+  @param {number} [max] - Scale maximum, default 5
+  @param {string} [class] - Extra classes
+{% enddoc %}
+{%- liquid
+  assign max = max | default: 5
+  assign filled = rating | round
+-%}
+<span class="stars {{ class }}" role="img" aria-label="{{ 'products.rating.label' | t: rating: rating, max: max }}">
+  {%- for i in (1..max) -%}
+    {%- if i <= filled -%}★{%- else -%}☆{%- endif -%}
+  {%- endfor -%}
+</span>
+
+{% stylesheet %}
+  .stars {
+    font: 400 14px / 1 var(--font-mono);
+    letter-spacing: 0.1em;
+    white-space: nowrap;
+  }
+{% endstylesheet %}
