@@ -80,6 +80,20 @@
       "block_order": ["event-launch", "event-workshop", "event-fair", "event-weekender", "event-market"],
       "settings": { "label": "Find us", "caption": "Fairs, workshops, launches", "heading": "See you there", "feature_label": "Next fair", "spacing": "medium" }
     },
+    "inks": {
+      "type": "ink-marquee",
+      "blocks": {
+        "ink-1": { "type": "ink", "settings": { "name": "Jumbo Red", "color": "#EA5A46" } },
+        "ink-2": { "type": "ink", "settings": { "name": "Jumbo Yellow", "color": "#FFE800" } },
+        "ink-3": { "type": "ink", "settings": { "name": "Jumbo Green", "color": "#00A95C" } },
+        "ink-4": { "type": "ink", "settings": { "name": "Jumbo Blue", "color": "#0078BF" } },
+        "ink-5": { "type": "ink", "settings": { "name": "Jumbo Aqua", "color": "#5EC8E5" } },
+        "ink-6": { "type": "ink", "settings": { "name": "Jumbo Purple", "color": "#765BA7" } },
+        "ink-7": { "type": "ink", "settings": { "name": "Jumbo Fluo-Green", "color": "#44D62C" } }
+      },
+      "block_order": ["ink-1", "ink-2", "ink-3", "ink-4", "ink-5", "ink-6", "ink-7"],
+      "settings": {}
+    },
     "stories": {
       "type": "stories",
       "blocks": {
@@ -91,5 +105,5 @@
       "settings": { "label": "@jumbopress", "caption": "Follow along", "account": "jumbopress", "spacing": "medium" }
     }
   },
-  "order": ["hero", "intro", "reviews", "editions", "studio-note", "on-the-press", "shop-the-studio", "packs", "events", "stories"]
+  "order": ["hero", "intro", "reviews", "editions", "inks", "studio-note", "on-the-press", "shop-the-studio", "packs", "events", "stories"]
 }

@@ -1,0 +1,235 @@
+{% comment %}
+  Ink marquee
+  A continuously scrolling row of rounded colour blocks, one per ink, each
+  labelled with the ink's name and an optional code (e.g. a Pantone or hex
+  reference). Each ink is a block. The row pauses on hover and keyboard
+  focus and has a pause button (WCAG 2.2.2). Under reduced motion it doesn't
+  move; it becomes a row you can scroll.
+
+  The list is printed twice so the loop is seamless; the copy is hidden from
+  assistive technology.
+{% endcomment %}
+{%- render 'section-border', section: section -%}
+{%- liquid
+  assign inks = section.blocks | where: 'type', 'ink'
+  case section.settings.size
+    when 'small'
+      assign block_width = '160px'
+    when 'large'
+      assign block_width = '320px'
+    else
+      assign block_width = '240px'
+  endcase
+  assign region_label = section.settings.label
+  if region_label == blank
+    assign region_label = 'sections.ink_marquee.label' | t
+  endif
+-%}
+{%- if inks.size > 0 -%}
+  <ink-marquee
+    class="ink-marquee space-{{ section.settings.spacing }}{% if section.settings.direction == 'right' %} ink-marquee--reverse{% endif %}"
+    style="--marquee-duration: {{ section.settings.speed | times: inks.size }}s; --ink-block: {{ block_width }};"
+    data-play-label="{{ 'sections.ink_marquee.play' | t | escape }}"
+    data-pause-label="{{ 'sections.ink_marquee.pause' | t | escape }}"
+  >
+    {%- if section.settings.label != blank or section.settings.caption != blank -%}
+      <div class="page ink-marquee__head">
+        {%- render 'section-head', label: section.settings.label, color: section.settings.label_color, caption: section.settings.caption -%}
+      </div>
+    {%- endif -%}
+
+    <div class="ink-marquee__viewport" tabindex="0" role="region" aria-label="{{ region_label | escape }}">
+      <div class="ink-marquee__track">
+        {%- for copy in (1..2) -%}
+          <ul class="ink-marquee__group" role="list" {% if copy == 2 %}aria-hidden="true" inert{% endif %}>
+            {%- for block in inks -%}
+              <li class="ink-marquee__ink" style="--ink: {{ block.settings.color }};" {% if copy == 1 %}{{ block.shopify_attributes }}{% endif %}>
+                <span class="pill pill--bg ink-marquee__name">{{ block.settings.name | escape }}</span>
+                {%- if block.settings.code != blank -%}
+                  <span class="pill pill--bg ink-marquee__code">{{ block.settings.code | escape }}</span>
+                {%- endif -%}
+              </li>
+            {%- endfor -%}
+          </ul>
+        {%- endfor -%}
+      </div>
+    </div>
+
+    <div class="page ink-marquee__controls">
+      <button type="button" class="icon-button ink-marquee__toggle" data-marquee-toggle aria-label="{{ 'sections.ink_marquee.pause' | t }}">
+        <span data-icon-pause aria-hidden="true">❚❚</span>
+        <span data-icon-play aria-hidden="true" hidden>▶</span>
+      </button>
+    </div>
+  </ink-marquee>
+
+  <script src="{{ 'ink-marquee.js' | asset_url }}" type="module"></script>
+{%- endif -%}
+
+{% stylesheet %}
+  .ink-marquee__head {
+    margin-bottom: 16px;
+  }
+
+  .ink-marquee__viewport {
+    overflow: hidden;
+  }
+
+  .ink-marquee__viewport:focus-visible {
+    outline-offset: -2px;
+  }
+
+  .ink-marquee__track {
+    display: flex;
+    width: max-content;
+    animation: ink-marquee var(--marquee-duration, 40s) linear infinite;
+  }
+
+  .ink-marquee--reverse .ink-marquee__track {
+    animation-direction: reverse;
+  }
+
+  .ink-marquee:hover .ink-marquee__track,
+  .ink-marquee:focus-within .ink-marquee__track,
+  .ink-marquee.is-paused .ink-marquee__track {
+    animation-play-state: paused;
+  }
+
+  .ink-marquee__group {
+    display: flex;
+    gap: var(--grid-gap);
+    margin: 0;
+    padding: 0 var(--grid-gap) 0 0;
+    list-style: none;
+  }
+
+  .ink-marquee__ink {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: var(--ink-block);
+    aspect-ratio: 3 / 4;
+    padding: 8px;
+    border-radius: var(--radius-lg);
+    background: var(--ink);
+  }
+
+  .ink-marquee__controls {
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 8px;
+  }
+
+  @keyframes ink-marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* No movement: a row the visitor scrolls, the copy and the button hidden. */
+  @media (prefers-reduced-motion: reduce) {
+    .ink-marquee__viewport {
+      overflow-x: auto;
+    }
+
+    .ink-marquee__track {
+      animation: none;
+    }
+
+    .ink-marquee__group[aria-hidden='true'],
+    .ink-marquee__controls {
+      display: none;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .ink-marquee__ink {
+      width: calc(var(--ink-block) * 0.7);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Ink marquee",
+  "class": "section-ink-marquee",
+  "tag": "section",
+  "max_blocks": 30,
+  "settings": [
+    { "type": "checkbox", "id": "show_border", "label": "Show top border", "default": true },
+    { "type": "text", "id": "label", "label": "Label", "default": "Our inks" },
+    {
+      "type": "select",
+      "id": "label_color",
+      "label": "Label colour",
+      "options": [
+        { "value": "blue", "label": "Blue" },
+        { "value": "red", "label": "Red" },
+        { "value": "grey", "label": "Grey" }
+      ],
+      "default": "red"
+    },
+    { "type": "text", "id": "caption", "label": "Caption", "default": "Every colour we print" },
+    {
+      "type": "select",
+      "id": "size",
+      "label": "Block size",
+      "options": [
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    { "type": "range", "id": "speed", "label": "Seconds per ink", "info": "Higher is slower.", "min": 2, "max": 12, "step": 1, "unit": "s", "default": 5 },
+    {
+      "type": "select",
+      "id": "direction",
+      "label": "Direction",
+      "options": [
+        { "value": "left", "label": "Right to left" },
+        { "value": "right", "label": "Left to right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "select",
+      "id": "spacing",
+      "label": "Space below",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "large"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "ink",
+      "name": "Ink",
+      "settings": [
+        { "type": "text", "id": "name", "label": "Name", "default": "Jumbo Red" },
+        { "type": "color", "id": "color", "label": "Colour", "default": "#EA5A46" },
+        { "type": "text", "id": "code", "label": "Code", "info": "Optional, e.g. a Pantone or hex reference." }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Ink marquee",
+      "blocks": [
+        { "type": "ink", "settings": { "name": "Jumbo Red", "color": "#EA5A46" } },
+        { "type": "ink", "settings": { "name": "Jumbo Yellow", "color": "#FFE800" } },
+        { "type": "ink", "settings": { "name": "Jumbo Green", "color": "#00A95C" } },
+        { "type": "ink", "settings": { "name": "Jumbo Blue", "color": "#0078BF" } },
+        { "type": "ink", "settings": { "name": "Jumbo Aqua", "color": "#5EC8E5" } },
+        { "type": "ink", "settings": { "name": "Jumbo Purple", "color": "#765BA7" } },
+        { "type": "ink", "settings": { "name": "Jumbo Fluo-Green", "color": "#44D62C" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

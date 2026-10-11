@@ -7,6 +7,7 @@
   the rest for next, arrow keys and Escape. Auto-advance is off under
   reduced motion. Content is uploaded here; there is no Instagram feed.
 {% endcomment %}
+{%- render 'section-border', section: section -%}
 {%- assign stories = section.blocks | where: 'type', 'story' -%}
 <section class="page stories space-{{ section.settings.spacing }}">
   {%- render 'section-head', label: section.settings.label, color: section.settings.label_color, caption: section.settings.caption -%}
@@ -87,7 +88,7 @@
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: var(--grid-gap);
     margin: 0;
-    padding: 8px 0 0;
+    padding: 16px 0 0;
     list-style: none;
   }
 
@@ -116,8 +117,8 @@
     flex-direction: column;
     justify-content: flex-end;
     align-items: flex-start;
-    gap: 6px;
-    padding: 8px;
+    gap: 8px;
+    padding: 12px;
     border: 0;
     background: linear-gradient(transparent 55%, var(--color-scrim));
     color: var(--color-white);
@@ -340,6 +341,7 @@
   "tag": "div",
   "max_blocks": 12,
   "settings": [
+    { "type": "checkbox", "id": "show_border", "label": "Show top border", "default": true },
     { "type": "text", "id": "label", "label": "Label", "default": "@jumbopress" },
     {
       "type": "select",
