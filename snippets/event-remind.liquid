@@ -1,0 +1,28 @@
+{% doc %}
+  "Remind me" button for an event block. Downloads an .ics calendar file
+  built in the browser from these data attributes.
+
+  @param {object} block - Event block
+  @param {string} start_ts - Start, Unix seconds
+  @param {string} end_ts - End, Unix seconds
+  @param {string} class - Button classes
+  @param {string} label_key - Translation key for the label
+  @param {boolean} [short] - Use the short "Set ✓" confirmation
+{% enddoc %}
+<button
+  type="button"
+  class="{{ class }}"
+  data-remind
+  data-title="{{ block.settings.title | escape }}"
+  data-start="{{ start_ts }}"
+  data-end="{{ end_ts }}"
+  data-location="{{ block.settings.location | escape }}"
+  data-url="{{ block.settings.details_url | default: block.settings.directions_url }}"
+  data-uid="{{ block.id }}@{{ shop.permanent_domain }}"
+  {% if short %}
+    data-short
+  {% endif %}
+>
+  {{- label_key | t -}}
+  <span class="visually-hidden">: {{ block.settings.title | escape }}</span>
+</button>

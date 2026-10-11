@@ -1,0 +1,410 @@
+{% comment %}
+  Stories
+  Instagram-style story tiles (3:5). Each "Story" block has a portrait image
+  and/or a Shopify-hosted video, a name, a caption and an optional product.
+  Tapping a tile opens a 9:16 viewer: progress bars, auto-advance (5s for
+  images, the video's length for videos), tap left third for previous and
+  the rest for next, arrow keys and Escape. Auto-advance is off under
+  reduced motion. Content is uploaded here; there is no Instagram feed.
+{% endcomment %}
+{%- assign stories = section.blocks | where: 'type', 'story' -%}
+<section class="page stories space-{{ section.settings.spacing }}">
+  {%- render 'section-head', label: section.settings.label, color: section.settings.label_color, caption: section.settings.caption -%}
+
+  <story-viewer class="stories__root" data-section="{{ section.id }}">
+    <ul class="stories__grid" role="list">
+      {%- for block in stories -%}
+        {%- assign poster = block.settings.image | default: block.settings.video.preview_image -%}
+        <li class="stories__tile" style="--media-bg: var(--color-{{ block.settings.ground }});" {{ block.shopify_attributes }}>
+          {%- render 'image', image: poster, sizes: '(min-width: 750px) 33vw, 42vw', alt_fallback: block.settings.caption, placeholder: 'lifestyle-1' -%}
+          <button type="button" class="stories__open" data-story-open="{{ forloop.index0 }}" aria-haspopup="dialog">
+            {%- if block.settings.name != blank -%}
+              <span class="pill pill--grey stories__name">{{ block.settings.name | escape }}</span>
+            {%- endif -%}
+            <span class="stories__watch">▶ {{ 'sections.stories.watch' | t }}<span class="visually-hidden">: {{ block.settings.caption | default: block.settings.name | escape }}</span></span>
+          </button>
+        </li>
+      {%- endfor -%}
+    </ul>
+
+    {%- if section.settings.button_label != blank -%}
+      {%- assign follow_url = section.settings.button_link | default: settings.social_instagram_link -%}
+      {%- if follow_url != blank -%}
+        <div class="stories__follow">
+          <a class="button button--small" href="{{ follow_url }}" target="_blank" rel="noopener">
+            {{- section.settings.button_label | escape -}}
+            <span class="visually-hidden"> {{ 'accessibility.opens_new_window' | t }}</span>
+          </a>
+        </div>
+      {%- endif -%}
+    {%- endif -%}
+
+    <dialog class="overlay story" id="Story-{{ section.id }}" aria-label="{{ 'sections.stories.viewer' | t }}">
+      <div class="story__frame">
+        {%- for block in stories -%}
+          <div class="story__slide" data-story-slide hidden style="--media-bg: var(--color-{{ block.settings.ground }});">
+            {%- if block.settings.video != blank -%}
+              {{ block.settings.video | video_tag: playsinline: true, muted: true, preload: 'none', image_size: '720x', class: 'story__media' }}
+            {%- else -%}
+              {%- render 'image', image: block.settings.image, sizes: '(min-width: 750px) 480px, 100vw', class: 'story__media', alt_fallback: block.settings.caption, placeholder: 'lifestyle-1' -%}
+            {%- endif -%}
+            <div class="story__foot">
+              {%- if block.settings.caption != blank -%}
+                <p class="story__caption">{{ block.settings.caption | escape }}</p>
+              {%- endif -%}
+              {%- assign shop_url = block.settings.product.url | default: block.settings.link -%}
+              {%- if shop_url != blank -%}
+                <a class="story__shop" href="{{ shop_url }}">{{ section.settings.shop_label | escape }}</a>
+              {%- endif -%}
+            </div>
+            <span class="visually-hidden" data-story-time>{{ block.settings.time | escape }}</span>
+          </div>
+        {%- endfor -%}
+
+        <div class="story__bars" aria-hidden="true">
+          {%- for block in stories -%}
+            <span class="story__bar"><span class="story__bar-fill" data-story-bar></span></span>
+          {%- endfor -%}
+        </div>
+        <div class="story__head">
+          <span class="story__account">
+            <i class="story__avatar" aria-hidden="true"></i>
+            {{- section.settings.account | escape }}<span data-story-head-time></span>
+          </span>
+          <button type="button" class="story__close" data-overlay-close aria-label="{{ 'sections.stories.close' | t }}">×</button>
+        </div>
+        <button type="button" class="story__zone story__zone--prev" data-story-prev aria-label="{{ 'sections.stories.previous' | t }}"></button>
+        <button type="button" class="story__zone story__zone--next" data-story-next aria-label="{{ 'sections.stories.next' | t }}"></button>
+      </div>
+    </dialog>
+  </story-viewer>
+</section>
+<script src="{{ 'story-viewer.js' | asset_url }}" type="module"></script>
+
+{% stylesheet %}
+  .stories__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--grid-gap);
+    margin: 0;
+    padding: 8px 0 0;
+    list-style: none;
+  }
+
+  .stories__tile {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 3 / 5;
+    border: 2px solid var(--color-ink);
+    border-radius: var(--radius-lg);
+    background: var(--media-bg, var(--color-grey));
+  }
+
+  .stories__tile > .media__img,
+  .stories__tile > .media__placeholder {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .stories__open {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-start;
+    gap: 6px;
+    padding: 8px;
+    border: 0;
+    background: linear-gradient(transparent 55%, var(--color-scrim));
+    color: var(--color-white);
+    text-align: left;
+  }
+
+  .stories__open:focus-visible {
+    outline-offset: -4px;
+    outline-color: var(--color-white);
+  }
+
+  .stories__name {
+    font-size: 10px;
+  }
+
+  .stories__watch {
+    font: 400 10px / 1.3 var(--font-mono);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+  }
+
+  .stories__follow {
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 8px;
+  }
+
+  .stories__follow .button {
+    padding: 14px 18px;
+  }
+
+  /* Viewer */
+  .story {
+    inset: 50% auto auto 50%;
+    translate: -50% -50%;
+    height: min(86vh, 760px);
+    aspect-ratio: 9 / 16;
+    max-width: calc(100vw - 24px);
+    overflow: hidden;
+    border: 1px solid var(--color-white);
+    background: var(--color-ink);
+  }
+
+  .story::backdrop {
+    background: var(--color-scrim-strong);
+  }
+
+  .story__frame,
+  .story__slide {
+    position: absolute;
+    inset: 0;
+  }
+
+  .story__slide {
+    background: var(--media-bg, var(--color-grey));
+  }
+
+  .story__media,
+  .story__slide > .media__placeholder {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .story__bars {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    z-index: 3;
+    display: flex;
+    gap: 4px;
+    pointer-events: none;
+  }
+
+  .story__bar {
+    flex: 1;
+    height: 3px;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    background: rgb(246 246 244 / 0.45);
+  }
+
+  .story__bar-fill {
+    display: block;
+    width: 0;
+    height: 100%;
+    background: var(--color-bg);
+  }
+
+  .story__head {
+    position: absolute;
+    top: 22px;
+    left: 10px;
+    right: 10px;
+    z-index: 3;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .story__account {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--color-white);
+    font: 400 var(--text-label-sm) / 1 var(--font-mono);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    text-shadow: 0 1px 3px rgb(17 17 17);
+  }
+
+  .story__avatar {
+    display: block;
+    width: 26px;
+    height: 26px;
+    border: 2px solid var(--color-white);
+    border-radius: 50%;
+    background: var(--color-grey);
+  }
+
+  .story__close {
+    width: 34px;
+    height: 34px;
+    border: 1px solid var(--color-white);
+    border-radius: 50%;
+    background: var(--color-scrim);
+    color: var(--color-white);
+    font: 400 16px / 1 var(--font-mono);
+  }
+
+  .story__zone {
+    position: absolute;
+    top: 70px;
+    bottom: 130px;
+    z-index: 2;
+    padding: 0;
+    border: 0;
+    background: transparent;
+  }
+
+  .story__zone--prev { left: 0; width: 35%; cursor: w-resize; }
+  .story__zone--next { right: 0; width: 65%; cursor: e-resize; }
+
+  .story__zone:focus-visible {
+    outline-color: var(--color-white);
+    outline-offset: -4px;
+  }
+
+  .story__foot {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 14px;
+    background: linear-gradient(transparent, rgb(17 17 17 / 0.75));
+  }
+
+  .story__caption {
+    color: var(--color-white);
+    font: 500 clamp(26px, 3vw, 38px) / 1 var(--font-display);
+    letter-spacing: -0.04em;
+  }
+
+  .story__shop {
+    display: block;
+    padding: 13px;
+    border-radius: var(--radius-pill);
+    background: var(--color-bg);
+    color: var(--color-ink);
+    font: 400 var(--text-label-sm) / 1.2 var(--font-mono);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    text-align: center;
+    text-decoration: none;
+  }
+
+  .story__shop:hover {
+    background: var(--color-grey);
+    color: var(--color-ink);
+  }
+
+  @media screen and (max-width: 749px) {
+    .stories__grid {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+      margin-right: calc(var(--page-pad-x) * -1);
+      padding-right: var(--page-pad-x);
+    }
+
+    .stories__grid::-webkit-scrollbar {
+      display: none;
+    }
+
+    .stories__tile {
+      flex: none;
+      width: calc((100% - var(--grid-gap) * 2) / 2.4);
+      scroll-snap-align: start;
+    }
+
+    .story__close {
+      width: 44px;
+      height: 44px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Stories",
+  "class": "section-stories",
+  "tag": "div",
+  "max_blocks": 12,
+  "settings": [
+    { "type": "text", "id": "label", "label": "Label", "default": "@jumbopress" },
+    {
+      "type": "select",
+      "id": "label_color",
+      "label": "Label colour",
+      "options": [
+        { "value": "blue", "label": "Blue" },
+        { "value": "red", "label": "Red" },
+        { "value": "grey", "label": "Grey" }
+      ],
+      "default": "blue"
+    },
+    { "type": "text", "id": "caption", "label": "Caption", "default": "Follow along" },
+    { "type": "text", "id": "account", "label": "Account name in viewer", "default": "jumbopress" },
+    { "type": "text", "id": "shop_label", "label": "Shop link label", "default": "Shop this →" },
+    { "type": "text", "id": "button_label", "label": "Follow button label", "default": "Follow on Instagram →" },
+    { "type": "url", "id": "button_link", "label": "Follow button link", "info": "Defaults to the Instagram link in Theme settings." },
+    {
+      "type": "select",
+      "id": "spacing",
+      "label": "Top spacing",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "story",
+      "name": "Story",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Portrait image", "info": "9:16 works best. Also used as the tile image." },
+        { "type": "video", "id": "video", "label": "Video", "info": "Optional. Plays muted in the viewer." },
+        { "type": "text", "id": "name", "label": "Name", "default": "Studio" },
+        { "type": "text", "id": "caption", "label": "Caption", "default": "Fresh from the drum." },
+        { "type": "text", "id": "time", "label": "Time label", "info": "Optional, e.g. 2h" },
+        { "type": "product", "id": "product", "label": "Product" },
+        { "type": "url", "id": "link", "label": "Link", "info": "Used when no product is selected." },
+        {
+          "type": "select",
+          "id": "ground",
+          "label": "Background while loading",
+          "options": [
+            { "value": "blue", "label": "Blue" },
+            { "value": "red", "label": "Red" },
+            { "value": "grey", "label": "Grey" }
+          ],
+          "default": "blue"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Stories",
+      "blocks": [
+        { "type": "story", "settings": { "name": "Studio", "caption": "Fresh from the drum.", "ground": "blue" } },
+        { "type": "story", "settings": { "name": "New drop", "caption": "Soft Machines is live.", "ground": "blue" } },
+        { "type": "story", "settings": { "name": "Process", "caption": "Pass two of three.", "ground": "grey" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
