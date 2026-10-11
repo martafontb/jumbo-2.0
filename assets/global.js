@@ -98,8 +98,34 @@ export function openOverlay(dialog, opener = document.activeElement) {
 
 export function closeOverlay(dialog) {
   if (!dialog || !dialog.open) return;
+  // Drawers slide back out before closing (skipped under reduced motion).
+  if (dialog.classList.contains('drawer') && !prefersReducedMotion()) {
+    if (dialog.classList.contains('is-closing')) return;
+    dialog.classList.add('is-closing');
+    const finish = () => {
+      clearTimeout(fallback);
+      dialog.classList.remove('is-closing');
+      dialog.close();
+    };
+    const fallback = setTimeout(finish, 400);
+    dialog.addEventListener('animationend', (event) => event.target === dialog && finish(), { once: true });
+    return;
+  }
   dialog.close();
 }
+
+// Esc on a drawer: run the same slide-out instead of closing at once.
+document.addEventListener(
+  'cancel',
+  (event) => {
+    const dialog = event.target;
+    if (dialog instanceof HTMLDialogElement && dialog.classList.contains('drawer')) {
+      event.preventDefault();
+      closeOverlay(dialog);
+    }
+  },
+  true
+);
 
 function onDialogClose(event) {
   const dialog = event.target;
