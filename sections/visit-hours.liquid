@@ -1,0 +1,137 @@
+{% comment %}
+  Visit (opening hours)
+  Section head, a 3:2 image across two columns, and a paragraph with
+  opening-hours rows in the third. Each "Hours" block is one row.
+{% endcomment %}
+<section class="page visit-hours space-{{ section.settings.spacing }}">
+  {%- render 'section-head', label: section.settings.label, color: section.settings.label_color, caption: section.settings.caption -%}
+  <div class="visit-hours__grid">
+    <div class="media visit-hours__image" style="--ratio: 3 / 2;">
+      {%- render 'image', image: section.settings.image, sizes: '(min-width: 750px) 66vw, 100vw', alt: section.settings.image_alt, placeholder: 'lifestyle-1' -%}
+    </div>
+    <div class="visit-hours__side">
+      {%- if section.settings.text != blank -%}<div class="visit-hours__text">{{ section.settings.text }}</div>{%- endif -%}
+      <dl class="visit-hours__rows">
+        {%- for block in section.blocks -%}
+          <div {{ block.shopify_attributes }}>
+            <dt>{{ block.settings.days | escape }}</dt>
+            <dd>{{ block.settings.hours | escape }}</dd>
+          </div>
+        {%- endfor -%}
+      </dl>
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .visit-hours__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--grid-gap) 12px;
+    margin-top: 8px;
+  }
+
+  .visit-hours__image {
+    grid-column: span 2;
+  }
+
+  .visit-hours__side {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 24px;
+  }
+
+  .visit-hours__text {
+    font: 400 clamp(20px, 1.8vw, 28px) / 1.15 var(--font-display);
+    letter-spacing: -0.03em;
+  }
+
+  .visit-hours__rows {
+    margin: 0;
+  }
+
+  .visit-hours__rows > div {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 8px 0;
+    border-top: var(--border);
+    font: 400 22px / 1.1 var(--font-display);
+    letter-spacing: -0.02em;
+  }
+
+  .visit-hours__rows dd {
+    margin: 0;
+    text-align: right;
+  }
+
+  @media screen and (max-width: 749px) {
+    .visit-hours__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .visit-hours__image {
+      grid-column: auto;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Visit and hours",
+  "class": "section-visit-hours",
+  "tag": "div",
+  "max_blocks": 8,
+  "settings": [
+    { "type": "text", "id": "label", "label": "Label", "default": "02 — Visit the studio" },
+    {
+      "type": "select",
+      "id": "label_color",
+      "label": "Label colour",
+      "options": [
+        { "value": "blue", "label": "Blue" },
+        { "value": "red", "label": "Red" },
+        { "value": "grey", "label": "Grey" }
+      ],
+      "default": "blue"
+    },
+    { "type": "text", "id": "caption", "label": "Caption", "default": "Canal Yard" },
+    { "type": "image_picker", "id": "image", "label": "Image" },
+    { "type": "text", "id": "image_alt", "label": "Image alt text" },
+    { "type": "richtext", "id": "text", "label": "Text", "default": "<p>Come and see the machines run. The studio is on the ground floor at Canal Yard, with the shop at the front and the presses behind.</p>" },
+    {
+      "type": "select",
+      "id": "spacing",
+      "label": "Top spacing",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "large"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "hours",
+      "name": "Hours",
+      "settings": [
+        { "type": "text", "id": "days", "label": "Days", "default": "Tuesday to Saturday" },
+        { "type": "text", "id": "hours", "label": "Hours", "default": "10.00–18.00" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Visit and hours",
+      "blocks": [
+        { "type": "hours", "settings": { "days": "Monday", "hours": "closed" } },
+        { "type": "hours", "settings": { "days": "Tuesday to Saturday", "hours": "10.00–18.00" } },
+        { "type": "hours", "settings": { "days": "Sunday", "hours": "11.00–16.00" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

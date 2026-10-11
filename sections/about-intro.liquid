@@ -1,0 +1,91 @@
+{% comment %}
+  About intro
+  Big title, a 16:9 studio image across two columns and an intro line with
+  a small caption in the third. "Page background" recolours the whole main
+  area for this page (the design uses red on About); header and footer keep
+  the normal background.
+{% endcomment %}
+{%- if section.settings.page_color != 'none' -%}
+  {% style %}
+    .main { background: var(--color-{{ section.settings.page_color }}); padding-bottom: 80px; }
+    .site-footer { margin-top: 0; }
+  {% endstyle %}
+{%- endif -%}
+<section class="page about-intro">
+  <h1 class="title-page about-intro__title">{{ section.settings.title | default: page.title | escape }}</h1>
+  <div class="about-intro__grid">
+    <div class="media about-intro__image" style="--ratio: 16 / 9;">
+      {%- render 'image', image: section.settings.image, sizes: '(min-width: 750px) 66vw, 100vw', alt: section.settings.image_alt, eager: true, placeholder: 'lifestyle-2' -%}
+    </div>
+    <div class="about-intro__text">
+      {%- if section.settings.text != blank -%}<div class="about-intro__lead">{{ section.settings.text }}</div>{%- endif -%}
+      {%- if section.settings.caption != blank -%}<span class="label label--sm">{{ section.settings.caption | escape }}</span>{%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .about-intro__title {
+    padding: 40px 0 24px;
+  }
+
+  .about-intro__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--grid-gap) 12px;
+  }
+
+  .about-intro__image {
+    grid-column: span 2;
+  }
+
+  .about-intro__text {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .about-intro__lead {
+    font: 400 clamp(28px, 3.2vw, 52px) / 1.05 var(--font-display);
+    letter-spacing: -0.04em;
+  }
+
+  @media screen and (max-width: 749px) {
+    .about-intro__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .about-intro__image {
+      grid-column: auto;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "About intro",
+  "class": "section-about-intro",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Title", "info": "Defaults to the page title." },
+    { "type": "image_picker", "id": "image", "label": "Image" },
+    { "type": "text", "id": "image_alt", "label": "Image alt text" },
+    { "type": "richtext", "id": "text", "label": "Intro", "default": "<p>An independent risograph studio and publisher. Small runs, made with artists, one colour at a time.</p>" },
+    { "type": "text", "id": "caption", "label": "Caption", "default": "Est. 2019 · Canal Yard" },
+    {
+      "type": "select",
+      "id": "page_color",
+      "label": "Page background",
+      "options": [
+        { "value": "none", "label": "Default" },
+        { "value": "red", "label": "Red" },
+        { "value": "blue", "label": "Blue" },
+        { "value": "grey", "label": "Grey" }
+      ],
+      "default": "red"
+    }
+  ],
+  "presets": [{ "name": "About intro" }]
+}
+{% endschema %}

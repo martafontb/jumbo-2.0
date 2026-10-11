@@ -1,0 +1,107 @@
+{% comment %}
+  Media and text
+  Section head (label + caption), a large paragraph across two columns and,
+  in the third column, an image (4:5) or a button. Used for "Our story" and
+  "Work with us" on About.
+{% endcomment %}
+<section class="page media-text space-{{ section.settings.spacing }}">
+  {%- render 'section-head', label: section.settings.label, color: section.settings.label_color, caption: section.settings.caption -%}
+  <div class="media-text__grid">
+    {%- if section.settings.text != blank -%}
+      <div class="media-text__text">{{ section.settings.text }}</div>
+    {%- endif -%}
+    {%- if section.settings.image != blank or section.settings.show_image_placeholder -%}
+      <div class="media media-text__image" style="--ratio: 4 / 5; --media-bg: var(--color-blue);">
+        {%- render 'image', image: section.settings.image, sizes: '(min-width: 750px) 33vw, 100vw', alt: section.settings.image_alt, placeholder: 'image' -%}
+      </div>
+    {%- elsif section.settings.use_shop_email and shop.email != blank -%}
+      <a class="button media-text__button" href="mailto:{{ shop.email }}">{{ shop.email }} →</a>
+    {%- elsif section.settings.button_label != blank -%}
+      <a class="button media-text__button" href="{{ section.settings.button_link | default: '#' }}">{{ section.settings.button_label | escape }}</a>
+    {%- endif -%}
+  </div>
+</section>
+
+{% stylesheet %}
+  .media-text__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--grid-gap) 12px;
+    margin-top: 8px;
+  }
+
+  .media-text__text {
+    grid-column: span 2;
+    font: 400 clamp(28px, 3.2vw, 52px) / 1.05 var(--font-display);
+    letter-spacing: -0.04em;
+  }
+
+  .media-text__text p + p {
+    margin-top: 0.5em;
+  }
+
+  .media-text__button {
+    align-self: end;
+    border-radius: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .media-text__button:hover {
+    background: var(--color-blue);
+    border-color: var(--color-blue);
+  }
+
+  @media screen and (max-width: 749px) {
+    .media-text__grid {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 20px;
+    }
+
+    .media-text__text {
+      grid-column: auto;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Media and text",
+  "class": "section-media-text",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "label", "label": "Label", "default": "01 — Our story" },
+    {
+      "type": "select",
+      "id": "label_color",
+      "label": "Label colour",
+      "options": [
+        { "value": "blue", "label": "Blue" },
+        { "value": "red", "label": "Red" },
+        { "value": "grey", "label": "Grey" }
+      ],
+      "default": "blue"
+    },
+    { "type": "text", "id": "caption", "label": "Caption", "default": "2019 to now" },
+    { "type": "richtext", "id": "text", "label": "Text", "default": "<p>Jumbo Press began in a shared unit at Canal Yard with one secondhand risograph and a stack of uncoated paper.</p>" },
+    { "type": "image_picker", "id": "image", "label": "Image", "info": "Shown in the third column. Leave empty to show the button instead." },
+    { "type": "text", "id": "image_alt", "label": "Image alt text" },
+    { "type": "checkbox", "id": "show_image_placeholder", "label": "Keep the image slot when no image is set", "default": false },
+    { "type": "checkbox", "id": "use_shop_email", "label": "Button emails the store", "info": "Shows the store's contact email as the button.", "default": false },
+    { "type": "text", "id": "button_label", "label": "Button label" },
+    { "type": "url", "id": "button_link", "label": "Button link", "info": "For email, use mailto:you@example.com" },
+    {
+      "type": "select",
+      "id": "spacing",
+      "label": "Top spacing",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "large"
+    }
+  ],
+  "presets": [{ "name": "Media and text" }]
+}
+{% endschema %}

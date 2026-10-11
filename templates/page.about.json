@@ -1,0 +1,114 @@
+{
+  "sections": {
+    "intro": {
+      "type": "about-intro",
+      "settings": {
+        "title": "About",
+        "text": "<p>An independent risograph studio and publisher. Small runs, made with artists, one colour at a time.</p>",
+        "caption": "Est. 2019 · Canal Yard",
+        "page_color": "red"
+      }
+    },
+    "story": {
+      "type": "media-text",
+      "settings": {
+        "label": "01 — Our story",
+        "label_color": "blue",
+        "caption": "2019 to now",
+        "text": "<p>Jumbo Press began in a shared unit at Canal Yard with one secondhand risograph and a stack of uncoated paper. We publish artists' books, zines and prints, and we print for people who want the same grain and layered colour. Every job is set up by hand, one drum per colour, tested on the paper you chose.</p>",
+        "show_image_placeholder": true,
+        "spacing": "large"
+      }
+    },
+    "numbers": {
+      "type": "numbers-band",
+      "blocks": {
+        "n1": {
+          "type": "stat",
+          "settings": {
+            "value": "2",
+            "caption": "Machines"
+          }
+        },
+        "n2": {
+          "type": "stat",
+          "settings": {
+            "value": "14",
+            "caption": "Ink colours"
+          }
+        },
+        "n3": {
+          "type": "stat",
+          "settings": {
+            "value": "40",
+            "caption": "Artists a year"
+          }
+        }
+      },
+      "block_order": [
+        "n1",
+        "n2",
+        "n3"
+      ],
+      "settings": {
+        "label": "By the numbers",
+        "color": "blue",
+        "spacing": "small"
+      }
+    },
+    "visit": {
+      "type": "visit-hours",
+      "blocks": {
+        "h1": {
+          "type": "hours",
+          "settings": {
+            "days": "Monday",
+            "hours": "closed"
+          }
+        },
+        "h2": {
+          "type": "hours",
+          "settings": {
+            "days": "Tuesday to Saturday",
+            "hours": "10.00–18.00"
+          }
+        },
+        "h3": {
+          "type": "hours",
+          "settings": {
+            "days": "Sunday",
+            "hours": "11.00–16.00"
+          }
+        }
+      },
+      "block_order": [
+        "h1",
+        "h2",
+        "h3"
+      ],
+      "settings": {
+        "label": "02 — Visit the studio",
+        "caption": "Canal Yard",
+        "spacing": "large"
+      }
+    },
+    "work": {
+      "type": "media-text",
+      "settings": {
+        "label": "03 — Work with us",
+        "label_color": "blue",
+        "caption": "Commissions and collaborations",
+        "text": "<p>We print for artists, small publishers and festivals. Tell us the size, the colours and the run.</p>",
+        "use_shop_email": true,
+        "spacing": "large"
+      }
+    }
+  },
+  "order": [
+    "intro",
+    "story",
+    "numbers",
+    "visit",
+    "work"
+  ]
+}

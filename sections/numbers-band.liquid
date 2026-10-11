@@ -1,0 +1,121 @@
+{% comment %}
+  Numbers band ("By the numbers")
+  Coloured band with a pill label and up to four big figures with captions.
+{% endcomment %}
+<section class="page numbers-band space-{{ section.settings.spacing }}">
+  <div class="numbers-band__inner" style="--band-bg: var(--color-{{ section.settings.color }});">
+    {%- if section.settings.label != blank -%}<h2 class="pill pill--grey numbers-band__label">{{ section.settings.label | escape }}</h2>{%- endif -%}
+    <dl class="numbers-band__stats">
+      {%- for block in section.blocks -%}
+        <div {{ block.shopify_attributes }}>
+          <dt class="label label--sm">{{ block.settings.caption | escape }}</dt>
+          <dd class="numbers-band__value">{{ block.settings.value | escape }}</dd>
+        </div>
+      {%- endfor -%}
+    </dl>
+  </div>
+</section>
+
+{% stylesheet %}
+  .numbers-band__inner {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--grid-gap);
+    align-items: end;
+    padding: clamp(20px, 3vw, 48px);
+    background: var(--band-bg);
+    color: var(--color-ink);
+  }
+
+  .numbers-band__label {
+    align-self: start;
+    justify-self: start;
+    margin: 0;
+  }
+
+  .numbers-band__stats {
+    grid-column: span 2;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+    grid-auto-flow: column;
+    gap: var(--grid-gap);
+    margin: 0;
+  }
+
+  .numbers-band__stats > div {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+
+  .numbers-band__value {
+    margin: 0;
+    font: 500 clamp(56px, 8vw, 128px) / 0.85 var(--font-display);
+    letter-spacing: -0.05em;
+  }
+
+  @media screen and (max-width: 749px) {
+    .numbers-band__inner {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 24px;
+    }
+
+    .numbers-band__stats {
+      grid-column: auto;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Numbers band",
+  "class": "section-numbers-band",
+  "tag": "div",
+  "max_blocks": 4,
+  "settings": [
+    { "type": "text", "id": "label", "label": "Label", "default": "By the numbers" },
+    {
+      "type": "select",
+      "id": "color",
+      "label": "Background",
+      "options": [
+        { "value": "blue", "label": "Blue" },
+        { "value": "red", "label": "Red" },
+        { "value": "grey", "label": "Grey" }
+      ],
+      "default": "blue"
+    },
+    {
+      "type": "select",
+      "id": "spacing",
+      "label": "Top spacing",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "small"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "stat",
+      "name": "Figure",
+      "settings": [
+        { "type": "text", "id": "value", "label": "Value", "default": "2" },
+        { "type": "text", "id": "caption", "label": "Caption", "default": "Machines" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Numbers band",
+      "blocks": [
+        { "type": "stat", "settings": { "value": "2", "caption": "Machines" } },
+        { "type": "stat", "settings": { "value": "14", "caption": "Ink colours" } },
+        { "type": "stat", "settings": { "value": "40", "caption": "Artists a year" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
