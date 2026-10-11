@@ -4,6 +4,7 @@
   step's illustration and text on the right. Each "Step" block can use one
   of the built-in illustrations or an uploaded image.
 {% endcomment %}
+{%- render 'section-border', section: section -%}
 {%- assign steps = section.blocks | where: 'type', 'step' -%}
 {%- if steps.size > 0 -%}
   <process-steps class="page process-steps space-{{ section.settings.spacing }}">
@@ -35,8 +36,8 @@
           {% unless forloop.first %}hidden{% endunless %}
         >
           <div class="process-steps__art" style="--art-bg: var(--color-{{ block.settings.color }});">
-            {%- if block.settings.image != blank -%}
-              {%- render 'image', image: block.settings.image, sizes: '(min-width: 750px) 33vw, 100vw', alt_fallback: block.settings.title -%}
+            {%- if block.settings.image != blank or block.settings.video != blank -%}
+              {%- render 'image-or-video', video: block.settings.video, image: block.settings.image, sizes: '(min-width: 750px) 33vw, 100vw', alt_fallback: block.settings.title -%}
             {%- else -%}
               {%- render 'process-illustration', name: block.settings.illustration, caption: block.settings.meta -%}
             {%- endif -%}
@@ -159,6 +160,7 @@
   "tag": "div",
   "max_blocks": 8,
   "settings": [
+    { "type": "checkbox", "id": "show_border", "label": "Show top border", "default": true },
     { "type": "text", "id": "label", "label": "Label", "default": "Chapter 02 — How it is made" },
     { "type": "text", "id": "caption", "label": "Caption", "default": "From file to edition" },
     {
@@ -195,6 +197,7 @@
           "default": "mark"
         },
         { "type": "image_picker", "id": "image", "label": "Image", "info": "Optional. Replaces the illustration." },
+        { "type": "video", "id": "video", "label": "Video", "info": "Optional. Plays muted on a loop instead of the image; the image becomes its poster." },
         {
           "type": "select",
           "id": "color",

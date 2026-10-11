@@ -5,6 +5,7 @@
   email link. Each "Question" block has a category, question and answer.
   Outputs FAQPage structured data built from the same questions.
 {% endcomment %}
+{%- render 'section-border', section: section -%}
 {%- liquid
   assign questions = section.blocks | where: 'type', 'question'
   assign categories = ''
@@ -85,7 +86,7 @@
     gap: 6px;
     margin-bottom: 4px;
     padding: 10px 0;
-    border-top: var(--border);
+    border-top: var(--section-border, var(--border));
     border-bottom: var(--border);
   }
 
@@ -224,6 +225,7 @@
   "tag": "div",
   "max_blocks": 50,
   "settings": [
+    { "type": "checkbox", "id": "show_border", "label": "Show top border", "default": true },
     { "type": "checkbox", "id": "open_first", "label": "Open the first question", "default": true },
     { "type": "header", "content": "Contact card" },
     { "type": "text", "id": "card_label", "label": "Label", "default": "Still stuck?" },

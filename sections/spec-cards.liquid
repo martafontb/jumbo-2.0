@@ -2,6 +2,7 @@
   Spec cards ("At a glance")
   Up to three bordered cards: a small label, a big value and a short note.
 {% endcomment %}
+{%- render 'section-border', section: section -%}
 <section class="page spec-cards space-{{ section.settings.spacing }}">
   {%- render 'section-head', label: section.settings.label, color: 'grey', caption: section.settings.caption -%}
   <div class="spec-cards__grid">
@@ -57,6 +58,7 @@
   "tag": "div",
   "max_blocks": 6,
   "settings": [
+    { "type": "checkbox", "id": "show_border", "label": "Show top border", "default": true },
     { "type": "text", "id": "label", "label": "Label", "default": "Specs" },
     { "type": "text", "id": "caption", "label": "Caption", "default": "At a glance" },
     {

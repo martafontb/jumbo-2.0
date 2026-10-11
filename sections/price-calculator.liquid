@@ -8,6 +8,7 @@
   (same formula as the JS), so it shows before and without JS. Nothing is submitted to checkout: the button links to your
   quote form.
 {% endcomment %}
+{%- render 'section-border', section: section -%}
 {%- liquid
   assign size_rows = section.settings.sizes | newline_to_br | split: '<br />'
   assign max_colours = section.settings.max_colours
@@ -291,6 +292,7 @@
   "class": "section-price-calculator",
   "tag": "div",
   "settings": [
+    { "type": "checkbox", "id": "show_border", "label": "Show top border", "default": true },
     { "type": "paragraph", "content": "Estimate = run × unit rate × colours + setup fee × colours. Amounts are in your store's currency. The defaults are placeholders: replace them with your real rates." },
     {
       "type": "textarea",

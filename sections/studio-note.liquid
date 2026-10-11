@@ -3,6 +3,7 @@
   A ruled band: a small label and date on the left, a large quote with a
   mono attribution across the other two columns.
 {% endcomment %}
+{%- render 'section-border', section: section -%}
 {%- if section.settings.quote != blank -%}
   <section class="page studio-note space-{{ section.settings.spacing }}">
     <div class="studio-note__band">
@@ -29,7 +30,7 @@
     gap: var(--grid-gap);
     margin: 0;
     padding: 22px 0;
-    border-top: var(--border);
+    border-top: var(--section-border, var(--border));
     border-bottom: var(--border);
   }
 
@@ -66,6 +67,7 @@
   "class": "section-studio-note",
   "tag": "div",
   "settings": [
+    { "type": "checkbox", "id": "show_border", "label": "Show top border", "default": true },
     { "type": "text", "id": "label", "label": "Label", "default": "Studio note" },
     { "type": "text", "id": "date", "label": "Date", "default": "09.10.2026" },
     { "type": "textarea", "id": "quote", "label": "Quote", "info": "A real quote, e.g. from an artist you've worked with. The section is hidden until this is filled in." },

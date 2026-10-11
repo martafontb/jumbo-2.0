@@ -8,6 +8,7 @@
 
   Artist fields used: name, kind, color, portrait, since, collection.
 {% endcomment %}
+{%- render 'section-border', section: section -%}
 {%- liquid
   assign artists = shop.metaobjects.artist.values
   assign kinds = ''
@@ -87,7 +88,7 @@
     gap: 6px;
     margin-bottom: 4px;
     padding: 10px 0;
-    border-top: var(--border);
+    border-top: var(--section-border, var(--border));
     border-bottom: var(--border);
     background: var(--color-bg);
   }
@@ -197,6 +198,7 @@
   "name": "Artists index",
   "class": "section-artists-index",
   "settings": [
+    { "type": "checkbox", "id": "show_border", "label": "Show top border", "default": true },
     { "type": "paragraph", "content": "Lists every entry of the artist metaobject (Content > Metaobjects). Turn on web pages for artists so each row links to its page." },
     { "type": "text", "id": "title", "label": "Title", "info": "Defaults to the page title." },
     { "type": "richtext", "id": "intro", "label": "Intro", "default": "<p>The people we print with. Hover a name to see their work, click to see their editions.</p>" }

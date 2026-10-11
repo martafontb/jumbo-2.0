@@ -4,6 +4,7 @@
   optional row of tab chips (e.g. Print guide / Price guide). A tab is shown
   as selected when its link matches the current page.
 {% endcomment %}
+{%- render 'section-border', section: section -%}
 {%- liquid
   assign title = section.settings.title
   if title == blank
@@ -37,7 +38,7 @@
     gap: 6px;
     margin-bottom: 4px;
     padding: 10px 0;
-    border-top: var(--border);
+    border-top: var(--section-border, var(--border));
     border-bottom: var(--border);
   }
 
@@ -53,6 +54,7 @@
   "class": "section-page-header",
   "max_blocks": 6,
   "settings": [
+    { "type": "checkbox", "id": "show_border", "label": "Show top border", "default": true },
     { "type": "text", "id": "title", "label": "Title", "info": "Defaults to the page title." },
     { "type": "checkbox", "id": "show_dot", "label": "Accent full stop", "default": true },
     { "type": "richtext", "id": "intro", "label": "Intro" },

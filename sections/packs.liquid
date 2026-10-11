@@ -5,6 +5,7 @@
   and struck-through price come from the product's compare-at price, so
   nothing is calculated in the theme. The button adds the pack to the cart.
 {% endcomment %}
+{%- render 'section-border', section: section -%}
 {%- liquid
   assign packs = section.blocks | where: 'type', 'pack'
   assign grounds = section.settings.grounds | split: ','
@@ -124,6 +125,7 @@
   "tag": "div",
   "max_blocks": 6,
   "settings": [
+    { "type": "checkbox", "id": "show_border", "label": "Show top border", "default": true },
     { "type": "text", "id": "label", "label": "Label", "default": "Packs" },
     {
       "type": "select",

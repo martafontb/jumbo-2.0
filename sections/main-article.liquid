@@ -7,6 +7,7 @@
   same blog. Blockquotes in the article body render as the design's grey
   pull quotes.
 {% endcomment %}
+{%- render 'section-border', section: section -%}
 {%- liquid
   assign kind = article.tags.first | default: blog.title
   assign words = article.content | strip_html | split: ' ' | size
@@ -280,6 +281,7 @@
   "name": "Article",
   "class": "section-main-article",
   "settings": [
+    { "type": "checkbox", "id": "show_border", "label": "Show top border", "default": true },
     { "type": "checkbox", "id": "show_author", "label": "Show author", "default": true },
     { "type": "paragraph", "content": "Featured product: set the article metafield custom.featured_product (product reference)." },
     { "type": "text", "id": "featured_label", "label": "Featured product label", "default": "Featured in this story" },

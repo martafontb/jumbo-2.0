@@ -4,6 +4,7 @@
   inks overprint (multiply blend). The figure is inline SVG. "Ink" blocks
   set the selectable inks; enter the real ink colours.
 {% endcomment %}
+{%- render 'section-border', section: section -%}
 {%- assign inks = section.blocks | where: 'type', 'ink' -%}
 {%- if inks.size > 1 -%}
   {%- liquid
@@ -190,6 +191,7 @@
   "tag": "div",
   "max_blocks": 12,
   "settings": [
+    { "type": "checkbox", "id": "show_border", "label": "Show top border", "default": true },
     { "type": "text", "id": "label", "label": "Label", "default": "Fig. 2 — Meet Jumbo" },
     { "type": "text", "id": "caption", "label": "Caption", "default": "Pick two inks, nudge the registration" },
     { "type": "text", "id": "figure_label", "label": "Figure description", "info": "Read by screen readers.", "default": "Two ink layers of an illustrated elephant overprinting each other" },

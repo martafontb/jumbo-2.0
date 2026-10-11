@@ -3,6 +3,7 @@
   Numbered rows with a tick box, a title and a short explanation. Ticking
   is just a visual aid for the visitor (nothing is saved or sent).
 {% endcomment %}
+{%- render 'section-border', section: section -%}
 {%- assign steps = section.blocks | where: 'type', 'step' -%}
 <check-list class="page checklist space-{{ section.settings.spacing }}">
   {%- render 'section-head', label: section.settings.label, color: 'blue', caption: section.settings.caption -%}
@@ -95,6 +96,7 @@
   "tag": "div",
   "max_blocks": 10,
   "settings": [
+    { "type": "checkbox", "id": "show_border", "label": "Show top border", "default": true },
     { "type": "text", "id": "label", "label": "Label", "default": "Prepare your file" },
     { "type": "text", "id": "caption", "label": "Caption", "default": "Tick them off" },
     {

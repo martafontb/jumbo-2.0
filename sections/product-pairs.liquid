@@ -5,6 +5,7 @@
   products), falling back to the section's collection. Products already in
   the cart are hidden; when everything is in the cart a short message shows.
 {% endcomment %}
+{%- render 'section-border', section: section -%}
 {%- liquid
   assign source = product.metafields.custom.pairs_with.value
   if source == blank and section.settings.collection != blank
@@ -130,6 +131,7 @@
   "class": "section-product-pairs",
   "tag": "div",
   "settings": [
+    { "type": "checkbox", "id": "show_border", "label": "Show top border", "default": true },
     { "type": "paragraph", "content": "Uses the product's custom.pairs_with metafield (list of products), or this collection when that's empty." },
     { "type": "collection", "id": "collection", "label": "Fallback collection" },
     { "type": "range", "id": "limit", "label": "Products", "min": 1, "max": 6, "step": 1, "default": 3 },

@@ -6,6 +6,7 @@
   policies are shown one after another. Each policy also links to its own
   Shopify page.
 {% endcomment %}
+{%- render 'section-border', section: section -%}
 {%- assign policies = shop.policies -%}
 <policy-tabs class="page policies">
   {%- if policies.size > 0 -%}
@@ -62,7 +63,7 @@
     top: calc(var(--header-height) + 8px);
     display: flex;
     flex-direction: column;
-    border-top: var(--border);
+    border-top: var(--section-border, var(--border));
   }
 
   .policies__tab {
@@ -159,6 +160,7 @@
   "name": "Policies",
   "class": "section-policies",
   "settings": [
+    { "type": "checkbox", "id": "show_border", "label": "Show top border", "default": true },
     { "type": "paragraph", "content": "Shows the policies from Settings > Policies." },
     { "type": "text", "id": "badge", "label": "Label above each policy", "info": "Optional, e.g. Last updated 9 Oct 2026" }
   ]

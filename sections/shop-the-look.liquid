@@ -5,6 +5,7 @@
   small card with the title, price and "Add to cart". The list on the right
   mirrors the hotspots and opens the same cards.
 {% endcomment %}
+{%- render 'section-border', section: section -%}
 {%- liquid
   assign hotspots = section.blocks | where: 'type', 'hotspot'
   assign placeholder_title = 'products.placeholder_title' | t
@@ -14,7 +15,7 @@
   <shop-the-look class="shop-look__grid">
     <div class="shop-look__stage">
       <div class="media shop-look__image" style="--ratio: 3 / 2;">
-        {%- render 'image', image: section.settings.image, sizes: '(min-width: 750px) 66vw, 100vw', alt: section.settings.image_alt, placeholder: 'lifestyle-1' -%}
+        {%- render 'image-or-video', video: section.settings.video, image: section.settings.image, sizes: '(min-width: 750px) 66vw, 100vw', alt: section.settings.image_alt, placeholder: 'lifestyle-1' -%}
       </div>
       {%- for block in hotspots -%}
         {%- liquid
@@ -238,7 +239,9 @@
   "tag": "div",
   "max_blocks": 8,
   "settings": [
+    { "type": "checkbox", "id": "show_border", "label": "Show top border", "default": true },
     { "type": "image_picker", "id": "image", "label": "Image" },
+    { "type": "video", "id": "video", "label": "Video", "info": "Optional. Plays muted on a loop instead of the image; the image becomes its poster." },
     { "type": "text", "id": "image_alt", "label": "Image alt text" },
     { "type": "text", "id": "heading", "label": "Heading", "default": "Get the look" },
     { "type": "text", "id": "label", "label": "Label", "default": "Shop the studio" },

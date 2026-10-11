@@ -8,6 +8,7 @@
   app. App blocks (e.g. the Shop app's reviews widget) can be added instead.
   The section hides itself until it has content.
 {% endcomment %}
+{%- render 'section-border', section: section -%}
 {%- liquid
   assign quotes = section.blocks | where: 'type', 'review'
   assign apps = section.blocks | where: 'type', '@app'
@@ -84,7 +85,7 @@
     gap: var(--grid-gap);
     align-items: center;
     padding: 14px 0;
-    border-top: var(--border);
+    border-top: var(--section-border, var(--border));
     border-bottom: var(--border);
   }
 
@@ -191,6 +192,7 @@
   "tag": "div",
   "max_blocks": 10,
   "settings": [
+    { "type": "checkbox", "id": "show_border", "label": "Show top border", "default": true },
     { "type": "paragraph", "content": "Only real reviews: copy the rating, count and quotes from your Shop app reviews, or add the Shop app's own block. Hidden until something is filled in." },
     { "type": "text", "id": "label", "label": "Label", "default": "Loved by buyers" },
     { "type": "text", "id": "rating", "label": "Average rating", "info": "E.g. 4.8" },

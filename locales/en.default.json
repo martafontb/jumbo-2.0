@@ -27,7 +27,11 @@
       "next": "Next page",
       "page": "Page {{ number }}"
     },
-    "close": "Close"
+    "close": "Close",
+    "video": {
+      "play": "Play video",
+      "pause": "Pause video"
+    }
   },
   "date_formats": {
     "date": "%-d %b %Y"
@@ -161,6 +165,11 @@
       "website": "Visit website ↗",
       "next": "Next: {{ name }}"
     },
+    "ink_marquee": {
+      "label": "Ink colours",
+      "play": "Play ink colours",
+      "pause": "Pause ink colours"
+    },
     "policies": {
       "label": "Policies",
       "permalink": "Open this policy on its own page →",
@@ -210,7 +219,8 @@
         "one": "{{ count }} review",
         "other": "{{ count }} reviews"
       },
-      "empty": "Product reviews: add the Shop app's reviews block to show this section."
+      "empty": "Product reviews: add the Shop app's reviews block to show this section.",
+      "add_app": "Written reviews appear here once you add your reviews app's block: Add block > Apps."
     },
     "artist": {
       "since": "With us since {{ year }}",

@@ -5,6 +5,7 @@
   Videos are Shopify-hosted; the poster is the video's preview image unless
   a poster image is set.
 {% endcomment %}
+{%- render 'section-border', section: section -%}
 {%- assign videos = section.blocks | where: 'type', 'video' -%}
 <section class="page video-grid space-{{ section.settings.spacing }}">
   {%- render 'section-head', label: section.settings.label, color: section.settings.label_color, caption: section.settings.caption -%}
@@ -164,6 +165,7 @@
   "tag": "div",
   "max_blocks": 3,
   "settings": [
+    { "type": "checkbox", "id": "show_border", "label": "Show top border", "default": true },
     { "type": "text", "id": "label", "label": "Label", "default": "On the press" },
     {
       "type": "select",

@@ -4,6 +4,7 @@
   cards used by "Read next" (4/3 image, kind pill, title, reading time),
   with pagination.
 {% endcomment %}
+{%- render 'section-border', section: section -%}
 {%- paginate blog.articles by section.settings.per_page -%}
   <div class="page main-blog">
     {%- render 'page-title', title: blog.title, count: blog.articles_count, intro: section.settings.intro -%}
@@ -39,7 +40,7 @@
     gap: 6px;
     margin-bottom: 4px;
     padding: 10px 0;
-    border-top: var(--border);
+    border-top: var(--section-border, var(--border));
     border-bottom: var(--border);
   }
 
@@ -68,6 +69,7 @@
   "name": "Blog",
   "class": "section-main-blog",
   "settings": [
+    { "type": "checkbox", "id": "show_border", "label": "Show top border", "default": true },
     { "type": "richtext", "id": "intro", "label": "Intro" },
     { "type": "checkbox", "id": "show_tags", "label": "Show tag filters", "default": true },
     { "type": "range", "id": "per_page", "label": "Articles per page", "min": 6, "max": 24, "step": 3, "default": 12 }

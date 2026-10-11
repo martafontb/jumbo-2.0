@@ -8,6 +8,7 @@
   "Remind me" downloads a calendar file (.ics) for the event; nothing is
   stored or sent anywhere.
 {% endcomment %}
+{%- render 'section-border', section: section -%}
 {%- liquid
   assign now_ts = 'now' | date: '%s' | plus: 0
   assign upcoming = ''
@@ -57,7 +58,7 @@
         -%}
         <div class="events__feature" {{ block.shopify_attributes }}>
           <div class="media events__feature-media" style="--ratio: auto; --media-bg: var(--color-blue);">
-            {%- render 'image', image: section.settings.feature_image, sizes: '(min-width: 750px) 33vw, 100vw', alt: section.settings.feature_image_alt, placeholder: 'lifestyle-2' -%}
+            {%- render 'image-or-video', video: section.settings.feature_video, image: section.settings.feature_image, sizes: '(min-width: 750px) 33vw, 100vw', alt: section.settings.feature_image_alt, placeholder: 'lifestyle-2' -%}
             {%- if section.settings.feature_label != blank -%}
               <span class="pill pill--grey">{{ section.settings.feature_label | escape }}</span>
             {%- endif -%}
@@ -327,6 +328,7 @@
   "tag": "div",
   "max_blocks": 16,
   "settings": [
+    { "type": "checkbox", "id": "show_border", "label": "Show top border", "default": true },
     { "type": "text", "id": "label", "label": "Label", "default": "Find us" },
     {
       "type": "select",
@@ -344,6 +346,7 @@
     { "type": "header", "content": "Featured event" },
     { "type": "paragraph", "content": "The first upcoming event ticked as Featured, otherwise the next upcoming event." },
     { "type": "image_picker", "id": "feature_image", "label": "Image" },
+    { "type": "video", "id": "feature_video", "label": "Video", "info": "Optional. Plays muted on a loop instead of the image; the image becomes its poster." },
     { "type": "text", "id": "feature_image_alt", "label": "Image alt text" },
     { "type": "text", "id": "feature_label", "label": "Image label", "default": "Next fair" },
     { "type": "text", "id": "empty_text", "label": "Text when no events are coming up", "default": "New dates coming soon." },

@@ -6,6 +6,7 @@
   via the Section Rendering API. The heading's [artist] token is replaced
   with the artist's name (or the store name).
 {% endcomment %}
+{%- render 'section-border', section: section -%}
 {%- liquid
   assign artist = product.metafields.custom.artist.value
   assign artist_collection = artist.collection.value
@@ -54,7 +55,7 @@
   .product-related__head {
     margin: 0 0 4px;
     padding-top: 8px;
-    border-top: var(--border);
+    border-top: var(--section-border, var(--border));
   }
 
   .product-related__grid {
@@ -83,6 +84,7 @@
   "class": "section-product-related",
   "tag": "div",
   "settings": [
+    { "type": "checkbox", "id": "show_border", "label": "Show top border", "default": true },
     { "type": "text", "id": "heading", "label": "Heading", "info": "[artist] is replaced with the artist's name.", "default": "Also from [artist] & Jumbo Press" },
     { "type": "range", "id": "limit", "label": "Products", "min": 3, "max": 6, "step": 3, "default": 3 },
     {

@@ -1,0 +1,37 @@
+{% doc %}
+  Fills a `.media` frame with a video when one is set, otherwise the image
+  (or a placeholder). Videos play muted and looped, pause off screen, start
+  paused under reduced motion and have a pause/play button (WCAG 2.2.2).
+  The image doubles as the video's poster.
+
+  @param {object} [video] - Video from a `video` setting
+  @param {image} [image] - Image from an `image_picker` setting
+  @param {string} [sizes] - Image `sizes` attribute
+  @param {string} [widths] - Image srcset widths
+  @param {string} [alt] - Overrides the image's alt text
+  @param {string} [alt_fallback] - Alt text when the image has none
+  @param {boolean} [eager] - Above the fold
+  @param {string} [placeholder] - placeholder_svg_tag name
+{% enddoc %}
+{%- if video != blank -%}
+  {%- liquid
+    assign poster = ''
+    if image != blank
+      assign poster = image | image_url: width: 1600
+    endif
+  -%}
+  <auto-video class="auto-video" data-play-label="{{ 'general.video.play' | t | escape }}" data-pause-label="{{ 'general.video.pause' | t | escape }}">
+    {%- if poster != blank -%}
+      {{ video | video_tag: autoplay: true, loop: true, muted: true, playsinline: true, controls: false, preload: 'metadata', poster: poster, class: 'auto-video__video' }}
+    {%- else -%}
+      {{ video | video_tag: autoplay: true, loop: true, muted: true, playsinline: true, controls: false, preload: 'metadata', image_size: '1600x', class: 'auto-video__video' }}
+    {%- endif -%}
+    <button type="button" class="icon-button auto-video__toggle" data-video-toggle aria-label="{{ 'general.video.pause' | t }}">
+      <span data-icon-pause aria-hidden="true">❚❚</span>
+      <span data-icon-play aria-hidden="true" hidden>▶</span>
+    </button>
+  </auto-video>
+  <script src="{{ 'auto-video.js' | asset_url }}" type="module"></script>
+{%- else -%}
+  {%- render 'image', image: image, sizes: sizes, widths: widths, alt: alt, alt_fallback: alt_fallback, eager: eager, placeholder: placeholder -%}
+{%- endif -%}

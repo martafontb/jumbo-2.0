@@ -3,11 +3,12 @@
   Section head, a 3:2 image across two columns, and a paragraph with
   opening-hours rows in the third. Each "Hours" block is one row.
 {% endcomment %}
+{%- render 'section-border', section: section -%}
 <section class="page visit-hours space-{{ section.settings.spacing }}">
   {%- render 'section-head', label: section.settings.label, color: section.settings.label_color, caption: section.settings.caption -%}
   <div class="visit-hours__grid">
     <div class="media visit-hours__image" style="--ratio: 3 / 2;">
-      {%- render 'image', image: section.settings.image, sizes: '(min-width: 750px) 66vw, 100vw', alt: section.settings.image_alt, placeholder: 'lifestyle-1' -%}
+      {%- render 'image-or-video', video: section.settings.video, image: section.settings.image, sizes: '(min-width: 750px) 66vw, 100vw', alt: section.settings.image_alt, placeholder: 'lifestyle-1' -%}
     </div>
     <div class="visit-hours__side">
       {%- if section.settings.text != blank -%}<div class="visit-hours__text">{{ section.settings.text }}</div>{%- endif -%}
@@ -84,6 +85,7 @@
   "tag": "div",
   "max_blocks": 8,
   "settings": [
+    { "type": "checkbox", "id": "show_border", "label": "Show top border", "default": true },
     { "type": "text", "id": "label", "label": "Label", "default": "02 — Visit the studio" },
     {
       "type": "select",
@@ -98,6 +100,7 @@
     },
     { "type": "text", "id": "caption", "label": "Caption", "default": "Canal Yard" },
     { "type": "image_picker", "id": "image", "label": "Image" },
+    { "type": "video", "id": "video", "label": "Video", "info": "Optional. Plays muted on a loop instead of the image; the image becomes its poster." },
     { "type": "text", "id": "image_alt", "label": "Image alt text" },
     { "type": "richtext", "id": "text", "label": "Text", "default": "<p>Come and see the machines run. The studio is on the ground floor at Canal Yard, with the shop at the front and the presses behind.</p>" },
     {

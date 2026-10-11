@@ -4,15 +4,16 @@
   in the third column, an image (4:5) or a button. Used for "Our story" and
   "Work with us" on About.
 {% endcomment %}
+{%- render 'section-border', section: section -%}
 <section class="page media-text space-{{ section.settings.spacing }}">
   {%- render 'section-head', label: section.settings.label, color: section.settings.label_color, caption: section.settings.caption -%}
   <div class="media-text__grid">
     {%- if section.settings.text != blank -%}
       <div class="media-text__text">{{ section.settings.text }}</div>
     {%- endif -%}
-    {%- if section.settings.image != blank or section.settings.show_image_placeholder -%}
+    {%- if section.settings.image != blank or section.settings.video != blank or section.settings.show_image_placeholder -%}
       <div class="media media-text__image" style="--ratio: 4 / 5; --media-bg: var(--color-blue);">
-        {%- render 'image', image: section.settings.image, sizes: '(min-width: 750px) 33vw, 100vw', alt: section.settings.image_alt, placeholder: 'image' -%}
+        {%- render 'image-or-video', video: section.settings.video, image: section.settings.image, sizes: '(min-width: 750px) 33vw, 100vw', alt: section.settings.image_alt, placeholder: 'image' -%}
       </div>
     {%- elsif section.settings.use_shop_email and shop.email != blank -%}
       <a class="button media-text__button" href="mailto:{{ shop.email }}">{{ shop.email }} →</a>
@@ -69,6 +70,7 @@
   "class": "section-media-text",
   "tag": "div",
   "settings": [
+    { "type": "checkbox", "id": "show_border", "label": "Show top border", "default": true },
     { "type": "text", "id": "label", "label": "Label", "default": "01 — Our story" },
     {
       "type": "select",
@@ -84,6 +86,7 @@
     { "type": "text", "id": "caption", "label": "Caption", "default": "2019 to now" },
     { "type": "richtext", "id": "text", "label": "Text", "default": "<p>Jumbo Press began in a shared unit at Canal Yard with one secondhand risograph and a stack of uncoated paper.</p>" },
     { "type": "image_picker", "id": "image", "label": "Image", "info": "Shown in the third column. Leave empty to show the button instead." },
+    { "type": "video", "id": "video", "label": "Video", "info": "Optional. Plays muted on a loop instead of the image; the image becomes its poster." },
     { "type": "text", "id": "image_alt", "label": "Image alt text" },
     { "type": "checkbox", "id": "show_image_placeholder", "label": "Keep the image slot when no image is set", "default": false },
     { "type": "checkbox", "id": "use_shop_email", "label": "Button emails the store", "info": "Shows the store's contact email as the button.", "default": false },

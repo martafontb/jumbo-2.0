@@ -4,6 +4,7 @@
   swatches to pick from and a note per ink. Each "Ink" block is one ink:
   enter the real ink colour (hex) from your ink list.
 {% endcomment %}
+{%- render 'section-border', section: section -%}
 {%- assign inks = section.blocks | where: 'type', 'ink' -%}
 {%- if inks.size > 0 -%}
   <ink-picker class="page ink-picker space-{{ section.settings.spacing }}">
@@ -119,6 +120,7 @@
   "tag": "div",
   "max_blocks": 16,
   "settings": [
+    { "type": "checkbox", "id": "show_border", "label": "Show top border", "default": true },
     { "type": "text", "id": "label", "label": "Label", "default": "Inks" },
     { "type": "text", "id": "caption", "label": "Caption", "default": "Pick one to preview" },
     {

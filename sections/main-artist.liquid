@@ -9,6 +9,7 @@
   Artist fields: name, kind, color, portrait, bio, since, website, quote,
   inks (list of text, or ink metaobjects with name + color), collection.
 {% endcomment %}
+{%- render 'section-border', section: section -%}
 {%- liquid
   assign artist = metaobject
   assign artist_collection = artist.collection.value
@@ -315,6 +316,7 @@
   "name": "Artist",
   "class": "section-main-artist",
   "settings": [
+    { "type": "checkbox", "id": "show_border", "label": "Show top border", "default": true },
     { "type": "text", "id": "index_label", "label": "Breadcrumb label", "default": "Artists" },
     { "type": "url", "id": "index_link", "label": "Artists page", "info": "Defaults to /pages/artists." },
     { "type": "text", "id": "editions_label", "label": "Editions label", "default": "Editions" },

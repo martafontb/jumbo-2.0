@@ -73,7 +73,8 @@
     </div>
 
     {%- capture side -%}
-      {%- render 'image',
+      {%- render 'image-or-video',
+        video: section.settings.side_video,
         image: section.settings.side_image,
         sizes: '(min-width: 750px) 33vw, 100vw',
         alt: section.settings.side_image_alt,
@@ -224,6 +225,7 @@
     },
     { "type": "header", "content": "Side image" },
     { "type": "image_picker", "id": "side_image", "label": "Image" },
+    { "type": "video", "id": "side_video", "label": "Video", "info": "Optional. Plays muted on a loop instead of the image; the image becomes its poster." },
     { "type": "text", "id": "side_image_alt", "label": "Image alt text" },
     { "type": "text", "id": "side_label", "label": "Label", "default": "Now printing" },
     { "type": "url", "id": "side_link", "label": "Link" },

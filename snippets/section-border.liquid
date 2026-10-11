@@ -1,0 +1,11 @@
+{% doc %}
+  Hides the section's top rule when "Show top border" is unchecked. Rules
+  that frame a section use `border-top: var(--section-border, var(--border))`.
+
+  @param {object} section - The section
+{% enddoc %}
+{%- unless section.settings.show_border -%}
+  {%- style -%}
+    #shopify-section-{{ section.id }} { --section-border: none; }
+  {%- endstyle -%}
+{%- endunless -%}

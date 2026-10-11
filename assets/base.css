@@ -27,6 +27,7 @@ article-page,
 policy-tabs,
 product-related,
 contact-form,
+ink-marquee,
 video-tile {
   display: block;
 }
@@ -489,7 +490,7 @@ a {
   align-items: center;
   gap: 16px;
   padding-top: 8px;
-  border-top: var(--border);
+  border-top: var(--section-border, var(--border));
 }
 
 /* ---------- Spec list ---------- */
@@ -581,7 +582,7 @@ a {
   inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: var(--media-fit, cover);
 }
 
 .media__placeholder {
@@ -595,6 +596,27 @@ a {
   left: 8px;
   z-index: 1;
   pointer-events: none;
+}
+
+/* ---------- Background video in a media frame (snippets/image-or-video) ---------- */
+.auto-video {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+
+.auto-video__video {
+  width: 100%;
+  height: 100%;
+  object-fit: var(--media-fit, cover);
+}
+
+.auto-video__toggle {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  z-index: 1;
+  background: var(--color-bg);
 }
 
 /* ---------- Forms ---------- */
@@ -656,6 +678,29 @@ html.has-overlay {
   width: min(var(--drawer-width, 420px), 100vw);
   height: 100%;
   border-left: var(--border);
+}
+
+/* Drawers slide in from the right and back out (global.js closeOverlay). */
+.drawer[open] {
+  animation: drawer-in 0.4s var(--ease-out-expo) both;
+}
+
+.drawer.is-closing {
+  animation: drawer-out 0.25s ease-in both;
+}
+
+.drawer.is-closing::backdrop {
+  animation: fade 0.25s reverse both;
+}
+
+@keyframes drawer-in {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+@keyframes drawer-out {
+  from { transform: translateX(0); }
+  to { transform: translateX(100%); }
 }
 
 .drawer__inner {
@@ -736,8 +781,15 @@ html.has-overlay {
 }
 
 @media (pointer: fine) {
-  .scroller[data-draggable] {
+  /* Open hand over the whole row, links included, so it reads as draggable. */
+  .scroller[data-draggable],
+  .scroller[data-draggable] a {
     cursor: grab;
+  }
+
+  .scroller.is-dragging,
+  .scroller.is-dragging * {
+    cursor: grabbing;
   }
 }
 

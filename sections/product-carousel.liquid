@@ -6,6 +6,7 @@
   "Card colours" list. An optional end card closes the row with an image, a
   short note (e.g. what's sold out or coming back) and a button.
 {% endcomment %}
+{%- render 'section-border', section: section -%}
 {%- liquid
   assign collection = section.settings.collection
   assign grounds = section.settings.grounds | split: ','
@@ -23,7 +24,7 @@
     assign track_label = collection.title
   endif
   assign has_end_card = false
-  if section.settings.end_note != blank or section.settings.end_button_label != blank or section.settings.end_image != blank
+  if section.settings.end_note != blank or section.settings.end_button_label != blank or section.settings.end_image != blank or section.settings.end_video != blank
     assign has_end_card = true
   endif
 -%}
@@ -55,7 +56,7 @@
       {%- if has_end_card -%}
         <div class="product-carousel__item product-carousel__end">
           <div class="media" style="--ratio: 3 / 4; --media-bg: var(--color-{{ section.settings.end_ground }});">
-            {%- render 'image', image: section.settings.end_image, sizes: '(min-width: 750px) 33vw, 60vw', alt: section.settings.end_image_alt, placeholder: 'image' -%}
+            {%- render 'image-or-video', video: section.settings.end_video, image: section.settings.end_image, sizes: '(min-width: 750px) 33vw, 60vw', alt: section.settings.end_image_alt, placeholder: 'image' -%}
           </div>
           {%- if section.settings.end_note != blank -%}
             <div class="product-carousel__note label label--sm">{{ section.settings.end_note }}</div>
@@ -129,6 +130,7 @@
   "class": "section-product-carousel",
   "tag": "div",
   "settings": [
+    { "type": "checkbox", "id": "show_border", "label": "Show top border", "default": true },
     { "type": "collection", "id": "collection", "label": "Collection" },
     { "type": "range", "id": "limit", "label": "Products", "min": 3, "max": 16, "step": 1, "default": 8 },
     {
@@ -153,6 +155,7 @@
     { "type": "text", "id": "caption", "label": "Caption" },
     { "type": "header", "content": "End card" },
     { "type": "image_picker", "id": "end_image", "label": "Image" },
+    { "type": "video", "id": "end_video", "label": "Video", "info": "Optional. Plays muted on a loop instead of the image; the image becomes its poster." },
     { "type": "text", "id": "end_image_alt", "label": "Image alt text" },
     {
       "type": "select",

@@ -9,6 +9,7 @@
   Links from the price calculator (?size=A3&colours=3&run=300) prefill the
   quote fields.
 {% endcomment %}
+{%- render 'section-border', section: section -%}
 {%- liquid
   assign form_id = 'ContactForm-' | append: section.id
   assign contact_email = section.settings.email | default: shop.email
@@ -108,7 +109,7 @@
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: var(--grid-gap);
     padding-top: 20px;
-    border-top: var(--border);
+    border-top: var(--section-border, var(--border));
   }
 
   .contact-form__intro {
@@ -244,6 +245,7 @@
   "class": "section-contact-form",
   "tag": "section",
   "settings": [
+    { "type": "checkbox", "id": "show_border", "label": "Show top border", "default": true },
     { "type": "text", "id": "label", "label": "Label", "default": "Get a quote" },
     { "type": "text", "id": "heading", "label": "Heading", "default": "Send your artwork, get a price within 2 days." },
     { "type": "richtext", "id": "text", "label": "Text", "default": "<p>Tell us the size, colours and run. Share files with a WeTransfer, Drive or Dropbox link.</p>" },

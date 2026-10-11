@@ -15,7 +15,7 @@
   <h1 class="title-page about-intro__title">{{ section.settings.title | default: page.title | escape }}</h1>
   <div class="about-intro__grid">
     <div class="media about-intro__image" style="--ratio: 16 / 9;">
-      {%- render 'image', image: section.settings.image, sizes: '(min-width: 750px) 66vw, 100vw', alt: section.settings.image_alt, eager: true, placeholder: 'lifestyle-2' -%}
+      {%- render 'image-or-video', video: section.settings.video, image: section.settings.image, sizes: '(min-width: 750px) 66vw, 100vw', alt: section.settings.image_alt, eager: true, placeholder: 'lifestyle-2' -%}
     </div>
     <div class="about-intro__text">
       {%- if section.settings.text != blank -%}<div class="about-intro__lead">{{ section.settings.text }}</div>{%- endif -%}
@@ -70,6 +70,7 @@
   "settings": [
     { "type": "text", "id": "title", "label": "Title", "info": "Defaults to the page title." },
     { "type": "image_picker", "id": "image", "label": "Image" },
+    { "type": "video", "id": "video", "label": "Video", "info": "Optional. Plays muted on a loop instead of the image; the image becomes its poster." },
     { "type": "text", "id": "image_alt", "label": "Image alt text" },
     { "type": "richtext", "id": "text", "label": "Intro", "default": "<p>An independent risograph studio and publisher. Small runs, made with artists, one colour at a time.</p>" },
     { "type": "text", "id": "caption", "label": "Caption", "default": "Est. 2019 · Canal Yard" },

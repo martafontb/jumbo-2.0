@@ -3,6 +3,7 @@
   Page title (with accent full stop) and the page's rich-text content in a
   readable column. Used by templates/page.json.
 {% endcomment %}
+{%- render 'section-border', section: section -%}
 <div class="page main-page">
   {%- render 'page-title', title: page.title, intro: section.settings.intro, show_dot: section.settings.show_dot -%}
   <div class="main-page__body grid">
@@ -16,7 +17,7 @@
   .main-page__body {
     margin-top: 24px;
     padding-top: 24px;
-    border-top: var(--border);
+    border-top: var(--section-border, var(--border));
   }
 
   .main-page__content {
@@ -47,6 +48,7 @@
   "name": "Page",
   "class": "section-main-page",
   "settings": [
+    { "type": "checkbox", "id": "show_border", "label": "Show top border", "default": true },
     {
       "type": "richtext",
       "id": "intro",

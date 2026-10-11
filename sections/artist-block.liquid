@@ -9,6 +9,7 @@
   "See all editions" links to the artist page when the metaobject has web
   pages enabled, otherwise to the artist's collection.
 {% endcomment %}
+{%- render 'section-border', section: section -%}
 {%- assign artist = product.metafields.custom.artist.value -%}
 {%- if artist != blank -%}
   {%- liquid
@@ -125,6 +126,7 @@
   "class": "section-artist-block",
   "tag": "div",
   "settings": [
+    { "type": "checkbox", "id": "show_border", "label": "Show top border", "default": true },
     { "type": "paragraph", "content": "Shown when the product's custom.artist metafield points to an artist." },
     { "type": "text", "id": "label", "label": "Label", "default": "The artist" },
     {
