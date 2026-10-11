@@ -1,0 +1,322 @@
+{% comment %}
+  Price calculator ("Price guide")
+  Size and colour pills, a run slider and an estimate card on ink, then a
+  rate card table. Estimate = run × unit rate (per sheet, per colour) ×
+  colours + setup fee × colours. Rates are entered here in the store's
+  currency; the defaults are placeholders from the design, replace them.
+  Everything is a plain form, so without JS the controls still show the
+  rate card. Nothing is submitted to checkout: the button links to your
+  quote form.
+{% endcomment %}
+{%- liquid
+  assign size_rows = section.settings.sizes | newline_to_br | split: '<br />'
+  assign max_colours = section.settings.max_colours
+  assign default_colours = section.settings.default_colours | at_most: max_colours
+  assign setup_cents = section.settings.setup_fee | times: 100
+  assign card_qty = section.settings.rate_card_run
+-%}
+<price-calculator
+  class="page price-calc space-{{ section.settings.spacing }}"
+  data-setup="{{ setup_cents }}"
+  data-money-format="{{ shop.money_format | escape }}"
+>
+  <form class="price-calc__grid">
+    <div class="price-calc__controls">
+      <fieldset class="price-calc__group">
+        <legend class="label label--sm">{{ 'sections.prices.size' | t }}</legend>
+        <div class="price-calc__pills">
+          {%- assign size_index = 0 -%}
+          {%- for row in size_rows -%}
+            {%- assign cells = row | split: '|' -%}
+            {%- if cells.size < 2 -%}{%- continue -%}{%- endif -%}
+            {%- assign label = cells[0] | strip -%}
+            {%- assign unit_cents = cells[1] | strip | times: 100 | round -%}
+            <label class="price-calc__pill">
+              <input class="visually-hidden" type="radio" name="size" value="{{ unit_cents }}" data-label="{{ label | escape }}" {% if label == section.settings.default_size %}checked{% elsif size_index == 0 and section.settings.default_size == blank %}checked{% endif %}>
+              <span>{{ label | escape }}</span>
+            </label>
+            {%- assign size_index = size_index | plus: 1 -%}
+          {%- endfor -%}
+        </div>
+      </fieldset>
+
+      <fieldset class="price-calc__group">
+        <legend class="label label--sm">{{ 'sections.prices.colours' | t }}</legend>
+        <div class="price-calc__pills">
+          {%- for n in (1..max_colours) -%}
+            <label class="price-calc__pill">
+              <input class="visually-hidden" type="radio" name="colours" value="{{ n }}" {% if n == default_colours %}checked{% endif %}>
+              <span>{{ 'sections.prices.colour_count' | t: count: n }}</span>
+            </label>
+          {%- endfor -%}
+        </div>
+      </fieldset>
+
+      <label class="label label--sm price-calc__run">
+        <span>{{ 'sections.prices.run' | t }} <output data-run-output>{{ section.settings.default_run }}</output> {{ 'sections.prices.copies' | t }}</span>
+        <input type="range" name="run" min="{{ section.settings.min_run }}" max="{{ section.settings.max_run }}" step="{{ section.settings.run_step }}" value="{{ section.settings.default_run }}">
+      </label>
+    </div>
+
+    <div class="price-calc__estimate" aria-live="polite">
+      <span class="pill pill--blue">{{ section.settings.estimate_label | escape }}</span>
+      <div>
+        <p class="price-calc__total" data-total>–</p>
+        <p class="label label--sm price-calc__each"><span data-each>–</span> {{ 'sections.prices.each_note' | t }}</p>
+      </div>
+      {%- if section.settings.button_label != blank -%}
+        <a class="price-calc__button" href="{{ section.settings.button_link | default: '/pages/contact' }}" data-quote-link>{{ section.settings.button_label | escape }}</a>
+      {%- endif -%}
+    </div>
+  </form>
+
+  <div class="price-calc__rates">
+    {%- capture rate_caption -%}{{ 'sections.prices.rate_caption' | t: count: card_qty }}{%- endcapture -%}
+    {%- render 'section-head', label: section.settings.rate_label, color: 'red', caption: rate_caption -%}
+    <table class="price-calc__table">
+      <thead>
+        <tr>
+          <th scope="col">{{ 'sections.prices.size' | t }}</th>
+          {%- for n in (1..max_colours) -%}<th scope="col">{{ 'sections.prices.colour_count' | t: count: n }}</th>{%- endfor -%}
+        </tr>
+      </thead>
+      <tbody>
+        {%- for row in size_rows -%}
+          {%- assign cells = row | split: '|' -%}
+          {%- if cells.size < 2 -%}{%- continue -%}{%- endif -%}
+          {%- assign unit_cents = cells[1] | strip | times: 100 -%}
+          <tr>
+            <th scope="row">{{ cells[0] | strip | escape }}</th>
+            {%- for n in (1..max_colours) -%}
+              {%- assign setup_total = setup_cents | times: n -%}
+              {%- assign price = unit_cents | times: card_qty | times: n | plus: setup_total | round -%}
+              <td>{{ price | money_without_trailing_zeros }}</td>
+            {%- endfor -%}
+          </tr>
+        {%- endfor -%}
+      </tbody>
+    </table>
+    {%- if section.settings.note != blank -%}
+      <p class="label label--sm price-calc__note">{{ section.settings.note | escape }}</p>
+    {%- endif -%}
+  </div>
+</price-calculator>
+<script src="{{ 'price-calculator.js' | asset_url }}" type="module"></script>
+
+{% stylesheet %}
+  .price-calc__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--grid-gap);
+  }
+
+  .price-calc__controls {
+    grid-column: span 2;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    padding: 12px 0;
+  }
+
+  .price-calc__group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .price-calc__pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .price-calc__pill span {
+    display: inline-block;
+    padding: 16px 28px;
+    border: var(--border);
+    border-radius: var(--radius-pill);
+    font: 500 28px / 1 var(--font-display);
+    letter-spacing: -0.03em;
+    cursor: pointer;
+  }
+
+  .price-calc__pill span:hover {
+    background: var(--color-grey);
+  }
+
+  .price-calc__pill input:checked + span {
+    background: var(--color-ink);
+    color: var(--color-white);
+  }
+
+  .price-calc__pill input:focus-visible + span {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 2px;
+  }
+
+  .price-calc__run {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .price-calc__run input {
+    width: 100%;
+    accent-color: var(--color-ink);
+  }
+
+  .price-calc__estimate {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 16px;
+    margin: 12px 0 12px 12px;
+    padding: 20px;
+    border-radius: var(--radius-lg);
+    background: var(--color-ink);
+    color: var(--color-white);
+  }
+
+  .price-calc__total {
+    font: 500 clamp(64px, 8vw, 128px) / 0.85 var(--font-display);
+    letter-spacing: -0.05em;
+  }
+
+  .price-calc__each {
+    margin-top: 10px;
+  }
+
+  .price-calc__button {
+    padding: 16px;
+    background: var(--color-bg);
+    color: var(--color-ink);
+    font: 400 var(--text-label) / 1.2 var(--font-mono);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    text-align: center;
+    text-decoration: none;
+  }
+
+  .price-calc__button:hover {
+    background: var(--color-grey);
+    color: var(--color-ink);
+  }
+
+  .price-calc__estimate :focus-visible {
+    outline-color: var(--color-white);
+  }
+
+  .price-calc__rates {
+    margin-top: calc(var(--section-gap) * 1.3);
+  }
+
+  .price-calc__table {
+    width: 100%;
+    margin-top: 8px;
+    border-collapse: collapse;
+    border-top: var(--border);
+    table-layout: fixed;
+    text-align: left;
+  }
+
+  .price-calc__table thead th {
+    padding: 10px 0;
+    border-bottom: var(--border);
+    font: 400 var(--text-label-sm) / 1.3 var(--font-mono);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+  }
+
+  .price-calc__table tbody th,
+  .price-calc__table td {
+    padding: 16px 0;
+    border-bottom: var(--border);
+    font-weight: 400;
+  }
+
+  .price-calc__table tbody th {
+    font: 500 clamp(28px, 3vw, 48px) / 1 var(--font-display);
+    letter-spacing: -0.04em;
+  }
+
+  .price-calc__table td {
+    font: 400 20px / 1 var(--font-display);
+  }
+
+  .price-calc__note {
+    margin-top: 16px;
+    opacity: 0.6;
+  }
+
+  @media screen and (max-width: 749px) {
+    .price-calc__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .price-calc__controls {
+      grid-column: auto;
+    }
+
+    .price-calc__estimate {
+      margin: 12px 0;
+    }
+
+    .price-calc__pill span {
+      padding: 12px 20px;
+      font-size: 22px;
+    }
+
+    .price-calc__table td {
+      font-size: 16px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Price calculator",
+  "class": "section-price-calculator",
+  "tag": "div",
+  "settings": [
+    { "type": "paragraph", "content": "Estimate = run × unit rate × colours + setup fee × colours. Amounts are in your store's currency. The defaults are placeholders: replace them with your real rates." },
+    {
+      "type": "textarea",
+      "id": "sizes",
+      "label": "Sizes and unit rates",
+      "info": "One per line: Size | rate per sheet per colour, e.g. A4 | 0.70",
+      "default": "A5 | 0.40\nA4 | 0.70\nA3 | 1.20"
+    },
+    { "type": "text", "id": "default_size", "label": "Selected size", "default": "A4" },
+    { "type": "range", "id": "max_colours", "label": "Maximum colours", "min": 1, "max": 4, "step": 1, "default": 3 },
+    { "type": "range", "id": "default_colours", "label": "Selected colours", "min": 1, "max": 4, "step": 1, "default": 2 },
+    { "type": "number", "id": "setup_fee", "label": "Setup fee per colour", "default": 15 },
+    { "type": "number", "id": "min_run", "label": "Minimum run", "default": 10 },
+    { "type": "number", "id": "max_run", "label": "Maximum run", "default": 300 },
+    { "type": "number", "id": "run_step", "label": "Run step", "default": 10 },
+    { "type": "number", "id": "default_run", "label": "Starting run", "default": 100 },
+    { "type": "text", "id": "estimate_label", "label": "Estimate label", "default": "Estimate" },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Request this quote →" },
+    { "type": "url", "id": "button_link", "label": "Button link", "info": "Your quote form. Defaults to /pages/contact. The chosen size, colours and run are added to the link." },
+    { "type": "header", "content": "Rate card" },
+    { "type": "text", "id": "rate_label", "label": "Label", "default": "Rate card" },
+    { "type": "number", "id": "rate_card_run", "label": "Copies per row", "default": 100 },
+    { "type": "text", "id": "note", "label": "Note", "default": "Prices are placeholders. Replace with your real rates." },
+    {
+      "type": "select",
+      "id": "spacing",
+      "label": "Top spacing",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "none"
+    }
+  ],
+  "presets": [{ "name": "Price calculator" }]
+}
+{% endschema %}

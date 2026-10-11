@@ -1,0 +1,40 @@
+{
+  "sections": {
+    "header": {
+      "type": "page-header",
+      "blocks": {
+        "tab-print": {
+          "type": "tab",
+          "settings": {
+            "label": "Print guide",
+            "link": "shopify://pages/print-guide"
+          }
+        },
+        "tab-prices": {
+          "type": "tab",
+          "settings": {
+            "label": "Price guide",
+            "link": "shopify://pages/price-guide"
+          }
+        }
+      },
+      "block_order": [
+        "tab-print",
+        "tab-prices"
+      ],
+      "settings": {
+        "title": "Price guide",
+        "intro": "<p>Pick a size, colours and run for an estimate. Final quotes follow your file check.</p>",
+        "tabs_label": "Print service"
+      }
+    },
+    "calculator": {
+      "type": "price-calculator",
+      "settings": {}
+    }
+  },
+  "order": [
+    "header",
+    "calculator"
+  ]
+}
