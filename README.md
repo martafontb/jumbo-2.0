@@ -15,7 +15,7 @@ See `CLAUDE.md` for coding rules and `docs/phase-1-audit.md` for the architectur
 | 1 | Audit and plan | Done |
 | 2 | Foundation: tokens, fonts, layout, announcement bar, header (mega menus, mobile menu, predictive search), footer, baseline templates | Done |
 | 3 | Homepage: hero, statement, reviews strip, product carousel, studio note, video grid, shop the look, packs, events, stories | Done |
-| 4 | Collection, product (editions + merch), cart drawer and cart page | Done. Content pages (artists, journal, print guide, FAQ, policies, about) are next | |
+| 4 | Collection, product (editions + merch), cart drawer and cart page | Done. Print guide, price guide and FAQ done. Artists, journal, policies and about are next | |
 | 5 | Interactions and polish | Planned |
 | 6–7 | Validation and handover | Planned |
 
@@ -94,6 +94,20 @@ All optional. Create product metafields in Settings > Custom data > Products, an
 - **Studio notes** in the collection grid are blocks on the Collection section ("Show after product" sets the position).
 - **Cart drawer:** Theme settings > Cart chooses the drawer or the cart page. The drawer's add-ons come from a collection set on the Cart drawer section (Theme editor > any page > Cart drawer). The free-shipping bar uses the threshold in Theme settings > Cart.
 - **Size & shipping guide:** content lives on the Product section (sizes, shipping zones, returns text). Keep the shipping zones in sync with Settings > Shipping.
+
+### Print service and FAQ pages
+
+Create these pages in Online Store > Pages and pick the matching template:
+
+| Page (handle) | Template | Contents |
+|---|---|---|
+| Print guide (`print-guide`) | `page.print` | Header with tabs, statement, ink picker, file checklist, spec cards, CTA band, overprint simulator (off by default, as in the design), "How it is made" steps |
+| Price guide (`price-guide`) | `page.prices` | Header with tabs, price calculator and rate card |
+| FAQ (`faq`) | `page.faq` | Header, category chips, questions, "Still stuck?" card, FAQPage structured data |
+
+- **Inks:** the ink picker and overprint simulator ship with standard risograph ink colours as placeholders. Replace them with Jumbo's real ink colours (each ink is a block with a colour setting).
+- **Price calculator:** estimate = run × rate per sheet per colour × colours + setup fee × colours. The rates, setup fee, run range and sizes are section settings in the store's currency. **The defaults are the design's placeholder rates** and the note under the rate card says so until you change it. "Request this quote" links to `/pages/contact` by default and adds the chosen size, colours and run to the URL.
+- **FAQ:** one block per question. Questions with the same category share a filter chip. The contact card uses the store's email unless one is set.
 
 ### Homepage content
 

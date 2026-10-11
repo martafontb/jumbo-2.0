@@ -5,6 +5,9 @@ All notable changes to this theme are documented here. The format follows [Keep 
 ## [Unreleased]
 
 ### Added
+- Print service pages: `page.print` (page header with tabs, ink picker, file checklist, spec cards, CTA band, overprint simulator, "How it is made" stepper with inline SVG illustrations) and `page.prices` (price calculator with live estimate, quote link with chosen options, rate card).
+- FAQ page (`page.faq`): category filter chips, native `<details>` accordion, contact card, FAQPage JSON-LD.
+- Reusable sections: page header, CTA band, spec cards, checklist; statement section gains an ink-block button style. `print-tools`, `price-calculator` and `faq` modules.
 - Collection page: title with count, sticky filter bar (menu or Search & Discovery chips, sort), gap-free mixed-span grid driven by `custom.card_span`, studio-note tiles, empty state.
 - Product page (`main-product`): stacked or grid gallery, sticky info column built from blocks (breadcrumb, switcher, accented title, artist line, price with edition stock, specs from metafields, variant picker with swatches and size chart, buy buttons with quantity, live total and "View cart", guide link, description, text, app blocks), size & shipping guide drawer, Section Rendering on variant change, no-JS variant fallback.
 - Product sections: related products (artist collection or recommendations), "Complete the set" (`custom.pairs_with`), product reviews (Shop app blocks + `reviews.*` metafields), "The artist" (artist metaobject). New `product.merch` template.

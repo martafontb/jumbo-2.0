@@ -122,6 +122,30 @@
       "close": "Close stories",
       "previous": "Previous story",
       "next": "Next story"
+    },
+    "checklist": {
+      "step": "Step {{ number }}"
+    },
+    "overprint": {
+      "offset": "Offset {{ amount }} mm",
+      "drum": "Drum {{ number }}",
+      "misregistration": "Misregistration"
+    },
+    "prices": {
+      "size": "Size",
+      "colours": "Colours",
+      "colour_count": {
+        "one": "{{ count }} colour",
+        "other": "{{ count }} colours"
+      },
+      "run": "Run:",
+      "copies": "copies",
+      "each_note": "each · excl. shipping",
+      "rate_caption": "{{ count }} copies, per run"
+    },
+    "faq": {
+      "filter": "Filter questions",
+      "all": "All"
     }
   },
   "products": {
