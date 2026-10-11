@@ -1,95 +1,386 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "hero": {
       "type": "hero",
-      "blocks": {},
-      "block_order": [],
-      "settings": { "side_label": "Now printing", "main_ground": "ink", "side_ground": "grey", "spacing": "none" }
+      "blocks": {
+        "review_fgQwwW": {
+          "type": "review",
+          "settings": {
+            "quote": "Colour is richer than the photos. Slight blue misregistration is exactly why I bought it.",
+            "name": "Ines M.",
+            "caption": "",
+            "rating": 5,
+            "color": "blue"
+          }
+        }
+      },
+      "block_order": [
+        "review_fgQwwW"
+      ],
+      "settings": {
+        "video": "shopify://files/videos/video horizontal.mov",
+        "image_alt": "",
+        "main_ground": "blue",
+        "side_image": "shopify://shop_images/657760298_18156740725433464_4927516774514660040_n_1af85bcd-52c0-43a2-be99-a15626521b34.webp",
+        "side_image_alt": "",
+        "side_label": "Now printing",
+        "side_link": "",
+        "side_ground": "grey",
+        "spacing": "none"
+      }
     },
     "intro": {
       "type": "statement",
       "settings": {
         "text": "<p>Jumbo Press is a risograph studio and publisher. We print editions, zines and books with artists, one colour at a time, in small runs.</p>",
         "size": "regular",
+        "button_label": "",
+        "button_link": "",
         "spacing": "none"
       }
     },
     "reviews": {
       "type": "reviews-strip",
-      "blocks": {},
-      "block_order": [],
-      "settings": { "label": "Loved by buyers", "rating": "", "count_text": "", "spacing": "none" }
+      "disabled": true,
+      "settings": {
+        "label": "Loved by buyers",
+        "rating": "",
+        "count_text": "",
+        "spacing": "none"
+      }
     },
     "editions": {
       "type": "product-carousel",
       "settings": {
-        "collection": "editions",
+        "collection": "soft-goods",
         "limit": 8,
         "grounds": "blue, red, grey, red, blue",
+        "label": "",
+        "label_color": "blue",
+        "caption": "",
+        "end_image_alt": "",
+        "end_ground": "blue",
         "end_note": "<p>Sold out · Bloom Fields Vol. 2<br/>Back in print: November</p>",
         "end_button_label": "Shop all editions →",
-        "end_ground": "blue",
+        "end_button_link": "",
         "spacing": "none"
       }
     },
     "studio-note": {
       "type": "studio-note",
-      "settings": { "label": "Studio note", "date": "09.10.2026", "quote": "", "attribution": "", "spacing": "small" }
-    },
-    "on-the-press": {
-      "type": "video-grid",
-      "disabled": true,
-      "blocks": {
-        "video-1": { "type": "video", "settings": { "title": "How a print is made", "pill_color": "red", "ground": "blue" } },
-        "video-2": { "type": "video", "settings": { "title": "Studio tour", "pill_color": "blue", "ground": "blue" } },
-        "video-3": { "type": "video", "settings": { "title": "New drop unboxing", "pill_color": "grey", "ground": "red" } }
-      },
-      "block_order": ["video-1", "video-2", "video-3"],
-      "settings": { "label": "On the press", "caption": "Tap to play", "spacing": "medium" }
-    },
-    "shop-the-studio": {
-      "type": "shop-the-look",
-      "disabled": true,
-      "blocks": {
-        "spot-1": { "type": "hotspot", "settings": { "x": 22, "y": 34, "color": "blue" } },
-        "spot-2": { "type": "hotspot", "settings": { "x": 62, "y": 46, "color": "grey" } },
-        "spot-3": { "type": "hotspot", "settings": { "x": 40, "y": 78, "color": "blue" } }
-      },
-      "block_order": ["spot-1", "spot-2", "spot-3"],
-      "settings": { "heading": "Get the look", "label": "Shop the studio", "caption": "Tap the dots", "spacing": "medium" }
+      "settings": {
+        "label": "Studio note",
+        "date": "09.10.2026",
+        "quote": "I wanted the green to bleed into the paper a little. Jumbo let it.",
+        "attribution": "Jake Lucas",
+        "spacing": "none"
+      }
     },
     "packs": {
       "type": "packs",
       "blocks": {
-        "pack-1": { "type": "pack", "settings": { "title": "Starter Pack" } },
-        "pack-2": { "type": "pack", "settings": { "title": "Zine Pack" } },
-        "pack-3": { "type": "pack", "settings": { "title": "Studio Pack" } }
+        "pack-2": {
+          "type": "pack",
+          "settings": {
+            "product": "elephants-never-forget",
+            "title": "Zine Pack",
+            "blurb": ""
+          }
+        },
+        "pack-3": {
+          "type": "pack",
+          "settings": {
+            "product": "a-cat-cap",
+            "title": "Studio Pack",
+            "blurb": ""
+          }
+        },
+        "pack-1": {
+          "type": "pack",
+          "settings": {
+            "product": "cowgirl-risograph-print",
+            "title": "Starter Pack",
+            "blurb": ""
+          }
+        }
       },
-      "block_order": ["pack-1", "pack-2", "pack-3"],
-      "settings": { "label": "Packs", "caption": "Buy together, pay less", "button_label": "Add", "grounds": "grey, blue, red", "spacing": "medium" }
+      "block_order": [
+        "pack-2",
+        "pack-3",
+        "pack-1"
+      ],
+      "settings": {
+        "label": "Packs",
+        "label_color": "blue",
+        "caption": "Buy together, pay less",
+        "button_label": "Add",
+        "grounds": "grey, blue, red",
+        "spacing": "medium"
+      }
+    },
+    "on-the-press": {
+      "type": "video-grid",
+      "blocks": {
+        "video-1": {
+          "type": "video",
+          "settings": {
+            "title": "How a print is made",
+            "pill_color": "red",
+            "ground": "blue"
+          }
+        },
+        "video-2": {
+          "type": "video",
+          "settings": {
+            "title": "Studio tour",
+            "pill_color": "blue",
+            "ground": "blue"
+          }
+        },
+        "video-3": {
+          "type": "video",
+          "settings": {
+            "title": "New drop unboxing",
+            "pill_color": "grey",
+            "ground": "red"
+          }
+        }
+      },
+      "block_order": [
+        "video-1",
+        "video-2",
+        "video-3"
+      ],
+      "disabled": true,
+      "settings": {
+        "label": "On the press",
+        "label_color": "blue",
+        "caption": "Tap to play",
+        "spacing": "medium"
+      }
+    },
+    "shop-the-studio": {
+      "type": "shop-the-look",
+      "blocks": {
+        "spot-1": {
+          "type": "hotspot",
+          "settings": {
+            "product": "",
+            "title": "",
+            "x": 22,
+            "y": 34,
+            "color": "blue"
+          }
+        },
+        "spot-2": {
+          "type": "hotspot",
+          "settings": {
+            "product": "",
+            "title": "",
+            "x": 62,
+            "y": 46,
+            "color": "grey"
+          }
+        },
+        "spot-3": {
+          "type": "hotspot",
+          "settings": {
+            "product": "",
+            "title": "",
+            "x": 40,
+            "y": 78,
+            "color": "blue"
+          }
+        }
+      },
+      "block_order": [
+        "spot-1",
+        "spot-2",
+        "spot-3"
+      ],
+      "disabled": true,
+      "settings": {
+        "image_alt": "",
+        "heading": "Get the look",
+        "label": "Shop the studio",
+        "label_color": "blue",
+        "caption": "Tap the dots",
+        "spacing": "medium"
+      }
     },
     "events": {
       "type": "events",
       "blocks": {
-        "event-launch": { "type": "event", "settings": { "title": "Soft Machines launch", "kind": "Launches", "kind_color": "blue", "start": "2026-10-15 18:00", "end": "2026-10-15 21:00", "location": "Studio, Canal Yard · 6–9pm" } },
-        "event-workshop": { "type": "event", "settings": { "title": "Two-colour printing workshop", "kind": "Workshops", "kind_color": "blue", "start": "2026-10-24 10:00", "end": "2026-10-24 16:00", "location": "Studio, Canal Yard · 10am" } },
-        "event-fair": { "type": "event", "settings": { "title": "Small Press Fair", "kind": "Fairs", "kind_color": "grey", "start": "2026-11-07 10:00", "end": "2026-11-08 18:00", "date_label": "Sat 7 – Sun 8 Nov", "location": "Canal Yard", "featured": true } },
-        "event-weekender": { "type": "event", "settings": { "title": "Zine Weekender", "kind": "Fairs", "kind_color": "grey", "start": "2026-11-28 10:00", "end": "2026-11-29 18:00", "location": "Warehouse 9 · Sat–Sun" } },
-        "event-market": { "type": "event", "settings": { "title": "Riso Christmas Market", "kind": "Fairs", "kind_color": "red", "start": "2026-12-12 11:00", "end": "2026-12-12 19:00", "location": "Studio, Canal Yard · 11am–7pm" } }
+        "event-launch": {
+          "type": "event",
+          "settings": {
+            "title": "Soft Machines launch",
+            "kind": "Launches",
+            "kind_color": "blue",
+            "start": "2026-10-15 18:00",
+            "end": "2026-10-15 21:00",
+            "date_label": "",
+            "location": "Studio, Canal Yard · 6–9pm",
+            "directions_url": "",
+            "details_url": "",
+            "featured": false
+          }
+        },
+        "event-workshop": {
+          "type": "event",
+          "settings": {
+            "title": "Two-colour printing workshop",
+            "kind": "Workshops",
+            "kind_color": "blue",
+            "start": "2026-10-24 10:00",
+            "end": "2026-10-24 16:00",
+            "date_label": "",
+            "location": "Studio, Canal Yard · 10am",
+            "directions_url": "",
+            "details_url": "",
+            "featured": false
+          }
+        },
+        "event-fair": {
+          "type": "event",
+          "settings": {
+            "title": "Small Press Fair",
+            "kind": "Fairs",
+            "kind_color": "grey",
+            "start": "2026-11-07 10:00",
+            "end": "2026-11-08 18:00",
+            "date_label": "Sat 7 – Sun 8 Nov",
+            "location": "Canal Yard",
+            "directions_url": "",
+            "details_url": "",
+            "featured": true
+          }
+        },
+        "event-weekender": {
+          "type": "event",
+          "settings": {
+            "title": "Zine Weekender",
+            "kind": "Fairs",
+            "kind_color": "grey",
+            "start": "2026-11-28 10:00",
+            "end": "2026-11-29 18:00",
+            "date_label": "",
+            "location": "Warehouse 9 · Sat–Sun",
+            "directions_url": "",
+            "details_url": "",
+            "featured": false
+          }
+        },
+        "event-market": {
+          "type": "event",
+          "settings": {
+            "title": "Riso Christmas Market",
+            "kind": "Fairs",
+            "kind_color": "red",
+            "start": "2026-12-12 11:00",
+            "end": "2026-12-12 19:00",
+            "date_label": "",
+            "location": "Studio, Canal Yard · 11am–7pm",
+            "directions_url": "",
+            "details_url": "",
+            "featured": false
+          }
+        }
       },
-      "block_order": ["event-launch", "event-workshop", "event-fair", "event-weekender", "event-market"],
-      "settings": { "label": "Find us", "caption": "Fairs, workshops, launches", "heading": "See you there", "feature_label": "Next fair", "spacing": "medium" }
+      "block_order": [
+        "event-launch",
+        "event-workshop",
+        "event-fair",
+        "event-weekender",
+        "event-market"
+      ],
+      "settings": {
+        "label": "Find us",
+        "label_color": "blue",
+        "caption": "Fairs, workshops, launches",
+        "heading": "See you there",
+        "feature_image_alt": "",
+        "feature_label": "Next fair",
+        "empty_text": "New dates coming soon.",
+        "spacing": "medium"
+      }
     },
     "stories": {
       "type": "stories",
       "blocks": {
-        "story-1": { "type": "story", "settings": { "name": "Studio", "caption": "Fresh from the drum.", "time": "2h", "ground": "blue" } },
-        "story-2": { "type": "story", "settings": { "name": "New drop", "caption": "Soft Machines is live.", "time": "5h", "ground": "blue" } },
-        "story-3": { "type": "story", "settings": { "name": "Process", "caption": "Pass two of three.", "time": "1d", "ground": "grey" } }
+        "story-1": {
+          "type": "story",
+          "settings": {
+            "video": "shopify://files/videos/PXL_20260218_144154365.TS.mp4",
+            "name": "Studio",
+            "caption": "Fresh from the drum.",
+            "time": "2h",
+            "product": "",
+            "link": "",
+            "ground": "blue"
+          }
+        },
+        "story-2": {
+          "type": "story",
+          "settings": {
+            "image": "shopify://shop_images/DSC_5467.jpg",
+            "name": "New drop",
+            "caption": "Soft Machines is live.",
+            "time": "5h",
+            "product": "",
+            "link": "",
+            "ground": "blue"
+          }
+        },
+        "story-3": {
+          "type": "story",
+          "settings": {
+            "image": "shopify://shop_images/8F1A3337.jpg",
+            "name": "Process",
+            "caption": "Pass two of three.",
+            "time": "1d",
+            "product": "",
+            "link": "",
+            "ground": "grey"
+          }
+        }
       },
-      "block_order": ["story-1", "story-2", "story-3"],
-      "settings": { "label": "@jumbopress", "caption": "Follow along", "account": "jumbopress", "spacing": "medium" }
+      "block_order": [
+        "story-1",
+        "story-2",
+        "story-3"
+      ],
+      "settings": {
+        "label": "@jumbopress",
+        "label_color": "blue",
+        "caption": "Follow along",
+        "account": "jumbopress",
+        "shop_label": "Shop this →",
+        "button_label": "Follow on Instagram →",
+        "button_link": "",
+        "spacing": "medium"
+      }
     }
   },
-  "order": ["hero", "intro", "reviews", "editions", "studio-note", "on-the-press", "shop-the-studio", "packs", "events", "stories"]
+  "order": [
+    "hero",
+    "intro",
+    "reviews",
+    "editions",
+    "studio-note",
+    "packs",
+    "on-the-press",
+    "shop-the-studio",
+    "events",
+    "stories"
+  ]
 }

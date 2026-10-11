@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "type": "header",
   "name": "Header group",
@@ -7,6 +16,7 @@
       "blocks": {
         "message-welcome": {
           "type": "message",
+          "disabled": true,
           "settings": {
             "text": "10% off your first order with code 'WELCOME'",
             "link": "",
@@ -15,6 +25,7 @@
         },
         "message-shipping": {
           "type": "message",
+          "disabled": true,
           "settings": {
             "text": "Free UK shipping over £75",
             "link": "",
@@ -24,13 +35,17 @@
         "message-fair": {
           "type": "message",
           "settings": {
-            "text": "Next fair: Small Press Fair, 7 Nov",
+            "text": "Independent prints, zines and books. Made with artists, printed in Barcelona.",
             "link": "",
             "code": ""
           }
         }
       },
-      "block_order": ["message-welcome", "message-shipping", "message-fair"],
+      "block_order": [
+        "message-welcome",
+        "message-shipping",
+        "message-fair"
+      ],
       "settings": {
         "interval": 5,
         "dismissible": true,
@@ -44,7 +59,7 @@
           "type": "menu",
           "settings": {
             "label": "Shop",
-            "menu": "shop-menu",
+            "menu": "",
             "link": "shopify://collections/all",
             "row_colors": "blue, grey, blue, red, grey, white",
             "row_pills": "",
@@ -55,6 +70,7 @@
         "card-shop-feature": {
           "type": "product_card",
           "settings": {
+            "product": "",
             "tag": "New edition",
             "tag_color": "blue",
             "ground": "blue"
@@ -63,6 +79,7 @@
         "card-shop-zines": {
           "type": "product_card",
           "settings": {
+            "product": "",
             "tag": "Zines",
             "tag_color": "red",
             "ground": "grey"
@@ -72,7 +89,7 @@
           "type": "menu",
           "settings": {
             "label": "Print",
-            "menu": "print-menu",
+            "menu": "",
             "link": "",
             "row_colors": "blue, grey, red, grey",
             "row_pills": "Overview\nFrom £0.40\n12 inks\nPDF",
@@ -113,16 +130,20 @@
       ],
       "settings": {
         "sticky": true,
-        "mobile_menu": "info-menu",
+        "mobile_menu": "",
         "mobile_menu_heading": "Info",
         "show_search": true,
         "search_placeholder": "Search editions, zines, artists…",
         "search_suggestions_label": "Try",
         "search_suggestions": "Zines, Editions, Books, Process",
+        "search_collection": "",
         "search_collection_label": "Trending now",
         "search_empty_hint": "Try zines or editions."
       }
     }
   },
-  "order": ["announcement", "header"]
+  "order": [
+    "announcement",
+    "header"
+  ]
 }
