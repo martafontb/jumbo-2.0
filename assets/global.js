@@ -48,6 +48,35 @@ export function parseHTML(html) {
   return new DOMParser().parseFromString(html, 'text/html');
 }
 
+/**
+ * Format cents with a Shopify money format string, e.g. "£{{amount}}".
+ * Supports the standard placeholders Shopify stores use.
+ */
+export function formatMoney(cents, format = '{{amount}}') {
+  const value = Number(cents) / 100;
+  const group = (number, decimals, thousands, decimal) => {
+    const [whole, fraction] = number.toFixed(decimals).split('.');
+    const withThousands = whole.replace(/\B(?=(\d{3})+(?!\d))/g, thousands);
+    return fraction ? `${withThousands}${decimal}${fraction}` : withThousands;
+  };
+  return format.replace(/\{\{\s*(\w+)\s*\}\}/, (_, key) => {
+    switch (key) {
+      case 'amount_no_decimals':
+        return group(value, 0, ',', '.');
+      case 'amount_with_comma_separator':
+        return group(value, 2, '.', ',');
+      case 'amount_no_decimals_with_comma_separator':
+        return group(value, 0, '.', ',');
+      case 'amount_with_apostrophe_separator':
+        return group(value, 2, "'", '.');
+      case 'amount_with_space_separator':
+        return group(value, 2, ' ', ',');
+      default:
+        return group(value, 2, ',', '.');
+    }
+  });
+}
+
 /* ---------- Overlays ---------- */
 
 const openers = new WeakMap();
@@ -113,6 +142,12 @@ document.addEventListener('click', (event) => {
     event.preventDefault();
     closeOverlay(closeTrigger.closest('dialog'));
   }
+});
+
+// Forms marked data-auto-submit submit when a select changes (e.g. collection sort).
+document.addEventListener('change', (event) => {
+  const form = event.target.closest('form[data-auto-submit]');
+  if (form && event.target.matches('select')) form.requestSubmit();
 });
 
 /* ---------- Cart API ---------- */
@@ -219,6 +254,7 @@ document.addEventListener('cart:updated', (event) => {
 Object.assign(JumboPress, {
   debounce,
   announce,
+  formatMoney,
   copyText,
   parseHTML,
   prefersReducedMotion,

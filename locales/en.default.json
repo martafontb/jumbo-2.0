@@ -26,7 +26,8 @@
       "previous": "Previous page",
       "next": "Next page",
       "page": "Page {{ number }}"
-    }
+    },
+    "close": "Close"
   },
   "date_formats": {
     "date": "%-d %b %Y"
@@ -67,7 +68,12 @@
       "button": "Back to the shop →"
     },
     "collection": {
-      "empty": "Nothing here yet."
+      "empty": "Nothing here yet.",
+      "filter_label": "Filter products",
+      "all": "All",
+      "sort": "Sort:",
+      "apply": "Apply",
+      "clear": "Clear filters"
     },
     "blog": {
       "empty": "No stories yet."
@@ -134,6 +140,50 @@
     "save": "Save {{ amount }}",
     "rating": {
       "label": "Rated {{ rating }} out of {{ max }}"
+    },
+    "breadcrumb": "Breadcrumb",
+    "shop": "Shop",
+    "size_chart": {
+      "show": "View size chart",
+      "hide": "Hide size chart"
+    },
+    "edition_remaining": "{{ remaining }} of {{ size }} remaining",
+    "in_stock": "In stock",
+    "tax_included": "Tax included.",
+    "shipping_at_checkout": "Shipping calculated at checkout.",
+    "added_another": "Added ✓ — add another",
+    "view_cart": "View cart",
+    "quantity_increase": "Increase quantity",
+    "quantity_decrease": "Decrease quantity",
+    "guide": {
+      "sizes": "Sizes",
+      "shipping": "Shipping",
+      "returns": "Returns",
+      "refund_policy": "Full refund policy →"
+    },
+    "choose_options": "Choose options",
+    "reviews": {
+      "count": {
+        "one": "{{ count }} review",
+        "other": "{{ count }} reviews"
+      },
+      "empty": "Product reviews: add the Shop app's reviews block to show this section."
+    },
+    "artist": {
+      "since": "With us since {{ year }}",
+      "practice": "Practice",
+      "based_in": "Based in",
+      "editions": "Editions",
+      "editions_count": {
+        "one": "{{ count }} with {{ shop }}",
+        "other": "{{ count }} with {{ shop }}"
+      },
+      "elsewhere": "Elsewhere",
+      "see_all": {
+        "one": "See {{ count }} edition →",
+        "other": "See all {{ count }} editions →"
+      },
+      "view": "About the artist →"
     }
   },
   "cart": {
@@ -145,6 +195,20 @@
     "update": "Update cart",
     "errors": {
       "generic": "Something went wrong. Please try again."
+    },
+    "close": "Close cart",
+    "each": "{{ price }} each",
+    "view_full": "View full cart",
+    "add_price": "+ {{ price }}",
+    "keep_shopping": "← Keep shopping",
+    "shipping_label": "Shipping",
+    "shipping_calculated": "Calculated at checkout",
+    "total": "Total",
+    "updated": "Cart updated",
+    "shipping": {
+      "away": "{{ amount }} away from free shipping",
+      "unlocked": "Free shipping unlocked",
+      "gets_free": "Gets you free shipping"
     }
   },
   "gift_card": {

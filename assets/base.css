@@ -13,8 +13,15 @@ event-list,
 product-form,
 quote-rotator,
 predictive-search,
+product-info,
+cart-items,
+product-related,
 video-tile {
   display: block;
+}
+
+quantity-input {
+  display: inline-flex;
 }
 
 *,
