@@ -1,4 +1,95 @@
 {
-  "sections": {},
-  "order": []
+  "sections": {
+    "hero": {
+      "type": "hero",
+      "blocks": {},
+      "block_order": [],
+      "settings": { "side_label": "Now printing", "main_ground": "ink", "side_ground": "grey", "spacing": "none" }
+    },
+    "intro": {
+      "type": "statement",
+      "settings": {
+        "text": "<p>Jumbo Press is a risograph studio and publisher. We print editions, zines and books with artists, one colour at a time, in small runs.</p>",
+        "size": "regular",
+        "spacing": "none"
+      }
+    },
+    "reviews": {
+      "type": "reviews-strip",
+      "blocks": {},
+      "block_order": [],
+      "settings": { "label": "Loved by buyers", "rating": "", "count_text": "", "spacing": "none" }
+    },
+    "editions": {
+      "type": "product-carousel",
+      "settings": {
+        "collection": "editions",
+        "limit": 8,
+        "grounds": "blue, red, grey, red, blue",
+        "end_note": "<p>Sold out · Bloom Fields Vol. 2<br/>Back in print: November</p>",
+        "end_button_label": "Shop all editions →",
+        "end_ground": "blue",
+        "spacing": "none"
+      }
+    },
+    "studio-note": {
+      "type": "studio-note",
+      "settings": { "label": "Studio note", "date": "09.10.2026", "quote": "", "attribution": "", "spacing": "small" }
+    },
+    "on-the-press": {
+      "type": "video-grid",
+      "disabled": true,
+      "blocks": {
+        "video-1": { "type": "video", "settings": { "title": "How a print is made", "pill_color": "red", "ground": "blue" } },
+        "video-2": { "type": "video", "settings": { "title": "Studio tour", "pill_color": "blue", "ground": "blue" } },
+        "video-3": { "type": "video", "settings": { "title": "New drop unboxing", "pill_color": "grey", "ground": "red" } }
+      },
+      "block_order": ["video-1", "video-2", "video-3"],
+      "settings": { "label": "On the press", "caption": "Tap to play", "spacing": "medium" }
+    },
+    "shop-the-studio": {
+      "type": "shop-the-look",
+      "disabled": true,
+      "blocks": {
+        "spot-1": { "type": "hotspot", "settings": { "x": 22, "y": 34, "color": "blue" } },
+        "spot-2": { "type": "hotspot", "settings": { "x": 62, "y": 46, "color": "grey" } },
+        "spot-3": { "type": "hotspot", "settings": { "x": 40, "y": 78, "color": "blue" } }
+      },
+      "block_order": ["spot-1", "spot-2", "spot-3"],
+      "settings": { "heading": "Get the look", "label": "Shop the studio", "caption": "Tap the dots", "spacing": "medium" }
+    },
+    "packs": {
+      "type": "packs",
+      "blocks": {
+        "pack-1": { "type": "pack", "settings": { "title": "Starter Pack" } },
+        "pack-2": { "type": "pack", "settings": { "title": "Zine Pack" } },
+        "pack-3": { "type": "pack", "settings": { "title": "Studio Pack" } }
+      },
+      "block_order": ["pack-1", "pack-2", "pack-3"],
+      "settings": { "label": "Packs", "caption": "Buy together, pay less", "button_label": "Add", "grounds": "grey, blue, red", "spacing": "medium" }
+    },
+    "events": {
+      "type": "events",
+      "blocks": {
+        "event-launch": { "type": "event", "settings": { "title": "Soft Machines launch", "kind": "Launches", "kind_color": "blue", "start": "2026-10-15 18:00", "end": "2026-10-15 21:00", "location": "Studio, Canal Yard · 6–9pm" } },
+        "event-workshop": { "type": "event", "settings": { "title": "Two-colour printing workshop", "kind": "Workshops", "kind_color": "blue", "start": "2026-10-24 10:00", "end": "2026-10-24 16:00", "location": "Studio, Canal Yard · 10am" } },
+        "event-fair": { "type": "event", "settings": { "title": "Small Press Fair", "kind": "Fairs", "kind_color": "grey", "start": "2026-11-07 10:00", "end": "2026-11-08 18:00", "date_label": "Sat 7 – Sun 8 Nov", "location": "Canal Yard", "featured": true } },
+        "event-weekender": { "type": "event", "settings": { "title": "Zine Weekender", "kind": "Fairs", "kind_color": "grey", "start": "2026-11-28 10:00", "end": "2026-11-29 18:00", "location": "Warehouse 9 · Sat–Sun" } },
+        "event-market": { "type": "event", "settings": { "title": "Riso Christmas Market", "kind": "Fairs", "kind_color": "red", "start": "2026-12-12 11:00", "end": "2026-12-12 19:00", "location": "Studio, Canal Yard · 11am–7pm" } }
+      },
+      "block_order": ["event-launch", "event-workshop", "event-fair", "event-weekender", "event-market"],
+      "settings": { "label": "Find us", "caption": "Fairs, workshops, launches", "heading": "See you there", "feature_label": "Next fair", "spacing": "medium" }
+    },
+    "stories": {
+      "type": "stories",
+      "blocks": {
+        "story-1": { "type": "story", "settings": { "name": "Studio", "caption": "Fresh from the drum.", "time": "2h", "ground": "blue" } },
+        "story-2": { "type": "story", "settings": { "name": "New drop", "caption": "Soft Machines is live.", "time": "5h", "ground": "blue" } },
+        "story-3": { "type": "story", "settings": { "name": "Process", "caption": "Pass two of three.", "time": "1d", "ground": "grey" } }
+      },
+      "block_order": ["story-1", "story-2", "story-3"],
+      "settings": { "label": "@jumbopress", "caption": "Follow along", "account": "jumbopress", "spacing": "medium" }
+    }
+  },
+  "order": ["hero", "intro", "reviews", "editions", "studio-note", "on-the-press", "shop-the-studio", "packs", "events", "stories"]
 }

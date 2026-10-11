@@ -14,8 +14,8 @@ See `CLAUDE.md` for coding rules and `docs/phase-1-audit.md` for the architectur
 |---|---|---|
 | 1 | Audit and plan | Done |
 | 2 | Foundation: tokens, fonts, layout, announcement bar, header (mega menus, mobile menu, predictive search), footer, baseline templates | Done |
-| 3 | Homepage sections | Next |
-| 4 | Collection, product, cart (drawer + page), content pages | Planned. Collection, product, cart, blog and article currently use working baseline sections |
+| 3 | Homepage: hero, statement, reviews strip, product carousel, studio note, video grid, shop the look, packs, events, stories | Done |
+| 4 | Collection, product, cart (drawer + page), content pages | Next. Collection, product, cart, blog and article currently use working baseline sections |
 | 5 | Interactions and polish | Planned |
 | 6–7 | Validation and handover | Planned |
 
@@ -54,9 +54,37 @@ Each header "Menu" block picks its menu in the theme editor, so other handles wo
 - **Cart:** drawer or page on add, and the free-shipping threshold for the progress bar (must match your shipping rates).
 - **Social media:** links shown in the footer "Follow" column.
 
+### Reviews (Shop app)
+
+Reviews come from the Shop app. The theme never invents review content:
+
+- **Star ratings** on product cards read the standard `reviews.rating` product metafield and render only when it's populated. Product pages (Phase 4) also accept the Shop app's app blocks.
+- **Reviews strip** (homepage): add the Shop app's block, and/or fill in the average rating, review count and "Review quote" blocks with real reviews. It stays hidden until something is filled in.
+- **Hero review card:** "Review quote" blocks on the Hero section. Empty by default; the card is hidden until you add one.
+
 ### Metafields and metaobjects
 
-None are required yet. The definitions planned for Phases 3–4 are listed in `docs/phase-1-audit.md` §3 and will be documented here as they're used.
+The theme reads these product metafields when present. All are optional; create them in Settings > Custom data > Products.
+
+| Namespace.key | Type | Used for |
+|---|---|---|
+| `custom.card_meta` | Single line text | Caption under product cards, e.g. "edition of 120 · 3 colours" |
+| `custom.card_tag` | Single line text | Tag pill on product cards in the collection grid (Phase 4) |
+| `reviews.rating` | Rating (set by the reviews app) | Stars on product cards |
+
+Further definitions planned for Phase 4 are listed in `docs/phase-1-audit.md` §3.
+
+### Homepage content
+
+Every homepage section is editable in the theme editor. All text, images and videos are placeholders to replace:
+
+- **Hero:** Shopify-hosted video (Content > Files) or an image, side image and label, optional review quotes.
+- **Product carousel:** pick a collection (defaults to the `editions` handle). The end card's note and button are editable.
+- **Studio note:** hidden until a real quote is added.
+- **Video grid** and **Shop the look:** included but switched off, as in the design. Enable them in the theme editor.
+- **Packs:** pick bundle products (e.g. made with Shopify Bundles). Set a compare-at price to show the saving.
+- **Events:** one block per event, with start/end as `YYYY-MM-DD HH:MM`. Past events hide automatically. "Remind me" downloads a calendar file.
+- **Stories:** upload portrait images or videos per story. The follow button uses the Instagram link from Theme settings.
 
 ## Structure
 

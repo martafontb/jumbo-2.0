@@ -5,6 +5,8 @@ All notable changes to this theme are documented here. The format follows [Keep 
 ## [Unreleased]
 
 ### Added
+- Homepage sections: hero (video or image, side image, rotating review card), statement, reviews strip (Shop app blocks + optional real quotes), product carousel with drag-to-scroll and an end card, studio note, video grid, shop the look (hotspots with add to cart), packs (savings from compare-at prices), events (featured countdown, kind filters, .ics reminders, auto-hiding past events) and stories (9:16 viewer with auto-advance).
+- Shared snippets: product card, price, stars, section head, add-to-cart form; `product-form`, `drag-scroller`, `quote-rotator`, `video-tile`, `event-list`, `story-viewer` and `hero` modules.
 - Theme foundation on Shopify Skeleton v1.0.0: layout, password layout, Theme Check config, `.shopifyignore`.
 - Design tokens (`snippets/css-variables.liquid`) driven by theme colour settings; self-hosted Outfit (variable) and DM Mono fonts with preload.
 - `assets/base.css`: reset, typography scale, pills, buttons, chips, icon buttons, section heads, spec lists, progress bars, steppers, media frames, dialog-based overlays, reduced-motion support.
