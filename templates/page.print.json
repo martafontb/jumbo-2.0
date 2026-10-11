@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "header": {
@@ -24,16 +33,19 @@
       ],
       "settings": {
         "title": "Print with us",
+        "show_dot": true,
         "intro": "<p>A small-run risograph service for artists, publishers and festivals. Here is how it works.</p>",
         "tabs_label": "Print service"
       }
     },
     "statement": {
       "type": "statement",
+      "disabled": true,
       "settings": {
         "text": "<p>Two drums, up to three colours, runs up to 300. We turn files around in about a week.</p>",
         "size": "regular",
         "button_label": "Request a quote →",
+        "button_link": "",
         "button_style": "block",
         "spacing": "none"
       }
@@ -45,7 +57,7 @@
           "type": "ink",
           "settings": {
             "name": "Jumbo Red",
-            "color": "#EA5A46",
+            "color": "#ea5a46",
             "note": "A warm, strong red. Beautiful on its own, punchy under black."
           }
         },
@@ -53,7 +65,7 @@
           "type": "ink",
           "settings": {
             "name": "Jumbo Yellow",
-            "color": "#FFE800",
+            "color": "#ffe800",
             "note": "Bright and sunny. Overprints well with every other colour."
           }
         },
@@ -61,7 +73,7 @@
           "type": "ink",
           "settings": {
             "name": "Jumbo Green",
-            "color": "#00A95C",
+            "color": "#00a95c",
             "note": "A deep, leafy green. Our most-requested ink."
           }
         },
@@ -69,7 +81,7 @@
           "type": "ink",
           "settings": {
             "name": "Jumbo Blue",
-            "color": "#0078BF",
+            "color": "#0078bf",
             "note": "Clean cobalt blue. Pairs with red for a rich purple."
           }
         },
@@ -77,7 +89,7 @@
           "type": "ink",
           "settings": {
             "name": "Jumbo Aqua",
-            "color": "#5EC8E5",
+            "color": "#5ec8e5",
             "note": "Cool and light. Good for skies, water and soft shadows."
           }
         },
@@ -85,7 +97,7 @@
           "type": "ink",
           "settings": {
             "name": "Jumbo Purple",
-            "color": "#765BA7",
+            "color": "#765ba7",
             "note": "Saturated purple. Strong on its own or under yellow."
           }
         },
@@ -93,7 +105,7 @@
           "type": "ink",
           "settings": {
             "name": "Jumbo Fluo-Green",
-            "color": "#44D62C",
+            "color": "#44d62c",
             "note": "Neon green that glows. Use it sparingly and loudly."
           }
         }
@@ -110,7 +122,94 @@
       "settings": {
         "label": "Inks",
         "caption": "Pick one to preview",
-        "spacing": "large"
+        "spacing": "none"
+      }
+    },
+    "specs": {
+      "type": "spec-cards",
+      "blocks": {
+        "c1": {
+          "type": "card",
+          "settings": {
+            "label": "Max size",
+            "value": "A3",
+            "note": "297 × 420 mm. Smaller sizes are cheaper per sheet.",
+            "color": "grey"
+          }
+        },
+        "c2": {
+          "type": "card",
+          "settings": {
+            "label": "Run",
+            "value": "10–300",
+            "note": "Copies per design. Larger runs by arrangement.",
+            "color": "bg"
+          }
+        },
+        "c3": {
+          "type": "card",
+          "settings": {
+            "label": "Turnaround",
+            "value": "~7 days",
+            "note": "From approved proof to finished sheets.",
+            "color": "blue"
+          }
+        }
+      },
+      "block_order": [
+        "c1",
+        "c2",
+        "c3"
+      ],
+      "settings": {
+        "label": "Specs",
+        "caption": "At a glance",
+        "spacing": "small"
+      }
+    },
+    "simulator": {
+      "type": "overprint-simulator",
+      "blocks": {
+        "a": {
+          "type": "ink",
+          "settings": {
+            "name": "Blue",
+            "color": "#0078bf"
+          }
+        },
+        "b": {
+          "type": "ink",
+          "settings": {
+            "name": "Red",
+            "color": "#ea5a46"
+          }
+        },
+        "c": {
+          "type": "ink",
+          "settings": {
+            "name": "Yellow",
+            "color": "#ffe800"
+          }
+        },
+        "d": {
+          "type": "ink",
+          "settings": {
+            "name": "Green",
+            "color": "#00a95c"
+          }
+        }
+      },
+      "block_order": [
+        "a",
+        "b",
+        "c",
+        "d"
+      ],
+      "settings": {
+        "label": "Fig. 2 — Meet Jumbo",
+        "caption": "Pick two inks, nudge the registration",
+        "figure_label": "Two ink layers of an illustrated elephant overprinting each other",
+        "spacing": "small"
       }
     },
     "file-prep": {
@@ -154,102 +253,7 @@
       "settings": {
         "label": "Prepare your file",
         "caption": "Tick them off",
-        "spacing": "large"
-      }
-    },
-    "specs": {
-      "type": "spec-cards",
-      "blocks": {
-        "c1": {
-          "type": "card",
-          "settings": {
-            "label": "Max size",
-            "value": "A3",
-            "note": "297 × 420 mm. Smaller sizes are cheaper per sheet.",
-            "color": "grey"
-          }
-        },
-        "c2": {
-          "type": "card",
-          "settings": {
-            "label": "Run",
-            "value": "10–300",
-            "note": "Copies per design. Larger runs by arrangement.",
-            "color": "bg"
-          }
-        },
-        "c3": {
-          "type": "card",
-          "settings": {
-            "label": "Turnaround",
-            "value": "~7 days",
-            "note": "From approved proof to finished sheets.",
-            "color": "blue"
-          }
-        }
-      },
-      "block_order": [
-        "c1",
-        "c2",
-        "c3"
-      ],
-      "settings": {
-        "label": "Specs",
-        "caption": "At a glance",
-        "spacing": "large"
-      }
-    },
-    "cta": {
-      "type": "cta-band",
-      "settings": {
-        "text": "Ready? Send us the file.",
-        "button_label": "See the price guide →",
-        "button_link": "shopify://pages/price-guide",
-        "color": "grey",
-        "spacing": "medium"
-      }
-    },
-    "simulator": {
-      "type": "overprint-simulator",
-      "disabled": true,
-      "blocks": {
-        "a": {
-          "type": "ink",
-          "settings": {
-            "name": "Blue",
-            "color": "#0078BF"
-          }
-        },
-        "b": {
-          "type": "ink",
-          "settings": {
-            "name": "Red",
-            "color": "#EA5A46"
-          }
-        },
-        "c": {
-          "type": "ink",
-          "settings": {
-            "name": "Yellow",
-            "color": "#FFE800"
-          }
-        },
-        "d": {
-          "type": "ink",
-          "settings": {
-            "name": "Green",
-            "color": "#00A95C"
-          }
-        }
-      },
-      "block_order": [
-        "a",
-        "b",
-        "c",
-        "d"
-      ],
-      "settings": {
-        "spacing": "large"
+        "spacing": "small"
       }
     },
     "process": {
@@ -303,6 +307,18 @@
         "p4"
       ],
       "settings": {
+        "label": "Chapter 02 — How it is made",
+        "caption": "From file to edition",
+        "spacing": "small"
+      }
+    },
+    "cta": {
+      "type": "cta-band",
+      "settings": {
+        "text": "Ready? Send us the file.",
+        "button_label": "See the price guide →",
+        "button_link": "shopify://pages/price-guide",
+        "color": "grey",
         "spacing": "medium"
       }
     }
@@ -311,10 +327,10 @@
     "header",
     "statement",
     "inks",
-    "file-prep",
     "specs",
-    "cta",
     "simulator",
-    "process"
+    "file-prep",
+    "process",
+    "cta"
   ]
 }

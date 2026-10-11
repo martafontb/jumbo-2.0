@@ -49,7 +49,8 @@
       "settings": {
         "interval": 5,
         "dismissible": true,
-        "background": "red"
+        "background": "red",
+        "text_color": "white"
       }
     },
     "header": {
@@ -59,7 +60,7 @@
           "type": "menu",
           "settings": {
             "label": "Shop",
-            "menu": "",
+            "menu": "collections",
             "link": "shopify://collections/all",
             "row_colors": "blue, grey, blue, red, grey, white",
             "row_pills": "",
@@ -70,7 +71,7 @@
         "card-shop-feature": {
           "type": "product_card",
           "settings": {
-            "product": "",
+            "product": "the-illustrators-cookbook",
             "tag": "New edition",
             "tag_color": "blue",
             "ground": "blue"
@@ -79,7 +80,7 @@
         "card-shop-zines": {
           "type": "product_card",
           "settings": {
-            "product": "",
+            "product": "jumbologo",
             "tag": "Zines",
             "tag_color": "red",
             "ground": "grey"
