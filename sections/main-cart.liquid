@@ -1,40 +1,107 @@
 {% comment %}
-  Cart (baseline)
-  Working cart page as a plain form: quantities post to /cart, checkout
-  button submits to checkout. Phase 4 replaces this with the designed cart
-  (ink summary card, steppers, shipping progress) plus the cart drawer.
+  Cart page
+  "Cart. (n)" title, lines across two columns (140px thumbnails, steppers,
+  Remove, line totals and unit prices) and a sticky order summary card on
+  ink: shipping progress, subtotal, discounts, shipping note, total and
+  Checkout. Empty state: a grey block with a message and a button.
+
+  Works without JS as a normal cart form (quantities post as updates[],
+  Update and Checkout buttons). With JS, <cart-items> updates lines through
+  the Cart API and re-renders this section.
 {% endcomment %}
-<div class="page main-cart">
-  {%- assign title = 'cart.title' | t -%}
-  {%- render 'page-title', title: title, count: cart.item_count, count_style: 'accent' -%}
+<cart-items class="page main-cart" data-section="{{ section.id }}">
+  <div class="main-cart__head">
+    <h1 class="title-page main-cart__title">
+      {{- 'cart.title' | t -}}<span class="dot">.</span>
+      <em class="main-cart__count{% if cart.item_count == 0 %} main-cart__count--empty{% endif %}">(<span data-cart-count>{{ cart.item_count }}</span>)</em>
+    </h1>
+  </div>
 
   {%- if cart.item_count > 0 -%}
-    <form action="{{ routes.cart_url }}" method="post" class="main-cart__form">
-      <ul class="main-cart__lines" role="list">
-        {%- for item in cart.items -%}
-          <li class="main-cart__line">
-            <a href="{{ item.url }}" class="title-card">{{ item.product.title | escape }}</a>
-            {%- unless item.product.has_only_default_variant -%}
-              <span class="pill pill--blue">{{ item.variant.title | escape }}</span>
-            {%- endunless -%}
-            <label class="visually-hidden" for="Updates-{{ item.key }}">{{ 'products.quantity' | t }}</label>
-            <input class="field main-cart__qty" id="Updates-{{ item.key }}" type="number" name="updates[]" value="{{ item.quantity }}" min="0">
-            <span class="label">{{ item.final_line_price | money }}</span>
-          </li>
-        {%- endfor -%}
-      </ul>
-      <p class="main-cart__total">{{ 'cart.subtotal' | t }} {{ cart.total_price | money_with_currency }}</p>
-      <div class="main-cart__actions">
-        <button type="submit" class="button button--secondary" name="update">{{ 'cart.update' | t }}</button>
-        <button type="submit" class="button" name="checkout">{{ 'cart.checkout' | t }}</button>
-      </div>
-    </form>
+    <div class="main-cart__grid">
+      <form action="{{ routes.cart_url }}" method="post" id="CartPageForm" class="main-cart__lines-wrap" novalidate>
+        <ul class="main-cart__lines" role="list">
+          {%- for item in cart.items -%}
+            {%- render 'cart-line', item: item, index: forloop.index, size: 'page' -%}
+          {%- endfor -%}
+        </ul>
+        <noscript>
+          <button type="submit" name="update" class="button button--secondary main-cart__update">{{ 'cart.update' | t }}</button>
+        </noscript>
+        <a class="link-mono main-cart__continue" href="{{ section.settings.continue_link | default: routes.all_products_collection_url }}">{{ 'cart.keep_shopping' | t }}</a>
+      </form>
+
+      <aside class="main-cart__summary" aria-labelledby="CartSummaryTitle">
+        <h2 class="pill pill--red main-cart__summary-label" id="CartSummaryTitle">{{ section.settings.summary_label | escape }}</h2>
+        {%- render 'cart-shipping-progress', variant: 'dark' -%}
+        <dl class="main-cart__rows">
+          <dt>{{ 'cart.subtotal' | t }}</dt>
+          <dd>{{ cart.items_subtotal_price | money }}</dd>
+          {%- for discount in cart.cart_level_discount_applications -%}
+            <dt>{{ discount.title | escape }}</dt>
+            <dd>−{{ discount.total_allocated_amount | money }}</dd>
+          {%- endfor -%}
+          <dt>{{ 'cart.shipping_label' | t }}</dt>
+          <dd>{{ 'cart.shipping_calculated' | t }}</dd>
+        </dl>
+        <p class="main-cart__total">
+          <span class="label">{{ 'cart.total' | t }}</span>
+          <span class="main-cart__total-amount">{{ cart.total_price | money }}</span>
+          <span class="visually-hidden">{{ cart.currency.iso_code }}</span>
+        </p>
+        {%- if cart.taxes_included -%}
+          <p class="label label--sm main-cart__fine">{{ 'products.tax_included' | t }}</p>
+        {%- endif -%}
+        <button type="submit" name="checkout" form="CartPageForm" class="button button--full main-cart__checkout">{{ 'cart.checkout' | t }}</button>
+        {%- if section.settings.note != blank -%}
+          <p class="label label--sm main-cart__fine">{{ section.settings.note | escape }}</p>
+        {%- endif -%}
+      </aside>
+    </div>
   {%- else -%}
-    <p class="title-statement">{{ 'cart.empty' | t }}</p>
+    <div class="main-cart__empty">
+      <p class="main-cart__empty-text">{{ section.settings.empty_text | escape }}</p>
+      <a class="button main-cart__empty-button" href="{{ section.settings.empty_button_link | default: routes.all_products_collection_url }}">
+        {{- section.settings.empty_button_label | escape -}}
+      </a>
+    </div>
   {%- endif -%}
-</div>
+  <p class="visually-hidden" role="status" data-cart-status></p>
+</cart-items>
+<script src="{{ 'cart-items.js' | asset_url }}" type="module"></script>
+<script src="{{ 'quantity-input.js' | asset_url }}" type="module"></script>
 
 {% stylesheet %}
+  .main-cart__head {
+    padding: 28px 0 14px;
+  }
+
+  .main-cart__title {
+    margin: 0;
+  }
+
+  .main-cart__count {
+    color: var(--color-blue);
+    font-weight: 400;
+  }
+
+  .main-cart__count--empty {
+    color: var(--color-red);
+  }
+
+  .main-cart__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--grid-gap);
+    align-items: start;
+  }
+
+  .main-cart__lines-wrap {
+    grid-column: span 2;
+    display: flex;
+    flex-direction: column;
+  }
+
   .main-cart__lines {
     margin: 0;
     padding: 0;
@@ -42,28 +109,118 @@
     border-top: var(--border);
   }
 
-  .main-cart__line {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 12px;
-    padding: 12px 0;
-    border-bottom: var(--border);
+  .main-cart__update,
+  .main-cart__continue {
+    align-self: flex-start;
+    margin-top: 14px;
+    text-decoration: none;
   }
 
-  .main-cart__qty {
-    width: 90px;
+  .main-cart__summary {
+    position: sticky;
+    top: 60px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-left: 12px;
+    padding: 18px;
+    background: var(--color-ink);
+    color: var(--color-white);
+  }
+
+  .main-cart__summary-label {
+    margin: 0;
+  }
+
+  .main-cart__rows {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 8px;
+    margin: 0;
+    padding-top: 12px;
+    border-top: 1px solid var(--color-white);
+    font: 400 var(--text-label) / 1.3 var(--font-mono);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+  }
+
+  .main-cart__rows dd {
+    margin: 0;
+    text-align: right;
   }
 
   .main-cart__total {
-    margin-top: 24px;
-    font: 500 32px / 1 var(--font-display);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--color-white);
   }
 
-  .main-cart__actions {
+  .main-cart__total-amount {
+    font: 500 clamp(36px, 4vw, 56px) / 1 var(--font-display);
+    letter-spacing: -0.03em;
+    text-align: right;
+  }
+
+  .main-cart__checkout {
+    border-color: var(--color-grey);
+    background: var(--color-grey);
+    color: var(--color-ink);
+    font-size: 13px;
+  }
+
+  .main-cart__checkout:hover {
+    border-color: var(--color-red);
+  }
+
+  .main-cart__summary :focus-visible {
+    outline-color: var(--color-white);
+  }
+
+  .main-cart__fine {
+    opacity: 0.8;
+  }
+
+  .main-cart__empty {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--grid-gap);
+  }
+
+  .main-cart__empty-text {
+    grid-column: span 2;
     display: flex;
-    gap: 8px;
-    margin-top: 16px;
+    align-items: flex-end;
+    aspect-ratio: 2 / 1;
+    padding: 20px;
+    border-radius: var(--radius-lg);
+    background: var(--color-grey);
+    font: 500 clamp(28px, 3.4vw, 52px) / 1.04 var(--font-display);
+    letter-spacing: -0.03em;
+  }
+
+  .main-cart__empty-button {
+    align-self: end;
+    border-radius: 0;
+  }
+
+  @media screen and (max-width: 749px) {
+    .main-cart__grid,
+    .main-cart__empty {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .main-cart__lines-wrap,
+    .main-cart__empty-text {
+      grid-column: auto;
+    }
+
+    .main-cart__summary {
+      position: static;
+      margin: 24px 0 0;
+    }
   }
 {% endstylesheet %}
 
@@ -71,6 +228,14 @@
 {
   "name": "Cart",
   "class": "section-main-cart",
-  "settings": []
+  "settings": [
+    { "type": "text", "id": "summary_label", "label": "Summary label", "default": "Order summary" },
+    { "type": "text", "id": "note", "label": "Note under Checkout", "default": "Ships flat in board envelopes. Tracked delivery." },
+    { "type": "url", "id": "continue_link", "label": "“Keep shopping” link" },
+    { "type": "header", "content": "Empty cart" },
+    { "type": "text", "id": "empty_text", "label": "Text", "default": "Nothing here yet. Fresh prints are waiting." },
+    { "type": "text", "id": "empty_button_label", "label": "Button label", "default": "Shop editions →" },
+    { "type": "url", "id": "empty_button_link", "label": "Button link" }
+  ]
 }
 {% endschema %}

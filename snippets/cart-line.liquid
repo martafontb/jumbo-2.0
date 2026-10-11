@@ -1,0 +1,207 @@
+{% doc %}
+  One cart line: square thumbnail, title, variant / properties, quantity
+  stepper, Remove, line total (and unit price on the cart page).
+  Works without JS: the quantity input posts as updates[] with the cart
+  form, and Remove is a link to /cart/change.
+
+  @param {object} item - Line item
+  @param {number} index - forloop.index (Cart API line number)
+  @param {string} [size] - 'drawer' (default) or 'page'
+{% enddoc %}
+{%- assign size = size | default: 'drawer' -%}
+<li class="cart-line cart-line--{{ size }}" data-line="{{ index }}" data-key="{{ item.key }}">
+  <a class="cart-line__thumb" href="{{ item.url }}" tabindex="-1" aria-hidden="true">
+    {%- if item.image -%}
+      {%- if size == 'page' -%}
+        {%- render 'image', image: item.image, sizes: '140px', widths: '140, 280, 420', decorative: true -%}
+      {%- else -%}
+        {%- render 'image', image: item.image, sizes: '76px', widths: '76, 152, 228', decorative: true -%}
+      {%- endif -%}
+    {%- endif -%}
+  </a>
+
+  <div class="cart-line__info">
+    <div>
+      <a class="cart-line__title" href="{{ item.url }}">{{ item.product.title | escape }}</a>
+      {%- unless item.product.has_only_default_variant -%}
+        <p class="cart-line__variant{% if size == 'page' %} pill pill--blue{% endif %}">{{ item.variant.title | escape }}</p>
+      {%- endunless -%}
+      {%- if item.selling_plan_allocation -%}
+        <p class="cart-line__meta">{{ item.selling_plan_allocation.selling_plan.name | escape }}</p>
+      {%- endif -%}
+      {%- for property in item.properties -%}
+        {%- assign first_char = property.first | slice: 0 -%}
+        {%- if property.last != blank and first_char != '_' -%}
+          <p class="cart-line__meta">{{ property.first | escape }}: {{ property.last | escape }}</p>
+        {%- endif -%}
+      {%- endfor -%}
+      {%- for discount in item.line_level_discount_allocations -%}
+        <p class="cart-line__meta">{{ discount.discount_application.title | escape }} (−{{ discount.amount | money }})</p>
+      {%- endfor -%}
+    </div>
+
+    <div class="cart-line__actions">
+      <quantity-input class="stepper cart-line__qty">
+        <button type="button" class="stepper__button" data-step="down" aria-label="{{ 'products.quantity_decrease' | t }}: {{ item.product.title | escape }}">−</button>
+        <label class="visually-hidden" for="Qty-{{ size }}-{{ index }}">{{ 'products.quantity' | t }}: {{ item.product.title | escape }}</label>
+        <input
+          class="stepper__input"
+          type="number"
+          id="Qty-{{ size }}-{{ index }}"
+          name="updates[]"
+          value="{{ item.quantity }}"
+          min="0"
+          {% if item.variant.quantity_rule.max %}max="{{ item.variant.quantity_rule.max }}"{% endif %}
+          step="{{ item.variant.quantity_rule.increment | default: 1 }}"
+          inputmode="numeric"
+          data-line-quantity
+        >
+        <button type="button" class="stepper__button" data-step="up" aria-label="{{ 'products.quantity_increase' | t }}: {{ item.product.title | escape }}">+</button>
+      </quantity-input>
+      <a class="link-mono cart-line__remove" href="{{ item.url_to_remove }}" data-remove>
+        {{- 'cart.remove' | t -}}<span class="visually-hidden">: {{ item.product.title | escape }}</span>
+      </a>
+    </div>
+    <p class="form-message form-message--error" role="alert" data-line-error hidden></p>
+  </div>
+
+  <div class="cart-line__price">
+    <span class="cart-line__total">
+      {%- if item.original_line_price > item.final_line_price -%}
+        <s class="cart-line__was">{{ item.original_line_price | money }}</s>
+      {%- endif -%}
+      {{ item.final_line_price | money }}
+    </span>
+    {%- if size == 'page' -%}
+      {%- assign each_price = item.final_price | money -%}
+      <span class="label label--sm">{{ 'cart.each' | t: price: each_price }}</span>
+    {%- endif -%}
+  </div>
+</li>
+
+{% stylesheet %}
+  .cart-line {
+    display: grid;
+    grid-template-columns: 76px minmax(0, 1fr) auto;
+    gap: 12px;
+    padding: 14px 0;
+    border-bottom: var(--border);
+  }
+
+  .cart-line--page {
+    grid-template-columns: 140px minmax(0, 1fr) auto;
+    gap: 16px;
+  }
+
+  .cart-line[aria-busy='true'] {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  .cart-line__thumb {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    aspect-ratio: 1;
+    border-radius: var(--radius-sm);
+    background: var(--color-grey);
+  }
+
+  .cart-line__thumb img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .cart-line__info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 8px;
+    min-width: 0;
+  }
+
+  .cart-line__title {
+    display: block;
+    font: 400 22px / 1.05 var(--font-display);
+    letter-spacing: -0.02em;
+    text-decoration: none;
+  }
+
+  .cart-line--page .cart-line__title {
+    font-size: 32px;
+  }
+
+  .cart-line__variant,
+  .cart-line__meta {
+    margin-top: 4px;
+    font: 400 var(--text-label-sm) / 1.35 var(--font-mono);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    opacity: 0.7;
+  }
+
+  .cart-line__variant.pill {
+    margin-top: 6px;
+    opacity: 1;
+  }
+
+  .cart-line__actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .cart-line__qty {
+    --stepper-size: 28px;
+  }
+
+  .cart-line--page .cart-line__qty {
+    --stepper-size: 34px;
+  }
+
+  .cart-line__remove:hover {
+    color: var(--color-red);
+  }
+
+  .cart-line__price {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-end;
+    text-align: right;
+  }
+
+  .cart-line__total {
+    font: 500 22px / 1 var(--font-display);
+  }
+
+  .cart-line--page .cart-line__total {
+    font-size: 32px;
+  }
+
+  .cart-line__was {
+    display: block;
+    font-size: 0.6em;
+    opacity: 0.55;
+  }
+
+  @media screen and (max-width: 749px) {
+    .cart-line--page {
+      grid-template-columns: 96px minmax(0, 1fr) auto;
+      gap: 12px;
+    }
+
+    .cart-line--page .cart-line__title,
+    .cart-line--page .cart-line__total {
+      font-size: 22px;
+    }
+
+    .cart-line__qty,
+    .cart-line--page .cart-line__qty {
+      --stepper-size: 44px;
+    }
+  }
+{% endstylesheet %}

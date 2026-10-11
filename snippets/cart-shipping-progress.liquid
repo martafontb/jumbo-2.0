@@ -1,0 +1,59 @@
+{% doc %}
+  Free-shipping progress: "£n away from free shipping" or "Free shipping
+  unlocked", plus a bar. The threshold is the theme setting (store currency).
+  Hidden when the customer shops in another currency, because Liquid has no
+  exchange rate to convert the threshold reliably.
+
+  @param {string} [variant] - 'light' (drawer, default) or 'dark' (cart summary card)
+{% enddoc %}
+{%- liquid
+  assign threshold = settings.free_shipping_threshold | default: 0 | times: 100
+  assign show = false
+  if threshold > 0 and cart.currency.iso_code == shop.currency
+    assign show = true
+  endif
+-%}
+{%- if show -%}
+  {%- liquid
+    assign remaining = threshold | minus: cart.total_price
+    assign pct = cart.total_price | times: 100.0 | divided_by: threshold | at_most: 100 | round
+  -%}
+  <div class="shipping-progress shipping-progress--{{ variant | default: 'light' }}">
+    <p class="shipping-progress__text" data-shipping-text>
+      {%- if remaining > 0 -%}
+        {%- assign remaining_money = remaining | money -%}
+        {{ 'cart.shipping.away' | t: amount: remaining_money }}
+      {%- else -%}
+        {{ 'cart.shipping.unlocked' | t }}
+      {%- endif -%}
+    </p>
+    <div class="progress shipping-progress__bar" style="--progress: {{ pct }}%;" aria-hidden="true">
+      <div class="progress__fill"></div>
+    </div>
+  </div>
+{%- endif -%}
+
+{% stylesheet %}
+  .shipping-progress {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .shipping-progress__text {
+    font: 400 var(--text-label) / 1.3 var(--font-mono);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+  }
+
+  .shipping-progress--light .shipping-progress__bar {
+    --progress-track: var(--color-grey);
+    --progress-fill: var(--color-ink);
+  }
+
+  .shipping-progress--dark .shipping-progress__bar {
+    height: 8px;
+    --progress-track: rgb(255 255 255 / 0.18);
+    --progress-fill: var(--color-blue);
+  }
+{% endstylesheet %}

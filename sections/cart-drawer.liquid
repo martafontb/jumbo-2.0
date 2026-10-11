@@ -1,0 +1,37 @@
+{% comment %}
+  Cart drawer
+  Rendered statically from layout/theme.liquid when Theme settings > Cart is
+  set to "Open the cart drawer", so the Section Rendering API can re-render
+  it by name ("cart-drawer") after every cart change.
+
+  Lines with steppers and Remove, an optional "Fancy a little extra?" upsell
+  list (products from a collection that aren't already in the cart; ones
+  that would unlock free shipping say so), the free-shipping bar, subtotal,
+  Checkout and "View full cart".
+
+  The content sits in [data-cart-drawer-content] so JS can swap it without
+  closing the open dialog.
+{% endcomment %}
+<dialog class="overlay drawer cart-drawer" id="CartDrawer" aria-labelledby="CartDrawerTitle">
+  <cart-items class="drawer__inner" data-section="{{ section.id }}" data-cart-drawer-content>
+    {%- render 'cart-drawer-content', drawer: section.settings -%}
+  </cart-items>
+</dialog>
+<script src="{{ 'cart-items.js' | asset_url }}" type="module"></script>
+<script src="{{ 'quantity-input.js' | asset_url }}" type="module"></script>
+<script src="{{ 'product-form.js' | asset_url }}" type="module"></script>
+
+{% schema %}
+{
+  "name": "Cart drawer",
+  "class": "section-cart-drawer",
+  "settings": [
+    { "type": "header", "content": "Upsells" },
+    { "type": "collection", "id": "upsell_collection", "label": "Add-on products", "info": "Up to two products from this collection that aren't in the cart yet." },
+    { "type": "range", "id": "upsell_limit", "label": "Add-ons to show", "min": 0, "max": 3, "step": 1, "default": 2 },
+    { "type": "text", "id": "upsell_heading", "label": "Heading", "default": "Fancy a little extra?" },
+    { "type": "header", "content": "Empty cart" },
+    { "type": "text", "id": "empty_text", "label": "Text", "default": "Nothing here yet." }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,230 @@
+{% doc %}
+  Inner content of the cart drawer (re-rendered after every cart change).
+
+  @param {object} drawer - cart-drawer section settings
+{% enddoc %}
+{%- liquid
+  assign in_cart = cart.items | map: 'product_id' | join: ','
+  assign in_cart = ',' | append: in_cart | append: ','
+  assign threshold = settings.free_shipping_threshold
+  assign remaining = 0
+  if threshold > 0 and cart.currency.iso_code == shop.currency
+    assign remaining = threshold | times: 100 | minus: cart.total_price
+  endif
+-%}
+<div class="drawer__head">
+  <h2 class="drawer__title" id="CartDrawerTitle">
+    {{- 'cart.title' | t -}}
+    <span class="cart-drawer__count" data-cart-count>{{ cart.item_count }}</span>
+  </h2>
+  <button type="button" class="icon-button" data-overlay-close aria-label="{{ 'cart.close' | t }}"><span aria-hidden="true">×</span></button>
+</div>
+
+<div class="cart-drawer__body">
+  <form action="{{ routes.cart_url }}" method="post" id="CartDrawerForm" novalidate>
+    {%- if cart.item_count == 0 -%}
+      {%- assign empty_text = 'cart.empty' | t -%}
+      <p class="cart-drawer__empty">{{ drawer.empty_text | default: empty_text | escape }}</p>
+    {%- else -%}
+      <ul class="cart-drawer__lines" role="list">
+        {%- for item in cart.items -%}
+          {%- render 'cart-line', item: item, index: forloop.index, size: 'drawer' -%}
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+  </form>
+
+    {%- if drawer.upsell_collection != blank and drawer.upsell_limit > 0 -%}
+      {%- capture upsell_rows -%}
+        {%- assign shown = 0 -%}
+        {%- for product in drawer.upsell_collection.products -%}
+          {%- assign needle = ',' | append: product.id | append: ',' -%}
+          {%- if in_cart contains needle or product.available == false or product.has_only_default_variant == false -%}{%- continue -%}{%- endif -%}
+          {%- if shown >= drawer.upsell_limit -%}{%- break -%}{%- endif -%}
+          {%- assign shown = shown | plus: 1 -%}
+          <li class="cart-upsell">
+            <span class="cart-upsell__thumb">
+              {%- render 'image', image: product.featured_media, sizes: '56px', widths: '56, 112, 168', decorative: true -%}
+            </span>
+            <span class="cart-upsell__info">
+              <a class="cart-upsell__title" href="{{ product.url }}">{{ product.title | escape }}</a>
+              {%- if product.metafields.custom.card_meta.value != blank -%}
+                <span class="cart-upsell__blurb">{{ product.metafields.custom.card_meta.value | escape }}</span>
+              {%- endif -%}
+              {%- if remaining > 0 and product.price >= remaining -%}
+                <span class="label label--sm cart-upsell__unlock">{{ 'cart.shipping.gets_free' | t }}</span>
+              {%- endif -%}
+            </span>
+            {%- assign upsell_price = product.price | money -%}
+            {%- assign upsell_label = 'cart.add_price' | t: price: upsell_price -%}
+            {%- render 'add-to-cart-form', product: product, label: upsell_label -%}
+          </li>
+        {%- endfor -%}
+      {%- endcapture -%}
+      {%- if upsell_rows != blank -%}
+        <div class="cart-drawer__upsells">
+          <p class="cart-drawer__upsell-heading">{{ drawer.upsell_heading | escape }}</p>
+          {%- if remaining > 0 -%}
+            {%- assign remaining_money = remaining | money -%}
+            <span class="pill pill--blue">{{ 'cart.shipping.away' | t: amount: remaining_money }}</span>
+          {%- elsif threshold > 0 and cart.currency.iso_code == shop.currency -%}
+            <span class="pill pill--blue">{{ 'cart.shipping.unlocked' | t }}</span>
+          {%- endif -%}
+          <ul class="cart-drawer__upsell-list" role="list">{{ upsell_rows }}</ul>
+        </div>
+      {%- endif -%}
+    {%- endif -%}
+</div>
+
+{%- if cart.item_count > 0 -%}
+  <div class="cart-drawer__foot">
+    {%- render 'cart-shipping-progress', variant: 'light' -%}
+    <p class="cart-drawer__subtotal">
+      <span class="label">{{ 'cart.subtotal' | t }}</span>
+      <span class="cart-drawer__amount">{{ cart.total_price | money }}</span>
+    </p>
+    {%- if cart.cart_level_discount_applications.size > 0 -%}
+      <ul class="label label--sm cart-drawer__discounts" role="list">
+        {%- for discount in cart.cart_level_discount_applications -%}
+          <li>{{ discount.title | escape }} (−{{ discount.total_allocated_amount | money }})</li>
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+    <button type="submit" name="checkout" form="CartDrawerForm" class="button button--full cart-drawer__checkout">{{ 'cart.checkout' | t }}</button>
+    <a class="link-mono cart-drawer__full" href="{{ routes.cart_url }}">{{ 'cart.view_full' | t }}</a>
+  </div>
+{%- endif -%}
+<p class="visually-hidden" role="status" data-cart-status></p>
+
+{% stylesheet %}
+  .cart-drawer__count {
+    padding: 3px 12px;
+    border-radius: var(--radius-pill);
+    background: var(--color-grey);
+    font: 400 14px / 1 var(--font-mono);
+    letter-spacing: 0;
+  }
+
+  .cart-drawer__body {
+    flex: 1;
+    overflow: auto;
+    padding: 0 16px;
+  }
+
+  .cart-drawer__lines {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .cart-drawer__empty {
+    margin: 24px 0;
+    font: 500 32px / 1.05 var(--font-display);
+    letter-spacing: -0.03em;
+  }
+
+  .cart-drawer__upsells {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 16px 0 18px;
+  }
+
+  .cart-drawer__upsell-heading {
+    font: 500 32px / 1 var(--font-display);
+    letter-spacing: -0.04em;
+  }
+
+  .cart-drawer__upsell-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .cart-upsell {
+    display: grid;
+    grid-template-columns: 56px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 10px;
+    padding: 6px;
+    border: var(--border);
+    border-radius: var(--radius-sm);
+  }
+
+  .cart-upsell:hover {
+    background: var(--color-grey);
+  }
+
+  .cart-upsell__thumb {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 1;
+    border: var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--color-blue);
+  }
+
+  .cart-upsell__thumb img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .cart-upsell__info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  .cart-upsell__title {
+    font: 400 var(--text-card-sm) / 1.05 var(--font-display);
+    letter-spacing: -0.02em;
+    text-decoration: none;
+  }
+
+  .cart-upsell__blurb {
+    font: 400 13px / 1.25 var(--font-display);
+  }
+
+  .cart-upsell__unlock {
+    text-decoration: underline;
+  }
+
+  .cart-upsell .button {
+    padding: 10px 12px;
+  }
+
+  .cart-drawer__foot {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex-shrink: 0;
+    padding: 16px;
+    border-top: var(--border);
+  }
+
+  .cart-drawer__subtotal {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  .cart-drawer__amount {
+    font: 500 44px / 1 var(--font-display);
+    letter-spacing: -0.03em;
+  }
+
+  .cart-drawer__checkout {
+    font-size: 13px;
+  }
+
+  .cart-drawer__full {
+    align-self: center;
+  }
+{% endstylesheet %}
