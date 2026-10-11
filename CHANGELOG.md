@@ -5,6 +5,8 @@ All notable changes to this theme are documented here. The format follows [Keep 
 ## [Unreleased]
 
 ### Added
+- Announcement bar "Text colour" setting (ink by default, white optional).
+- `docs/phase-6-validation.md`: what was tested, how, and what still needs the store.
 - Newsletter popup (Overlays group): opens once per visitor after a delay, from the footer link, or on section select in the editor; Shopify customer form tagged `newsletter` with success and error states.
 - Sticky add-to-cart bar on mobile product pages, shown while the buy buttons are off screen; it submits the main product form and mirrors its "Added" state.
 - Touch-target helper: 44px invisible hit areas on touch screens for chips, buttons, mono links and `.tap-target` elements (breadcrumbs, logo, cart line titles, variant pills, hotspot list, carousel end link); larger range inputs and sort select.
@@ -36,3 +38,13 @@ All notable changes to this theme are documented here. The format follows [Keep 
 ### Changed
 - Stock status and form error messages use ink text with a red or blue marker, for WCAG AA contrast.
 - Product form accepts submit buttons outside the form (`form="…"`), mirroring busy and "Added" states and returning focus to the button used.
+- Muted text uses an `--opacity-muted` token (0.68) for WCAG AA contrast.
+- Collection studio notes use ink text on blue and red backgrounds.
+- Price calculator renders its default estimate in Liquid, so it shows without JS.
+- Empty collections link back to the shop unless a filter is applied.
+
+### Fixed
+- Size guide diagram colours (blue, grey, blue, as designed) so the size labels stay readable.
+- Visible focus ring on the collection sort control.
+- Quantity inputs and the policy permalink meet the 24px target size.
+- Ink picker, process steps and FAQ no longer leak `document` listeners when the theme editor re-renders them.

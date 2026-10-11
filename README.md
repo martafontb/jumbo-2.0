@@ -17,7 +17,8 @@ See `CLAUDE.md` for coding rules and `docs/phase-1-audit.md` for the architectur
 | 3 | Homepage: hero, statement, reviews strip, product carousel, studio note, video grid, shop the look, packs, events, stories | Done |
 | 4 | Collection, product (editions + merch), cart drawer, cart page, print guide, price guide, FAQ, artists, journal, policies, about | Done |
 | 5 | Interactions and polish: newsletter popup, sticky mobile add-to-cart bar, touch targets, reduced motion, contrast fixes | Done |
-| 6–7 | Validation and handover | Planned |
+| 6 | Validation: Theme Check, axe, keyboard, touch, reduced motion, no-JS, editor reloads, edge cases, Lighthouse. See `docs/phase-6-validation.md` | Done (local render; store testing pending) |
+| 7 | Handover | Planned |
 
 ## Development
 
@@ -183,7 +184,7 @@ Shared JS: feature modules import from `@theme/global` (an import map in `snippe
 
 - **Touch targets:** on touch screens, chips, buttons, mono links, breadcrumbs and similar small controls get an invisible 44px hit area (`.tap-target` and the primitives in `base.css`) without changing their size. Footer link rows keep the design's spacing and meet the WCAG 2.2 AA 24px minimum.
 - **Reduced motion:** with `prefers-reduced-motion: reduce`, every animation and transition is switched off, the hero video starts paused, and quote and story carousels don't auto-advance. The announcement bar still rotates (without the fade); it pauses on hover and focus and can be closed.
-- **Colour contrast:** the brand red (2.98:1) and blue (2.32:1) are below 4.5:1 as text on the page background. Stock status and form errors therefore use ink text with a coloured ● marker. The design still uses blue for large accents (heading counts such as "Artists. (4)", the full stop) and for link hover. These are decorative or large, but blue is also below the 3:1 large-text minimum. Darkening the blue would fix it, at the cost of changing the brand colour.
+- **Colour contrast:** the brand red (2.98:1) and blue (2.32:1) are below 4.5:1 as text on the page background. Stock status and form errors therefore use ink text with a coloured ● marker; muted labels use `--opacity-muted` (5.25:1); collection notes use ink text on blue and red; the announcement bar defaults to ink text (its Text colour setting offers white). The design still uses blue for large accents (heading counts such as "Artists. (4)", the full stop) and for link hover. These are decorative or large, but blue is also below the 3:1 large-text minimum. Darkening the blue would fix it, at the cost of changing the brand colour.
 
 ## Known limitations
 
