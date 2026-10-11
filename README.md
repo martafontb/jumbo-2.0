@@ -15,7 +15,7 @@ See `CLAUDE.md` for coding rules and `docs/phase-1-audit.md` for the architectur
 | 1 | Audit and plan | Done |
 | 2 | Foundation: tokens, fonts, layout, announcement bar, header (mega menus, mobile menu, predictive search), footer, baseline templates | Done |
 | 3 | Homepage: hero, statement, reviews strip, product carousel, studio note, video grid, shop the look, packs, events, stories | Done |
-| 4 | Collection, product (editions + merch), cart drawer and cart page | Done. Print guide, price guide and FAQ done. Artists, journal, policies and about are next | |
+| 4 | Collection, product (editions + merch), cart drawer, cart page, print guide, price guide, FAQ, artists, journal, policies, about | Done |
 | 5 | Interactions and polish | Planned |
 | 6–7 | Validation and handover | Planned |
 
@@ -85,7 +85,24 @@ All optional. Create product metafields in Settings > Custom data > Products, an
 | `custom.pairs_with` | List of products | "Complete the set" |
 | `reviews.rating`, `reviews.rating_count` | Set by the reviews app | Stars on cards, product reviews summary |
 
-**Artist metaobject (`artist`)**, with web pages turned on for artist URLs: `name` (single line text, required), `portrait` (file), `bio` (text), `story` (rich text), `practice`, `based_in`, `elsewhere` (single line text), `since` (integer), `collection` (collection reference: the artist's products).
+**Artist metaobject (`artist`)**. Turn on **Web pages** for the definition (Settings > Custom data > Metaobjects > Artist > Options) so each artist gets a URL using the `metaobject/artist` template.
+
+| Field key | Type | Used for |
+|---|---|---|
+| `name` | Single line text (required) | Everywhere |
+| `kind` | Single line text (e.g. Illustrator, Photographer, Collective) | Kind pill and the filter chips on the artists page |
+| `color` | Color | Background behind the artist's image (defaults to the blue token) |
+| `portrait` | File (image) | Artist page, preview card, "The artist" block |
+| `bio` | Multi-line text | Artist page intro, "The artist" block |
+| `story` | Rich text | "The artist" block on product pages |
+| `quote` | Multi-line text | "In their words" on the artist page (hidden when empty) |
+| `website` | URL | "Visit website" button |
+| `inks` | List of single line text (or ink metaobjects with `name` and `color`) | "Prints with" detail |
+| `practice`, `based_in`, `elsewhere` | Single line text | "The artist" block |
+| `since` | Integer | "With us since" |
+| `collection` | Collection reference | The artist's editions. Edition count, ink chips and the editions grid come from it |
+
+**Article metafield:** `custom.featured_product` (product reference) shows the sticky "Featured in this story" card on a journal article. Without it the article runs full width.
 
 ### Products, collections and cart
 
@@ -108,6 +125,19 @@ Create these pages in Online Store > Pages and pick the matching template:
 - **Inks:** the ink picker and overprint simulator ship with standard risograph ink colours as placeholders. Replace them with Jumbo's real ink colours (each ink is a block with a colour setting).
 - **Price calculator:** estimate = run × rate per sheet per colour × colours + setup fee × colours. The rates, setup fee, run range and sizes are section settings in the store's currency. **The defaults are the design's placeholder rates** and the note under the rate card says so until you change it. "Request this quote" links to `/pages/contact` by default and adds the chosen size, colours and run to the URL.
 - **FAQ:** one block per question. Questions with the same category share a filter chip. The contact card uses the store's email unless one is set.
+
+### Artists, journal, policies and about
+
+| Page (handle) | Template | Contents |
+|---|---|---|
+| Artists (`artists`) | `page.artists` | Every `artist` metaobject, kind chips, hover/focus preview card |
+| Policies (`policies`) | `page.policies` | Page header and vertical tabs over Settings > Policies. Link to one policy with its handle, e.g. `/pages/policies#refund-policy` |
+| About (`about`) | `page.about` | Intro (full-page colour option), image and text blocks, numbers band, visit hours, contact |
+
+- **Artist pages** use `templates/metaobject/artist.json` once web pages are on for the definition.
+- **Journal:** the blog page shows tag chips and article cards. The kind pill on a card is the article's first tag (falls back to the blog title), and reading time is estimated from the word count. Article pages have a reading-progress bar, copy-link button, pull quotes (style a quote as a blockquote in the editor) and "Read next".
+- **About figures** ("2 / 14 / 40", "Est. 2019"), hours and studio text are placeholders. Replace them in the theme editor.
+- Shopify's own policy pages (`/policies/…`) are styled by the theme too.
 
 ### Homepage content
 

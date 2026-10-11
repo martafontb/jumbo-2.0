@@ -5,6 +5,11 @@ All notable changes to this theme are documented here. The format follows [Keep 
 ## [Unreleased]
 
 ### Added
+- Artists page (`page.artists`): artist metaobject list with kind filters and a sticky hover/focus preview card. Artist pages (`metaobject/artist`): image with kind pill, bio, details, website link, editions grid with ink filters, "In their words" quote, next-artist link.
+- Journal: blog page with tag chips and article cards (kind pill, reading time); article page with reading-progress bar, copy link, 21:9 hero, sticky featured product (`custom.featured_product`), pull-quote styling and "Read next".
+- Policies page (`page.policies`): vertical tabs over the store policies with deep links by handle (`#refund-policy`), keyboard support and no-JS fallback. Native `/policies/…` pages styled.
+- About page (`page.about`): intro with full-page colour option, image and text sections, numbers band, visit hours.
+- `artists`, `article` and `policy-tabs` modules; `article-card` snippet.
 - Print service pages: `page.print` (page header with tabs, ink picker, file checklist, spec cards, CTA band, overprint simulator, "How it is made" stepper with inline SVG illustrations) and `page.prices` (price calculator with live estimate, quote link with chosen options, rate card).
 - FAQ page (`page.faq`): category filter chips, native `<details>` accordion, contact card, FAQPage JSON-LD.
 - Reusable sections: page header, CTA band, spec cards, checklist; statement section gains an ink-block button style. `print-tools`, `price-calculator` and `faq` modules.
