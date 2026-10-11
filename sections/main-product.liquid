@@ -12,6 +12,10 @@
   name, portrait, bio …), custom.year, custom.edition_size,
   custom.edition_detail, custom.inks, custom.paper, custom.dimensions,
   custom.format, custom.material, custom.size_chart.
+
+  "Sticky add-to-cart bar on mobile" shows a bottom bar under 750px while
+  the Buy buttons block is off screen. Its button submits the main product
+  form (form="…"), so quantity and variant come from the main form.
 {% endcomment %}
 {%- liquid
   assign current_variant = product.selected_or_first_available_variant
@@ -46,9 +50,9 @@
             {%- when 'breadcrumb' -%}
               <nav class="label label--sm main-product__crumb" aria-label="{{ 'products.breadcrumb' | t }}" {{ block.shopify_attributes }}>
                 {%- if crumb_collection -%}
-                  <a href="{{ crumb_collection.url }}">{{ crumb_collection.title | escape }}</a>
+                  <a class="tap-target" href="{{ crumb_collection.url }}">{{ crumb_collection.title | escape }}</a>
                 {%- else -%}
-                  <a href="{{ routes.all_products_collection_url }}">{{ 'products.shop' | t }}</a>
+                  <a class="tap-target" href="{{ routes.all_products_collection_url }}">{{ 'products.shop' | t }}</a>
                 {%- endif -%}
                 {%- if artist != blank -%}
                   <span aria-hidden="true"> / </span>{{ artist.name.value | escape }}
@@ -147,6 +151,36 @@
     </div>
   </div>
 
+  {%- assign buy_block = section.blocks | where: 'type', 'buy_buttons' | first -%}
+  {%- if section.settings.sticky_bar and buy_block -%}
+    <div class="sticky-buy" id="StickyBuy-{{ section.id }}" data-dynamic data-sticky-buy hidden>
+      {%- assign sticky_media = current_variant.featured_media | default: product.featured_media -%}
+      {%- if sticky_media -%}
+        <div class="media sticky-buy__media" style="--ratio: 1;">
+          {%- render 'image', image: sticky_media, sizes: '48px', widths: '96, 144', decorative: true -%}
+        </div>
+      {%- endif -%}
+      <div class="sticky-buy__text">
+        <p class="sticky-buy__title">{{ product.title | escape }}</p>
+        <p class="sticky-buy__meta">
+          {%- unless product.has_only_default_variant -%}{{ current_variant.title | escape }} · {% endunless -%}
+          {{- current_variant.price | money -}}
+        </p>
+      </div>
+      <button
+        type="submit"
+        form="{{ form_id }}"
+        name="add"
+        class="button sticky-buy__button"
+        {% unless current_variant.available %}disabled{% endunless %}
+      >
+        <span data-label>
+          {%- if current_variant.available -%}{{ 'products.add_to_cart' | t }}{%- else -%}{{ 'products.sold_out' | t }}{%- endif -%}
+        </span>
+      </button>
+    </div>
+  {%- endif -%}
+
   {%- if section.settings.guide_enabled -%}
     {%- assign guide_id = 'SizeGuide-' | append: section.id -%}
     {%- render 'size-guide', settings: section.settings, id: guide_id -%}
@@ -158,6 +192,75 @@
 <script src="{{ 'quantity-input.js' | asset_url }}" type="module"></script>
 
 {% stylesheet %}
+  .sticky-buy {
+    display: none;
+  }
+
+  @media (max-width: 749px) {
+    .sticky-buy:not([hidden]) {
+      position: fixed;
+      inset: auto 8px 8px;
+      z-index: 9;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 6px 6px 10px;
+      border: var(--border);
+      border-radius: var(--radius-pill);
+      background: var(--color-bg);
+      visibility: hidden;
+      opacity: 0;
+      translate: 0 8px;
+      transition: opacity 0.25s, translate 0.25s, visibility 0.25s;
+    }
+
+    .sticky-buy.is-visible {
+      visibility: visible;
+      opacity: 1;
+      translate: 0 0;
+    }
+
+    .sticky-buy__media {
+      flex-shrink: 0;
+      width: 44px;
+      border-radius: 50%;
+    }
+
+    .sticky-buy__text {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .sticky-buy__title {
+      margin: 0;
+      overflow: hidden;
+      font: 500 16px / 1.1 var(--font-display);
+      letter-spacing: -0.02em;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .sticky-buy__meta {
+      margin: 2px 0 0;
+      overflow: hidden;
+      font: 400 var(--text-label-sm) / 1.3 var(--font-mono);
+      letter-spacing: var(--tracking-label);
+      text-transform: uppercase;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .sticky-buy__button {
+      flex-shrink: 0;
+      min-height: 44px;
+      padding: 12px 18px;
+    }
+
+    html.has-sticky-buy .site-footer {
+      padding-bottom: 88px;
+    }
+  }
+
   .main-product__grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -272,6 +375,7 @@
     },
     { "type": "checkbox", "id": "captions", "label": "Show image alt text as a caption on secondary images", "default": true },
     { "type": "checkbox", "id": "sticky_info", "label": "Sticky info column on desktop", "default": true },
+    { "type": "checkbox", "id": "sticky_bar", "label": "Sticky add-to-cart bar on mobile", "info": "Shows the price and Add to cart at the bottom of the screen while the buy buttons are scrolled out of view.", "default": true },
     { "type": "header", "content": "Size & shipping guide" },
     { "type": "checkbox", "id": "guide_enabled", "label": "Enable guide drawer", "default": true },
     { "type": "text", "id": "guide_title", "label": "Title", "default": "Guide" },

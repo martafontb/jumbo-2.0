@@ -7,6 +7,8 @@ import { parseHTML } from '@theme/global';
  *   buy buttons, gallery) through the Section Rendering API.
  * - Keeps focus on the picker: only its availability classes are refreshed.
  * - Size chart toggle (highlights the selected size row), guide tabs.
+ * - Sticky mobile add-to-cart bar ([data-sticky-buy]): shown while the buy
+ *   buttons are off screen.
  */
 class ProductInfo extends HTMLElement {
   connectedCallback() {
@@ -19,6 +21,36 @@ class ProductInfo extends HTMLElement {
     this.picker?.addEventListener('change', this.onOptionChange);
     this.addEventListener('click', this.onClick);
     this.addEventListener('keydown', this.onTabKeydown);
+
+    if (this.querySelector('[data-sticky-buy]')) {
+      this.buyObserver = new IntersectionObserver(([entry]) => {
+        this.buyInView = entry.isIntersecting;
+        this.syncStickyBar();
+      });
+      this.observeBuyButtons();
+    }
+  }
+
+  disconnectedCallback() {
+    this.buyObserver?.disconnect();
+    document.documentElement.classList.remove('has-sticky-buy');
+  }
+
+  observeBuyButtons() {
+    if (!this.buyObserver) return;
+    this.buyObserver.disconnect();
+    const buy = this.querySelector('.main-product__buy');
+    if (buy) this.buyObserver.observe(buy);
+  }
+
+  syncStickyBar() {
+    const bar = this.querySelector('[data-sticky-buy]');
+    if (!bar) return;
+    const show = this.buyInView === false;
+    bar.hidden = false;
+    bar.inert = !show;
+    bar.classList.toggle('is-visible', show);
+    document.documentElement.classList.add('has-sticky-buy');
   }
 
   /** The id input is disabled in markup so the <noscript> select wins without JS. */
@@ -79,6 +111,8 @@ class ProductInfo extends HTMLElement {
       });
 
       this.enableVariantInput();
+      this.observeBuyButtons();
+      this.syncStickyBar();
     } catch (error) {
       if (error.name !== 'AbortError') window.location.reload();
     } finally {

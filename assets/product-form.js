@@ -29,16 +29,23 @@ class ProductForm extends HTMLElement {
     event.preventDefault();
     if (this.button.getAttribute('aria-busy') === 'true') return;
 
-    const label = this.button.querySelector('[data-label]') || this.button;
-    const original = label.innerHTML;
-    this.button.setAttribute('aria-busy', 'true');
-    this.button.disabled = true;
+    // A button elsewhere can submit this form with form="…" (e.g. the sticky
+    // mobile bar); it mirrors the main button's busy and "added" states.
+    const buttons = [this.button];
+    if (event.submitter && event.submitter !== this.button) buttons.push(event.submitter);
+    const labels = buttons.map((button) => button.querySelector('[data-label]') || button);
+    const originals = labels.map((label) => label.innerHTML);
+    const restore = () => labels.forEach((label, i) => (label.innerHTML = originals[i]));
+    buttons.forEach((button) => {
+      button.setAttribute('aria-busy', 'true');
+      button.disabled = true;
+    });
     this.setError('');
 
     try {
       await cart.add(new FormData(this.form));
       const added = this.dataset.addedLabel || window.JumboPress.strings?.added || '';
-      if (added) label.textContent = added;
+      if (added) labels.forEach((label) => (label.textContent = added));
       announce(added);
       this.querySelector('[data-view-cart]')?.removeAttribute('hidden');
 
@@ -47,18 +54,19 @@ class ProductForm extends HTMLElement {
         return;
       }
       const drawer = document.getElementById('CartDrawer');
-      if (drawer) openOverlay(drawer, this.button);
+      if (drawer) openOverlay(drawer, buttons[buttons.length - 1]);
 
       clearTimeout(this.resetTimer);
-      this.resetTimer = setTimeout(() => {
-        label.innerHTML = original;
-      }, 2500);
+      this.resetTimer = setTimeout(restore, 2500);
     } catch (error) {
-      label.innerHTML = original;
+      restore();
       this.setError(error.message);
+      if (buttons.length > 1) announce(error.message);
     } finally {
-      this.button.removeAttribute('aria-busy');
-      this.button.disabled = false;
+      buttons.forEach((button) => {
+        button.removeAttribute('aria-busy');
+        button.disabled = false;
+      });
     }
   };
 
