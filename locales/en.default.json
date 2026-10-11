@@ -263,6 +263,16 @@
     "add_to_apple_wallet": "Add to Apple Wallet",
     "print": "Print"
   },
+  "contact": {
+    "name": "Name",
+    "email": "Email",
+    "size": "Size",
+    "colours": "Colours",
+    "run": "Run (copies)",
+    "artwork": "Artwork link",
+    "artwork_hint": "WeTransfer, Drive or Dropbox link to your files",
+    "message": "Message"
+  },
   "newsletter": {
     "email": "Email",
     "placeholder": "you@email.com"

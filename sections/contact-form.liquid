@@ -1,0 +1,272 @@
+{% comment %}
+  Contact and quote form
+  Intro column (label, heading, text, email) and Shopify's contact form.
+  "Show quote fields" adds size, colours, run and an artwork link: Shopify
+  contact forms can't take file uploads, so customers share artwork through
+  a link (WeTransfer, Drive, Dropbox). Extra fields arrive in the contact
+  email as "Size", "Colours", "Run" and "Artwork link".
+
+  Links from the price calculator (?size=A3&colours=3&run=300) prefill the
+  quote fields.
+{% endcomment %}
+{%- liquid
+  assign form_id = 'ContactForm-' | append: section.id
+  assign contact_email = section.settings.email | default: shop.email
+-%}
+<contact-form class="page contact-form space-{{ section.settings.spacing }}">
+  <div class="contact-form__grid">
+    <div class="contact-form__intro">
+      {%- if section.settings.label != blank -%}
+        <span class="pill pill--blue">{{ section.settings.label | escape }}</span>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h2 class="contact-form__heading">{{ section.settings.heading | escape }}</h2>
+      {%- endif -%}
+      {%- if section.settings.text != blank -%}
+        <div class="rte contact-form__text">{{ section.settings.text }}</div>
+      {%- endif -%}
+      {%- if section.settings.show_email and contact_email != blank -%}
+        <a class="link-mono contact-form__email" href="mailto:{{ contact_email }}">{{ contact_email }}</a>
+      {%- endif -%}
+    </div>
+
+    {%- form 'contact', id: form_id, class: 'contact-form__form' -%}
+      {%- if form.posted_successfully? -%}
+        <div class="contact-form__success" role="status" tabindex="-1" data-posted>
+          <p class="contact-form__success-title">{{ section.settings.success_heading | escape }}<span class="dot">.</span></p>
+          {%- if section.settings.success_text != blank -%}
+            <p class="contact-form__success-text">{{ section.settings.success_text | escape }}</p>
+          {%- endif -%}
+        </div>
+      {%- else -%}
+        {%- if form.errors -%}
+          <div class="form-message form-message--error contact-form__errors" role="alert" tabindex="-1" data-posted>
+            {{ form.errors | default_errors }}
+          </div>
+        {%- endif -%}
+
+        <div class="contact-form__fields">
+          <div class="contact-form__field">
+            <label class="label label--sm" for="{{ form_id }}-name">{{ 'contact.name' | t }}</label>
+            <input class="field" type="text" id="{{ form_id }}-name" name="contact[name]" value="{{ form.name }}" autocomplete="name">
+          </div>
+          <div class="contact-form__field">
+            <label class="label label--sm" for="{{ form_id }}-email">{{ 'contact.email' | t }} <span aria-hidden="true">*</span></label>
+            <input
+              class="field"
+              type="email"
+              id="{{ form_id }}-email"
+              name="contact[email]"
+              value="{{ form.email }}"
+              autocomplete="email"
+              autocapitalize="off"
+              spellcheck="false"
+              required
+              {% if form.errors contains 'email' %}
+                aria-invalid="true"
+              {% endif %}
+            >
+          </div>
+
+          {%- if section.settings.show_quote_fields -%}
+            <div class="contact-form__field contact-form__field--third">
+              <label class="label label--sm" for="{{ form_id }}-size">{{ 'contact.size' | t }}</label>
+              <input class="field" type="text" id="{{ form_id }}-size" name="contact[Size]" data-prefill="size">
+            </div>
+            <div class="contact-form__field contact-form__field--third">
+              <label class="label label--sm" for="{{ form_id }}-colours">{{ 'contact.colours' | t }}</label>
+              <input class="field" type="number" min="1" inputmode="numeric" id="{{ form_id }}-colours" name="contact[Colours]" data-prefill="colours">
+            </div>
+            <div class="contact-form__field contact-form__field--third">
+              <label class="label label--sm" for="{{ form_id }}-run">{{ 'contact.run' | t }}</label>
+              <input class="field" type="number" min="1" inputmode="numeric" id="{{ form_id }}-run" name="contact[Run]" data-prefill="run">
+            </div>
+            <div class="contact-form__field contact-form__field--full">
+              <label class="label label--sm" for="{{ form_id }}-artwork">{{ 'contact.artwork' | t }}</label>
+              <input class="field" type="url" id="{{ form_id }}-artwork" name="contact[Artwork link]" placeholder="https://" aria-describedby="{{ form_id }}-artwork-hint">
+              <p class="contact-form__hint" id="{{ form_id }}-artwork-hint">{{ 'contact.artwork_hint' | t }}</p>
+            </div>
+          {%- endif -%}
+
+          <div class="contact-form__field contact-form__field--full">
+            <label class="label label--sm" for="{{ form_id }}-body">{{ 'contact.message' | t }}</label>
+            <textarea class="field contact-form__textarea" id="{{ form_id }}-body" name="contact[body]" rows="6">{{ form.body }}</textarea>
+          </div>
+        </div>
+
+        <button type="submit" class="button contact-form__submit">{{ section.settings.button_label | escape }}</button>
+      {%- endif -%}
+    {%- endform -%}
+  </div>
+</contact-form>
+
+<script src="{{ 'contact-form.js' | asset_url }}" type="module"></script>
+
+{% stylesheet %}
+  .contact-form__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--grid-gap);
+    padding-top: 20px;
+    border-top: var(--border);
+  }
+
+  .contact-form__intro {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    padding-right: 20px;
+  }
+
+  .contact-form__heading {
+    margin: 0;
+    font: 500 var(--text-statement) / 1 var(--font-display);
+    letter-spacing: -0.04em;
+  }
+
+  .contact-form__text {
+    max-width: 40ch;
+  }
+
+  .contact-form__form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    grid-column: span 2;
+  }
+
+  .contact-form__fields {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 16px 8px;
+  }
+
+  .contact-form__field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    grid-column: span 3;
+  }
+
+  .contact-form__field--third {
+    grid-column: span 2;
+  }
+
+  .contact-form__field--full {
+    grid-column: 1 / -1;
+  }
+
+  .contact-form__textarea {
+    min-height: 160px;
+    border-radius: var(--radius-lg);
+    resize: vertical;
+  }
+
+  .contact-form__hint {
+    margin: 0;
+    font: 400 var(--text-label-sm) / 1.4 var(--font-mono);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    opacity: var(--opacity-muted);
+  }
+
+  .contact-form__submit {
+    align-self: flex-start;
+    min-width: 220px;
+  }
+
+  .contact-form__errors::before {
+    content: none;
+  }
+
+  .contact-form__errors ul {
+    margin: 0;
+    padding-left: 18px;
+  }
+
+  .contact-form__errors li::marker {
+    color: var(--color-red);
+  }
+
+  .contact-form__success {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 24px;
+    border-radius: var(--radius-lg);
+    background: var(--color-blue);
+  }
+
+  .contact-form__success-title {
+    margin: 0;
+    font: 500 clamp(40px, 5vw, 68px) / 0.9 var(--font-display);
+    letter-spacing: -0.05em;
+  }
+
+  .contact-form__success .dot {
+    color: var(--color-ink);
+  }
+
+  .contact-form__success-text {
+    margin: 0;
+    font: 400 var(--text-body) / var(--leading-body) var(--font-display);
+  }
+
+  @media screen and (max-width: 749px) {
+    .contact-form__grid {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 32px;
+    }
+
+    .contact-form__intro {
+      padding-right: 0;
+    }
+
+    .contact-form__form {
+      grid-column: auto;
+    }
+
+    .contact-form__field,
+    .contact-form__field--third {
+      grid-column: 1 / -1;
+    }
+
+    .contact-form__submit {
+      align-self: stretch;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Contact form",
+  "class": "section-contact-form",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "label", "label": "Label", "default": "Get a quote" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Send your artwork, get a price within 2 days." },
+    { "type": "richtext", "id": "text", "label": "Text", "default": "<p>Tell us the size, colours and run. Share files with a WeTransfer, Drive or Dropbox link.</p>" },
+    { "type": "checkbox", "id": "show_email", "label": "Show email address", "default": true },
+    { "type": "text", "id": "email", "label": "Email address", "info": "Defaults to the store's sender email." },
+    { "type": "checkbox", "id": "show_quote_fields", "label": "Show quote fields", "info": "Size, colours, run and an artwork link. Links from the price calculator fill them in.", "default": true },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Send request →" },
+    { "type": "header", "content": "After sending" },
+    { "type": "text", "id": "success_heading", "label": "Heading", "default": "Thanks, we've got it" },
+    { "type": "textarea", "id": "success_text", "label": "Text", "default": "We'll check your file and reply with a price within 2 working days." },
+    {
+      "type": "select",
+      "id": "spacing",
+      "label": "Space below",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "large"
+    }
+  ],
+  "presets": [{ "name": "Contact form" }]
+}
+{% endschema %}
