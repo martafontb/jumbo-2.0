@@ -263,6 +263,10 @@
     "add_to_apple_wallet": "Add to Apple Wallet",
     "print": "Print"
   },
+  "newsletter": {
+    "email": "Email",
+    "placeholder": "you@email.com"
+  },
   "blogs": {
     "minutes": {
       "one": "{{ count }} min",

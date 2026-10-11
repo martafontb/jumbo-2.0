@@ -1,6 +1,11 @@
 {
   "type": "custom.overlay",
   "name": "Overlays",
-  "sections": {},
-  "order": []
+  "sections": {
+    "newsletter_popup": {
+      "type": "newsletter-popup",
+      "settings": {}
+    }
+  },
+  "order": ["newsletter_popup"]
 }
