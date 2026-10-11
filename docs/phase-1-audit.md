@@ -61,7 +61,7 @@ Hero (video + rotating review card), intro statement, reviews strip, editions ca
 ```
 layout/        theme.liquid, password.liquid
 config/        settings_schema.json (tokens, shipping threshold, social, popup), settings_data.json
-locales/       en.default.json, en.default.schema.json (+ es/ca if confirmed, see §5)
+locales/       en.default.json (English only, confirmed)
 assets/        base.css (tokens consumers, primitives, utilities)
                fonts: outfit-*.woff2, dm-mono-400.woff2 (self-hosted, font-display: swap)
                global.js (drawer/modal/focus-trap helpers, cart API client, section rendering)
@@ -149,8 +149,11 @@ Why:
 Prices, review quotes and ratings ("4.8 / 312 verified reviews"), FAQ answers, policies, price-guide rates, shipping rates and times, events, artist bios, specs card values, opening hours, contact email (`hello@jumbopress.example`). All of these become settings, blocks, metaobjects or Shopify data. Defaults will be clearly marked placeholders, and the review UI hides itself when no real review data exists.
 
 ### Decisions that affect implementation
-1. **Location, currency and language conflict.** The brief says Barcelona. The design says "Free UK shipping over £75", prices in £, UK/Europe/Worldwide shipping and "Unit 4, Canal Yard". The theme formats money from the store's own currency and markets either way, so code doesn't block on this. But I need to know which locale files to ship (English only, or English + Spanish + Catalan) and what default copy to seed.
-2. **Reviews.** Shopify's own Product Reviews app has been retired. Which review app will the store use (e.g. Judge.me)? I'll build against the standard `reviews.*` metafields + app blocks, which most apps populate, so this can be decided later.
+1. **Language — resolved:** English only. The theme ships `locales/en.default.json`. Currency and markets follow the store's settings, and shipping copy is editable content.
+2. **Reviews — resolved:** reviews come from the **Shop app**. The theme can't read individual review texts from Liquid, so:
+   - Star ratings on product pages and cards come from the Shop app's app blocks. The theme also reads the standard `reviews.rating` / `reviews.rating_count` product metafields when they're populated, and hides the rating otherwise.
+   - Review sections (product reviews, home reviews strip) accept `@app` blocks so the Shop app's own widgets can be placed in them.
+   - The quote-style reviews in the design (hero review card, rotating quotes) are optional "Review quote" blocks the merchant fills in with real reviews. They're **empty by default** and render nothing until filled. The aggregate rating and review count are optional settings, hidden when blank. Nothing is invented.
 3. **Packs/bundles.** I propose Shopify's free **Bundles** app. Each pack is a real product with a compare-at price, so the theme needs no custom bundle logic.
 4. **Event reminders.** I propose a generated `.ics` calendar link per event (no app, works everywhere) instead of the prototype's local toggle.
 5. **Quote form.** Shopify contact forms can't accept file uploads. I propose a contact form with size, colours, run and an artwork-link field (WeTransfer/Drive), unless they want a form app.
