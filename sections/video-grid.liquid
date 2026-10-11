@@ -1,0 +1,238 @@
+{% comment %}
+  Video grid ("On the press")
+  Up to three 16:9 videos: the first spans two columns, the others stack in
+  the third. Click a video to play or pause it; a thin bar shows progress.
+  Videos are Shopify-hosted; the poster is the video's preview image unless
+  a poster image is set.
+{% endcomment %}
+{%- assign videos = section.blocks | where: 'type', 'video' -%}
+<section class="page video-grid space-{{ section.settings.spacing }}">
+  {%- render 'section-head', label: section.settings.label, color: section.settings.label_color, caption: section.settings.caption -%}
+  <div class="video-grid__grid">
+    {%- for block in videos -%}
+      <video-tile
+        class="media video-grid__tile{% if forloop.first %} video-grid__tile--main{% endif %}"
+        style="--ratio: 16 / 9; --media-bg: var(--color-{{ block.settings.ground }});"
+        {{ block.shopify_attributes }}
+      >
+        {%- if block.settings.video != blank -%}
+          {%- if block.settings.poster != blank -%}
+            {%- assign poster_url = block.settings.poster | image_url: width: 1600 -%}
+            {{
+              block.settings.video
+              | video_tag:
+                playsinline: true,
+                controls: false,
+                preload: 'none',
+                poster: poster_url,
+                class: 'video-grid__video'
+            }}
+          {%- else -%}
+            {{
+              block.settings.video
+              | video_tag:
+                playsinline: true,
+                controls: false,
+                preload: 'none',
+                image_size: '1600x',
+                class: 'video-grid__video'
+            }}
+          {%- endif -%}
+        {%- else -%}
+          {%- render 'image', image: block.settings.poster, sizes: '(min-width: 750px) 66vw, 100vw', alt_fallback: block.settings.title, placeholder: 'lifestyle-2' -%}
+        {%- endif -%}
+        <span class="video-grid__progress" aria-hidden="true"><span class="video-grid__progress-fill" data-progress></span></span>
+        <span class="video-grid__bar">
+          {%- if block.settings.title != blank -%}
+            <span class="pill pill--{{ block.settings.pill_color }}">{{ block.settings.title | escape }}</span>
+          {%- endif -%}
+          {%- if block.settings.video != blank -%}
+            {%- assign play_label = 'sections.video.play' | t: title: block.settings.title -%}
+            {%- assign pause_label = 'sections.video.pause' | t: title: block.settings.title -%}
+            <button
+              type="button"
+              class="video-grid__toggle"
+              data-toggle
+              aria-label="{{ play_label | escape }}"
+              data-play-label="{{ play_label | escape }}"
+              data-pause-label="{{ pause_label | escape }}"
+            >
+              <span data-icon-play aria-hidden="true">▶</span>
+              <span data-icon-pause aria-hidden="true" hidden>❚❚</span>
+            </button>
+          {%- endif -%}
+        </span>
+      </video-tile>
+    {%- endfor -%}
+  </div>
+</section>
+<script src="{{ 'video-tile.js' | asset_url }}" type="module"></script>
+
+{% stylesheet %}
+  .video-grid__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--grid-gap);
+    padding-top: 8px;
+  }
+
+  .video-grid__tile {
+    display: block;
+    cursor: pointer;
+  }
+
+  .video-grid__tile--main {
+    grid-column: span 2;
+    grid-row: span 2;
+    align-self: start;
+  }
+
+  .media > .video-grid__video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .video-grid__progress {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 2;
+    height: 5px;
+    background: rgb(246 246 244 / 0.5);
+    pointer-events: none;
+  }
+
+  .video-grid__progress-fill {
+    display: block;
+    width: 0;
+    height: 100%;
+    border-radius: var(--radius-lg);
+    background: var(--color-ink);
+  }
+
+  .video-grid__bar {
+    position: absolute;
+    left: 10px;
+    right: 10px;
+    bottom: 16px;
+    z-index: 2;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    pointer-events: none;
+  }
+
+  .video-grid__bar .pill {
+    position: static;
+  }
+
+  .video-grid__toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: var(--border);
+    border-radius: 50%;
+    background: var(--color-bg);
+    color: var(--color-ink);
+    font: 400 14px / 1 var(--font-mono);
+    pointer-events: auto;
+  }
+
+  @media screen and (max-width: 749px) {
+    .video-grid__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .video-grid__tile--main {
+      grid-column: auto;
+      grid-row: auto;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Video grid",
+  "class": "section-video-grid",
+  "tag": "div",
+  "max_blocks": 3,
+  "settings": [
+    { "type": "text", "id": "label", "label": "Label", "default": "On the press" },
+    {
+      "type": "select",
+      "id": "label_color",
+      "label": "Label colour",
+      "options": [
+        { "value": "blue", "label": "Blue" },
+        { "value": "red", "label": "Red" },
+        { "value": "grey", "label": "Grey" }
+      ],
+      "default": "blue"
+    },
+    { "type": "text", "id": "caption", "label": "Caption", "default": "Tap to play" },
+    {
+      "type": "select",
+      "id": "spacing",
+      "label": "Top spacing",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "video",
+      "name": "Video",
+      "settings": [
+        { "type": "video", "id": "video", "label": "Video" },
+        { "type": "image_picker", "id": "poster", "label": "Poster image", "info": "Optional. Defaults to the video's preview image." },
+        { "type": "text", "id": "title", "label": "Title", "default": "How a print is made" },
+        {
+          "type": "select",
+          "id": "pill_color",
+          "label": "Title colour",
+          "options": [
+            { "value": "blue", "label": "Blue" },
+            { "value": "red", "label": "Red" },
+            { "value": "grey", "label": "Grey" }
+          ],
+          "default": "red"
+        },
+        {
+          "type": "select",
+          "id": "ground",
+          "label": "Background while loading",
+          "options": [
+            { "value": "blue", "label": "Blue" },
+            { "value": "red", "label": "Red" },
+            { "value": "grey", "label": "Grey" },
+            { "value": "ink", "label": "Ink" }
+          ],
+          "default": "blue"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Video grid",
+      "blocks": [
+        { "type": "video", "settings": { "title": "How a print is made", "pill_color": "red", "ground": "blue" } },
+        { "type": "video", "settings": { "title": "Studio tour", "pill_color": "blue", "ground": "blue" } },
+        { "type": "video", "settings": { "title": "New drop unboxing", "pill_color": "grey", "ground": "red" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
