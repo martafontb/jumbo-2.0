@@ -45,6 +45,7 @@
         "size": "regular",
         "button_label": "",
         "button_link": "",
+        "button_style": "pill",
         "spacing": "none"
       }
     },
@@ -308,6 +309,7 @@
         "label_color": "blue",
         "caption": "Fairs, workshops, launches",
         "heading": "See you there",
+        "feature_image": "shopify://shop_images/PXL_20260925_151452068.jpg",
         "feature_image_alt": "",
         "feature_label": "Next fair",
         "empty_text": "New dates coming soon.",

@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "type": "footer",
   "name": "Footer group",
@@ -7,11 +16,19 @@
       "blocks": {
         "shop": {
           "type": "menu",
-          "settings": { "heading": "Shop", "pill_color": "red", "menu": "footer" }
+          "settings": {
+            "heading": "Shop",
+            "pill_color": "red",
+            "menu": "collections"
+          }
         },
         "info": {
           "type": "menu",
-          "settings": { "heading": "Info", "pill_color": "grey", "menu": "footer-info" }
+          "settings": {
+            "heading": "Info",
+            "pill_color": "grey",
+            "menu": "info"
+          }
         },
         "visit": {
           "type": "text",
@@ -23,15 +40,27 @@
         },
         "follow": {
           "type": "social",
-          "settings": { "heading": "Follow", "pill_color": "blue", "newsletter_label": "Newsletter" }
+          "settings": {
+            "heading": "Follow",
+            "pill_color": "red",
+            "newsletter_label": "Newsletter"
+          }
         }
       },
-      "block_order": ["shop", "info", "visit", "follow"],
+      "block_order": [
+        "shop",
+        "info",
+        "visit",
+        "follow"
+      ],
       "settings": {
-        "statement": "<p><strong>Jumbo Press</strong> is a risograph studio and print shop.</p>",
+        "statement": "<p><strong>Jumbo Press</strong> is a risograph studio&nbsp;</p><p>and print shop.</p>",
+        "legal_menu": "footer",
         "copyright": ""
       }
     }
   },
-  "order": ["footer"]
+  "order": [
+    "footer"
+  ]
 }
