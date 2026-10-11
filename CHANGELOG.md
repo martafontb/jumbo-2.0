@@ -5,6 +5,9 @@ All notable changes to this theme are documented here. The format follows [Keep 
 ## [Unreleased]
 
 ### Added
+- Newsletter popup (Overlays group): opens once per visitor after a delay, from the footer link, or on section select in the editor; Shopify customer form tagged `newsletter` with success and error states.
+- Sticky add-to-cart bar on mobile product pages, shown while the buy buttons are off screen; it submits the main product form and mirrors its "Added" state.
+- Touch-target helper: 44px invisible hit areas on touch screens for chips, buttons, mono links and `.tap-target` elements (breadcrumbs, logo, cart line titles, variant pills, hotspot list, carousel end link); larger range inputs and sort select.
 - Artists page (`page.artists`): artist metaobject list with kind filters and a sticky hover/focus preview card. Artist pages (`metaobject/artist`): image with kind pill, bio, details, website link, editions grid with ink filters, "In their words" quote, next-artist link.
 - Journal: blog page with tag chips and article cards (kind pill, reading time); article page with reading-progress bar, copy link, 21:9 hero, sticky featured product (`custom.featured_product`), pull-quote styling and "Read next".
 - Policies page (`page.policies`): vertical tabs over the store policies with deep links by handle (`#refund-policy`), keyboard support and no-JS fallback. Native `/policies/…` pages styled.
@@ -29,3 +32,7 @@ All notable changes to this theme are documented here. The format follows [Keep 
 - Footer section with statement, link/text/social columns, policy links and newsletter trigger.
 - Baseline templates and sections for page, 404, search, collection, collections list, product, cart, blog, article, password and gift card.
 - `CLAUDE.md` project guidelines, `README.md` setup checklist, Phase 1 audit.
+
+### Changed
+- Stock status and form error messages use ink text with a red or blue marker, for WCAG AA contrast.
+- Product form accepts submit buttons outside the form (`form="…"`), mirroring busy and "Added" states and returning focus to the button used.

@@ -16,7 +16,7 @@ See `CLAUDE.md` for coding rules and `docs/phase-1-audit.md` for the architectur
 | 2 | Foundation: tokens, fonts, layout, announcement bar, header (mega menus, mobile menu, predictive search), footer, baseline templates | Done |
 | 3 | Homepage: hero, statement, reviews strip, product carousel, studio note, video grid, shop the look, packs, events, stories | Done |
 | 4 | Collection, product (editions + merch), cart drawer, cart page, print guide, price guide, FAQ, artists, journal, policies, about | Done |
-| 5 | Interactions and polish | Planned |
+| 5 | Interactions and polish: newsletter popup, sticky mobile add-to-cart bar, touch targets, reduced motion, contrast fixes | Done |
 | 6–7 | Validation and handover | Planned |
 
 ## Development
@@ -139,6 +139,18 @@ Create these pages in Online Store > Pages and pick the matching template:
 - **About figures** ("2 / 14 / 40", "Est. 2019"), hours and studio text are placeholders. Replace them in the theme editor.
 - Shopify's own policy pages (`/policies/…`) are styled by the theme too.
 
+### Newsletter popup
+
+The popup lives in the **Overlays** group (Theme editor > any page > Overlays > Newsletter popup). Select the section to preview it; it never opens on its own in the editor.
+
+- Opens once per visitor after the delay (3s by default). Closing or subscribing stores that in the browser, so it doesn't come back. The footer "Newsletter" link opens it any time.
+- Signs people up with Shopify's customer form, tagged `newsletter` (Customers > filter by tag or email subscription). The form posts as a normal page load so Shopify's spam protection runs; the popup then re-opens with the success or error message.
+- Turning "Enable popup" off removes it everywhere. Also clear the footer's "Newsletter link label" so the link disappears.
+
+### Product page on mobile
+
+"Sticky add-to-cart bar on mobile" (Product section, on by default) shows the product, selected variant, price and Add to cart at the bottom of the screen while the buy buttons are scrolled out of view. It submits the main product form, so it follows the selected variant and quantity.
+
 ### Homepage content
 
 Every homepage section is editable in the theme editor. All text, images and videos are placeholders to replace:
@@ -166,6 +178,12 @@ design_handoff_shopify_liquid/   design reference (not deployed)
 ```
 
 Shared JS: feature modules import from `@theme/global` (an import map in `snippets/theme-scripts.liquid`), so every module shares one instance of the cart client and overlay helpers. Components talk through `CustomEvent`s on `document`: `cart:updated` and `cart:refresh` for the cart, `jumbo:*` for everything else.
+
+## Accessibility notes
+
+- **Touch targets:** on touch screens, chips, buttons, mono links, breadcrumbs and similar small controls get an invisible 44px hit area (`.tap-target` and the primitives in `base.css`) without changing their size. Footer link rows keep the design's spacing and meet the WCAG 2.2 AA 24px minimum.
+- **Reduced motion:** with `prefers-reduced-motion: reduce`, every animation and transition is switched off, the hero video starts paused, and quote and story carousels don't auto-advance. The announcement bar still rotates (without the fade); it pauses on hover and focus and can be closed.
+- **Colour contrast:** the brand red (2.98:1) and blue (2.32:1) are below 4.5:1 as text on the page background. Stock status and form errors therefore use ink text with a coloured ● marker. The design still uses blue for large accents (heading counts such as "Artists. (4)", the full stop) and for link hover. These are decorative or large, but blue is also below the 3:1 large-text minimum. Darkening the blue would fix it, at the cost of changing the brand colour.
 
 ## Known limitations
 
