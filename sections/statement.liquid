@@ -1,0 +1,104 @@
+{% comment %}
+  Statement
+  A large intro statement spanning two of three columns (max 30ch), e.g.
+  the homepage introduction. An optional button sits in the third column.
+{% endcomment %}
+<section class="page statement space-{{ section.settings.spacing }}">
+  <div class="statement__grid">
+    {%- if section.settings.text != blank -%}
+      <div class="statement__text statement__text--{{ section.settings.size }}">{{ section.settings.text }}</div>
+    {%- endif -%}
+    {%- if section.settings.button_label != blank -%}
+      <a class="button button--secondary statement__button" href="{{ section.settings.button_link | default: '#' }}">
+        {{- section.settings.button_label | escape -}}
+      </a>
+    {%- endif -%}
+  </div>
+</section>
+
+{% stylesheet %}
+  .statement__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--grid-gap);
+    align-items: end;
+    padding: 28px 0 20px;
+  }
+
+  .statement__text {
+    grid-column: span 2;
+    max-width: 30ch;
+    font: 400 var(--text-statement) / 1.02 var(--font-display);
+    letter-spacing: -0.04em;
+    text-wrap: balance;
+  }
+
+  .statement__text--large {
+    font-size: clamp(36px, 5vw, 80px);
+    line-height: 0.95;
+  }
+
+  .statement__text p + p {
+    margin-top: 0.5em;
+  }
+
+  .statement__text strong {
+    font-weight: 500;
+  }
+
+  .statement__button {
+    justify-self: start;
+  }
+
+  @media screen and (max-width: 749px) {
+    .statement__grid {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 16px;
+    }
+
+    .statement__text {
+      grid-column: auto;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Statement",
+  "class": "section-statement",
+  "tag": "div",
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>Jumbo Press is a risograph studio and publisher. We print editions, zines and books with artists, one colour at a time, in small runs.</p>"
+    },
+    {
+      "type": "select",
+      "id": "size",
+      "label": "Size",
+      "options": [
+        { "value": "regular", "label": "Regular" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "regular"
+    },
+    { "type": "text", "id": "button_label", "label": "Button label" },
+    { "type": "url", "id": "button_link", "label": "Button link" },
+    {
+      "type": "select",
+      "id": "spacing",
+      "label": "Top spacing",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "none"
+    }
+  ],
+  "presets": [{ "name": "Statement" }]
+}
+{% endschema %}

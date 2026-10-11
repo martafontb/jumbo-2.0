@@ -1,0 +1,236 @@
+{% comment %}
+  Reviews strip
+  Ruled band: overall rating on the left, a rotating review quote with
+  previous/next controls across two columns.
+
+  Nothing here is invented. The rating and review count are optional
+  settings, and "Review quote" blocks hold real reviews pasted from the Shop
+  app. App blocks (e.g. the Shop app's reviews widget) can be added instead.
+  The section hides itself until it has content.
+{% endcomment %}
+{%- liquid
+  assign quotes = section.blocks | where: 'type', 'review'
+  assign apps = section.blocks | where: 'type', '@app'
+  assign has_summary = false
+  if section.settings.rating != blank or section.settings.count_text != blank
+    assign has_summary = true
+  endif
+-%}
+{%- if has_summary or quotes.size > 0 or apps.size > 0 -%}
+  <section class="page reviews-strip space-{{ section.settings.spacing }}">
+    {%- if has_summary or quotes.size > 0 -%}
+      <div class="reviews-strip__band">
+        <div class="reviews-strip__summary">
+          {%- if section.settings.label != blank -%}
+            <h2 class="pill pill--grey reviews-strip__label">{{ section.settings.label | escape }}</h2>
+          {%- endif -%}
+          {%- if section.settings.rating != blank -%}
+            <p class="reviews-strip__score">
+              <span class="reviews-strip__rating">{{ section.settings.rating | escape }}</span>
+              {%- assign rating_number = section.settings.rating | plus: 0 -%}
+              {%- render 'stars', rating: rating_number, class: 'reviews-strip__stars' -%}
+            </p>
+          {%- endif -%}
+          {%- if section.settings.count_text != blank -%}
+            <p class="label label--sm">{{ section.settings.count_text | escape }}</p>
+          {%- endif -%}
+        </div>
+
+        {%- if quotes.size > 0 -%}
+          <quote-rotator class="reviews-strip__quotes">
+            {%- for block in quotes -%}
+              <figure class="reviews-strip__quote" data-quote {% unless forloop.first %}hidden{% endunless %} {{ block.shopify_attributes }}>
+                <blockquote class="reviews-strip__text">“{{ block.settings.quote | escape }}”</blockquote>
+                <figcaption class="label label--sm">
+                  {%- if block.settings.name != blank -%}
+                    <span class="pill pill--{{ block.settings.color }}">{{ block.settings.name | escape }}</span>
+                  {%- endif -%}
+                  {%- if block.settings.caption != blank %} · {{ block.settings.caption | escape }}{% endif -%}
+                </figcaption>
+              </figure>
+            {%- endfor -%}
+            {%- if quotes.size > 1 -%}
+              <div class="reviews-strip__controls label label--sm">
+                <span data-counter aria-live="polite">1 / {{ quotes.size }}</span>
+                <button type="button" class="icon-button reviews-strip__arrow" data-prev aria-label="{{ 'sections.reviews.previous' | t }}">←</button>
+                <button type="button" class="icon-button reviews-strip__arrow" data-next aria-label="{{ 'sections.reviews.next' | t }}">→</button>
+              </div>
+            {%- endif -%}
+          </quote-rotator>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- for block in apps -%}
+      <div class="reviews-strip__app">{% render block %}</div>
+    {%- endfor -%}
+  </section>
+  {%- if quotes.size > 1 -%}
+    <script src="{{ 'quote-rotator.js' | asset_url }}" type="module"></script>
+  {%- endif -%}
+{%- elsif request.design_mode -%}
+  <p class="page label reviews-strip__empty">{{ 'sections.reviews.empty' | t }}</p>
+{%- endif -%}
+
+{% stylesheet %}
+  /* The design leaves a full section gap below the strip. */
+  .reviews-strip {
+    margin-bottom: var(--section-gap);
+  }
+
+  .reviews-strip__band {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--grid-gap);
+    align-items: center;
+    padding: 14px 0;
+    border-top: var(--border);
+    border-bottom: var(--border);
+  }
+
+  .reviews-strip__summary {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .reviews-strip__label {
+    margin: 0;
+  }
+
+  .reviews-strip__score {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+
+  .reviews-strip__rating {
+    font: 500 clamp(56px, 7vw, 112px) / 0.85 var(--font-display);
+    letter-spacing: -0.05em;
+  }
+
+  .reviews-strip__stars {
+    font-size: 22px;
+  }
+
+  .reviews-strip__quotes {
+    grid-column: span 2;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .reviews-strip__quote {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 0;
+  }
+
+  .reviews-strip__quote.is-entering {
+    animation: fade 0.3s both;
+  }
+
+  .reviews-strip__text {
+    min-height: 2.1em;
+    font: 500 clamp(24px, 2.8vw, 44px) / 1.05 var(--font-display);
+    letter-spacing: -0.03em;
+  }
+
+  .reviews-strip__controls {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .reviews-strip__controls [data-counter] {
+    margin-right: 8px;
+  }
+
+  .reviews-strip__arrow {
+    width: 34px;
+    height: 34px;
+    font-size: var(--text-label);
+  }
+
+  .reviews-strip__arrow:hover {
+    background: var(--color-grey);
+    color: var(--color-ink);
+  }
+
+  .reviews-strip__app {
+    margin-top: 20px;
+  }
+
+  .reviews-strip__empty {
+    padding-block: 20px;
+  }
+
+  @media screen and (max-width: 749px) {
+    .reviews-strip__band {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 20px;
+    }
+
+    .reviews-strip__quotes {
+      grid-column: auto;
+    }
+
+    .reviews-strip__arrow {
+      width: 44px;
+      height: 44px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Reviews strip",
+  "class": "section-reviews-strip",
+  "tag": "div",
+  "max_blocks": 10,
+  "settings": [
+    { "type": "paragraph", "content": "Only real reviews: copy the rating, count and quotes from your Shop app reviews, or add the Shop app's own block. Hidden until something is filled in." },
+    { "type": "text", "id": "label", "label": "Label", "default": "Loved by buyers" },
+    { "type": "text", "id": "rating", "label": "Average rating", "info": "E.g. 4.8" },
+    { "type": "text", "id": "count_text", "label": "Review count text", "info": "E.g. 312 verified reviews" },
+    {
+      "type": "select",
+      "id": "spacing",
+      "label": "Top spacing",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "none"
+    }
+  ],
+  "blocks": [
+    { "type": "@app" },
+    {
+      "type": "review",
+      "name": "Review quote",
+      "settings": [
+        { "type": "textarea", "id": "quote", "label": "Quote" },
+        { "type": "text", "id": "name", "label": "Reviewer name" },
+        { "type": "text", "id": "caption", "label": "Caption", "info": "E.g. the review title or product." },
+        {
+          "type": "select",
+          "id": "color",
+          "label": "Name colour",
+          "options": [
+            { "value": "blue", "label": "Blue" },
+            { "value": "red", "label": "Red" },
+            { "value": "grey", "label": "Grey" }
+          ],
+          "default": "blue"
+        }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Reviews strip" }]
+}
+{% endschema %}

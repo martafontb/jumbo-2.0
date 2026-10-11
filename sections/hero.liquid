@@ -1,0 +1,282 @@
+{% comment %}
+  Hero
+  Two-thirds media block (looping muted video, or an image) with an optional
+  floating review card, and a one-third side image with a pill label.
+
+  "Review quote" blocks fill the floating card. They are empty by default:
+  paste real reviews (e.g. from the Shop app). With more than one, the card
+  cycles. With none, no card is shown.
+
+  The video is Shopify-hosted (Content > Files). A pause button is always
+  shown for autoplaying video (WCAG 2.2.2); under reduced motion the video
+  starts paused.
+{% endcomment %}
+{%- liquid
+  assign reviews = section.blocks | where: 'type', 'review'
+  assign has_video = false
+  if section.settings.video != blank
+    assign has_video = true
+  endif
+-%}
+<hero-section
+  class="page hero space-{{ section.settings.spacing }}"
+  data-play-label="{{ 'sections.hero.play' | t | escape }}"
+  data-pause-label="{{ 'sections.hero.pause' | t | escape }}"
+>
+  <div class="hero__grid">
+    <div class="media hero__main" style="--media-bg: var(--color-{{ section.settings.main_ground }});">
+      {%- if has_video -%}
+        {{
+          section.settings.video
+          | video_tag:
+            autoplay: true,
+            loop: true,
+            muted: true,
+            playsinline: true,
+            controls: false,
+            preload: 'metadata',
+            image_size: '1600x',
+            class: 'hero__video'
+        }}
+        <button type="button" class="hero__play icon-button" data-hero-toggle aria-label="{{ 'sections.hero.pause' | t }}">
+          <span data-icon-pause aria-hidden="true">❚❚</span>
+          <span data-icon-play aria-hidden="true" hidden>▶</span>
+        </button>
+      {%- else -%}
+        {%- render 'image',
+          image: section.settings.image,
+          sizes: '(min-width: 750px) 66vw, 100vw',
+          alt: section.settings.image_alt,
+          eager: true,
+          placeholder: 'hero-apparel-1'
+        -%}
+      {%- endif -%}
+
+      {%- if reviews.size > 0 -%}
+        <quote-rotator class="hero__review" data-interval="6000">
+          {%- for block in reviews -%}
+            <figure class="hero__quote" data-quote {% unless forloop.first %}hidden{% endunless %} {{ block.shopify_attributes }}>
+              {%- render 'stars', rating: block.settings.rating -%}
+              <blockquote class="hero__quote-text">“{{ block.settings.quote | escape }}”</blockquote>
+              <figcaption class="hero__quote-meta">
+                {%- if block.settings.name != blank -%}
+                  <span class="pill pill--{{ block.settings.color }}">{{ block.settings.name | escape }}</span>
+                {%- endif -%}
+                {%- if block.settings.caption != blank -%}
+                  <span>{{ block.settings.caption | escape }}</span>
+                {%- endif -%}
+              </figcaption>
+            </figure>
+          {%- endfor -%}
+        </quote-rotator>
+      {%- endif -%}
+    </div>
+
+    {%- capture side -%}
+      {%- render 'image',
+        image: section.settings.side_image,
+        sizes: '(min-width: 750px) 33vw, 100vw',
+        alt: section.settings.side_image_alt,
+        eager: true,
+        placeholder: 'image'
+      -%}
+      {%- if section.settings.side_label != blank -%}
+        <span class="pill pill--bg hero__side-label">{{ section.settings.side_label | escape }}</span>
+      {%- endif -%}
+    {%- endcapture -%}
+    {%- if section.settings.side_link != blank -%}
+      <a class="media hero__side" href="{{ section.settings.side_link }}" style="--media-bg: var(--color-{{ section.settings.side_ground }});">{{ side }}</a>
+    {%- else -%}
+      <div class="media hero__side" style="--media-bg: var(--color-{{ section.settings.side_ground }});">{{ side }}</div>
+    {%- endif -%}
+  </div>
+</hero-section>
+
+<script src="{{ 'hero.js' | asset_url }}" type="module"></script>
+{%- if reviews.size > 1 -%}
+  <script src="{{ 'quote-rotator.js' | asset_url }}" type="module"></script>
+{%- endif -%}
+
+{% stylesheet %}
+  .hero__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--grid-gap);
+  }
+
+  .hero__main {
+    grid-column: span 2;
+    --ratio: 3 / 2;
+  }
+
+  .hero__main > .hero__video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .hero__side {
+    --ratio: auto;
+    display: block;
+    color: var(--color-ink);
+  }
+
+  .media > .hero__side-label {
+    top: auto;
+    bottom: 12px;
+    left: 12px;
+  }
+
+  .hero__play {
+    position: absolute;
+    right: 16px;
+    bottom: 16px;
+    z-index: 3;
+    width: 44px;
+    height: 44px;
+    background: var(--color-bg);
+    font-size: 12px;
+  }
+
+  .hero__review {
+    position: absolute;
+    left: 16px;
+    bottom: 16px;
+    z-index: 3;
+    display: block;
+    width: min(300px, calc(100% - 92px));
+    padding: 14px;
+    border-radius: var(--radius-md);
+    background: var(--color-bg);
+    color: var(--color-ink);
+  }
+
+  .hero__quote {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .hero__quote.is-entering {
+    animation: fade 0.3s both;
+  }
+
+  .hero__quote-text {
+    font: 400 18px / 1.15 var(--font-display);
+    letter-spacing: -0.02em;
+  }
+
+  .hero__quote-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    font: 400 var(--text-label-sm) / 1.35 var(--font-mono);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+  }
+
+  @media screen and (max-width: 749px) {
+    .hero__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .hero__main {
+      grid-column: auto;
+      --ratio: 4 / 5;
+    }
+
+    .hero__side {
+      --ratio: 4 / 3;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Hero",
+  "class": "section-hero",
+  "tag": "section",
+  "max_blocks": 6,
+  "settings": [
+    { "type": "header", "content": "Main media" },
+    {
+      "type": "video",
+      "id": "video",
+      "label": "Video",
+      "info": "Plays muted on a loop. Upload in Content > Files. Leave empty to use the image."
+    },
+    { "type": "image_picker", "id": "image", "label": "Image", "info": "Shown when there's no video." },
+    { "type": "text", "id": "image_alt", "label": "Image alt text", "info": "Describe the image for screen readers. Defaults to the image's alt text." },
+    {
+      "type": "select",
+      "id": "main_ground",
+      "label": "Background while loading",
+      "options": [
+        { "value": "ink", "label": "Ink" },
+        { "value": "blue", "label": "Blue" },
+        { "value": "red", "label": "Red" },
+        { "value": "grey", "label": "Grey" }
+      ],
+      "default": "ink"
+    },
+    { "type": "header", "content": "Side image" },
+    { "type": "image_picker", "id": "side_image", "label": "Image" },
+    { "type": "text", "id": "side_image_alt", "label": "Image alt text" },
+    { "type": "text", "id": "side_label", "label": "Label", "default": "Now printing" },
+    { "type": "url", "id": "side_link", "label": "Link" },
+    {
+      "type": "select",
+      "id": "side_ground",
+      "label": "Background while loading",
+      "options": [
+        { "value": "grey", "label": "Grey" },
+        { "value": "blue", "label": "Blue" },
+        { "value": "red", "label": "Red" },
+        { "value": "bg", "label": "Background" }
+      ],
+      "default": "grey"
+    },
+    { "type": "header", "content": "Layout" },
+    {
+      "type": "select",
+      "id": "spacing",
+      "label": "Top spacing",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "none"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "Review quote",
+      "settings": [
+        { "type": "paragraph", "content": "Use a real customer review, e.g. copied from your Shop app reviews." },
+        { "type": "textarea", "id": "quote", "label": "Quote" },
+        { "type": "text", "id": "name", "label": "Reviewer name" },
+        { "type": "text", "id": "caption", "label": "Caption", "info": "E.g. the review title or product." },
+        { "type": "range", "id": "rating", "label": "Stars", "min": 1, "max": 5, "step": 1, "default": 5 },
+        {
+          "type": "select",
+          "id": "color",
+          "label": "Name colour",
+          "options": [
+            { "value": "blue", "label": "Blue" },
+            { "value": "red", "label": "Red" },
+            { "value": "grey", "label": "Grey" }
+          ],
+          "default": "blue"
+        }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Hero" }]
+}
+{% endschema %}

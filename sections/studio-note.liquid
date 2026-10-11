@@ -1,0 +1,88 @@
+{% comment %}
+  Studio note
+  A ruled band: a small label and date on the left, a large quote with a
+  mono attribution across the other two columns.
+{% endcomment %}
+{%- if section.settings.quote != blank -%}
+  <section class="page studio-note space-{{ section.settings.spacing }}">
+    <div class="studio-note__band">
+      <p class="label label--sm studio-note__label">
+        {{- section.settings.label | escape -}}
+        {%- if section.settings.date != blank -%}<br>{{ section.settings.date | escape }}{%- endif -%}
+      </p>
+      <div class="studio-note__body">
+        <blockquote class="studio-note__quote">{{ section.settings.quote | escape }}</blockquote>
+        {%- if section.settings.attribution != blank %}
+          <span class="label studio-note__by">— {{ section.settings.attribution | escape }}</span>
+        {%- endif -%}
+      </div>
+    </div>
+  </section>
+{%- elsif request.design_mode -%}
+  <p class="page label studio-note__empty">{{ 'sections.studio_note.empty' | t }}</p>
+{%- endif -%}
+
+{% stylesheet %}
+  .studio-note__band {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--grid-gap);
+    margin: 0;
+    padding: 22px 0;
+    border-top: var(--border);
+    border-bottom: var(--border);
+  }
+
+  .studio-note__body {
+    grid-column: span 2;
+    font: 400 clamp(28px, 3.4vw, 52px) / 1.04 var(--font-display);
+    letter-spacing: -0.03em;
+  }
+
+  .studio-note__quote,
+  .studio-note__by {
+    display: inline;
+  }
+
+  .studio-note__empty {
+    padding-block: 20px;
+  }
+
+  @media screen and (max-width: 749px) {
+    .studio-note__band {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 12px;
+    }
+
+    .studio-note__body {
+      grid-column: auto;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Studio note",
+  "class": "section-studio-note",
+  "tag": "div",
+  "settings": [
+    { "type": "text", "id": "label", "label": "Label", "default": "Studio note" },
+    { "type": "text", "id": "date", "label": "Date", "default": "09.10.2026" },
+    { "type": "textarea", "id": "quote", "label": "Quote", "info": "A real quote, e.g. from an artist you've worked with. The section is hidden until this is filled in." },
+    { "type": "text", "id": "attribution", "label": "Attribution" },
+    {
+      "type": "select",
+      "id": "spacing",
+      "label": "Top spacing",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "small"
+    }
+  ],
+  "presets": [{ "name": "Studio note" }]
+}
+{% endschema %}
