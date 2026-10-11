@@ -1,0 +1,11 @@
+{
+  "sections": {
+    "main": {
+      "type": "artists-index",
+      "settings": {
+        "intro": "<p>The people we print with. Hover a name to see their work, click to see their editions.</p>"
+      }
+    }
+  },
+  "order": ["main"]
+}

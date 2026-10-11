@@ -146,6 +146,25 @@
     "faq": {
       "filter": "Filter questions",
       "all": "All"
+    },
+    "artists": {
+      "filter": "Filter artists",
+      "all": "All",
+      "editions": {
+        "one": "{{ count }} ed.",
+        "other": "{{ count }} eds"
+      },
+      "since": "Since {{ year }}",
+      "empty": "No artists yet.",
+      "with_us_since": "With us since",
+      "prints_with": "Prints with",
+      "website": "Visit website ↗",
+      "next": "Next: {{ name }}"
+    },
+    "policies": {
+      "label": "Policies",
+      "permalink": "Open this policy on its own page →",
+      "empty": "No policies yet. Add them in Settings > Policies."
     }
   },
   "products": {
@@ -243,5 +262,19 @@
     "copy_code": "Copy code",
     "add_to_apple_wallet": "Add to Apple Wallet",
     "print": "Print"
+  },
+  "blogs": {
+    "minutes": {
+      "one": "{{ count }} min",
+      "other": "{{ count }} min"
+    },
+    "minutes_read": {
+      "one": "{{ count }} min read",
+      "other": "{{ count }} min read"
+    },
+    "words_by": "Words: {{ author }}",
+    "copy_link": "Copy link",
+    "link_copied": "Link copied ✓",
+    "filter": "Filter articles"
   }
 }

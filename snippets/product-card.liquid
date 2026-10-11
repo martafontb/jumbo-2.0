@@ -7,7 +7,7 @@
   @param {object} [product] - Product. Omit to render a placeholder card (theme editor only).
   @param {string} [ground] - Image background token: blue | red | grey | ink | bg
   @param {string} [ratio] - CSS aspect ratio, default '3 / 4'
-  @param {string} [size] - 'lg' (26px title, default) or 'sm' (20px)
+  @param {string} [scale] - 'lg' (26px title, default) or 'sm' (20px)
   @param {boolean} [show_tag] - Show the tag pill on the image
   @param {string} [sizes] - Image `sizes` attribute
   @param {boolean} [eager] - Load the image eagerly
@@ -17,7 +17,7 @@
 {%- liquid
   assign ground = ground | default: 'grey'
   assign ratio = ratio | default: '3 / 4'
-  assign card_size = size | default: 'lg'
+  assign card_size = scale | default: 'lg'
   assign sizes = sizes | default: '(min-width: 750px) 33vw, 60vw'
   assign caption = product.metafields.custom.card_meta.value
   assign tag = product.metafields.custom.card_tag.value

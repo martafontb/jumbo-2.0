@@ -1,0 +1,15 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-artist",
+      "settings": {
+        "index_label": "Artists",
+        "index_link": "shopify://pages/artists",
+        "editions_label": "Editions",
+        "editions_caption": "Filter by ink",
+        "quote_label": "In their words"
+      }
+    }
+  },
+  "order": ["main"]
+}

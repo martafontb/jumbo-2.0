@@ -1,0 +1,205 @@
+{% comment %}
+  Artists index
+  Every entry of the `artist` metaobject as a big row: name, kind pill and
+  number of editions (products in the artist's `collection`). Hovering or
+  focusing a row fills it with the artist's colour and shows their image in
+  the sticky right column. Kind chips filter the list. Rows link to the
+  artist page (turn on web pages for the artist metaobject).
+
+  Artist fields used: name, kind, color, portrait, since, collection.
+{% endcomment %}
+{%- liquid
+  assign artists = shop.metaobjects.artist.values
+  assign kinds = ''
+  for artist in artists
+    if artist.kind.value != blank
+      assign kinds = kinds | append: artist.kind.value | append: '|'
+    endif
+  endfor
+  assign kind_list = kinds | split: '|' | uniq
+  assign title = section.settings.title | default: page.title
+-%}
+<artists-index class="page artists-index">
+  {%- render 'page-title', title: title, count: artists.size, count_style: 'accent', intro: section.settings.intro -%}
+
+  {%- if kind_list.size > 1 -%}
+    <div class="artists-index__chips" role="group" aria-label="{{ 'sections.artists.filter' | t }}">
+      <button type="button" class="chip" aria-pressed="true" data-kind="">{{ 'sections.artists.all' | t }}</button>
+      {%- for kind in kind_list -%}
+        <button type="button" class="chip" aria-pressed="false" data-kind="{{ kind | handle }}">{{ kind | escape }}</button>
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+
+  {%- if artists.size > 0 -%}
+    <div class="artists-index__grid">
+      <ul class="artists-index__list" role="list">
+        {%- for artist in artists -%}
+          {%- liquid
+            assign color = artist.color.value | default: settings.color_blue
+            assign editions = artist.collection.value.products_count | default: 0
+          -%}
+          <li class="artists-index__item" data-kind="{{ artist.kind.value | handle }}">
+            <a
+              class="artists-index__row"
+              href="{{ artist.system.url | default: '#' }}"
+              style="--artist-color: {{ color }};"
+              data-preview="{{ forloop.index0 }}"
+            >
+              <span class="artists-index__name">{{ artist.name.value | escape }}</span>
+              <span class="artists-index__meta">
+                {%- if artist.kind.value != blank -%}<span class="pill pill--grey">{{ artist.kind.value | escape }}</span>{%- endif -%}
+                {%- if editions > 0 -%}<span class="label label--sm">{{ 'sections.artists.editions' | t: count: editions }}</span>{%- endif -%}
+              </span>
+            </a>
+          </li>
+        {%- endfor -%}
+      </ul>
+
+      <div class="artists-index__preview" aria-hidden="true">
+        {%- for artist in artists -%}
+          <div class="artists-index__card" data-preview-card="{{ forloop.index0 }}" {% unless forloop.first %}hidden{% endunless %}>
+            <div class="media" style="--ratio: 3 / 4; --media-bg: {{ artist.color.value | default: settings.color_blue }};">
+              {%- render 'image', image: artist.portrait.value, sizes: '33vw', decorative: true, placeholder: 'image' -%}
+              {%- if artist.kind.value != blank -%}<span class="pill pill--bg">{{ artist.kind.value | escape }}</span>{%- endif -%}
+            </div>
+            <div class="artists-index__card-meta">
+              <span class="title-card title-card--sm">{{ artist.name.value | escape }}</span>
+              {%- if artist.since.value != blank -%}<span class="label label--sm">{{ 'sections.artists.since' | t: year: artist.since.value }}</span>{%- endif -%}
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+  {%- else -%}
+    <p class="title-statement artists-index__empty">{{ 'sections.artists.empty' | t }}</p>
+  {%- endif -%}
+</artists-index>
+<script src="{{ 'artists.js' | asset_url }}" type="module"></script>
+
+{% stylesheet %}
+  .artists-index__chips {
+    position: sticky;
+    top: var(--header-height);
+    z-index: 5;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 4px;
+    padding: 10px 0;
+    border-top: var(--border);
+    border-bottom: var(--border);
+    background: var(--color-bg);
+  }
+
+  .artists-index__chips .chip {
+    font-size: var(--text-label);
+  }
+
+  .artists-index__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--grid-gap);
+    align-items: start;
+  }
+
+  .artists-index__list {
+    grid-column: span 2;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .artists-index__row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: var(--border);
+    color: var(--color-ink);
+    text-decoration: none;
+    transition: padding-left 0.15s, background-color 0.15s;
+  }
+
+  .artists-index__row:hover,
+  .artists-index__row:focus-visible,
+  .artists-index__row.is-active {
+    padding-left: 16px;
+    background: var(--artist-color);
+    color: var(--color-ink);
+  }
+
+  .artists-index__row:focus-visible {
+    outline-offset: -2px;
+  }
+
+  .artists-index__name {
+    min-width: 0;
+    font: 500 clamp(40px, 6.4vw, 104px) / 0.95 var(--font-display);
+    letter-spacing: -0.05em;
+    overflow-wrap: anywhere;
+  }
+
+  .artists-index__meta {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: 4px;
+    padding-right: 8px;
+  }
+
+  .artists-index__preview {
+    position: sticky;
+    top: calc(var(--header-height) + 26px);
+    margin-left: 12px;
+  }
+
+  .artists-index__card {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .artists-index__card-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-top: 6px;
+    border-top: var(--border);
+  }
+
+  @media screen and (max-width: 749px) {
+    .artists-index__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .artists-index__list {
+      grid-column: auto;
+    }
+
+    .artists-index__preview {
+      display: none;
+    }
+
+    .artists-index__name {
+      font-size: 40px;
+    }
+
+    .artists-index__chips {
+      top: var(--header-height);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Artists index",
+  "class": "section-artists-index",
+  "settings": [
+    { "type": "paragraph", "content": "Lists every entry of the artist metaobject (Content > Metaobjects). Turn on web pages for artists so each row links to its page." },
+    { "type": "text", "id": "title", "label": "Title", "info": "Defaults to the page title." },
+    { "type": "richtext", "id": "intro", "label": "Intro", "default": "<p>The people we print with. Hover a name to see their work, click to see their editions.</p>" }
+  ]
+}
+{% endschema %}

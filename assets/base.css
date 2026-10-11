@@ -21,6 +21,10 @@ process-steps,
 overprint-simulator,
 price-calculator,
 faq-list,
+artists-index,
+artist-editions,
+article-page,
+policy-tabs,
 product-related,
 video-tile {
   display: block;
@@ -711,4 +715,25 @@ html.has-overlay {
   .scroller[data-draggable] {
     cursor: grab;
   }
+}
+
+/* ---------- Shopify's own policy pages (/policies/…) ---------- */
+.shopify-policy__container {
+  max-width: none;
+  margin: 0;
+  padding: 28px var(--page-pad-x) 0;
+}
+
+.shopify-policy__title h1 {
+  margin-bottom: 24px;
+  font: 500 var(--text-page-title) / 0.85 var(--font-display);
+  letter-spacing: -0.05em;
+  text-align: left;
+}
+
+.shopify-policy__body {
+  max-width: 64ch;
+  padding-top: 24px;
+  border-top: var(--border);
+  font: 400 17px / 1.5 var(--font-display);
 }

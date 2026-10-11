@@ -1,0 +1,325 @@
+{% comment %}
+  Artist page (metaobject template)
+  Renders one entry of the `artist` metaobject: breadcrumb, huge name, a 3/2
+  image with the kind pill, bio and details (with us since, editions, inks),
+  website button; the artist's editions (products in their `collection`)
+  with ink filter chips; an "In their words" quote; and a link to the next
+  artist.
+
+  Artist fields: name, kind, color, portrait, bio, since, website, quote,
+  inks (list of text, or ink metaobjects with name + color), collection.
+{% endcomment %}
+{%- liquid
+  assign artist = metaobject
+  assign artist_collection = artist.collection.value
+  assign color = artist.color.value | default: settings.color_blue
+  assign all_artists = shop.metaobjects.artist.values
+  assign next_artist = all_artists.first
+  assign take_next = false
+  for candidate in all_artists
+    if take_next
+      assign next_artist = candidate
+      break
+    endif
+    if candidate.system.handle == artist.system.handle
+      assign take_next = true
+    endif
+  endfor
+-%}
+<div class="page main-artist">
+  <nav class="label label--sm main-artist__crumb" aria-label="{{ 'products.breadcrumb' | t }}">
+    <a href="{{ section.settings.index_link | default: '/pages/artists' }}">{{ section.settings.index_label | escape }}</a>
+    <span aria-hidden="true"> / </span>{{ artist.name.value | escape }}
+  </nav>
+  <h1 class="main-artist__name">{{ artist.name.value | escape }}<span class="dot">.</span></h1>
+
+  <div class="main-artist__intro">
+    <div class="media main-artist__image" style="--ratio: 3 / 2; --media-bg: {{ color }};">
+      {%- render 'image', image: artist.portrait.value, sizes: '(min-width: 750px) 66vw, 100vw', alt_fallback: artist.name.value, eager: true, placeholder: 'image' -%}
+      {%- if artist.kind.value != blank -%}<span class="pill pill--bg">{{ artist.kind.value | escape }}</span>{%- endif -%}
+    </div>
+    <div class="main-artist__about">
+      <div class="main-artist__about-top">
+        {%- if artist.bio.value != blank -%}<p class="main-artist__bio">{{ artist.bio.value | escape }}</p>{%- endif -%}
+        <dl class="main-artist__details">
+          {%- if artist.since.value != blank -%}
+            <div><dt>{{ 'sections.artists.with_us_since' | t }}</dt><dd>{{ artist.since.value }}</dd></div>
+          {%- endif -%}
+          {%- if artist_collection != blank -%}
+            <div><dt>{{ 'products.artist.editions' | t }}</dt><dd>{{ artist_collection.products_count }}</dd></div>
+          {%- endif -%}
+          {%- if artist.inks.value != blank -%}
+            <div>
+              <dt>{{ 'sections.artists.prints_with' | t }}</dt>
+              <dd class="main-artist__inks">
+                {%- for ink in artist.inks.value -%}
+                  {%- assign ink_name = ink.name.value | default: ink -%}
+                  <span>
+                    {%- if ink.color.value != blank -%}<i class="dot-swatch" style="--swatch: {{ ink.color.value }};" aria-hidden="true"></i>{%- endif -%}
+                    {{- ink_name | escape -}}
+                  </span>
+                {%- endfor -%}
+              </dd>
+            </div>
+          {%- endif -%}
+        </dl>
+      </div>
+      {%- if artist.website.value != blank -%}
+        <a class="main-artist__website" href="{{ artist.website.value }}" target="_blank" rel="noopener">
+          {{- 'sections.artists.website' | t -}}<span class="visually-hidden"> {{ 'accessibility.opens_new_window' | t }}</span>
+        </a>
+      {%- endif -%}
+    </div>
+  </div>
+
+  {%- if artist_collection != blank and artist_collection.products_count > 0 -%}
+    {%- liquid
+      assign ink_names = ''
+      for product in artist_collection.products limit: 24
+        for ink in product.metafields.custom.inks.value
+          assign ink_name = ink.name.value | default: ink
+          assign ink_names = ink_names | append: ink_name | append: '|'
+        endfor
+      endfor
+      assign ink_list = ink_names | split: '|' | uniq
+      assign palette = 'blue,red,grey' | split: ','
+    -%}
+    <artist-editions class="main-artist__editions space-large">
+      {%- render 'section-head', label: section.settings.editions_label, color: 'red', caption: section.settings.editions_caption -%}
+      {%- if ink_list.size > 1 -%}
+        <div class="main-artist__chips" role="group" aria-label="{{ section.settings.editions_caption | escape }}">
+          <button type="button" class="chip" aria-pressed="true" data-ink="">{{ 'sections.artists.all' | t }}</button>
+          {%- for ink in ink_list -%}
+            <button type="button" class="chip" aria-pressed="false" data-ink="{{ ink | handle }}">{{ ink | escape }}</button>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+      <ul class="main-artist__works" role="list">
+        {%- for product in artist_collection.products limit: 24 -%}
+          {%- liquid
+            assign product_inks = ''
+            for ink in product.metafields.custom.inks.value
+              assign ink_name = ink.name.value | default: ink | handle
+              assign product_inks = product_inks | append: ink_name | append: ' '
+            endfor
+            assign ground_index = forloop.index0 | modulo: 3
+          -%}
+          <li data-inks="{{ product_inks | strip }}">
+            {%- render 'product-card', product: product, ground: palette[ground_index], scale: 'sm', show_tag: true, class: 'product-card--upper', heading_tag: 'h3' -%}
+          </li>
+        {%- endfor -%}
+      </ul>
+    </artist-editions>
+  {%- endif -%}
+
+  {%- if artist.quote.value != blank -%}
+    <figure class="main-artist__quote">
+      <figcaption class="pill pill--grey">{{ section.settings.quote_label | escape }}</figcaption>
+      <blockquote>“{{ artist.quote.value | escape }}”</blockquote>
+    </figure>
+  {%- endif -%}
+
+  {%- if next_artist != blank and next_artist.system.handle != artist.system.handle -%}
+    <a class="main-artist__next" href="{{ next_artist.system.url }}">
+      <span>{{ 'sections.artists.next' | t: name: next_artist.name.value }}</span>
+      <span aria-hidden="true">→</span>
+    </a>
+  {%- endif -%}
+</div>
+<script src="{{ 'artists.js' | asset_url }}" type="module"></script>
+
+{% stylesheet %}
+  .main-artist__crumb {
+    padding-top: 16px;
+  }
+
+  .main-artist__name {
+    padding: 12px 0 20px;
+    font: 500 clamp(56px, 11vw, 180px) / 0.85 var(--font-display);
+    letter-spacing: -0.05em;
+    overflow-wrap: anywhere;
+  }
+
+  .main-artist__intro {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--grid-gap);
+  }
+
+  .main-artist__image {
+    grid-column: span 2;
+  }
+
+  .main-artist__about {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 22px;
+    padding-left: 12px;
+  }
+
+  .main-artist__about-top {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+  }
+
+  .main-artist__bio {
+    font: 500 clamp(24px, 2.4vw, 38px) / 1.05 var(--font-display);
+    letter-spacing: -0.03em;
+  }
+
+  .main-artist__details {
+    margin: 0;
+    border-top: 1px solid var(--color-grey);
+    font: 400 var(--text-label-sm) / 1.35 var(--font-mono);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+  }
+
+  .main-artist__details > div {
+    display: grid;
+    grid-template-columns: 110px 1fr;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--color-grey);
+  }
+
+  .main-artist__details dt {
+    opacity: 0.55;
+  }
+
+  .main-artist__details dd {
+    margin: 0;
+  }
+
+  .main-artist__inks {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 10px;
+  }
+
+  .main-artist__inks span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .main-artist__inks .dot-swatch {
+    width: 12px;
+    height: 12px;
+  }
+
+  .main-artist__website {
+    padding: 14px;
+    border: var(--border);
+    color: var(--color-ink);
+    font: 400 var(--text-label) / 1.2 var(--font-mono);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    text-align: center;
+    text-decoration: none;
+  }
+
+  .main-artist__website:hover {
+    background: var(--color-grey);
+    color: var(--color-ink);
+  }
+
+  .main-artist__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding-top: 8px;
+  }
+
+  .main-artist__chips .chip {
+    padding: 6px 14px;
+    font-size: var(--text-label);
+  }
+
+  .main-artist__works {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px var(--grid-gap);
+    margin: 0;
+    padding: 8px 0 0;
+    list-style: none;
+  }
+
+  .main-artist__quote {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--grid-gap);
+    align-items: end;
+    margin: 44px 0 0;
+    padding: clamp(20px, 3vw, 48px);
+    background: var(--color-grey);
+  }
+
+  .main-artist__quote figcaption {
+    align-self: start;
+    justify-self: start;
+    background: var(--color-bg);
+  }
+
+  .main-artist__quote blockquote {
+    grid-column: span 2;
+    font: 500 clamp(32px, 4.6vw, 76px) / 0.95 var(--font-display);
+    letter-spacing: -0.05em;
+  }
+
+  .main-artist__next {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-top: 4px;
+    padding: 22px 0;
+    border-top: var(--border);
+    border-bottom: var(--border);
+    color: var(--color-ink);
+    font: 500 clamp(36px, 6vw, 96px) / 0.9 var(--font-display);
+    letter-spacing: -0.05em;
+    text-decoration: none;
+    transition: padding-left 0.15s, background-color 0.15s;
+  }
+
+  .main-artist__next:hover {
+    padding-left: 16px;
+    background: var(--color-grey);
+    color: var(--color-ink);
+  }
+
+  @media screen and (max-width: 749px) {
+    .main-artist__intro,
+    .main-artist__quote {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .main-artist__image,
+    .main-artist__quote blockquote {
+      grid-column: auto;
+    }
+
+    .main-artist__about {
+      padding: 12px 0 0;
+    }
+
+    .main-artist__works {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Artist",
+  "class": "section-main-artist",
+  "settings": [
+    { "type": "text", "id": "index_label", "label": "Breadcrumb label", "default": "Artists" },
+    { "type": "url", "id": "index_link", "label": "Artists page", "info": "Defaults to /pages/artists." },
+    { "type": "text", "id": "editions_label", "label": "Editions label", "default": "Editions" },
+    { "type": "text", "id": "editions_caption", "label": "Editions caption", "default": "Filter by ink" },
+    { "type": "text", "id": "quote_label", "label": "Quote label", "default": "In their words" }
+  ]
+}
+{% endschema %}
