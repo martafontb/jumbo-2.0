@@ -1,0 +1,158 @@
+{% comment %}
+  Ink picker
+  A large colour field named after the selected ink, with a grid of round
+  swatches to pick from and a note per ink. Each "Ink" block is one ink:
+  enter the real ink colour (hex) from your ink list.
+{% endcomment %}
+{%- assign inks = section.blocks | where: 'type', 'ink' -%}
+{%- if inks.size > 0 -%}
+  <ink-picker class="page ink-picker space-{{ section.settings.spacing }}">
+    {%- render 'section-head', label: section.settings.label, color: 'red', caption: section.settings.caption -%}
+    <div class="ink-picker__grid">
+      {%- assign first = inks.first -%}
+      <div class="ink-picker__field" style="--ink: {{ first.settings.color }};" data-ink-field>
+        <span class="pill pill--bg" data-ink-name aria-live="polite">{{ first.settings.name | escape }}</span>
+      </div>
+      <div class="ink-picker__side">
+        <p class="ink-picker__note" data-ink-note>{{ first.settings.note | escape }}</p>
+        <div class="ink-picker__swatches" role="radiogroup" aria-label="{{ section.settings.label | escape }}">
+          {%- for block in inks -%}
+            <button
+              type="button"
+              class="ink-picker__swatch"
+              role="radio"
+              aria-checked="{% if forloop.first %}true{% else %}false{% endif %}"
+              aria-label="{{ block.settings.name | escape }}"
+              title="{{ block.settings.name | escape }}"
+              style="--ink: {{ block.settings.color }};"
+              data-name="{{ block.settings.name | escape }}"
+              data-note="{{ block.settings.note | escape }}"
+              data-color="{{ block.settings.color }}"
+              {% unless forloop.first %}tabindex="-1"{% endunless %}
+              {{ block.shopify_attributes }}
+            ></button>
+          {%- endfor -%}
+        </div>
+      </div>
+    </div>
+  </ink-picker>
+  <script src="{{ 'print-tools.js' | asset_url }}" type="module"></script>
+{%- endif -%}
+
+{% stylesheet %}
+  .ink-picker__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--grid-gap);
+    margin-top: 8px;
+  }
+
+  .ink-picker__field {
+    grid-column: span 2;
+    display: flex;
+    align-items: flex-end;
+    aspect-ratio: 3 / 2;
+    padding: 16px;
+    border-radius: var(--radius-lg);
+    background: var(--ink);
+    transition: background-color 0.3s;
+  }
+
+  .ink-picker__field .pill {
+    padding: 4px 12px;
+  }
+
+  .ink-picker__side {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-left: 12px;
+  }
+
+  .ink-picker__note {
+    margin-bottom: 6px;
+    font: 400 16px / 1.4 var(--font-display);
+  }
+
+  .ink-picker__swatches {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 4px;
+  }
+
+  .ink-picker__swatch {
+    aspect-ratio: 1;
+    padding: 0;
+    border: 1px solid rgba(var(--color-ink-rgb), 0.25);
+    border-radius: 50%;
+    background: var(--ink);
+  }
+
+  .ink-picker__swatch[aria-checked='true'] {
+    box-shadow: inset 0 0 0 4px var(--color-white);
+    border-color: var(--color-ink);
+  }
+
+  @media screen and (max-width: 749px) {
+    .ink-picker__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .ink-picker__field {
+      grid-column: auto;
+    }
+
+    .ink-picker__side {
+      margin: 12px 0 0;
+    }
+
+    .ink-picker__swatches {
+      grid-template-columns: repeat(7, 1fr);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Ink picker",
+  "class": "section-ink-picker",
+  "tag": "div",
+  "max_blocks": 16,
+  "settings": [
+    { "type": "text", "id": "label", "label": "Label", "default": "Inks" },
+    { "type": "text", "id": "caption", "label": "Caption", "default": "Pick one to preview" },
+    {
+      "type": "select",
+      "id": "spacing",
+      "label": "Top spacing",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "large"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "ink",
+      "name": "Ink",
+      "settings": [
+        { "type": "text", "id": "name", "label": "Name", "default": "Jumbo Red" },
+        { "type": "color", "id": "color", "label": "Ink colour", "default": "#EA5A46" },
+        { "type": "textarea", "id": "note", "label": "Note", "default": "A warm, strong red. Beautiful on its own, punchy under black." }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Ink picker",
+      "blocks": [
+        { "type": "ink", "settings": { "name": "Jumbo Red", "color": "#EA5A46", "note": "A warm, strong red. Beautiful on its own, punchy under black." } },
+        { "type": "ink", "settings": { "name": "Jumbo Blue", "color": "#22A8E1", "note": "Clean cobalt blue. Pairs with red for a rich purple." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

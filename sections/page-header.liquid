@@ -1,0 +1,73 @@
+{% comment %}
+  Page header
+  Big title with an accent full stop, an intro in the right column and an
+  optional row of tab chips (e.g. Print guide / Price guide). A tab is shown
+  as selected when its link matches the current page.
+{% endcomment %}
+{%- liquid
+  assign title = section.settings.title
+  if title == blank
+    assign title = page.title | default: page_title
+  endif
+  assign tabs = section.blocks | where: 'type', 'tab'
+-%}
+<div class="page page-header">
+  {%- render 'page-title', title: title, intro: section.settings.intro, show_dot: section.settings.show_dot -%}
+  {%- if tabs.size > 0 -%}
+    <nav class="page-header__tabs" aria-label="{{ section.settings.tabs_label | escape }}">
+      {%- for block in tabs -%}
+        {%- liquid
+          assign is_current = false
+          if block.settings.link != blank and block.settings.link == request.path
+            assign is_current = true
+          endif
+        -%}
+        <a class="chip page-header__tab" href="{{ block.settings.link | default: '#' }}" {% if is_current %}aria-current="page"{% endif %} {{ block.shopify_attributes }}>
+          {{- block.settings.label | escape -}}
+        </a>
+      {%- endfor -%}
+    </nav>
+  {%- endif -%}
+</div>
+
+{% stylesheet %}
+  .page-header__tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 4px;
+    padding: 10px 0;
+    border-top: var(--border);
+    border-bottom: var(--border);
+  }
+
+  .page-header__tab {
+    padding: 6px 14px;
+    font-size: var(--text-label);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Page header",
+  "class": "section-page-header",
+  "max_blocks": 6,
+  "settings": [
+    { "type": "text", "id": "title", "label": "Title", "info": "Defaults to the page title." },
+    { "type": "checkbox", "id": "show_dot", "label": "Accent full stop", "default": true },
+    { "type": "richtext", "id": "intro", "label": "Intro" },
+    { "type": "text", "id": "tabs_label", "label": "Tabs accessible label", "default": "Print service" }
+  ],
+  "blocks": [
+    {
+      "type": "tab",
+      "name": "Tab",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label", "default": "Print guide" },
+        { "type": "url", "id": "link", "label": "Link" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Page header" }]
+}
+{% endschema %}

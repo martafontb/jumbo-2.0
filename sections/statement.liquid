@@ -9,7 +9,7 @@
       <div class="statement__text statement__text--{{ section.settings.size }}">{{ section.settings.text }}</div>
     {%- endif -%}
     {%- if section.settings.button_label != blank -%}
-      <a class="button button--secondary statement__button" href="{{ section.settings.button_link | default: '#' }}">
+      <a class="button {% if section.settings.button_style == 'block' %}statement__button--block{% else %}button--secondary{% endif %} statement__button" href="{{ section.settings.button_link | default: '#' }}">
         {{- section.settings.button_label | escape -}}
       </a>
     {%- endif -%}
@@ -50,6 +50,11 @@
     justify-self: start;
   }
 
+  /* Square ink block, as on the print guide. */
+  .statement__button--block {
+    border-radius: 0;
+  }
+
   @media screen and (max-width: 749px) {
     .statement__grid {
       grid-template-columns: minmax(0, 1fr);
@@ -86,6 +91,16 @@
     },
     { "type": "text", "id": "button_label", "label": "Button label" },
     { "type": "url", "id": "button_link", "label": "Button link" },
+    {
+      "type": "select",
+      "id": "button_style",
+      "label": "Button style",
+      "options": [
+        { "value": "pill", "label": "Outline pill" },
+        { "value": "block", "label": "Ink block" }
+      ],
+      "default": "pill"
+    },
     {
       "type": "select",
       "id": "spacing",

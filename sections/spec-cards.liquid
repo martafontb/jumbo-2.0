@@ -1,0 +1,110 @@
+{% comment %}
+  Spec cards ("At a glance")
+  Up to three bordered cards: a small label, a big value and a short note.
+{% endcomment %}
+<section class="page spec-cards space-{{ section.settings.spacing }}">
+  {%- render 'section-head', label: section.settings.label, color: 'grey', caption: section.settings.caption -%}
+  <div class="spec-cards__grid">
+    {%- for block in section.blocks -%}
+      <div class="spec-cards__card" style="--card-bg: var(--color-{{ block.settings.color }}); --card-fg: {% if block.settings.color == 'ink' %}var(--color-white){% else %}var(--color-ink){% endif %};" {{ block.shopify_attributes }}>
+        <span class="label label--sm">{{ block.settings.label | escape }}</span>
+        <span class="spec-cards__value">{{ block.settings.value | escape }}</span>
+        <span class="spec-cards__note">{{ block.settings.note | escape }}</span>
+      </div>
+    {%- endfor -%}
+  </div>
+</section>
+
+{% stylesheet %}
+  .spec-cards__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--grid-gap);
+    margin-top: 8px;
+  }
+
+  .spec-cards__card {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 16px;
+    border: var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--card-bg);
+    color: var(--card-fg);
+  }
+
+  .spec-cards__value {
+    font: 500 clamp(36px, 4.4vw, 72px) / 0.9 var(--font-display);
+    letter-spacing: -0.05em;
+  }
+
+  .spec-cards__note {
+    font: 400 14px / 1.35 var(--font-display);
+  }
+
+  @media screen and (max-width: 749px) {
+    .spec-cards__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Spec cards",
+  "class": "section-spec-cards",
+  "tag": "div",
+  "max_blocks": 6,
+  "settings": [
+    { "type": "text", "id": "label", "label": "Label", "default": "Specs" },
+    { "type": "text", "id": "caption", "label": "Caption", "default": "At a glance" },
+    {
+      "type": "select",
+      "id": "spacing",
+      "label": "Top spacing",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "large"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "Card",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label", "default": "Max size" },
+        { "type": "text", "id": "value", "label": "Value", "default": "A3" },
+        { "type": "textarea", "id": "note", "label": "Note", "default": "297 × 420 mm. Smaller sizes are cheaper per sheet." },
+        {
+          "type": "select",
+          "id": "color",
+          "label": "Colour",
+          "options": [
+            { "value": "blue", "label": "Blue" },
+            { "value": "red", "label": "Red" },
+            { "value": "grey", "label": "Grey" },
+            { "value": "ink", "label": "Ink" },
+            { "value": "bg", "label": "Background (outlined)" }
+          ],
+          "default": "grey"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Spec cards",
+      "blocks": [
+        { "type": "card", "settings": { "label": "Max size", "value": "A3", "color": "grey" } },
+        { "type": "card", "settings": { "label": "Run", "value": "10–300", "note": "Copies per design. Larger runs by arrangement.", "color": "bg" } },
+        { "type": "card", "settings": { "label": "Turnaround", "value": "~7 days", "note": "From approved proof to finished sheets.", "color": "blue" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

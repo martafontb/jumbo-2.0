@@ -1,0 +1,320 @@
+{
+  "sections": {
+    "header": {
+      "type": "page-header",
+      "blocks": {
+        "tab-print": {
+          "type": "tab",
+          "settings": {
+            "label": "Print guide",
+            "link": "shopify://pages/print-guide"
+          }
+        },
+        "tab-prices": {
+          "type": "tab",
+          "settings": {
+            "label": "Price guide",
+            "link": "shopify://pages/price-guide"
+          }
+        }
+      },
+      "block_order": [
+        "tab-print",
+        "tab-prices"
+      ],
+      "settings": {
+        "title": "Print with us",
+        "intro": "<p>A small-run risograph service for artists, publishers and festivals. Here is how it works.</p>",
+        "tabs_label": "Print service"
+      }
+    },
+    "statement": {
+      "type": "statement",
+      "settings": {
+        "text": "<p>Two drums, up to three colours, runs up to 300. We turn files around in about a week.</p>",
+        "size": "regular",
+        "button_label": "Request a quote →",
+        "button_style": "block",
+        "spacing": "none"
+      }
+    },
+    "inks": {
+      "type": "ink-picker",
+      "blocks": {
+        "ink-0": {
+          "type": "ink",
+          "settings": {
+            "name": "Jumbo Red",
+            "color": "#EA5A46",
+            "note": "A warm, strong red. Beautiful on its own, punchy under black."
+          }
+        },
+        "ink-1": {
+          "type": "ink",
+          "settings": {
+            "name": "Jumbo Yellow",
+            "color": "#FFE800",
+            "note": "Bright and sunny. Overprints well with every other colour."
+          }
+        },
+        "ink-2": {
+          "type": "ink",
+          "settings": {
+            "name": "Jumbo Green",
+            "color": "#00A95C",
+            "note": "A deep, leafy green. Our most-requested ink."
+          }
+        },
+        "ink-3": {
+          "type": "ink",
+          "settings": {
+            "name": "Jumbo Blue",
+            "color": "#0078BF",
+            "note": "Clean cobalt blue. Pairs with red for a rich purple."
+          }
+        },
+        "ink-4": {
+          "type": "ink",
+          "settings": {
+            "name": "Jumbo Aqua",
+            "color": "#5EC8E5",
+            "note": "Cool and light. Good for skies, water and soft shadows."
+          }
+        },
+        "ink-5": {
+          "type": "ink",
+          "settings": {
+            "name": "Jumbo Purple",
+            "color": "#765BA7",
+            "note": "Saturated purple. Strong on its own or under yellow."
+          }
+        },
+        "ink-6": {
+          "type": "ink",
+          "settings": {
+            "name": "Jumbo Fluo-Green",
+            "color": "#44D62C",
+            "note": "Neon green that glows. Use it sparingly and loudly."
+          }
+        }
+      },
+      "block_order": [
+        "ink-0",
+        "ink-1",
+        "ink-2",
+        "ink-3",
+        "ink-4",
+        "ink-5",
+        "ink-6"
+      ],
+      "settings": {
+        "label": "Inks",
+        "caption": "Pick one to preview",
+        "spacing": "large"
+      }
+    },
+    "file-prep": {
+      "type": "checklist",
+      "blocks": {
+        "s1": {
+          "type": "step",
+          "settings": {
+            "title": "Set your size",
+            "body": "Up to A3. Leave a 5 mm margin, the press cannot print to the edge."
+          }
+        },
+        "s2": {
+          "type": "step",
+          "settings": {
+            "title": "Split into layers",
+            "body": "One black and white layer per ink colour, named by colour."
+          }
+        },
+        "s3": {
+          "type": "step",
+          "settings": {
+            "title": "Export at 300 dpi",
+            "body": "PDF or TIFF, greyscale. Halftones print best at 300 dpi."
+          }
+        },
+        "s4": {
+          "type": "step",
+          "settings": {
+            "title": "Send it over",
+            "body": "We reply within a day with a proof and a quote."
+          }
+        }
+      },
+      "block_order": [
+        "s1",
+        "s2",
+        "s3",
+        "s4"
+      ],
+      "settings": {
+        "label": "Prepare your file",
+        "caption": "Tick them off",
+        "spacing": "large"
+      }
+    },
+    "specs": {
+      "type": "spec-cards",
+      "blocks": {
+        "c1": {
+          "type": "card",
+          "settings": {
+            "label": "Max size",
+            "value": "A3",
+            "note": "297 × 420 mm. Smaller sizes are cheaper per sheet.",
+            "color": "grey"
+          }
+        },
+        "c2": {
+          "type": "card",
+          "settings": {
+            "label": "Run",
+            "value": "10–300",
+            "note": "Copies per design. Larger runs by arrangement.",
+            "color": "bg"
+          }
+        },
+        "c3": {
+          "type": "card",
+          "settings": {
+            "label": "Turnaround",
+            "value": "~7 days",
+            "note": "From approved proof to finished sheets.",
+            "color": "blue"
+          }
+        }
+      },
+      "block_order": [
+        "c1",
+        "c2",
+        "c3"
+      ],
+      "settings": {
+        "label": "Specs",
+        "caption": "At a glance",
+        "spacing": "large"
+      }
+    },
+    "cta": {
+      "type": "cta-band",
+      "settings": {
+        "text": "Ready? Send us the file.",
+        "button_label": "See the price guide →",
+        "button_link": "shopify://pages/price-guide",
+        "color": "grey",
+        "spacing": "medium"
+      }
+    },
+    "simulator": {
+      "type": "overprint-simulator",
+      "disabled": true,
+      "blocks": {
+        "a": {
+          "type": "ink",
+          "settings": {
+            "name": "Blue",
+            "color": "#0078BF"
+          }
+        },
+        "b": {
+          "type": "ink",
+          "settings": {
+            "name": "Red",
+            "color": "#EA5A46"
+          }
+        },
+        "c": {
+          "type": "ink",
+          "settings": {
+            "name": "Yellow",
+            "color": "#FFE800"
+          }
+        },
+        "d": {
+          "type": "ink",
+          "settings": {
+            "name": "Green",
+            "color": "#00A95C"
+          }
+        }
+      },
+      "block_order": [
+        "a",
+        "b",
+        "c",
+        "d"
+      ],
+      "settings": {
+        "spacing": "large"
+      }
+    },
+    "process": {
+      "type": "process-steps",
+      "blocks": {
+        "p1": {
+          "type": "step",
+          "settings": {
+            "title": "Mark",
+            "text": "The artist sends a file. We split it into one layer per ink, in black and white.",
+            "meta": "Per layer · 300 dpi",
+            "illustration": "mark",
+            "color": "blue"
+          }
+        },
+        "p2": {
+          "type": "step",
+          "settings": {
+            "title": "Master",
+            "text": "Each layer is burned onto a thin master that wraps the drum, one master per colour.",
+            "meta": "Burn time · 30 sec",
+            "illustration": "master",
+            "color": "grey"
+          }
+        },
+        "p3": {
+          "type": "step",
+          "settings": {
+            "title": "Print",
+            "text": "Paper passes through once per colour. Alignment shifts a little each time.",
+            "meta": "Passes · 1 per ink",
+            "illustration": "print",
+            "color": "ink"
+          }
+        },
+        "p4": {
+          "type": "step",
+          "settings": {
+            "title": "Edition",
+            "text": "Sheets are dried, checked, signed and numbered by hand.",
+            "meta": "Run · up to 300",
+            "illustration": "edition",
+            "color": "blue"
+          }
+        }
+      },
+      "block_order": [
+        "p1",
+        "p2",
+        "p3",
+        "p4"
+      ],
+      "settings": {
+        "spacing": "medium"
+      }
+    }
+  },
+  "order": [
+    "header",
+    "statement",
+    "inks",
+    "file-prep",
+    "specs",
+    "cta",
+    "simulator",
+    "process"
+  ]
+}

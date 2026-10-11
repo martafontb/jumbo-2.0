@@ -1,0 +1,133 @@
+{% comment %}
+  Checklist ("Prepare your file")
+  Numbered rows with a tick box, a title and a short explanation. Ticking
+  is just a visual aid for the visitor (nothing is saved or sent).
+{% endcomment %}
+{%- assign steps = section.blocks | where: 'type', 'step' -%}
+<check-list class="page checklist space-{{ section.settings.spacing }}">
+  {%- render 'section-head', label: section.settings.label, color: 'blue', caption: section.settings.caption -%}
+  <ol class="checklist__rows" role="list">
+    {%- for block in steps -%}
+      <li class="checklist__row" {{ block.shopify_attributes }}>
+        <button type="button" class="checklist__toggle" aria-pressed="false" data-check>
+          <span class="checklist__box" aria-hidden="true"></span>
+          <span class="label label--sm">{{ 'sections.checklist.step' | t: number: forloop.index }}</span>
+          <span class="visually-hidden">: {{ block.settings.title | escape }}</span>
+        </button>
+        <span class="checklist__title">{{ block.settings.title | escape }}</span>
+        <span class="checklist__body">{{ block.settings.body | escape }}</span>
+      </li>
+    {%- endfor -%}
+  </ol>
+</check-list>
+<script src="{{ 'print-tools.js' | asset_url }}" type="module"></script>
+
+{% stylesheet %}
+  .checklist__rows {
+    margin: 8px 0 0;
+    padding: 0;
+    list-style: none;
+    border-top: var(--border);
+  }
+
+  .checklist__row {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--grid-gap);
+    align-items: center;
+    padding: 16px 0;
+    border-bottom: var(--border);
+    transition: background-color 0.2s;
+  }
+
+  .checklist__row.is-done {
+    background: var(--color-blue);
+  }
+
+  .checklist__toggle {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-height: 44px;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    text-align: left;
+  }
+
+  .checklist__box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border: var(--border);
+    background: var(--color-bg);
+    font: 400 16px / 1 var(--font-mono);
+  }
+
+  .checklist__toggle[aria-pressed='true'] .checklist__box::after {
+    content: '✓';
+  }
+
+  .checklist__title {
+    font: 400 clamp(24px, 2.6vw, 40px) / 1.05 var(--font-display);
+    letter-spacing: -0.03em;
+  }
+
+  .checklist__body {
+    font: 400 15px / 1.4 var(--font-display);
+  }
+
+  @media screen and (max-width: 749px) {
+    .checklist__row {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 8px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Checklist",
+  "class": "section-checklist",
+  "tag": "div",
+  "max_blocks": 10,
+  "settings": [
+    { "type": "text", "id": "label", "label": "Label", "default": "Prepare your file" },
+    { "type": "text", "id": "caption", "label": "Caption", "default": "Tick them off" },
+    {
+      "type": "select",
+      "id": "spacing",
+      "label": "Top spacing",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "large"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Step",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Title", "default": "Set your size" },
+        { "type": "textarea", "id": "body", "label": "Text", "default": "Up to A3. Leave a 5 mm margin, the press cannot print to the edge." }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Checklist",
+      "blocks": [
+        { "type": "step", "settings": { "title": "Set your size", "body": "Up to A3. Leave a 5 mm margin, the press cannot print to the edge." } },
+        { "type": "step", "settings": { "title": "Split into layers", "body": "One black and white layer per ink colour, named by colour." } }
+      ]
+    }
+  ]
+}
+{% endschema %}
