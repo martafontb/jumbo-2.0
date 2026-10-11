@@ -32,7 +32,7 @@
             {%- if section.settings.badge != blank -%}<span class="pill pill--grey">{{ section.settings.badge | escape }}</span>{%- endif -%}
             <h2 class="policies__title">{{ policy.title | escape }}</h2>
             <div class="rte policies__body">{{ policy.body }}</div>
-            <a class="link-mono" href="{{ policy.url }}">{{ 'sections.policies.permalink' | t }}</a>
+            <a class="link-mono policies__permalink" href="{{ policy.url }}">{{ 'sections.policies.permalink' | t }}</a>
           </section>
         {%- endfor -%}
       </div>
@@ -44,6 +44,12 @@
 <script src="{{ 'policy-tabs.js' | asset_url }}" type="module"></script>
 
 {% stylesheet %}
+  .policies__permalink {
+    align-self: flex-start;
+    display: inline-block;
+    padding-block: 4px;
+  }
+
   .policies__grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));

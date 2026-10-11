@@ -10,7 +10,7 @@
 {%- liquid
   assign size_rows = settings.guide_sizes | newline_to_br | split: '<br />'
   assign ship_rows = settings.guide_shipping | newline_to_br | split: '<br />'
-  assign palette = 'blue,red,grey' | split: ','
+  assign palette = 'blue,grey,blue' | split: ','
 -%}
 <dialog class="overlay drawer size-guide" id="{{ id }}" aria-labelledby="{{ id }}-title" style="--drawer-width: 480px;">
   <div class="drawer__inner">
@@ -177,7 +177,7 @@
   }
 
   .size-guide__muted {
-    opacity: 0.6;
+    opacity: var(--opacity-muted);
   }
 
   .size-guide__lead {

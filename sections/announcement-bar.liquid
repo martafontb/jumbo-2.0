@@ -13,7 +13,7 @@
     class="announcement"
     data-interval="{{ section.settings.interval | times: 1000 }}"
     data-section-id="{{ section.id }}"
-    style="--announcement-bg: var(--color-{{ section.settings.background }});"
+    style="--announcement-bg: var(--color-{{ section.settings.background }}); --announcement-fg: var(--color-{{ section.settings.text_color | default: 'ink' }});"
     {% if request.design_mode %}
       data-design-mode
     {% endif %}
@@ -64,7 +64,7 @@
     align-items: center;
     min-height: 36px;
     background: var(--announcement-bg, var(--color-red));
-    color: var(--color-ink);
+    color: var(--announcement-fg, var(--color-ink));
     font: 400 var(--text-label) / 1.35 var(--font-mono);
     letter-spacing: var(--tracking-label);
     text-transform: uppercase;
@@ -83,7 +83,7 @@
     padding: 8px 0;
     border: 0;
     background: none;
-    color: var(--color-white);
+    color: inherit;
     font: inherit;
     letter-spacing: inherit;
     text-transform: inherit;
@@ -97,7 +97,7 @@
 
   button.announcement__message:hover,
   a.announcement__message:hover {
-    color: var(--color-white);
+    color: inherit;
     text-decoration: underline;
   }
 
@@ -109,7 +109,7 @@
     height: 36px;
     border: 0;
     background: transparent;
-    color: var(--color-ink);
+    color: inherit;
     font: 400 16px / 1 var(--font-mono);
   }
 
@@ -159,6 +159,17 @@
         { "value": "ink", "label": "Ink" }
       ],
       "default": "red"
+    },
+    {
+      "type": "select",
+      "id": "text_color",
+      "label": "Text colour",
+      "info": "White text meets WCAG AA contrast only on the ink background.",
+      "options": [
+        { "value": "ink", "label": "Ink" },
+        { "value": "white", "label": "White" }
+      ],
+      "default": "ink"
     }
   ],
   "blocks": [

@@ -197,7 +197,7 @@
                   endif
                   assign col = col | plus: note_span | modulo: 3
                 -%}
-                <li class="main-collection__item main-collection__note" style="--span: {{ note_span }}; --note-bg: var(--color-{{ note.settings.color }});" {{ note.shopify_attributes }}>
+                <li class="main-collection__item main-collection__note" style="--span: {{ note_span }}; --note-bg: var(--color-{{ note.settings.color }});{% if note.settings.color == 'ink' %} --note-fg: var(--color-white);{% endif %}" {{ note.shopify_attributes }}>
                   <span class="label label--sm">{{ note.settings.label | escape }}</span>
                   <p class="main-collection__note-text">{{ note.settings.text | escape }}</p>
                 </li>
@@ -210,8 +210,18 @@
     {%- else -%}
       <div class="main-collection__empty">
         <p class="title-statement">{{ 'sections.collection.empty' | t }}</p>
-        {%- if collection.filters.size > 0 -%}
+        {%- liquid
+          assign has_active_filter = false
+          for filter in collection.filters
+            if filter.active_values.size > 0 or filter.min_value.value != blank or filter.max_value.value != blank
+              assign has_active_filter = true
+            endif
+          endfor
+        -%}
+        {%- if has_active_filter -%}
           <a class="button button--secondary" href="{{ collection.url }}">{{ 'sections.collection.clear' | t }}</a>
+        {%- else -%}
+          <a class="button button--secondary" href="{{ routes.all_products_collection_url }}">{{ 'sections.not_found.button' | t }}</a>
         {%- endif -%}
       </div>
     {%- endif -%}
@@ -306,6 +316,12 @@
     outline: none;
   }
 
+  /* The select is borderless, so its chip carries the focus ring. */
+  .main-collection__sort-chip:has(.main-collection__select:focus-visible) {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 2px;
+  }
+
   .main-collection__grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -328,7 +344,7 @@
     padding: 16px;
     border-radius: var(--radius-lg);
     background: var(--note-bg, var(--color-blue));
-    color: var(--color-white);
+    color: var(--note-fg, var(--color-ink)); /* white only on ink: white on blue or red is below 4.5:1 */
   }
 
   .main-collection__note-text {
