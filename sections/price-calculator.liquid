@@ -4,8 +4,8 @@
   rate card table. Estimate = run × unit rate (per sheet, per colour) ×
   colours + setup fee × colours. Rates are entered here in the store's
   currency; the defaults are placeholders from the design, replace them.
-  Everything is a plain form, so without JS the controls still show the
-  rate card. Nothing is submitted to checkout: the button links to your
+  Everything is a plain form. The default estimate is rendered in Liquid
+  (same formula as the JS), so it shows before and without JS. Nothing is submitted to checkout: the button links to your
   quote form.
 {% endcomment %}
 {%- liquid
@@ -14,6 +14,7 @@
   assign default_colours = section.settings.default_colours | at_most: max_colours
   assign setup_cents = section.settings.setup_fee | times: 100
   assign card_qty = section.settings.rate_card_run
+  assign default_unit = 0
 -%}
 <price-calculator
   class="page price-calc space-{{ section.settings.spacing }}"
@@ -31,6 +32,7 @@
             {%- if cells.size < 2 -%}{%- continue -%}{%- endif -%}
             {%- assign label = cells[0] | strip -%}
             {%- assign unit_cents = cells[1] | strip | times: 100 | round -%}
+            {%- if label == section.settings.default_size or default_unit == 0 -%}{%- assign default_unit = unit_cents -%}{%- endif -%}
             <label class="price-calc__pill">
               <input class="visually-hidden" type="radio" name="size" value="{{ unit_cents }}" data-label="{{ label | escape }}" {% if label == section.settings.default_size %}checked{% elsif size_index == 0 and section.settings.default_size == blank %}checked{% endif %}>
               <span>{{ label | escape }}</span>
@@ -58,11 +60,19 @@
       </label>
     </div>
 
+    {%- liquid
+      assign default_run = section.settings.default_run
+      assign estimate = default_run | times: default_unit | times: default_colours
+      assign setup_total = setup_cents | times: default_colours
+      assign estimate = estimate | plus: setup_total
+      assign estimate_rounded = estimate | divided_by: 100.0 | round | times: 100
+      assign estimate_each = estimate | times: 1.0 | divided_by: default_run | round
+    -%}
     <div class="price-calc__estimate" aria-live="polite">
       <span class="pill pill--blue">{{ section.settings.estimate_label | escape }}</span>
       <div>
-        <p class="price-calc__total" data-total>–</p>
-        <p class="label label--sm price-calc__each"><span data-each>–</span> {{ 'sections.prices.each_note' | t }}</p>
+        <p class="price-calc__total" data-total>{{ estimate_rounded | money_without_trailing_zeros }}</p>
+        <p class="label label--sm price-calc__each"><span data-each>{{ estimate_each | money }}</span> {{ 'sections.prices.each_note' | t }}</p>
       </div>
       {%- if section.settings.button_label != blank -%}
         <a class="price-calc__button" href="{{ section.settings.button_link | default: '/pages/contact' }}" data-quote-link>{{ section.settings.button_label | escape }}</a>
@@ -248,7 +258,7 @@
 
   .price-calc__note {
     margin-top: 16px;
-    opacity: 0.6;
+    opacity: var(--opacity-muted);
   }
 
   @media screen and (max-width: 749px) {

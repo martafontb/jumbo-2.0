@@ -9,7 +9,7 @@ class FaqList extends HTMLElement {
       const chip = event.target.closest('[data-category][aria-pressed]');
       if (chip) this.filter(chip);
     });
-    document.addEventListener('shopify:block:select', (event) => {
+    this.addEventListener('shopify:block:select', (event) => {
       if (event.target.matches?.('details') && this.contains(event.target)) event.target.open = true;
     });
   }

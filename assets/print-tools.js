@@ -33,7 +33,7 @@ class InkPicker extends HTMLElement {
       if (swatch) this.select(swatch);
     });
     this.addEventListener('keydown', (event) => rovingKeys(event, this.swatches, (s) => this.select(s)));
-    document.addEventListener('shopify:block:select', (event) => {
+    this.addEventListener('shopify:block:select', (event) => {
       if (this.swatches.includes(event.target)) this.select(event.target);
     });
   }
@@ -70,7 +70,7 @@ class ProcessSteps extends HTMLElement {
       if (tab) this.select(tab);
     });
     this.addEventListener('keydown', (event) => rovingKeys(event, this.tabs, (t) => this.select(t), true));
-    document.addEventListener('shopify:block:select', (event) => {
+    this.addEventListener('shopify:block:select', (event) => {
       if (this.tabs.includes(event.target)) this.select(event.target);
     });
   }
