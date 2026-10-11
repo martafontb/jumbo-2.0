@@ -1,0 +1,4 @@
+extends: theme-check:recommended
+ignore:
+  - design_handoff_shopify_liquid/**
+  - docs/**

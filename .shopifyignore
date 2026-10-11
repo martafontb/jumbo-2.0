@@ -1,0 +1,10 @@
+# Files Shopify CLI must never push, pull or sync.
+# Non-theme project files (the CLI only syncs theme directories, listed for clarity):
+design_handoff_shopify_liquid/**
+docs/**
+CLAUDE.md
+README.md
+CHANGELOG.md
+
+# Live merchant settings: never overwrite the remote copy from git.
+config/settings_data.json
