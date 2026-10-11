@@ -1,0 +1,21 @@
+{% doc %}
+  Renders every link of a header "Menu" block as a coloured menu row, applying
+  the block's repeating colour list and per-row pill overrides.
+
+  @param {object} block - Header block of type "menu"
+{% enddoc %}
+{%- liquid
+  assign row_colors = block.settings.row_colors | split: ','
+  if row_colors.size == 0
+    assign row_colors = 'grey' | split: ','
+  endif
+  assign row_pills = block.settings.row_pills | newline_to_br | split: '<br />'
+-%}
+{%- for link in block.settings.menu.links -%}
+  {%- liquid
+    assign color_index = forloop.index0 | modulo: row_colors.size
+    assign row_color = row_colors[color_index] | strip | downcase
+    assign row_pill = row_pills[forloop.index0] | strip
+  -%}
+  {%- render 'menu-row', link: link, color: row_color, pill: row_pill -%}
+{%- endfor -%}

@@ -1,0 +1,7 @@
+{% doc %}
+  Nav label with the "roll up" hover effect: two stacked copies in a 1.3em
+  window; the second copy is hidden from assistive tech.
+
+  @param {string} text - Label text
+{% enddoc %}
+<span class="roll"><span class="roll__inner"><span>{{ text }}</span><span aria-hidden="true">{{ text }}</span></span></span>

@@ -1,0 +1,157 @@
+{% doc %}
+  One row in the search overlay: a 96px thumbnail (or colour swatch), title,
+  a kind pill and a short meta line. Accepts products, articles, pages and
+  collections, as returned by predictive search.
+
+  @param {object} item - product | article | page | collection
+  @param {number} [index] - Position, used to cycle the accent colour
+{% enddoc %}
+{%- liquid
+  assign palette = 'blue,red,grey,ink' | split: ','
+  assign color_index = index | default: 0 | modulo: 4
+  assign color = palette[color_index]
+
+  assign thumb = blank
+  assign kind = ''
+  assign meta = ''
+  case item.object_type
+    when 'product'
+      assign thumb = item.featured_media
+      if item.type != blank
+        assign kind = item.type
+      else
+        assign kind = 'general.kinds.product' | t
+      endif
+      if item.price_varies
+        assign price_min = item.price_min | money
+        assign meta = 'products.price.from' | t: price: price_min
+      else
+        assign meta = item.price | money
+      endif
+      unless item.available
+        assign meta = 'products.sold_out' | t
+      endunless
+    when 'article'
+      assign thumb = item.image
+      assign kind = item.blog.title | default: ''
+      assign meta = item.published_at | date: format: 'date'
+    when 'collection'
+      assign thumb = item.featured_image
+      assign kind = 'general.kinds.collection' | t
+      assign meta = 'general.kinds.items_count' | t: count: item.products_count
+    when 'page'
+      assign kind = 'general.kinds.page' | t
+  endcase
+-%}
+<li>
+  <a
+    class="search-result"
+    href="{{ item.url }}"
+    style="--result-color: var(--color-{{ color }}); --result-fg: {% if color == 'ink' %}var(--color-white){% else %}var(--color-ink){% endif %};"
+  >
+    <span class="search-result__thumb">
+      {%- if thumb != blank -%}
+        {%- render 'image', image: thumb, sizes: '96px', widths: '96, 192, 288', decorative: true -%}
+      {%- endif -%}
+    </span>
+    <span class="search-result__body">
+      <span class="search-result__title">{{ item.title | escape }}</span>
+      <span class="search-result__meta label label--sm">
+        {%- if kind != blank -%}<span class="pill pill--grey">{{ kind | escape }}</span>{%- endif -%}
+        {{ meta }}
+      </span>
+    </span>
+  </a>
+</li>
+
+{% stylesheet %}
+  .search-results__count {
+    padding-bottom: 8px;
+  }
+
+  .search-results__empty {
+    margin-top: 12px;
+    font: 500 clamp(28px, 3.4vw, 52px) / 1 var(--font-display);
+    letter-spacing: -0.04em;
+  }
+
+  .search-results {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--grid-gap);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .search-result {
+    display: grid;
+    grid-template-columns: 96px minmax(0, 1fr);
+    gap: 12px;
+    height: 100%;
+    padding: 10px 0;
+    border-top: var(--border);
+    color: var(--color-ink);
+    text-decoration: none;
+  }
+
+  @media (hover: hover) {
+    .search-result:hover {
+      background: var(--result-color);
+      color: var(--result-fg);
+    }
+  }
+
+  .search-result__thumb {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 1;
+    border: var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--result-color);
+  }
+
+  .search-result__thumb img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .search-result__body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 6px;
+    min-width: 0;
+  }
+
+  .search-result__title {
+    font: 400 var(--text-card-sm) / 1.1 var(--font-display);
+    letter-spacing: -0.02em;
+  }
+
+  .search-result__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+  }
+
+  @media screen and (max-width: 989px) {
+    .search-results {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .search-results {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .search-result {
+      grid-template-columns: 72px minmax(0, 1fr);
+    }
+  }
+{% endstylesheet %}

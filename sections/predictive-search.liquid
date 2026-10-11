@@ -1,0 +1,39 @@
+{% comment %}
+  Predictive search results
+  Not placed on any template. The search overlay fetches it via
+  /search/suggest?section_id=predictive-search and swaps in its markup.
+{% endcomment %}
+{%- if predictive_search.performed -%}
+  {%- liquid
+    assign results = predictive_search.resources.products | concat: predictive_search.resources.collections | concat: predictive_search.resources.pages | concat: predictive_search.resources.articles
+    assign result_count = results.size
+  -%}
+  <div data-predictive-results data-count="{{ result_count }}" data-terms="{{ predictive_search.terms | escape }}">
+    {%- if result_count > 0 -%}
+      <p class="label label--sm search-results__count">{{ 'sections.search.results_count' | t: count: result_count }}</p>
+      <ul class="search-results" role="list">
+        {%- for item in results -%}
+          {%- render 'search-result', item: item, index: forloop.index0 -%}
+        {%- endfor -%}
+      </ul>
+      <a class="link-mono search-overlay__all" href="{{ routes.search_url }}?q={{ predictive_search.terms | url_encode }}&options%5Bprefix%5D=last">
+        {{- 'sections.search.view_all' | t -}}
+      </a>
+    {%- endif -%}
+  </div>
+{%- endif -%}
+
+{% stylesheet %}
+  .search-overlay__all {
+    display: inline-block;
+    margin-top: 16px;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Predictive search",
+  "class": "section-predictive-search",
+  "settings": []
+}
+{% endschema %}

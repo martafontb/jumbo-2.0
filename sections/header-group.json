@@ -1,0 +1,128 @@
+{
+  "type": "header",
+  "name": "Header group",
+  "sections": {
+    "announcement": {
+      "type": "announcement-bar",
+      "blocks": {
+        "message-welcome": {
+          "type": "message",
+          "settings": {
+            "text": "10% off your first order with code 'WELCOME'",
+            "link": "",
+            "code": "WELCOME"
+          }
+        },
+        "message-shipping": {
+          "type": "message",
+          "settings": {
+            "text": "Free UK shipping over £75",
+            "link": "",
+            "code": ""
+          }
+        },
+        "message-fair": {
+          "type": "message",
+          "settings": {
+            "text": "Next fair: Small Press Fair, 7 Nov",
+            "link": "",
+            "code": ""
+          }
+        }
+      },
+      "block_order": ["message-welcome", "message-shipping", "message-fair"],
+      "settings": {
+        "interval": 5,
+        "dismissible": true,
+        "background": "red"
+      }
+    },
+    "header": {
+      "type": "header",
+      "blocks": {
+        "menu-shop": {
+          "type": "menu",
+          "settings": {
+            "label": "Shop",
+            "menu": "shop-menu",
+            "link": "shopify://collections/all",
+            "row_colors": "blue, grey, blue, red, grey, white",
+            "row_pills": "",
+            "show_on_mobile": true,
+            "mobile_pill_color": "red"
+          }
+        },
+        "card-shop-feature": {
+          "type": "product_card",
+          "settings": {
+            "tag": "New edition",
+            "tag_color": "blue",
+            "ground": "blue"
+          }
+        },
+        "card-shop-zines": {
+          "type": "product_card",
+          "settings": {
+            "tag": "Zines",
+            "tag_color": "red",
+            "ground": "grey"
+          }
+        },
+        "menu-print": {
+          "type": "menu",
+          "settings": {
+            "label": "Print",
+            "menu": "print-menu",
+            "link": "",
+            "row_colors": "blue, grey, red, grey",
+            "row_pills": "Overview\nFrom £0.40\n12 inks\nPDF",
+            "show_on_mobile": false,
+            "mobile_pill_color": "blue"
+          }
+        },
+        "card-print-specs": {
+          "type": "info_card",
+          "settings": {
+            "ground": "grey",
+            "label": "Specs",
+            "heading": "",
+            "specs": "Process | Risograph, 1–3 inks\nMax size | A3 sheet\nStock | Uncoated, 100–300gsm\nMin run | 25 copies\nTurnaround | 5–7 working days",
+            "button_label": "",
+            "button_link": ""
+          }
+        },
+        "card-print-quote": {
+          "type": "info_card",
+          "settings": {
+            "ground": "blue",
+            "label": "Get a quote",
+            "heading": "Send your artwork, get a price within 2 days.",
+            "specs": "",
+            "button_label": "Start a quote →",
+            "button_link": ""
+          }
+        }
+      },
+      "block_order": [
+        "menu-shop",
+        "card-shop-feature",
+        "card-shop-zines",
+        "menu-print",
+        "card-print-specs",
+        "card-print-quote"
+      ],
+      "settings": {
+        "sticky": true,
+        "mobile_menu": "info-menu",
+        "mobile_menu_heading": "Info",
+        "show_search": true,
+        "search_placeholder": "Search editions, zines, artists…",
+        "search_suggestions_label": "Try",
+        "search_suggestions": "Zines, Editions, Books, Process",
+        "search_collection_label": "Trending now",
+        "search_empty_hint": "Try zines or editions."
+      }
+    }
+  },
+  "order": ["announcement", "header"]
+}

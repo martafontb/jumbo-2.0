@@ -1,0 +1,102 @@
+{% doc %}
+  A large navigation row: colour dot, label and a count/info pill. Hover fills
+  the row with its colour. Used by the desktop mega menus and the mobile menu.
+
+  The pill shows `pill` when given, otherwise the product count of a linked
+  collection (or the article count of a linked blog).
+
+  @param {object} link - Shopify menu link
+  @param {string} [color] - Palette token: blue | red | grey | ink | white | bg
+  @param {string} [pill] - Pill text override
+  @param {string} [size] - 'lg' (default) or 'md' (mobile "info" rows with an arrow)
+{% enddoc %}
+{%- liquid
+  assign color = color | default: 'grey' | strip
+  assign size = size | default: 'lg'
+  assign pill_text = pill | strip
+
+  if pill_text == blank and size == 'lg'
+    case link.type
+      when 'collection_link'
+        assign pill_text = link.object.products_count
+      when 'catalog_link'
+        assign pill_text = collections.all.products_count
+      when 'blog_link'
+        assign pill_text = link.object.articles_count
+    endcase
+  endif
+-%}
+<a
+  class="menu-row menu-row--{{ size }}"
+  href="{{ link.url }}"
+  style="--row-color: var(--color-{{ color }}); --row-fg: {% if color == 'ink' %}var(--color-white){% else %}var(--color-ink){% endif %};"
+  {% if link.current %}
+    aria-current="page"
+  {% endif %}
+>
+  <span class="menu-row__label">
+    {%- if size == 'lg' -%}
+      <span class="dot-swatch" style="--swatch: var(--color-{{ color }});" aria-hidden="true"></span>
+    {%- endif -%}
+    {{- link.title | escape -}}
+  </span>
+  {%- if size == 'lg' -%}
+    {%- if pill_text != blank -%}
+      <span class="pill pill--grey">{{ pill_text }}</span>
+    {%- endif -%}
+  {%- else -%}
+    <span class="menu-row__arrow" aria-hidden="true">→</span>
+  {%- endif -%}
+</a>
+
+{% stylesheet %}
+  .menu-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: var(--border);
+    color: var(--color-ink);
+    text-decoration: none;
+    font: 500 var(--text-menu-row) / 1 var(--font-display);
+    letter-spacing: -0.04em;
+    transition: padding-left 0.25s var(--ease-out-expo), background-color 0.15s;
+  }
+
+  .menu-row__label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+  }
+
+  .menu-row--md {
+    padding: 12px 0;
+    font-size: 28px;
+    letter-spacing: -0.03em;
+  }
+
+  .menu-row__arrow {
+    font: 400 var(--text-label) var(--font-mono);
+  }
+
+  @media (hover: hover) {
+    .menu-row:hover {
+      padding-left: 12px;
+      background: var(--row-color);
+      color: var(--row-fg);
+    }
+  }
+
+  .menu-row:focus-visible {
+    outline-offset: -2px;
+  }
+
+  @media screen and (max-width: 749px) {
+    .menu-row--lg {
+      padding: 12px 0;
+      font-size: 40px;
+    }
+  }
+{% endstylesheet %}

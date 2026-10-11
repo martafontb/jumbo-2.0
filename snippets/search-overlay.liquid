@@ -1,0 +1,135 @@
+{% doc %}
+  Full-width search sheet opened from the header. Without JS the header's
+  Search link goes to /search; with JS this dialog opens and fetches
+  predictive results from the `predictive-search` section.
+
+  @param {object} settings - Header section settings (search_* keys)
+{% enddoc %}
+{%- liquid
+  assign suggestions = settings.search_suggestions | split: ','
+  assign trending = settings.search_collection
+-%}
+<dialog class="overlay search-overlay" id="SearchOverlay" aria-label="{{ 'sections.search.title' | t }}">
+  <predictive-search class="search-overlay__inner">
+    <form action="{{ routes.search_url }}" method="get" role="search" class="search-overlay__form">
+      <label class="visually-hidden" for="SearchOverlayInput">{{ 'sections.search.label' | t }}</label>
+      <input
+        id="SearchOverlayInput"
+        class="search-overlay__input"
+        type="search"
+        name="q"
+        value="{{ search.terms | escape }}"
+        placeholder="{{ settings.search_placeholder | escape }}"
+        autocomplete="off"
+        autocorrect="off"
+        autocapitalize="off"
+        spellcheck="false"
+        enterkeyhint="search"
+        aria-controls="SearchOverlayResults"
+        autofocus
+      >
+      <input type="hidden" name="options[prefix]" value="last">
+      <button type="button" class="icon-button icon-button--lg" data-overlay-close aria-label="{{ 'sections.search.close' | t }}">
+        <span aria-hidden="true">×</span>
+      </button>
+    </form>
+
+    {%- if suggestions.size > 0 -%}
+      <div class="search-overlay__suggestions">
+        {%- if settings.search_suggestions_label != blank -%}
+          <span class="pill pill--blue">{{ settings.search_suggestions_label | escape }}</span>
+        {%- endif -%}
+        {%- for term in suggestions -%}
+          {%- assign term = term | strip -%}
+          {%- if term != blank -%}
+            <button type="button" class="chip" data-search-suggestion="{{ term | escape }}">{{ term | escape }}</button>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    <div id="SearchOverlayResults" class="search-overlay__results" data-results>
+      {%- if trending != blank and trending.products_count > 0 -%}
+        <p class="label label--sm search-results__count">{{ settings.search_collection_label | escape }}</p>
+        <ul class="search-results" role="list">
+          {%- for product in trending.products limit: 6 -%}
+            {%- render 'search-result', item: product, index: forloop.index0 -%}
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+    </div>
+
+    <template data-empty-template>
+      <p class="search-results__empty">
+        {{ 'sections.search.no_results_html' | t: terms: '<span data-empty-terms></span>' }}
+        {{ settings.search_empty_hint | escape }}
+      </p>
+    </template>
+  </predictive-search>
+</dialog>
+
+<script src="{{ 'predictive-search.js' | asset_url }}" type="module"></script>
+
+{% stylesheet %}
+  .search-overlay {
+    inset: 0 0 auto;
+    width: 100%;
+    max-height: 92vh;
+    overflow: auto;
+    border-bottom: var(--border);
+  }
+
+  .search-overlay__inner {
+    display: block;
+    padding: 14px var(--page-pad-x) 22px;
+  }
+
+  .search-overlay__form {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--color-ink);
+  }
+
+  .search-overlay__input {
+    flex: 1;
+    min-width: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--color-ink);
+    font: 500 clamp(36px, 6vw, 104px) / 1 var(--font-display);
+    letter-spacing: -0.05em;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  .search-overlay__input::-webkit-search-cancel-button {
+    display: none;
+  }
+
+  .search-overlay__input::placeholder {
+    color: rgba(var(--color-ink-rgb), 0.35);
+  }
+
+  .search-overlay__input:focus-visible {
+    outline: none;
+  }
+
+  .search-overlay__form:focus-within {
+    border-bottom-color: var(--color-blue);
+  }
+
+  .search-overlay__suggestions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    padding: 12px 0;
+  }
+
+  .search-overlay__results[aria-busy='true'] {
+    opacity: 0.5;
+  }
+{% endstylesheet %}

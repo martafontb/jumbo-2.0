@@ -1,0 +1,203 @@
+{% comment %}
+  Announcement bar
+  Full-width red strip above the header. Each "Message" block is one rotating
+  message. If a block has a "Code to copy", clicking the message copies that
+  code and briefly confirms it. Rotation pauses on hover and keyboard focus.
+  Dismissal is remembered for the browser session.
+{% endcomment %}
+{%- liquid
+  assign messages = section.blocks | where: 'type', 'message'
+-%}
+{%- if messages.size > 0 -%}
+  <announcement-bar
+    class="announcement"
+    data-interval="{{ section.settings.interval | times: 1000 }}"
+    data-section-id="{{ section.id }}"
+    style="--announcement-bg: var(--color-{{ section.settings.background }});"
+    {% if request.design_mode %}
+      data-design-mode
+    {% endif %}
+  >
+    <span aria-hidden="true"></span>
+    <div class="announcement__track" aria-roledescription="{{ 'sections.announcement.carousel' | t }}" aria-live="off">
+      {%- for block in messages -%}
+        <div
+          class="announcement__slide"
+          {% unless forloop.first %}
+            hidden
+          {% endunless %}
+          {{ block.shopify_attributes }}
+        >
+          {%- if block.settings.code != blank -%}
+            <button
+              type="button"
+              class="announcement__message"
+              data-copy-code="{{ block.settings.code | escape }}"
+              data-copied-text="{{ 'sections.announcement.code_copied' | t: code: block.settings.code | escape }}"
+            >
+              <span data-message-text>{{ block.settings.text | escape }}</span>
+            </button>
+          {%- elsif block.settings.link != blank -%}
+            <a class="announcement__message" href="{{ block.settings.link }}">{{ block.settings.text | escape }}</a>
+          {%- else -%}
+            <p class="announcement__message">{{ block.settings.text | escape }}</p>
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+    </div>
+    {%- if section.settings.dismissible -%}
+      <button type="button" class="announcement__close" data-announcement-close aria-label="{{ 'sections.announcement.close' | t }}">
+        <span aria-hidden="true">×</span>
+      </button>
+    {%- else -%}
+      <span aria-hidden="true"></span>
+    {%- endif -%}
+  </announcement-bar>
+
+  <script src="{{ 'announcement-bar.js' | asset_url }}" type="module"></script>
+{%- endif -%}
+
+{% stylesheet %}
+  .announcement {
+    display: grid;
+    grid-template-columns: 48px minmax(0, 1fr) 48px;
+    align-items: center;
+    min-height: 36px;
+    background: var(--announcement-bg, var(--color-red));
+    color: var(--color-ink);
+    font: 400 var(--text-label) / 1.35 var(--font-mono);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+  }
+
+  .announcement.is-dismissed {
+    display: none;
+  }
+
+  .announcement__slide {
+    text-align: center;
+  }
+
+  .announcement__message {
+    display: inline-block;
+    padding: 8px 0;
+    border: 0;
+    background: none;
+    color: var(--color-white);
+    font: inherit;
+    letter-spacing: inherit;
+    text-transform: inherit;
+    text-decoration: none;
+  }
+
+  button.announcement__message,
+  a.announcement__message {
+    cursor: pointer;
+  }
+
+  button.announcement__message:hover,
+  a.announcement__message:hover {
+    color: var(--color-white);
+    text-decoration: underline;
+  }
+
+  .announcement__slide.is-entering {
+    animation: fade 0.3s both;
+  }
+
+  .announcement__close {
+    height: 36px;
+    border: 0;
+    background: transparent;
+    color: var(--color-ink);
+    font: 400 16px / 1 var(--font-mono);
+  }
+
+  .announcement__close:hover {
+    background: var(--color-bg);
+    color: var(--announcement-bg, var(--color-red));
+  }
+
+  @media screen and (max-width: 749px) {
+    .announcement__close {
+      height: 44px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Announcement bar",
+  "class": "section-announcement",
+  "tag": "aside",
+  "max_blocks": 6,
+  "settings": [
+    {
+      "type": "range",
+      "id": "interval",
+      "label": "Seconds per message",
+      "min": 3,
+      "max": 12,
+      "step": 1,
+      "unit": "s",
+      "default": 5
+    },
+    {
+      "type": "checkbox",
+      "id": "dismissible",
+      "label": "Show close button",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "background",
+      "label": "Background",
+      "options": [
+        { "value": "red", "label": "Red" },
+        { "value": "blue", "label": "Blue" },
+        { "value": "grey", "label": "Grey" },
+        { "value": "ink", "label": "Ink" }
+      ],
+      "default": "red"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "message",
+      "name": "Message",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "Free shipping over £75"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        },
+        {
+          "type": "text",
+          "id": "code",
+          "label": "Code to copy",
+          "info": "Optional. Clicking the message copies this discount code instead of following the link."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Announcement bar",
+      "blocks": [
+        { "type": "message", "settings": { "text": "10% off your first order with code 'WELCOME'", "code": "WELCOME" } },
+        { "type": "message", "settings": { "text": "Free UK shipping over £75" } },
+        { "type": "message", "settings": { "text": "Next fair: Small Press Fair, 7 Nov" } }
+      ]
+    }
+  ],
+  "enabled_on": {
+    "groups": ["header"]
+  }
+}
+{% endschema %}

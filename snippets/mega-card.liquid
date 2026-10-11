@@ -1,0 +1,135 @@
+{% doc %}
+  A card in a desktop mega menu's right-hand columns.
+  - product_card: 4/3 image with a tag pill, then title and price.
+  - info_card: coloured panel with a label, an optional heading, an optional
+    "Label | Value" spec list and an optional button.
+
+  @param {object} block - Header block of type product_card or info_card
+{% enddoc %}
+{%- case block.type -%}
+  {%- when 'product_card' -%}
+    {%- assign card_product = block.settings.product -%}
+    {%- if card_product != blank or request.design_mode -%}
+      {%- assign card_image = block.settings.image | default: card_product.featured_media -%}
+      <a
+        class="mega-card mega-card--product"
+        href="{{ card_product.url | default: '#' }}"
+        {{ block.shopify_attributes }}
+      >
+        <div class="media" style="--ratio: 4 / 3; --media-bg: var(--color-{{ block.settings.ground }});">
+          {%- render 'image',
+            image: card_image,
+            sizes: '(min-width: 750px) 33vw, 1px',
+            widths: '360, 540, 720, 960',
+            alt_fallback: card_product.title,
+            placeholder: 'product-1'
+          -%}
+          {%- if block.settings.tag != blank -%}
+            <span class="pill pill--{{ block.settings.tag_color }}">{{ block.settings.tag | escape }}</span>
+          {%- endif -%}
+        </div>
+        <div class="mega-card__meta">
+          <span class="title-card title-card--sm">
+            {{- card_product.title | default: block.settings.tag | escape -}}
+          </span>
+          {%- if card_product != blank -%}
+            <span class="label label--sm">
+              {%- if card_product.price_varies -%}
+                {%- assign price_min = card_product.price_min | money -%}
+                {{ 'products.price.from' | t: price: price_min }}
+              {%- else -%}
+                {{ card_product.price | money }}
+              {%- endif -%}
+            </span>
+          {%- endif -%}
+        </div>
+      </a>
+    {%- endif -%}
+
+  {%- when 'info_card' -%}
+    <div class="mega-card mega-card--info" style="--card-bg: var(--color-{{ block.settings.ground }});" {{ block.shopify_attributes }}>
+      {%- if block.settings.label != blank -%}
+        <span class="pill pill--bg">{{ block.settings.label | escape }}</span>
+      {%- endif -%}
+      <div class="mega-card__body">
+        {%- if block.settings.specs != blank -%}
+          {%- assign spec_lines = block.settings.specs | newline_to_br | split: '<br />' -%}
+          <dl class="spec-list">
+            {%- for line in spec_lines -%}
+              {%- assign parts = line | split: '|' -%}
+              {%- if parts.size > 1 -%}
+                <dt>{{ parts[0] | strip | escape }}</dt>
+                <dd>{{ parts[1] | strip | escape }}</dd>
+              {%- endif -%}
+            {%- endfor -%}
+          </dl>
+        {%- endif -%}
+        {%- if block.settings.heading != blank -%}
+          <p class="mega-card__heading">{{ block.settings.heading | escape }}</p>
+        {%- endif -%}
+        {%- if block.settings.button_label != blank -%}
+          <a class="button button--small mega-card__button" href="{{ block.settings.button_link | default: '#' }}">
+            {{- block.settings.button_label | escape -}}
+          </a>
+        {%- endif -%}
+      </div>
+    </div>
+{%- endcase -%}
+
+{% stylesheet %}
+  .mega-card {
+    margin-top: 4px;
+  }
+
+  .mega-card--product {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    color: var(--color-ink);
+    text-decoration: none;
+  }
+
+  .mega-card--product:hover {
+    color: var(--color-ink);
+  }
+
+  .mega-card__meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    padding-top: 6px;
+    border-top: var(--border);
+  }
+
+  .mega-card--info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 16px;
+    min-height: 240px;
+    padding: 14px;
+    border-radius: var(--radius-lg);
+    background: var(--card-bg);
+    color: var(--color-ink);
+  }
+
+  .mega-card__body {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .mega-card--info .spec-list {
+    gap: 8px 18px;
+  }
+
+  .mega-card__heading {
+    font: 500 clamp(24px, 2.6vw, 40px) / 1 var(--font-display);
+    letter-spacing: -0.03em;
+  }
+
+  .mega-card__button {
+    align-self: flex-start;
+  }
+{% endstylesheet %}
