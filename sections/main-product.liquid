@@ -30,7 +30,7 @@
   {% if section.settings.sticky_info %}data-sticky{% endif %}
 >
   <div class="main-product__grid">
-    <div class="main-product__media" id="Gallery-{{ section.id }}" data-dynamic>
+    <div class="main-product__media" id="Gallery-{{ section.id }}" data-dynamic style="--media-fit: {{ section.settings.gallery_fit | default: 'cover' }};">
       {%- render 'product-gallery',
         product: product,
         variant: current_variant,
@@ -364,7 +364,7 @@
     {
       "type": "select",
       "id": "gallery_ground",
-      "label": "Image background while loading",
+      "label": "Image background",
       "options": [
         { "value": "blue", "label": "Blue" },
         { "value": "red", "label": "Red" },
@@ -372,6 +372,17 @@
         { "value": "ink", "label": "Ink" }
       ],
       "default": "blue"
+    },
+    {
+      "type": "select",
+      "id": "gallery_fit",
+      "label": "Image fit",
+      "options": [
+        { "value": "cover", "label": "Fill the frame (crop)" },
+        { "value": "contain", "label": "Show the whole image" }
+      ],
+      "default": "cover",
+      "info": "\"Show the whole image\" suits packshots and transparent PNGs; the image background fills the rest of the frame."
     },
     { "type": "checkbox", "id": "captions", "label": "Show image alt text as a caption on secondary images", "default": true },
     { "type": "checkbox", "id": "sticky_info", "label": "Sticky info column on desktop", "default": true },

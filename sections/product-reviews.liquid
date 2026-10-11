@@ -2,9 +2,12 @@
   Product reviews
   Reviews come from the Shop app. The left column shows the average rating
   and count from the standard reviews.rating / reviews.rating_count
-  metafields (when the app fills them). Add the Shop app's reviews block to
-  list the reviews. The section is hidden until it has one or the other.
+  metafields (when the app fills them). The written reviews can't be read
+  from Liquid: they come from the reviews app's block (Add block > Apps).
+  The theme editor shows a prompt until one is added. The section is hidden
+  until it has a rating or an app block.
 {% endcomment %}
+{%- render 'section-border', section: section -%}
 {%- liquid
   assign rating = product.metafields.reviews.rating.value
   assign rating_count = product.metafields.reviews.rating_count.value | default: 0
@@ -21,11 +24,15 @@
           {%- render 'stars', rating: rating.rating, max: rating.scale_max, class: 'product-reviews__stars' -%}
         {%- endif -%}
       </div>
-      <div class="product-reviews__list">
-        {%- for block in apps -%}
-          {% render block %}
-        {%- endfor -%}
-      </div>
+      {%- if apps.size > 0 -%}
+        <div class="product-reviews__list">
+          {%- for block in apps -%}
+            {% render block %}
+          {%- endfor -%}
+        </div>
+      {%- elsif request.design_mode -%}
+        <p class="product-reviews__list product-reviews__hint label">{{ 'products.reviews.add_app' | t }}</p>
+      {%- endif -%}
     </div>
   </section>
 {%- elsif request.design_mode -%}
@@ -53,6 +60,12 @@
 
   .product-reviews__stars {
     font-size: 22px;
+  }
+
+  .product-reviews__hint {
+    padding: 16px;
+    border: 1px dashed var(--color-ink);
+    border-radius: var(--radius-lg);
   }
 
   .product-reviews__list {
@@ -83,6 +96,7 @@
   "class": "section-product-reviews",
   "tag": "div",
   "settings": [
+    { "type": "checkbox", "id": "show_border", "label": "Show top border", "default": true },
     { "type": "paragraph", "content": "Add the Shop app's reviews block below. The average rating shows when the app fills the reviews.rating metafield." },
     { "type": "text", "id": "label", "label": "Label", "default": "Reviews" },
     {

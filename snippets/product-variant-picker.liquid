@@ -72,7 +72,7 @@
               -%}
               <label
                 for="{{ input_id }}"
-                class="variant-picker__swatch{% unless value.available %} is-unavailable{% endunless %}"
+                class="tap-target variant-picker__swatch{% unless value.available %} is-unavailable{% endunless %}"
                 style="{{ swatch_style }}"
                 title="{{ value | escape }}"
               >
@@ -208,10 +208,10 @@
   }
 
   .variant-picker__swatch {
-    width: 48px;
-    height: 48px;
+    width: 28px;
+    height: 28px;
     border: var(--border);
-    border-radius: var(--radius-sm);
+    border-radius: 50%;
     background-color: var(--color-grey);
     background-size: cover;
     background-position: center;
