@@ -1,0 +1,265 @@
+{% comment %}
+  FAQ
+  Category chips, an accordion of questions (native <details>, so it works
+  without JS; the first item starts open) and a "Still stuck?" card with an
+  email link. Each "Question" block has a category, question and answer.
+  Outputs FAQPage structured data built from the same questions.
+{% endcomment %}
+{%- liquid
+  assign questions = section.blocks | where: 'type', 'question'
+  assign categories = ''
+  for block in questions
+    if block.settings.category != blank
+      assign categories = categories | append: block.settings.category | append: '|'
+    endif
+  endfor
+  assign category_list = categories | split: '|' | uniq
+  assign palette = 'blue,red,grey' | split: ','
+  assign contact_email = section.settings.email | default: shop.email
+-%}
+<faq-list class="page faq space-{{ section.settings.spacing }}">
+  {%- if category_list.size > 1 -%}
+    <div class="faq__chips" role="group" aria-label="{{ 'sections.faq.filter' | t }}">
+      <button type="button" class="chip faq__chip" aria-pressed="true" data-category="">{{ 'sections.faq.all' | t }}</button>
+      {%- for category in category_list -%}
+        <button type="button" class="chip faq__chip" aria-pressed="false" data-category="{{ category | handle }}">{{ category | escape }}</button>
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+
+  <div class="faq__grid">
+    <div class="faq__list">
+      {%- for block in questions -%}
+        {%- assign color_index = forloop.index0 | modulo: 3 -%}
+        <details
+          class="faq__item"
+          data-category="{{ block.settings.category | handle }}"
+          style="--toggle-bg: var(--color-{{ palette[color_index] }});"
+          {% if forloop.first and section.settings.open_first %}open{% endif %}
+          {{ block.shopify_attributes }}
+        >
+          <summary class="faq__question">
+            <span>{{ block.settings.question | escape }}</span>
+            <span class="faq__toggle" aria-hidden="true"></span>
+          </summary>
+          <div class="rte faq__answer">{{ block.settings.answer }}</div>
+        </details>
+      {%- endfor -%}
+    </div>
+
+    {%- if section.settings.card_text != blank or contact_email != blank -%}
+      <aside class="faq__card">
+        {%- if section.settings.card_label != blank -%}<span class="pill pill--blue">{{ section.settings.card_label | escape }}</span>{%- endif -%}
+        {%- if section.settings.card_text != blank -%}<p class="faq__card-text">{{ section.settings.card_text | escape }}</p>{%- endif -%}
+        {%- if contact_email != blank -%}
+          <a class="faq__card-link" href="mailto:{{ contact_email }}">{{ contact_email }} →</a>
+        {%- endif -%}
+      </aside>
+    {%- endif -%}
+  </div>
+</faq-list>
+
+{%- if questions.size > 0 -%}
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {%- for block in questions -%}
+          {
+            "@type": "Question",
+            "name": {{ block.settings.question | strip_html | json }},
+            "acceptedAnswer": { "@type": "Answer", "text": {{ block.settings.answer | strip_html | strip | json }} }
+          }{% unless forloop.last %},{% endunless %}
+        {%- endfor -%}
+      ]
+    }
+  </script>
+{%- endif -%}
+<script src="{{ 'faq.js' | asset_url }}" type="module"></script>
+
+{% stylesheet %}
+  .faq__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 4px;
+    padding: 10px 0;
+    border-top: var(--border);
+    border-bottom: var(--border);
+  }
+
+  .faq__chip {
+    padding: 6px 14px;
+    font-size: var(--text-label);
+  }
+
+  .faq__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--grid-gap);
+    align-items: start;
+  }
+
+  .faq__list {
+    grid-column: span 2;
+  }
+
+  .faq__item {
+    border-bottom: var(--border);
+  }
+
+  .faq__question {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 0;
+    font: 500 clamp(24px, 2.6vw, 40px) / 1.05 var(--font-display);
+    letter-spacing: -0.03em;
+    list-style: none;
+    cursor: pointer;
+  }
+
+  .faq__question::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq__toggle {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: var(--border);
+    font: 400 18px / 1 var(--font-mono);
+  }
+
+  .faq__toggle::before {
+    content: '+';
+  }
+
+  .faq__item[open] .faq__toggle {
+    background: var(--toggle-bg);
+  }
+
+  .faq__item[open] .faq__toggle::before {
+    content: '−';
+  }
+
+  .faq__answer {
+    max-width: 60ch;
+    margin: 0 0 22px;
+    font: 400 17px / 1.5 var(--font-display);
+  }
+
+  .faq__item[open] .faq__answer {
+    animation: fade 0.25s both;
+  }
+
+  .faq__card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 16px;
+    min-height: 280px;
+    margin-left: 12px;
+    padding: 16px;
+    border-radius: var(--radius-lg);
+    background: var(--color-grey);
+  }
+
+  .faq__card .pill {
+    align-self: flex-start;
+  }
+
+  .faq__card-text {
+    font: 500 clamp(28px, 3vw, 48px) / 1 var(--font-display);
+    letter-spacing: -0.04em;
+  }
+
+  .faq__card-link {
+    padding: 14px;
+    background: var(--color-ink);
+    color: var(--color-white);
+    font: 400 var(--text-label) / 1.2 var(--font-mono);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    text-align: center;
+    text-decoration: none;
+    overflow-wrap: anywhere;
+  }
+
+  .faq__card-link:hover {
+    background: var(--color-red);
+    color: var(--color-ink);
+  }
+
+  @media screen and (max-width: 749px) {
+    .faq__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .faq__list {
+      grid-column: auto;
+    }
+
+    .faq__card {
+      min-height: 0;
+      margin: 24px 0 0;
+    }
+
+    .faq__toggle {
+      width: 44px;
+      height: 44px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "FAQ",
+  "class": "section-faq",
+  "tag": "div",
+  "max_blocks": 50,
+  "settings": [
+    { "type": "checkbox", "id": "open_first", "label": "Open the first question", "default": true },
+    { "type": "header", "content": "Contact card" },
+    { "type": "text", "id": "card_label", "label": "Label", "default": "Still stuck?" },
+    { "type": "text", "id": "card_text", "label": "Text", "default": "Ask a human. We reply within a day." },
+    { "type": "text", "id": "email", "label": "Email", "info": "Defaults to the store's contact email." },
+    {
+      "type": "select",
+      "id": "spacing",
+      "label": "Top spacing",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "none"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "question",
+      "name": "Question",
+      "settings": [
+        { "type": "text", "id": "category", "label": "Category", "default": "Orders", "info": "Questions with the same category share a filter chip." },
+        { "type": "text", "id": "question", "label": "Question", "default": "How long until my order ships?" },
+        { "type": "richtext", "id": "answer", "label": "Answer", "default": "<p>In-stock items ship within 3 working days. Limited editions may take up to 5.</p>" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "FAQ",
+      "blocks": [
+        { "type": "question" }
+      ]
+    }
+  ]
+}
+{% endschema %}

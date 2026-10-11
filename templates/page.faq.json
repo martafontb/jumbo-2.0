@@ -1,0 +1,100 @@
+{
+  "sections": {
+    "header": {
+      "type": "page-header",
+      "settings": {
+        "title": "FAQ",
+        "intro": "<p>The things people ask us most. Can’t find yours? Email us.</p>"
+      }
+    },
+    "faq": {
+      "type": "faq",
+      "blocks": {
+        "q0": {
+          "type": "question",
+          "settings": {
+            "category": "Orders",
+            "question": "How long until my order ships?",
+            "answer": "<p>In-stock items ship within 3 working days. Limited editions may take up to 5.</p>"
+          }
+        },
+        "q1": {
+          "type": "question",
+          "settings": {
+            "category": "Orders",
+            "question": "Can I change or cancel my order?",
+            "answer": "<p>Email us within 24 hours and we will update it before it goes in the post.</p>"
+          }
+        },
+        "q2": {
+          "type": "question",
+          "settings": {
+            "category": "Shipping",
+            "question": "Do you ship internationally?",
+            "answer": "<p>Yes. UK, EU and worldwide, with tracking on every parcel.</p>"
+          }
+        },
+        "q3": {
+          "type": "question",
+          "settings": {
+            "category": "Shipping",
+            "question": "How are prints packed?",
+            "answer": "<p>Flat, in a rigid board envelope. Never rolled.</p>"
+          }
+        },
+        "q4": {
+          "type": "question",
+          "settings": {
+            "category": "Prints",
+            "question": "Why do prints look slightly different from photos?",
+            "answer": "<p>Riso inks are mixed by hand and overprinted, so small shifts in colour and registration are part of each edition.</p>"
+          }
+        },
+        "q5": {
+          "type": "question",
+          "settings": {
+            "category": "Prints",
+            "question": "Are editions signed and numbered?",
+            "answer": "<p>Limited editions are signed and numbered by the artist or by us. The edition size is on each product page.</p>"
+          }
+        },
+        "q6": {
+          "type": "question",
+          "settings": {
+            "category": "Printing with us",
+            "question": "What is the minimum run?",
+            "answer": "<p>We print runs from 10 to 300 copies.</p>"
+          }
+        },
+        "q7": {
+          "type": "question",
+          "settings": {
+            "category": "Printing with us",
+            "question": "What file format do you need?",
+            "answer": "<p>Greyscale PDF or TIFF at 300 dpi, one layer per colour.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "q0",
+        "q1",
+        "q2",
+        "q3",
+        "q4",
+        "q5",
+        "q6",
+        "q7"
+      ],
+      "settings": {
+        "open_first": true,
+        "card_label": "Still stuck?",
+        "card_text": "Ask a human. We reply within a day.",
+        "spacing": "none"
+      }
+    }
+  },
+  "order": [
+    "header",
+    "faq"
+  ]
+}
