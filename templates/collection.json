@@ -2,7 +2,23 @@
   "sections": {
     "main": {
       "type": "main-collection",
-      "settings": {}
+      "blocks": {
+        "note-1": {
+          "type": "note",
+          "settings": {
+            "position": 3,
+            "label": "Studio note",
+            "text": "Blue is the first drum, always. Everything after has to argue with it.",
+            "color": "blue"
+          }
+        }
+      },
+      "block_order": ["note-1"],
+      "settings": {
+        "show_sort": true,
+        "grounds": "blue, grey, red, ink, blue, red",
+        "per_page": 24
+      }
     }
   },
   "order": ["main"]

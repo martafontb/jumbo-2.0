@@ -1,34 +1,412 @@
 {% comment %}
-  Collection (baseline)
-  Working product grid from collection.products with pagination. Phase 4
-  replaces this with the designed PLP (mixed spans, studio notes, sticky
-  filters and sort).
+  Collection (PLP)
+  Title with product count and intro, a sticky filter bar (chips + sort) and
+  a gap-free grid where products span one or two columns.
+
+  - Span: product metafield `custom.card_span` (1 or 2). Wide cards are
+    clamped to fit the row and the last card stretches to finish it, as in
+    the design. Ratio follows span: 1 → 3/4, 2 → 3/2, 3 → 9/4. On mobile
+    every card is one column (3/4).
+  - Card colour: metafield `custom.card_ground` (blue, red, grey, ink, bg),
+    otherwise the section's repeating colour list.
+  - Chips: either links from a menu (e.g. Editions, Zines, Books) or the
+    values of the first list-type Storefront filter (e.g. Product type).
+  - "Studio note" blocks are coloured quote tiles inserted after the Nth
+    product on the first page.
+  Filtering and sorting use Shopify's URL parameters, so they work without JS.
 {% endcomment %}
+{%- liquid
+  assign grounds = section.settings.grounds | split: ','
+  if grounds.size == 0
+    assign grounds = 'grey' | split: ','
+  endif
+  assign notes = section.blocks | where: 'type', 'note'
+  assign title = section.settings.title | default: collection.title
+  assign intro = collection.description
+  if section.settings.intro != blank
+    assign intro = section.settings.intro
+  endif
+  assign sort_by = collection.sort_by | default: collection.default_sort_by
+-%}
+
 {%- paginate collection.products by section.settings.per_page -%}
   <div class="page main-collection">
-    {%- render 'page-title', title: collection.title, count: collection.products_count, intro: collection.description -%}
+    {%- comment -%} Solid strip behind the blended header so the filter bar can stick under it. {%- endcomment -%}
+    <div class="main-collection__strip" aria-hidden="true"><div></div></div>
+
+    {%- render 'page-title', title: title, count: collection.products_count, intro: intro -%}
+
+    <div class="main-collection__bar">
+      <nav class="main-collection__chips" aria-label="{{ 'sections.collection.filter_label' | t }}">
+        {%- if section.settings.chip_menu.links.size > 0 -%}
+          {%- for link in section.settings.chip_menu.links -%}
+            {%- assign dot_index = forloop.index0 | modulo: grounds.size -%}
+            <a
+              class="chip"
+              href="{{ link.url }}"
+              {% if link.active or link.current %}aria-current="page"{% endif %}
+            >
+              <span class="chip__dot" style="--swatch: var(--color-{{ grounds[dot_index] | strip }});" aria-hidden="true"></span>
+              {{- link.title | escape -}}
+            </a>
+          {%- endfor -%}
+        {%- else -%}
+          {%- assign chip_filter = collection.filters | where: 'type', 'list' | first -%}
+          {%- if chip_filter -%}
+            {%- liquid
+              assign any_active = false
+              if chip_filter.active_values.size > 0
+                assign any_active = true
+              endif
+              assign base_url = collection.url
+              if collection.sort_by != blank
+                assign base_url = base_url | append: '?sort_by=' | append: collection.sort_by
+              endif
+            -%}
+            <a class="chip" href="{{ base_url }}" {% unless any_active %}aria-current="page"{% endunless %}>
+              <span class="chip__dot" style="--swatch: var(--color-ink);" aria-hidden="true"></span>
+              {{- 'sections.collection.all' | t -}}
+            </a>
+            {%- for value in chip_filter.values -%}
+              {%- if value.count == 0 and value.active == false -%}{%- continue -%}{%- endif -%}
+              {%- liquid
+                assign dot_index = forloop.index0 | modulo: grounds.size
+                assign chip_value = value.value | url_param_escape
+                assign chip_url = collection.url | append: '?' | append: value.param_name | append: '=' | append: chip_value
+                if collection.sort_by != blank
+                  assign chip_url = chip_url | append: '&sort_by=' | append: collection.sort_by
+                endif
+              -%}
+              <a class="chip" href="{{ chip_url }}" {% if value.active %}aria-current="page"{% endif %}>
+                <span class="chip__dot" style="--swatch: var(--color-{{ grounds[dot_index] | strip }});" aria-hidden="true"></span>
+                {{- value.label | escape -}}
+              </a>
+            {%- endfor -%}
+          {%- endif -%}
+        {%- endif -%}
+      </nav>
+
+      {%- if section.settings.show_sort -%}
+        <form class="main-collection__sort" method="get" action="{{ collection.url }}" data-auto-submit>
+          {%- for filter in collection.filters -%}
+            {%- for value in filter.active_values -%}
+              <input type="hidden" name="{{ value.param_name }}" value="{{ value.value }}">
+            {%- endfor -%}
+            {%- if filter.type == 'price_range' -%}
+              {%- if filter.min_value.value -%}<input type="hidden" name="{{ filter.min_value.param_name }}" value="{{ filter.min_value.value | money_without_currency }}">{%- endif -%}
+              {%- if filter.max_value.value -%}<input type="hidden" name="{{ filter.max_value.param_name }}" value="{{ filter.max_value.value | money_without_currency }}">{%- endif -%}
+            {%- endif -%}
+          {%- endfor -%}
+          <label class="chip main-collection__sort-chip">
+            <span>{{ 'sections.collection.sort' | t }}</span>
+            <select name="sort_by" class="main-collection__select">
+              {%- for option in collection.sort_options -%}
+                <option value="{{ option.value }}" {% if option.value == sort_by %}selected{% endif %}>{{ option.name | escape }}</option>
+              {%- endfor -%}
+            </select>
+            <span aria-hidden="true">↕</span>
+          </label>
+          <noscript><button type="submit" class="chip">{{ 'sections.collection.apply' | t }}</button></noscript>
+        </form>
+      {%- endif -%}
+    </div>
+
     {%- if collection.products.size > 0 -%}
-      <ul class="card-grid" role="list">
+      <ul class="main-collection__grid" role="list">
+        {%- liquid
+          assign col = 0
+          assign product_total = collection.products.size
+          assign trailing_note = false
+          if paginate.current_page == 1
+            for note in notes
+              if note.settings.position >= product_total
+                assign trailing_note = true
+              endif
+            endfor
+          endif
+        -%}
         {%- for product in collection.products -%}
-          <li>
-            {%- assign price = product.price | money -%}
-            {%- render 'card-basic', url: product.url, title: product.title, image: product.featured_media, meta: price, ratio: '3 / 4', placeholder: 'product-1' -%}
+          {%- liquid
+            assign span = product.metafields.custom.card_span.value | default: 1 | at_least: 1 | at_most: 2
+            assign remaining = 3 | minus: col
+            if span > remaining
+              assign span = remaining
+            endif
+            if forloop.last and trailing_note == false
+              assign span = remaining
+            endif
+            assign col = col | plus: span | modulo: 3
+
+            case span
+              when 2
+                assign ratio = '3 / 2'
+              when 3
+                assign ratio = '9 / 4'
+              else
+                assign ratio = '3 / 4'
+            endcase
+
+            assign ground = product.metafields.custom.card_ground.value | strip | downcase
+            if ground == blank
+              assign ground_index = forloop.index0 | modulo: grounds.size
+              assign ground = grounds[ground_index] | strip
+            endif
+
+            if span == 1
+              assign card_sizes = '(min-width: 750px) 33vw, 50vw'
+            else
+              assign card_sizes = '(min-width: 750px) 66vw, 50vw'
+            endif
+            assign eager = false
+            if forloop.index <= 3
+              assign eager = true
+            endif
+          -%}
+          <li class="main-collection__item" style="--span: {{ span }};">
+            {%- render 'product-card',
+              product: product,
+              ground: ground,
+              ratio: ratio,
+              show_tag: true,
+              sizes: card_sizes,
+              eager: eager,
+              heading_tag: 'h2',
+              class: 'product-card--upper'
+            -%}
           </li>
+
+          {%- liquid
+            assign product_index = forloop.index
+            assign product_is_last = forloop.last
+          -%}
+          {%- if paginate.current_page == 1 -%}
+            {%- for note in notes -%}
+              {%- liquid
+                assign show_note = false
+                if note.settings.position == product_index
+                  assign show_note = true
+                elsif product_is_last and note.settings.position > product_total
+                  assign show_note = true
+                endif
+              -%}
+              {%- if show_note -%}
+                {%- liquid
+                  assign note_span = 1
+                  if product_is_last
+                    assign note_span = 3 | minus: col
+                  endif
+                  assign col = col | plus: note_span | modulo: 3
+                -%}
+                <li class="main-collection__item main-collection__note" style="--span: {{ note_span }}; --note-bg: var(--color-{{ note.settings.color }});" {{ note.shopify_attributes }}>
+                  <span class="label label--sm">{{ note.settings.label | escape }}</span>
+                  <p class="main-collection__note-text">{{ note.settings.text | escape }}</p>
+                </li>
+              {%- endif -%}
+            {%- endfor -%}
+          {%- endif -%}
         {%- endfor -%}
       </ul>
       {%- render 'pagination', paginate: paginate -%}
     {%- else -%}
-      <p class="title-statement">{{ 'sections.collection.empty' | t }}</p>
+      <div class="main-collection__empty">
+        <p class="title-statement">{{ 'sections.collection.empty' | t }}</p>
+        {%- if collection.filters.size > 0 -%}
+          <a class="button button--secondary" href="{{ collection.url }}">{{ 'sections.collection.clear' | t }}</a>
+        {%- endif -%}
+      </div>
     {%- endif -%}
   </div>
 {%- endpaginate -%}
+
+
+{% stylesheet %}
+  .main-collection__strip {
+    position: sticky;
+    top: 0;
+    z-index: var(--z-header-strip);
+    height: 0;
+    margin-top: calc(-1 * var(--header-height) - var(--page-pad-top));
+  }
+
+  .main-collection__strip > div {
+    height: var(--header-height);
+    margin: 0 calc(-1 * var(--page-pad-x));
+    background: var(--color-bg);
+  }
+
+  .main-collection .page-title {
+    margin-top: calc(var(--header-height) + var(--page-pad-top));
+    padding-bottom: 32px;
+  }
+
+  .main-collection__bar {
+    position: sticky;
+    top: var(--header-height);
+    z-index: 5;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 4px;
+    padding: 10px 0;
+    border-top: var(--border);
+    border-bottom: var(--border);
+    background: var(--color-bg);
+  }
+
+  .main-collection__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .main-collection__chips .chip,
+  .main-collection__sort-chip {
+    gap: 7px;
+    font-size: var(--text-label);
+  }
+
+  .chip__dot {
+    width: 8px;
+    height: 8px;
+    border: 1px solid currentColor;
+    border-radius: 50%;
+    background: var(--swatch);
+  }
+
+  .main-collection__sort-chip {
+    position: relative;
+  }
+
+  .main-collection__select {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    font: inherit;
+    letter-spacing: inherit;
+    text-transform: inherit;
+    cursor: pointer;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  .main-collection__sort-chip:focus-within {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 2px;
+  }
+
+  .main-collection__select:focus-visible {
+    outline: none;
+  }
+
+  .main-collection__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px var(--grid-gap);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .main-collection__item {
+    grid-column: span var(--span, 1);
+    min-width: 0;
+  }
+
+  .main-collection__note {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 220px;
+    padding: 16px;
+    border-radius: var(--radius-lg);
+    background: var(--note-bg, var(--color-blue));
+    color: var(--color-white);
+  }
+
+  .main-collection__note-text {
+    font: 400 clamp(28px, 3.4vw, 52px) / 1.04 var(--font-display);
+    letter-spacing: -0.02em;
+  }
+
+  .main-collection__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 40px 0;
+  }
+
+  @media screen and (max-width: 749px) {
+    .main-collection__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-auto-flow: row dense;
+      gap: 20px var(--grid-gap);
+    }
+
+    .main-collection__item {
+      grid-column: span 1;
+    }
+
+    .main-collection__item .product-card__media {
+      --ratio: 3 / 4;
+    }
+
+    .main-collection__note {
+      grid-column: 1 / -1;
+    }
+
+    .main-collection .product-card__title {
+      font-size: var(--text-card-sm);
+    }
+  }
+{% endstylesheet %}
 
 {% schema %}
 {
   "name": "Collection",
   "class": "section-main-collection",
+  "max_blocks": 6,
   "settings": [
+    { "type": "text", "id": "title", "label": "Title", "info": "Defaults to the collection title." },
+    { "type": "richtext", "id": "intro", "label": "Intro", "info": "Defaults to the collection description." },
+    {
+      "type": "link_list",
+      "id": "chip_menu",
+      "label": "Filter chips menu",
+      "info": "Optional. Collection links shown as chips (e.g. All, Editions, Zines, Books). Without a menu, the chips use the first list filter from Search & Discovery (e.g. Product type)."
+    },
+    { "type": "checkbox", "id": "show_sort", "label": "Show sort", "default": true },
+    {
+      "type": "text",
+      "id": "grounds",
+      "label": "Card colours",
+      "info": "Comma-separated, repeating: blue, red, grey, ink, bg. A product's custom.card_ground metafield overrides this.",
+      "default": "blue, grey, red, ink, blue, red"
+    },
     { "type": "range", "id": "per_page", "label": "Products per page", "min": 6, "max": 48, "step": 3, "default": 24 }
+  ],
+  "blocks": [
+    {
+      "type": "note",
+      "name": "Studio note",
+      "settings": [
+        { "type": "range", "id": "position", "label": "Show after product", "min": 1, "max": 24, "step": 1, "default": 3 },
+        { "type": "text", "id": "label", "label": "Label", "default": "Studio note" },
+        { "type": "textarea", "id": "text", "label": "Text", "default": "Blue is the first drum, always. Everything after has to argue with it." },
+        {
+          "type": "select",
+          "id": "color",
+          "label": "Colour",
+          "options": [
+            { "value": "blue", "label": "Blue" },
+            { "value": "red", "label": "Red" },
+            { "value": "ink", "label": "Ink" }
+          ],
+          "default": "blue"
+        }
+      ]
+    }
   ]
 }
 {% endschema %}
