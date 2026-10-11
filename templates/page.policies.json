@@ -1,0 +1,19 @@
+{
+  "sections": {
+    "header": {
+      "type": "page-header",
+      "settings": {
+        "title": "Policies",
+        "intro": "<p>Shipping, returns, privacy and terms in plain English.</p>"
+      }
+    },
+    "policies": {
+      "type": "policies",
+      "settings": {}
+    }
+  },
+  "order": [
+    "header",
+    "policies"
+  ]
+}

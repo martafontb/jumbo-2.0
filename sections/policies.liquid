@@ -1,0 +1,160 @@
+{% comment %}
+  Policies
+  The store's policies (Settings > Policies) as a tabbed page: a list of
+  policy names on the left (the selected one is filled grey and indented),
+  the selected policy's title and text on the right. Without JS all
+  policies are shown one after another. Each policy also links to its own
+  Shopify page.
+{% endcomment %}
+{%- assign policies = shop.policies -%}
+<policy-tabs class="page policies">
+  {%- if policies.size > 0 -%}
+    <div class="policies__grid">
+      <div class="policies__list" role="tablist" aria-orientation="vertical" aria-label="{{ 'sections.policies.label' | t }}">
+        {%- for policy in policies -%}
+          <a
+            class="policies__tab"
+            href="#{{ policy.title | handle }}"
+            role="tab"
+            id="PolicyTab-{{ policy.title | handle }}"
+            aria-controls="{{ policy.title | handle }}"
+            aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+            {% unless forloop.first %}tabindex="-1"{% endunless %}
+          >
+            {{- policy.title | escape -}}
+            <span class="label label--sm">{{ forloop.index | prepend: '0' }}</span>
+          </a>
+        {%- endfor -%}
+      </div>
+      <div class="policies__panels">
+        {%- for policy in policies -%}
+          <section class="policies__panel" role="tabpanel" id="{{ policy.title | handle }}" aria-labelledby="PolicyTab-{{ policy.title | handle }}" tabindex="0">
+            {%- if section.settings.badge != blank -%}<span class="pill pill--grey">{{ section.settings.badge | escape }}</span>{%- endif -%}
+            <h2 class="policies__title">{{ policy.title | escape }}</h2>
+            <div class="rte policies__body">{{ policy.body }}</div>
+            <a class="link-mono" href="{{ policy.url }}">{{ 'sections.policies.permalink' | t }}</a>
+          </section>
+        {%- endfor -%}
+      </div>
+    </div>
+  {%- else -%}
+    <p class="title-statement">{{ 'sections.policies.empty' | t }}</p>
+  {%- endif -%}
+</policy-tabs>
+<script src="{{ 'policy-tabs.js' | asset_url }}" type="module"></script>
+
+{% stylesheet %}
+  .policies__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--grid-gap);
+    align-items: start;
+  }
+
+  .policies__list {
+    position: sticky;
+    top: calc(var(--header-height) + 8px);
+    display: flex;
+    flex-direction: column;
+    border-top: var(--border);
+  }
+
+  .policies__tab {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 14px 8px 14px 0;
+    border-bottom: var(--border);
+    color: var(--color-ink);
+    font: 500 clamp(32px, 3.6vw, 56px) / 1 var(--font-display);
+    letter-spacing: -0.04em;
+    text-decoration: none;
+    transition: padding-left 0.15s, background-color 0.15s;
+  }
+
+  .policies__tab:hover {
+    color: var(--color-ink);
+    background: rgba(var(--color-ink-rgb), 0.05);
+  }
+
+  .policies__tab[aria-selected='true'] {
+    padding-left: 14px;
+    background: var(--color-grey);
+  }
+
+  .policies__tab:focus-visible {
+    outline-offset: -2px;
+  }
+
+  .policies__panels {
+    grid-column: span 2;
+    margin-left: 12px;
+  }
+
+  .policies__panel {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding-top: 14px;
+    border-top: var(--border);
+  }
+
+  .policies__panel + .policies__panel {
+    margin-top: 60px;
+  }
+
+  .policies__panel .pill {
+    align-self: flex-start;
+  }
+
+  .policies__title {
+    font: 500 clamp(40px, 5vw, 80px) / 0.9 var(--font-display);
+    letter-spacing: -0.05em;
+  }
+
+  .policies__body {
+    max-width: 64ch;
+    font: 400 17px / 1.5 var(--font-display);
+  }
+
+  .policies__body h2,
+  .policies__body h3 {
+    margin: 1.2em 0 0.4em;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+  }
+
+  .js .policies__panel[hidden] {
+    display: none;
+  }
+
+  .js .policies__panel + .policies__panel {
+    margin-top: 0;
+  }
+
+  @media screen and (max-width: 749px) {
+    .policies__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .policies__list {
+      position: static;
+    }
+
+    .policies__panels {
+      grid-column: auto;
+      margin: 24px 0 0;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Policies",
+  "class": "section-policies",
+  "settings": [
+    { "type": "paragraph", "content": "Shows the policies from Settings > Policies." },
+    { "type": "text", "id": "badge", "label": "Label above each policy", "info": "Optional, e.g. Last updated 9 Oct 2026" }
+  ]
+}
+{% endschema %}
