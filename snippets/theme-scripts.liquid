@@ -1,0 +1,37 @@
+{% doc %}
+  Global JS config and the theme's shared module. Feature modules are loaded
+  by the sections that need them.
+{% enddoc %}
+{%- comment -%}
+  The import map lets feature modules `import … from '@theme/global'` and get
+  the same versioned asset URL the layout loads. A relative './global.js'
+  import would drop Shopify's ?v= query and instantiate a second copy.
+{%- endcomment -%}
+<script type="importmap">
+  {
+    "imports": {
+      "@theme/global": "{{ 'global.js' | asset_url }}"
+    }
+  }
+</script>
+<script>
+  document.documentElement.classList.replace('no-js', 'js');
+  window.JumboPress = window.JumboPress || {};
+  window.JumboPress.routes = {
+    root: {{ routes.root_url | json }},
+    cart: {{ routes.cart_url | json }},
+    cartAdd: {{ routes.cart_add_url | json }},
+    cartChange: {{ routes.cart_change_url | json }},
+    cartUpdate: {{ routes.cart_update_url | json }},
+    predictiveSearch: {{ routes.predictive_search_url | json }},
+    search: {{ routes.search_url | json }}
+  };
+  window.JumboPress.settings = {
+    cartType: {{ settings.cart_type | json }}
+  };
+  window.JumboPress.strings = {
+    cartError: {{ 'cart.errors.generic' | t | json }},
+    copied: {{ 'general.copied' | t | json }}
+  };
+</script>
+<script src="{{ 'global.js' | asset_url }}" type="module"></script>

@@ -1,0 +1,80 @@
+{% doc %}
+  Design tokens for the whole theme. Colours come from theme settings
+  (Theme settings > Colours); everything else is fixed by the design system.
+  Components must reference these variables, never raw values.
+{% enddoc %}
+{% style %}
+  :root {
+    /* Colour */
+    --color-bg: {{ settings.color_bg }};
+    --color-ink: {{ settings.color_ink }};
+    --color-blue: {{ settings.color_blue }};
+    --color-red: {{ settings.color_red }};
+    --color-grey: {{ settings.color_grey }};
+    --color-white: {{ settings.color_white }};
+    --color-ink-rgb: {{ settings.color_ink.red }}, {{ settings.color_ink.green }}, {{ settings.color_ink.blue }};
+    --color-scrim: rgb(17 17 17 / 0.55);
+    --color-scrim-strong: rgb(17 17 17 / 0.85);
+
+    /* Type */
+    --font-display: 'Outfit', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
+    --font-mono: 'DM Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+    --text-body: 15px;
+    --leading-body: 1.35;
+    --text-label: 12px;
+    --text-label-sm: 11px;
+    --tracking-label: 0.04em;
+    --text-page-title: clamp(56px, 12vw, 200px);
+    --text-product-title: clamp(56px, 6vw, 96px);
+    --text-statement: clamp(28px, 3.4vw, 56px);
+    --text-menu-row: clamp(32px, 4.2vw, 64px);
+    --text-card-lg: 26px;
+    --text-card-sm: 20px;
+    --text-article: 19px;
+
+    /* Space and layout */
+    --page-pad-x: 20px;
+    --page-pad-top: 4px;
+    --grid-gap: 4px;
+    --grid-columns: 3;
+    --section-gap: 80px;
+    --footer-gap: 112px;
+    --header-height: calc(var(--logo-height) + 36px);
+    --logo-height: {{ settings.logo_height }}px;
+
+    /* Shape */
+    --radius-lg: 20px;
+    --radius-xl: 24px;
+    --radius-md: 16px;
+    --radius-sm: 8px;
+    --radius-pill: 999px;
+    --border: 1px solid var(--color-ink);
+
+    /* Motion */
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-in-out: cubic-bezier(0.76, 0, 0.24, 1);
+    --duration-fade: 0.25s;
+    --duration-roll: 0.55s;
+    --duration-nav-in: 0.9s;
+
+    /* Stacking */
+    --z-header-strip: 9;
+    --z-header: 10;
+    --z-menu: 11;
+    --z-drawer: 50;
+    --z-modal: 60;
+    --z-story: 70;
+    --z-search: 80;
+  }
+
+  @media screen and (max-width: 749px) {
+    :root {
+      --page-pad-x: 16px;
+      --grid-columns: 1;
+      --section-gap: 56px;
+      --footer-gap: 64px;
+      --header-height: 56px;
+      --logo-height: {{ settings.logo_height_mobile }}px;
+    }
+  }
+{% endstyle %}

@@ -1,0 +1,108 @@
+{
+  "general": {
+    "meta": {
+      "tagged_with": "tagged “{{ tags }}”",
+      "page": "Page {{ page }}"
+    },
+    "copied": "Copied ✓",
+    "kinds": {
+      "product": "Product",
+      "collection": "Collection",
+      "page": "Page",
+      "items_count": {
+        "one": "{{ count }} item",
+        "other": "{{ count }} items"
+      }
+    },
+    "password": {
+      "title": "Opening soon",
+      "enter": "Enter store",
+      "label": "Password",
+      "admin_link": "Are you the store owner? Log in here",
+      "powered_by_html": "Powered by {{ shopify }}"
+    },
+    "pagination": {
+      "label": "Pagination",
+      "previous": "Previous page",
+      "next": "Next page",
+      "page": "Page {{ number }}"
+    }
+  },
+  "date_formats": {
+    "date": "%-d %b %Y"
+  },
+  "accessibility": {
+    "skip_to_content": "Skip to content",
+    "opens_new_window": "(opens in a new window)"
+  },
+  "sections": {
+    "announcement": {
+      "carousel": "Announcements",
+      "code_copied": "Code {{ code }} copied ✓",
+      "close": "Close announcements"
+    },
+    "header": {
+      "menu": "Menu",
+      "close": "Close",
+      "main_navigation": "Main",
+      "search": "Search",
+      "cart": "Cart"
+    },
+    "search": {
+      "title": "Search",
+      "label": "Search the shop",
+      "close": "Close search",
+      "no_results_html": "Nothing for “{{ terms }}”.",
+      "results_count": {
+        "one": "{{ count }} result",
+        "other": "{{ count }} results"
+      },
+      "view_all": "See all results →",
+      "page_title": "Search",
+      "submit": "Search"
+    },
+    "not_found": {
+      "title": "Page not found",
+      "text": "That page has gone out of print.",
+      "button": "Back to the shop →"
+    },
+    "collection": {
+      "empty": "Nothing here yet."
+    },
+    "blog": {
+      "empty": "No stories yet."
+    }
+  },
+  "products": {
+    "price": {
+      "from": "From {{ price }}",
+      "regular": "Regular price",
+      "sale": "Sale price"
+    },
+    "sold_out": "Sold out",
+    "unavailable": "Unavailable",
+    "add_to_cart": "Add to cart",
+    "quantity": "Quantity",
+    "variant": "Option"
+  },
+  "cart": {
+    "title": "Cart",
+    "empty": "Nothing here yet.",
+    "checkout": "Checkout →",
+    "subtotal": "Subtotal",
+    "remove": "Remove",
+    "update": "Update cart",
+    "errors": {
+      "generic": "Something went wrong. Please try again."
+    }
+  },
+  "gift_card": {
+    "title": "Your gift card",
+    "expired": "This gift card has expired.",
+    "expires_on": "Expires {{ expires_on }}",
+    "use_at_checkout": "Use this code at checkout",
+    "copy_code": "Copy code",
+    "add_to_apple_wallet": "Add to Apple Wallet",
+    "print": "Print"
+  }
+}

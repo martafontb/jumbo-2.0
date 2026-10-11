@@ -1,0 +1,153 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Jumbo Press",
+    "theme_version": "0.1.0",
+    "theme_author": "Jumbo Press",
+    "theme_documentation_url": "https://help.shopify.com/manual/online-store/themes",
+    "theme_support_url": "https://help.shopify.com/"
+  },
+  {
+    "name": "Colours",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Brand palette. Every component reads these tokens, so changes apply site-wide."
+      },
+      {
+        "type": "color",
+        "id": "color_bg",
+        "label": "Background",
+        "default": "#F0EDEC"
+      },
+      {
+        "type": "color",
+        "id": "color_ink",
+        "label": "Ink (text, borders, primary buttons)",
+        "default": "#231F20"
+      },
+      {
+        "type": "color",
+        "id": "color_blue",
+        "label": "Accent blue",
+        "default": "#22A8E1"
+      },
+      {
+        "type": "color",
+        "id": "color_red",
+        "label": "Accent red",
+        "default": "#EA5A46"
+      },
+      {
+        "type": "color",
+        "id": "color_grey",
+        "label": "Grey (pills, placeholders)",
+        "default": "#C8C9D0"
+      },
+      {
+        "type": "color",
+        "id": "color_white",
+        "label": "Text on ink",
+        "default": "#FFFFFF"
+      }
+    ]
+  },
+  {
+    "name": "Logo",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "logo",
+        "label": "Logo",
+        "info": "Upload a dark logo on a transparent background (SVG or PNG). The header inverts it so it reads on any background."
+      },
+      {
+        "type": "checkbox",
+        "id": "logo_invert",
+        "label": "Invert logo colours in the header",
+        "default": true
+      },
+      {
+        "type": "range",
+        "id": "logo_height",
+        "label": "Logo height on desktop",
+        "min": 24,
+        "max": 80,
+        "step": 2,
+        "unit": "px",
+        "default": 48
+      },
+      {
+        "type": "range",
+        "id": "logo_height_mobile",
+        "label": "Logo height on mobile",
+        "min": 20,
+        "max": 48,
+        "step": 2,
+        "unit": "px",
+        "default": 36
+      },
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "Favicon",
+        "info": "Square image, at least 32 × 32px."
+      }
+    ]
+  },
+  {
+    "name": "Cart",
+    "settings": [
+      {
+        "type": "select",
+        "id": "cart_type",
+        "label": "When a product is added",
+        "options": [
+          { "value": "drawer", "label": "Open the cart drawer" },
+          { "value": "page", "label": "Go to the cart page" }
+        ],
+        "default": "drawer"
+      },
+      {
+        "type": "number",
+        "id": "free_shipping_threshold",
+        "label": "Free shipping threshold",
+        "info": "In your store's default currency. Drives the progress bar in the cart. Leave empty to hide it. It must match your shipping rates in Settings > Shipping.",
+        "default": 75
+      }
+    ]
+  },
+  {
+    "name": "Social media",
+    "settings": [
+      {
+        "type": "text",
+        "id": "social_instagram_link",
+        "label": "Instagram",
+        "info": "https://instagram.com/…"
+      },
+      {
+        "type": "text",
+        "id": "social_tiktok_link",
+        "label": "TikTok"
+      },
+      {
+        "type": "text",
+        "id": "social_facebook_link",
+        "label": "Facebook"
+      }
+    ]
+  },
+  {
+    "name": "Motion",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "animations_enabled",
+        "label": "Enable entrance animations",
+        "info": "Visitors who prefer reduced motion never see animations.",
+        "default": true
+      }
+    ]
+  }
+]

@@ -1,0 +1,39 @@
+{% doc %}
+  Responsive image from Shopify's CDN with srcset, sizes and intrinsic
+  dimensions. Falls back to a Shopify placeholder illustration when no image
+  is set, so empty theme-editor slots keep their layout.
+
+  @param {image} [image] - Image object (product media, image_picker, metafield)
+  @param {string} [sizes] - `sizes` attribute, e.g. '(min-width: 750px) 33vw, 100vw'
+  @param {string} [widths] - Comma-separated srcset widths
+  @param {string} [class] - Class on the <img>
+  @param {string} [alt] - Overrides the image's own alt text
+  @param {string} [alt_fallback] - Used when the image has no alt text (e.g. product title)
+  @param {boolean} [decorative] - Renders alt="" for purely decorative images
+  @param {boolean} [eager] - Above the fold: load eagerly with high fetch priority
+  @param {string} [placeholder] - placeholder_svg_tag name, defaults to 'image'
+
+  @example
+  {% render 'image', image: product.featured_media, sizes: '(min-width: 750px) 33vw, 50vw', alt_fallback: product.title %}
+{% enddoc %}
+{%- liquid
+  assign widths = widths | default: '360, 540, 720, 960, 1200, 1600, 2000'
+  assign sizes = sizes | default: '100vw'
+  assign img_class = 'media__img ' | append: class
+
+  if decorative
+    assign alt_text = ''
+  else
+    assign alt_text = alt | default: image.alt | default: alt_fallback | escape
+  endif
+-%}
+{%- if image != blank -%}
+  {%- if eager -%}
+    {{ image | image_url: width: 2400 | image_tag: widths: widths, sizes: sizes, class: img_class, alt: alt_text, loading: 'eager', fetchpriority: 'high' }}
+  {%- else -%}
+    {{ image | image_url: width: 2400 | image_tag: widths: widths, sizes: sizes, class: img_class, alt: alt_text, loading: 'lazy' }}
+  {%- endif -%}
+{%- else -%}
+  {%- assign placeholder_name = placeholder | default: 'image' -%}
+  {{ placeholder_name | placeholder_svg_tag: 'media__placeholder' }}
+{%- endif -%}
