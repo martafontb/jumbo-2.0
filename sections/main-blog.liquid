@@ -1,19 +1,28 @@
 {% comment %}
-  Blog (baseline)
-  Article cards with image, title and date, plus pagination. The design has
-  no blog index; Phase 4 aligns it with the "Read next" cards of the
-  article page.
+  Blog (journal index)
+  Title with article count and intro, optional tag chips, then the journal
+  cards used by "Read next" (4/3 image, kind pill, title, reading time),
+  with pagination.
 {% endcomment %}
-{%- paginate blog.articles by 12 -%}
+{%- paginate blog.articles by section.settings.per_page -%}
   <div class="page main-blog">
-    {%- render 'page-title', title: blog.title -%}
+    {%- render 'page-title', title: blog.title, count: blog.articles_count, intro: section.settings.intro -%}
+
+    {%- if section.settings.show_tags and blog.all_tags.size > 0 -%}
+      <nav class="main-blog__tags" aria-label="{{ 'blogs.filter' | t }}">
+        <a class="chip" href="{{ blog.url }}" {% unless current_tags %}aria-current="page"{% endunless %}>{{ 'sections.faq.all' | t }}</a>
+        {%- for tag in blog.all_tags -%}
+          <a class="chip" href="{{ blog.url }}/tagged/{{ tag | handleize }}" {% if current_tags contains tag %}aria-current="page"{% endif %}>{{ tag | escape }}</a>
+        {%- endfor -%}
+      </nav>
+    {%- endif -%}
+
     {%- if blog.articles.size > 0 -%}
-      <ul class="card-grid" role="list">
+      {%- assign palette = 'blue,red,grey' | split: ',' -%}
+      <ul class="main-blog__grid" role="list">
         {%- for article in blog.articles -%}
-          <li>
-            {%- assign published = article.published_at | date: format: 'date' -%}
-            {%- render 'card-basic', url: article.url, title: article.title, image: article.image, meta: published, placeholder: 'lifestyle-1' -%}
-          </li>
+          {%- assign ground_index = forloop.index0 | modulo: 3 -%}
+          <li>{%- render 'article-card', article: article, ground: palette[ground_index], heading_tag: 'h2' -%}</li>
         {%- endfor -%}
       </ul>
       {%- render 'pagination', paginate: paginate -%}
@@ -23,10 +32,45 @@
   </div>
 {%- endpaginate -%}
 
+{% stylesheet %}
+  .main-blog__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 4px;
+    padding: 10px 0;
+    border-top: var(--border);
+    border-bottom: var(--border);
+  }
+
+  .main-blog__tags .chip {
+    font-size: var(--text-label);
+  }
+
+  .main-blog__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px var(--grid-gap);
+    margin: 0;
+    padding: 8px 0 0;
+    list-style: none;
+  }
+
+  @media screen and (max-width: 749px) {
+    .main-blog__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+{% endstylesheet %}
+
 {% schema %}
 {
   "name": "Blog",
   "class": "section-main-blog",
-  "settings": []
+  "settings": [
+    { "type": "richtext", "id": "intro", "label": "Intro" },
+    { "type": "checkbox", "id": "show_tags", "label": "Show tag filters", "default": true },
+    { "type": "range", "id": "per_page", "label": "Articles per page", "min": 6, "max": 24, "step": 3, "default": 12 }
+  ]
 }
 {% endschema %}

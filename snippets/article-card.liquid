@@ -1,0 +1,57 @@
+{% doc %}
+  Journal card: 4/3 image with a kind pill (first tag, else blog title),
+  title and reading time on a ruled line.
+
+  @param {object} article - Article
+  @param {string} [ground] - Image background token
+  @param {string} [heading_tag] - Title element, default 'h3'
+{% enddoc %}
+{%- liquid
+  assign kind = article.tags.first | default: article.blog.title
+  assign words = article.content | strip_html | split: ' ' | size
+  assign minutes = words | divided_by: 200.0 | ceil | at_least: 1
+  assign title_tag = heading_tag | default: 'h3'
+-%}
+<a class="article-card" href="{{ article.url }}">
+  <div class="media" style="--ratio: 4 / 3; --media-bg: var(--color-{{ ground | default: 'blue' }});">
+    {%- render 'image', image: article.image, sizes: '(min-width: 750px) 33vw, 100vw', alt_fallback: article.title, placeholder: 'lifestyle-1' -%}
+    {%- if kind != blank -%}<span class="pill pill--blue">{{ kind | escape }}</span>{%- endif -%}
+  </div>
+  <span class="article-card__meta">
+    <{{ title_tag }} class="article-card__title">{{ article.title | escape }}</{{ title_tag }}>
+    <span class="label label--sm">{{ 'blogs.minutes' | t: count: minutes }}</span>
+  </span>
+</a>
+
+{% stylesheet %}
+  .article-card {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    color: var(--color-ink);
+    text-decoration: none;
+  }
+
+  .article-card:hover {
+    color: var(--color-ink);
+  }
+
+  .article-card__meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    padding-top: 6px;
+    border-top: var(--border);
+  }
+
+  .article-card__title {
+    margin: 0;
+    font: 400 var(--text-card-sm) / 1.1 var(--font-display);
+    letter-spacing: -0.02em;
+  }
+
+  .article-card__meta .label {
+    flex-shrink: 0;
+  }
+{% endstylesheet %}
