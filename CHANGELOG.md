@@ -4,6 +4,23 @@ All notable changes to this theme are documented here. The format follows [Keep 
 
 ## [Unreleased]
 
+### Added
+- "Show top border" setting on every section that opens with a ruled line.
+- Video option next to most image settings, through a shared `image-or-video` snippet and `<auto-video>` (muted loop, pause button, pauses off screen, no autoplay under reduced motion).
+- Ink marquee section: scrolling row of ink colour blocks with names and optional codes, pause button, static under reduced motion. Added to the homepage.
+- Collection blocks: "Media" tile (image or video, 1–3 columns) and "Product layout" (width 1–3 columns and replacement image or video per product). `custom.card_span` accepts 3.
+- Theme settings > Product cards: card background (product colour on hover or always) and image fit.
+- Product section: image fit (crop or show the whole image).
+- Product reviews: theme editor prompt to add the reviews app block.
+
+### Changed
+- Product cards no longer zoom on hover; by default they fill with the product's colour on hover and keyboard focus.
+- Cart and size guide drawers slide in from the right and back out (instant under reduced motion). The design specified a fade.
+- Mega menu product cards fill the full height of the menu panel.
+- Product carousel shows the open-hand cursor over cards, not just between them.
+- Stories: more space under the label and caption, and inside tiles.
+- Colour swatches are smaller (28px) and round, with a 44px touch area.
+
 ## [1.0.0-rc.1] - 2026-10-11
 
 Release candidate: the full design is built and validated on a local render. It becomes 1.0.0 after testing on the store (see `docs/phase-6-validation.md`).

@@ -113,12 +113,19 @@ Each header "Menu" block picks its menu in the theme editor, so other handles wo
 - **Colours:** the five brand tokens. Every component uses them.
 - **Cart:** drawer or page on add, and the free-shipping threshold for the progress bar (must match your shipping rates).
 - **Social media:** links shown in the footer "Follow" column.
+- **Product cards:** card background (product colour on hover, the default, or always) and image fit (crop to fill, or show the whole image for transparent PNG packshots).
+
+### Options on every section
+
+- **Show top border:** sections that open with a ruled line have a "Show top border" checkbox.
+- **Video instead of an image:** most image settings have a "Video" setting next to them (hero side image, about intro, media and text, visit hours, events feature, process steps, carousel end card, shop the look, newsletter popup, mega menu product cards, collection tiles and product layouts). Videos play muted on a loop, pause off screen and when the visitor presses pause, and don't autoplay for visitors who prefer reduced motion. The image becomes the poster.
 
 ### Reviews (Shop app)
 
 Reviews come from the Shop app. The theme never invents review content:
 
-- **Star ratings** on product cards read the standard `reviews.rating` product metafield and render only when it's populated. Product pages also accept the Shop app's app blocks.
+- **Star ratings** on product cards read the standard `reviews.rating` product metafield and render only when it's populated.
+- **Written reviews on product pages** come from your reviews app's block, which you add in the theme editor (Product reviews section > Add block > Apps). Liquid can't read individual reviews, so until the block is added the section shows only the average and the editor shows a prompt. Make sure the app you use publishes reviews to the Shop app.
 - **Reviews strip** (homepage): add the Shop app's block, and/or fill in the average rating, review count and "Review quote" blocks with real reviews. It stays hidden until something is filled in.
 - **Hero review card:** "Review quote" blocks on the Hero section. Empty by default; the card is hidden until you add one.
 
@@ -132,8 +139,8 @@ All optional. Create product metafields in Settings > Custom data > Products, an
 |---|---|---|
 | `custom.card_meta` | Single line text | Caption under product cards, add-on blurbs |
 | `custom.card_tag` | Single line text | Tag pill on collection cards and "Complete the set" cards |
-| `custom.card_span` | Integer (1 or 2) | Card width in the collection grid |
-| `custom.card_ground` | Single line text (blue, red, grey, ink, bg) | Card background colour override |
+| `custom.card_span` | Integer (1, 2 or 3) | Card width in the collection grid (a "Product layout" block overrides it) |
+| `custom.card_ground` | Single line text (blue, red, grey, ink, bg) | The product's card colour (shown on hover, or always; see Theme settings > Product cards) |
 | `custom.artist` | Metaobject reference (artist) | Breadcrumb, artist line, "The artist" block, "Also from …" |
 | `custom.year` | Integer or text | Artist line, e.g. "Mara Oyelaran · 2026" |
 | `custom.edition_size` | Integer | "38 of 120 remaining" and the stock bar (needs Shopify-tracked inventory) |
@@ -168,7 +175,7 @@ All optional. Create product metafields in Settings > Custom data > Products, an
 
 - **Templates:** editions use the default product template. Assign **product.merch** to tees, totes and cushions (product page > Theme template). Merch colour options show as swatches when the option values are linked to Shopify's colour swatches; otherwise they show as pills.
 - **Collection chips:** set a "Filter chips menu" on the Collection section (e.g. All, Editions, Zines, Books). Without one, the chips use the first list filter from the Search & Discovery app (e.g. Product type). Sorting uses Shopify's sort options.
-- **Studio notes** in the collection grid are blocks on the Collection section ("Show after product" sets the position).
+- **Collection grid blocks** (Collection section): "Studio note" (coloured quote) and "Media" (image or video, 1–3 columns, optional label and link) tiles appear after the product you choose; a wide tile that doesn't fit the current row moves to the next so the grid stays gap-free. "Product layout" picks a product and sets its width (1–3 columns) and an optional replacement image or video for its card.
 - **Cart drawer:** Theme settings > Cart chooses the drawer or the cart page. The drawer's add-ons come from a collection set on the Cart drawer section (Theme editor > any page > Cart drawer). The free-shipping bar uses the threshold in Theme settings > Cart.
 - **Size & shipping guide:** content lives on the Product section (sizes, shipping zones, returns text). Keep the shipping zones in sync with Settings > Shipping.
 
@@ -219,8 +226,9 @@ Every homepage section is editable in the theme editor. All text, images and vid
 - **Product carousel:** pick a collection (defaults to the `editions` handle). The end card's note and button are editable.
 - **Studio note:** hidden until a real quote is added.
 - **Video grid** and **Shop the look:** included but switched off, as in the design. Enable them in the theme editor.
+- **Ink marquee:** a scrolling row of ink colours; one block per ink (name, colour, optional code). Size, speed and direction are section settings. It pauses on hover, keyboard focus and with its pause button, and stays still for visitors who prefer reduced motion.
 - **Packs:** pick bundle products (e.g. made with Shopify Bundles). Set a compare-at price to show the saving.
-- **Events:** one block per event, with start/end as `YYYY-MM-DD HH:MM`. Past events hide automatically. "Remind me" downloads a calendar file.
+- **Events:** one block per event, with start/end as `YYYY-MM-DD HH:MM`. Past events hide automatically. "Remind me" downloads an `.ics` calendar file with the event's title, time and place, which opens in Apple Calendar, Google Calendar or Outlook; the button then reads "Reminder set ✓". No email or account is involved.
 - **Stories:** upload portrait images or videos per story. The follow button uses the Instagram link from Theme settings.
 
 ## Working on the theme after launch
