@@ -1,0 +1,96 @@
+{% doc %}
+  Product price (32px) with a stock note, plus the edition progress bar.
+  - Edition stock: when custom.edition_size is set and the variant's
+    inventory is tracked by Shopify: "● 38 of 120 remaining" and a bar.
+  - Otherwise "● In stock", or "● Sold out".
+
+  @param {object} product - Product
+  @param {object} variant - Selected variant
+  @param {object} block - "Price and stock" block
+{% enddoc %}
+{%- liquid
+  assign edition_size = product.metafields.custom.edition_size.value | default: 0
+  assign remaining = variant.inventory_quantity | at_least: 0
+  assign show_edition = false
+  if block.settings.show_edition and edition_size > 0 and variant.inventory_management == 'shopify' and variant.available
+    assign show_edition = true
+    assign pct = remaining | times: 100.0 | divided_by: edition_size | at_most: 100 | round
+  endif
+-%}
+<div class="price-block">
+  <p class="price-block__price">
+    {%- if variant.compare_at_price > variant.price -%}
+      <span class="visually-hidden">{{ 'products.price.sale' | t }}</span>
+      {{ variant.price | money }}
+      <span class="visually-hidden">{{ 'products.price.regular' | t }}</span>
+      <s class="price-block__compare">{{ variant.compare_at_price | money }}</s>
+    {%- else -%}
+      {{ variant.price | money }}
+    {%- endif -%}
+  </p>
+  {%- if variant.available == false -%}
+    <p class="price-block__stock price-block__stock--out">● {{ 'products.sold_out' | t }}</p>
+  {%- elsif show_edition -%}
+    <p class="price-block__stock price-block__stock--edition">● {{ 'products.edition_remaining' | t: remaining: remaining, size: edition_size }}</p>
+  {%- elsif block.settings.show_in_stock -%}
+    <p class="price-block__stock price-block__stock--in">● {{ 'products.in_stock' | t }}</p>
+  {%- endif -%}
+</div>
+{%- if variant.unit_price_measurement -%}
+  <p class="label label--sm">
+    {{ variant.unit_price | money }}/
+    {%- if variant.unit_price_measurement.reference_value != 1 -%}{{ variant.unit_price_measurement.reference_value }}{%- endif -%}
+    {{ variant.unit_price_measurement.reference_unit }}
+  </p>
+{%- endif -%}
+{%- if show_edition -%}
+  <div class="progress price-block__progress" role="img" aria-label="{{ 'products.edition_remaining' | t: remaining: remaining, size: edition_size }}" style="--progress: {{ pct }}%; --progress-track: var(--color-bg); --progress-fill: var(--color-blue);">
+    <div class="progress__fill"></div>
+  </div>
+{%- endif -%}
+{%- if block.settings.show_tax_note -%}
+  <p class="label label--sm price-block__tax">
+    {%- if cart.taxes_included -%}{{ 'products.tax_included' | t }}{%- endif -%}
+    {%- if shop.shipping_policy.body != blank %} <a href="{{ shop.shipping_policy.url }}">{{ 'products.shipping_at_checkout' | t }}</a>{%- endif -%}
+  </p>
+{%- endif -%}
+
+{% stylesheet %}
+  .main-product__price-block {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .price-block {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 12px;
+    padding-top: 10px;
+    border-top: var(--border);
+  }
+
+  .price-block__price {
+    font: 500 32px / 1 var(--font-display);
+  }
+
+  .price-block__compare {
+    margin-left: 6px;
+    font-size: 0.6em;
+    opacity: 0.55;
+  }
+
+  .price-block__stock {
+    font: 400 var(--text-label) / 1.3 var(--font-mono);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+  }
+
+  .price-block__stock--edition { color: var(--color-red); }
+  .price-block__stock--in { color: var(--color-blue); }
+
+  .price-block__progress {
+    border: 1px solid var(--color-grey);
+  }
+{% endstylesheet %}

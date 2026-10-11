@@ -2,8 +2,38 @@
   "sections": {
     "main": {
       "type": "main-product",
-      "settings": {}
+      "blocks": {
+        "breadcrumb": { "type": "breadcrumb", "settings": {} },
+        "title": { "type": "title", "settings": { "accent": true, "accent_color": "blue" } },
+        "artist": { "type": "artist", "settings": { "vendor_fallback": false } },
+        "price": { "type": "price", "settings": { "show_edition": true, "show_in_stock": true, "show_tax_note": false } },
+        "specs": { "type": "specs", "settings": {} },
+        "variant_picker": { "type": "variant_picker", "settings": {} },
+        "buy_buttons": { "type": "buy_buttons", "settings": { "show_quantity": false, "show_total": false, "show_dynamic_checkout": false, "show_view_cart": true } },
+        "guide_link": { "type": "guide_link", "settings": { "label": "Size & shipping guide →" } },
+        "description": { "type": "description", "settings": {} }
+      },
+      "block_order": ["breadcrumb", "title", "artist", "price", "specs", "variant_picker", "buy_buttons", "guide_link", "description"],
+      "settings": { "gallery_layout": "stack", "gallery_ground": "blue", "captions": true, "sticky_info": true, "guide_enabled": true }
+    },
+    "artist": {
+      "type": "artist-block",
+      "settings": { "label": "The artist", "spacing": "large" }
+    },
+    "related": {
+      "type": "product-related",
+      "settings": { "heading": "Also from [artist] & Jumbo Press", "limit": 3, "spacing": "small" }
+    },
+    "pairs": {
+      "type": "product-pairs",
+      "settings": { "limit": 3, "label": "Pairs well with", "caption": "Add to the same parcel", "heading": "Complete the set", "spacing": "large" }
+    },
+    "reviews": {
+      "type": "product-reviews",
+      "blocks": {},
+      "block_order": [],
+      "settings": { "label": "Reviews", "spacing": "large" }
     }
   },
-  "order": ["main"]
+  "order": ["main", "artist", "related", "pairs", "reviews"]
 }

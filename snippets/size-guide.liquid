@@ -1,0 +1,187 @@
+{% doc %}
+  "Size & shipping guide" drawer with three tabs: Sizes (a nested scale
+  diagram plus rows), Shipping (zones) and Returns (with a link to the
+  refund policy). All content comes from the product section's settings.
+  Rows are "Label | Value | Note" lines.
+
+  @param {object} settings - main-product section settings (guide_* keys)
+  @param {string} id - Dialog id
+{% enddoc %}
+{%- liquid
+  assign size_rows = settings.guide_sizes | newline_to_br | split: '<br />'
+  assign ship_rows = settings.guide_shipping | newline_to_br | split: '<br />'
+  assign palette = 'blue,red,grey' | split: ','
+-%}
+<dialog class="overlay drawer size-guide" id="{{ id }}" aria-labelledby="{{ id }}-title" style="--drawer-width: 480px;">
+  <div class="drawer__inner">
+    <div class="drawer__head">
+      <h2 class="drawer__title" id="{{ id }}-title">{{ settings.guide_title | escape }}</h2>
+      <button type="button" class="icon-button" data-overlay-close aria-label="{{ 'general.close' | t }}"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="size-guide__tabs" role="tablist">
+      <button type="button" class="chip" role="tab" id="{{ id }}-tab-sizes" aria-controls="{{ id }}-sizes" aria-selected="true">{{ 'products.guide.sizes' | t }}</button>
+      <button type="button" class="chip" role="tab" id="{{ id }}-tab-shipping" aria-controls="{{ id }}-shipping" aria-selected="false" tabindex="-1">{{ 'products.guide.shipping' | t }}</button>
+      <button type="button" class="chip" role="tab" id="{{ id }}-tab-returns" aria-controls="{{ id }}-returns" aria-selected="false" tabindex="-1">{{ 'products.guide.returns' | t }}</button>
+    </div>
+    <div class="drawer__body">
+      <div class="size-guide__panel" role="tabpanel" id="{{ id }}-sizes" aria-labelledby="{{ id }}-tab-sizes">
+        <div class="size-guide__scale" aria-hidden="true">
+          <div class="size-guide__scale-inner">
+            {%- assign scale = 100 -%}
+            {%- for row in size_rows -%}
+              {%- assign cells = row | split: '|' -%}
+              {%- if cells.size < 2 -%}{%- continue -%}{%- endif -%}
+              {%- assign color_index = forloop.index0 | modulo: 3 -%}
+              <div class="size-guide__sheet" style="--w: {{ scale }}%; --c: var(--color-{{ palette[color_index] }});">
+                <span>{{ cells[0] | strip | escape }}</span>
+              </div>
+              {%- assign scale = scale | times: 0.707 | round: 1 -%}
+            {%- endfor -%}
+          </div>
+        </div>
+        <dl class="size-guide__rows">
+          {%- for row in size_rows -%}
+            {%- assign cells = row | split: '|' -%}
+            {%- if cells.size < 2 -%}{%- continue -%}{%- endif -%}
+            <div class="size-guide__row">
+              <dt class="size-guide__big">{{ cells[0] | strip | escape }}</dt>
+              <dd class="label label--sm">{{ cells[1] | strip | escape }}</dd>
+              <dd class="label label--sm size-guide__muted">{{ cells[2] | strip | escape }}</dd>
+            </div>
+          {%- endfor -%}
+        </dl>
+        {%- if settings.guide_sizes_note != blank -%}<div class="rte">{{ settings.guide_sizes_note }}</div>{%- endif -%}
+      </div>
+
+      <div class="size-guide__panel" role="tabpanel" id="{{ id }}-shipping" aria-labelledby="{{ id }}-tab-shipping" hidden>
+        <dl class="size-guide__rows">
+          {%- for row in ship_rows -%}
+            {%- assign cells = row | split: '|' -%}
+            {%- if cells.size < 2 -%}{%- continue -%}{%- endif -%}
+            <div class="size-guide__row size-guide__row--ship">
+              <dt>
+                <span class="size-guide__big">{{ cells[0] | strip | escape }}</span>
+                <span class="label label--sm size-guide__muted">{{ cells[1] | strip | escape }}</span>
+              </dt>
+              <dd class="size-guide__big">{{ cells[2] | strip | escape }}</dd>
+            </div>
+          {%- endfor -%}
+        </dl>
+        {%- if settings.guide_shipping_note != blank -%}<div class="rte">{{ settings.guide_shipping_note }}</div>{%- endif -%}
+      </div>
+
+      <div class="size-guide__panel" role="tabpanel" id="{{ id }}-returns" aria-labelledby="{{ id }}-tab-returns" hidden>
+        {%- if settings.guide_returns_heading != blank -%}
+          <p class="size-guide__lead">{{ settings.guide_returns_heading | escape }}</p>
+        {%- endif -%}
+        {%- if settings.guide_returns_text != blank -%}<div class="rte">{{ settings.guide_returns_text }}</div>{%- endif -%}
+        {%- if shop.refund_policy -%}
+          <a class="link-mono" href="{{ shop.refund_policy.url }}">{{ 'products.guide.refund_policy' | t }}</a>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</dialog>
+
+{% stylesheet %}
+  .size-guide__tabs {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+    padding: 12px 16px;
+    border-bottom: var(--border);
+  }
+
+  .size-guide__tabs .chip {
+    padding: 6px 14px;
+    font-size: var(--text-label);
+  }
+
+  .size-guide__panel {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .size-guide__panel[hidden] {
+    display: none;
+  }
+
+  .size-guide__scale {
+    display: flex;
+    align-items: flex-end;
+    aspect-ratio: 4 / 3;
+    padding: 12px;
+    border: var(--border);
+    border-radius: var(--radius-lg);
+  }
+
+  .size-guide__scale-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  .size-guide__sheet {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: var(--w);
+    height: var(--w);
+    border: var(--border);
+    background: var(--c);
+    mix-blend-mode: multiply;
+  }
+
+  .size-guide__sheet span {
+    position: absolute;
+    top: 4px;
+    right: 6px;
+    font: 400 10px / 1 var(--font-mono);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+  }
+
+  .size-guide__rows {
+    margin: 0;
+    border-top: var(--border);
+  }
+
+  .size-guide__row {
+    display: grid;
+    grid-template-columns: 70px 1fr auto;
+    align-items: baseline;
+    gap: 12px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--color-grey);
+  }
+
+  .size-guide__row dd {
+    margin: 0;
+  }
+
+  .size-guide__row--ship {
+    grid-template-columns: 1fr auto;
+    padding: 16px 0;
+  }
+
+  .size-guide__row--ship dt {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .size-guide__big {
+    font: 500 28px / 1 var(--font-display);
+    letter-spacing: -0.03em;
+  }
+
+  .size-guide__muted {
+    opacity: 0.6;
+  }
+
+  .size-guide__lead {
+    font: 500 34px / 1.05 var(--font-display);
+    letter-spacing: -0.03em;
+  }
+{% endstylesheet %}

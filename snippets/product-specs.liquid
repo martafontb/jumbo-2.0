@@ -1,0 +1,56 @@
+{% doc %}
+  Product spec list (mono dl). Rows come from product metafields, labelled by
+  the block's settings, plus optional extra "Label | Value" lines. Empty rows
+  are skipped.
+
+  Metafields: custom.edition_size (integer), custom.edition_detail (text),
+  custom.inks (list of text or ink metaobjects with a `name` field),
+  custom.paper, custom.dimensions, custom.format, custom.material (text).
+
+  @param {object} product - Product
+  @param {object} block - The "Specs" block (labels and extra rows)
+{% enddoc %}
+{%- liquid
+  assign mf = product.metafields.custom
+  assign edition = ''
+  if mf.edition_size.value != blank
+    assign edition = mf.edition_size.value | append: ''
+    if mf.edition_detail.value != blank
+      assign edition = edition | append: ', ' | append: mf.edition_detail.value
+    endif
+  endif
+  assign inks = ''
+  for ink in mf.inks.value
+    assign ink_name = ink.name.value | default: ink
+    if forloop.first
+      assign inks = ink_name
+    else
+      assign inks = inks | append: ', ' | append: ink_name
+    endif
+  endfor
+  assign extra_rows = block.settings.extra_rows | newline_to_br | split: '<br />'
+-%}
+<dl class="spec-list product-specs" {{ block.shopify_attributes }}>
+  {%- if edition != blank -%}<dt>{{ block.settings.label_edition | escape }}</dt><dd>{{ edition | escape }}</dd>{%- endif -%}
+  {%- if inks != blank -%}<dt>{{ block.settings.label_inks | escape }}</dt><dd>{{ inks | escape }}</dd>{%- endif -%}
+  {%- if mf.paper.value != blank -%}<dt>{{ block.settings.label_paper | escape }}</dt><dd>{{ mf.paper.value | escape }}</dd>{%- endif -%}
+  {%- if mf.dimensions.value != blank -%}<dt>{{ block.settings.label_dimensions | escape }}</dt><dd>{{ mf.dimensions.value | escape }}</dd>{%- endif -%}
+  {%- if mf.format.value != blank -%}<dt>{{ block.settings.label_format | escape }}</dt><dd>{{ mf.format.value | escape }}</dd>{%- endif -%}
+  {%- if mf.material.value != blank -%}<dt>{{ block.settings.label_material | escape }}</dt><dd>{{ mf.material.value | escape }}</dd>{%- endif -%}
+  {%- for row in extra_rows -%}
+    {%- assign parts = row | split: '|' -%}
+    {%- if parts.size > 1 -%}
+      <dt>{{ parts[0] | strip | escape }}</dt><dd>{{ parts[1] | strip | escape }}</dd>
+    {%- endif -%}
+  {%- endfor -%}
+</dl>
+
+{% stylesheet %}
+  .product-specs:empty {
+    display: none;
+  }
+
+  .product-specs dd {
+    margin: 0;
+  }
+{% endstylesheet %}

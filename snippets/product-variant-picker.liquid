@@ -1,0 +1,280 @@
+{% doc %}
+  Variant picker: one fieldset per option. Options with Shopify swatches
+  (Settings > Custom data, option values linked to a category metafield)
+  render as 48px colour squares; all others render as pills. Unavailable
+  values stay selectable but are struck through so the sold-out state is
+  visible.
+
+  A size chart (product metafield `custom.size_chart`, multi-line text with
+  rows like "Size | Chest | Length | Sleeve") can be toggled under the size
+  option; the selected size's row is highlighted.
+
+  Without JS the radios can't resolve a variant, so a plain variant <select>
+  is rendered inside <noscript> and the JS-driven hidden id input stays
+  disabled.
+
+  @param {object} product - Product
+  @param {object} variant - Selected variant
+  @param {string} form_id - Product form id the inputs belong to
+  @param {string} section_id - Section id (for unique ids)
+{% enddoc %}
+{%- liquid
+  assign size_chart = product.metafields.custom.size_chart.value
+  assign size_names = 'size,talla,taille,größe'
+-%}
+{%- unless product.has_only_default_variant -%}
+  <div class="variant-picker" data-variant-picker>
+    {%- for option in product.options_with_values -%}
+      {%- liquid
+        assign option_handle = option.name | handle
+        assign uses_swatches = false
+        if option.values.first.swatch != blank
+          assign uses_swatches = true
+        endif
+        assign is_size = false
+        if size_names contains option_handle
+          assign is_size = true
+        endif
+      -%}
+      <fieldset class="variant-picker__option" data-option-index="{{ forloop.index0 }}">
+        <legend class="variant-picker__legend">
+          <span class="variant-picker__name">{{ option.name | escape }}</span>
+          {%- if is_size and size_chart != blank -%}
+            <button type="button" class="link-mono variant-picker__chart-toggle" aria-expanded="false" aria-controls="SizeChart-{{ section_id }}" data-chart-toggle data-show-label="{{ 'products.size_chart.show' | t | escape }}" data-hide-label="{{ 'products.size_chart.hide' | t | escape }}">
+              {{- 'products.size_chart.show' | t -}}
+            </button>
+          {%- else -%}
+            <span class="variant-picker__value" data-selected-value>{{ option.selected_value | escape }}</span>
+          {%- endif -%}
+        </legend>
+
+        <div class="variant-picker__values{% if uses_swatches %} variant-picker__values--swatches{% endif %}">
+          {%- for value in option.values -%}
+            {%- assign input_id = section_id | append: '-' | append: option.position | append: '-' | append: forloop.index0 -%}
+            <input
+              class="visually-hidden variant-picker__input"
+              type="radio"
+              id="{{ input_id }}"
+              name="{{ option.name | escape }}"
+              value="{{ value | escape }}"
+              form="{{ form_id }}-options"
+              {% if value.selected %}checked{% endif %}
+            >
+            {%- if uses_swatches -%}
+              {%- liquid
+                assign swatch_style = ''
+                if value.swatch.image
+                  assign swatch_url = value.swatch.image | image_url: width: 96
+                  assign swatch_style = 'background-image: url(' | append: swatch_url | append: ');'
+                elsif value.swatch.color
+                  assign swatch_style = 'background-color: ' | append: value.swatch.color | append: ';'
+                endif
+              -%}
+              <label
+                for="{{ input_id }}"
+                class="variant-picker__swatch{% unless value.available %} is-unavailable{% endunless %}"
+                style="{{ swatch_style }}"
+                title="{{ value | escape }}"
+              >
+                <span class="visually-hidden">
+                  {{- value | escape -}}
+                  {%- unless value.available %}, {{ 'products.sold_out' | t }}{% endunless -%}
+                </span>
+              </label>
+            {%- else -%}
+              <label for="{{ input_id }}" class="variant-picker__pill{% unless value.available %} is-unavailable{% endunless %}">
+                {{- value | escape -}}
+                {%- unless value.available -%}<span class="visually-hidden">, {{ 'products.sold_out' | t }}</span>{%- endunless -%}
+              </label>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+
+        {%- if is_size and size_chart != blank -%}
+          {%- assign chart_rows = size_chart | newline_to_br | split: '<br />' -%}
+          <div class="size-chart" id="SizeChart-{{ section_id }}" hidden>
+            {%- assign head_cells = chart_rows.first | split: '|' -%}
+            <table class="size-chart__table">
+              <thead>
+                <tr>
+                  {%- for cell in head_cells -%}<th scope="col">{{ cell | strip | escape }}</th>{%- endfor -%}
+                </tr>
+              </thead>
+              <tbody>
+                {%- for row in chart_rows offset: 1 -%}
+                  {%- assign cells = row | split: '|' -%}
+                  {%- if cells.size < 2 -%}{%- continue -%}{%- endif -%}
+                  {%- assign row_size = cells.first | strip -%}
+                  <tr data-size-row="{{ row_size | escape }}" {% if row_size == option.selected_value %}class="is-selected"{% endif %}>
+                    {%- for cell in cells -%}
+                      {%- if forloop.first -%}<th scope="row">{{ cell | strip | escape }}</th>{%- else -%}<td>{{ cell | strip | escape }}</td>{%- endif -%}
+                    {%- endfor -%}
+                  </tr>
+                {%- endfor -%}
+              </tbody>
+            </table>
+          </div>
+        {%- endif -%}
+      </fieldset>
+    {%- endfor -%}
+
+    <script type="application/json" data-variants>
+      [
+        {%- for v in product.variants -%}
+          {"id": {{ v.id }}, "available": {{ v.available | json }}, "options": {{ v.options | json }}}{% unless forloop.last %},{% endunless %}
+        {%- endfor -%}
+      ]
+    </script>
+
+    <noscript>
+      <label class="label" for="NoJsVariant-{{ section_id }}">{{ 'products.variant' | t }}</label>
+      <select class="field" id="NoJsVariant-{{ section_id }}" name="id" form="{{ form_id }}">
+        {%- for v in product.variants -%}
+          <option value="{{ v.id }}" {% if v == variant %}selected{% endif %} {% unless v.available %}disabled{% endunless %}>
+            {{ v.title | escape }} – {{ v.price | money }}{% unless v.available %} ({{ 'products.sold_out' | t }}){% endunless %}
+          </option>
+        {%- endfor -%}
+      </select>
+    </noscript>
+  </div>
+{%- endunless -%}
+
+{% stylesheet %}
+  .variant-picker {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .variant-picker__option {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    min-width: 0;
+  }
+
+  .variant-picker__legend {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0;
+    font: 400 var(--text-label-sm) / 1.35 var(--font-mono);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+  }
+
+  .variant-picker__name {
+    opacity: 0.6;
+  }
+
+  .variant-picker__chart-toggle {
+    font-size: var(--text-label-sm);
+  }
+
+  .variant-picker__values {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .variant-picker__pill {
+    flex: 1 1 0;
+    min-width: max-content;
+    padding: 10px 12px;
+    border: var(--border);
+    border-radius: var(--radius-pill);
+    background: transparent;
+    font: 400 var(--text-label) / 1.2 var(--font-mono);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    text-align: center;
+    cursor: pointer;
+  }
+
+  .variant-picker__pill:hover {
+    background: var(--color-grey);
+  }
+
+  .variant-picker__input:checked + .variant-picker__pill {
+    background: var(--color-ink);
+    color: var(--color-white);
+  }
+
+  .variant-picker__values--swatches {
+    margin-top: 4px;
+  }
+
+  .variant-picker__swatch {
+    width: 48px;
+    height: 48px;
+    border: var(--border);
+    border-radius: var(--radius-sm);
+    background-color: var(--color-grey);
+    background-size: cover;
+    background-position: center;
+    cursor: pointer;
+  }
+
+  .variant-picker__input:checked + .variant-picker__swatch {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 2px;
+  }
+
+  .variant-picker__input:focus-visible + label {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 4px;
+  }
+
+  .is-unavailable {
+    position: relative;
+    opacity: 0.55;
+    text-decoration: line-through;
+  }
+
+  .variant-picker__swatch.is-unavailable::after {
+    content: '';
+    position: absolute;
+    inset: 50% -2px auto;
+    border-top: 1px solid var(--color-ink);
+    transform: rotate(-45deg);
+  }
+
+  .size-chart {
+    padding: 4px 12px;
+    border: var(--border);
+    border-radius: var(--radius-sm);
+  }
+
+  .size-chart__table {
+    width: 100%;
+    border-collapse: collapse;
+    font: 400 var(--text-label) / 1.3 var(--font-mono);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    text-align: left;
+  }
+
+  .size-chart__table th,
+  .size-chart__table td {
+    padding: 8px 6px 8px 0;
+    font-weight: 400;
+  }
+
+  .size-chart__table thead th {
+    border-bottom: var(--border);
+    font-size: var(--text-label-sm);
+    opacity: 0.6;
+  }
+
+  .size-chart__table tr.is-selected {
+    background: var(--color-ink);
+    color: var(--color-white);
+  }
+
+  .size-chart__table tr.is-selected > * {
+    padding-left: 6px;
+  }
+{% endstylesheet %}

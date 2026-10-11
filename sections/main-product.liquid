@@ -1,111 +1,243 @@
 {% comment %}
-  Product (baseline)
-  Working product page: media, title, price, variant select, quantity and a
-  plain product form (no JS required). Phase 4 replaces this with the
-  designed PDP (gallery, sticky info column, edition stock, specs, size
-  guide, upsells, reviews, artist block).
+  Product
+  Gallery across two columns, sticky info column on the right. The info
+  column is built from blocks, so editions and merch share this section with
+  different block setups (see product.json and product.merch.json).
+
+  Variant changes re-render the price, picker state, buy buttons and gallery
+  through the Section Rendering API. Without JS, a plain variant <select>
+  (in <noscript>) posts the right variant id.
+
+  Metafields read here (all optional): custom.artist (artist metaobject:
+  name, portrait, bio …), custom.year, custom.edition_size,
+  custom.edition_detail, custom.inks, custom.paper, custom.dimensions,
+  custom.format, custom.material, custom.size_chart.
 {% endcomment %}
-{%- assign current_variant = product.selected_or_first_available_variant -%}
-<div class="page main-product grid">
-  <div class="main-product__media span-2">
-    {%- for media in product.media limit: 3 -%}
-      <div class="media" style="--ratio: 4 / 3;">
-        {%- if forloop.first -%}
-          {%- render 'image', image: media.preview_image, sizes: '(min-width: 750px) 66vw, 100vw', alt_fallback: product.title, eager: true -%}
-        {%- else -%}
-          {%- render 'image', image: media.preview_image, sizes: '(min-width: 750px) 66vw, 100vw', alt_fallback: product.title -%}
-        {%- endif -%}
+{%- liquid
+  assign current_variant = product.selected_or_first_available_variant
+  assign form_id = 'ProductForm-' | append: section.id
+  assign artist = product.metafields.custom.artist.value
+  assign crumb_collection = collection | default: product.collections.first
+-%}
+<product-info
+  class="page main-product"
+  data-section-id="{{ section.id }}"
+  data-url="{{ product.url }}"
+  {% if section.settings.sticky_info %}data-sticky{% endif %}
+>
+  <div class="main-product__grid">
+    <div class="main-product__media" id="Gallery-{{ section.id }}" data-dynamic>
+      {%- render 'product-gallery',
+        product: product,
+        variant: current_variant,
+        layout: section.settings.gallery_layout,
+        ground: section.settings.gallery_ground,
+        captions: section.settings.captions
+      -%}
+    </div>
+
+    <div class="main-product__info">
+      <div class="main-product__info-inner">
+        {%- for block in section.blocks -%}
+          {%- case block.type -%}
+            {%- when '@app' -%}
+              {% render block %}
+
+            {%- when 'breadcrumb' -%}
+              <nav class="label label--sm main-product__crumb" aria-label="{{ 'products.breadcrumb' | t }}" {{ block.shopify_attributes }}>
+                {%- if crumb_collection -%}
+                  <a href="{{ crumb_collection.url }}">{{ crumb_collection.title | escape }}</a>
+                {%- else -%}
+                  <a href="{{ routes.all_products_collection_url }}">{{ 'products.shop' | t }}</a>
+                {%- endif -%}
+                {%- if artist != blank -%}
+                  <span aria-hidden="true"> / </span>{{ artist.name.value | escape }}
+                {%- elsif product.type != blank -%}
+                  <span aria-hidden="true"> / </span>{{ product.type | escape }}
+                {%- endif -%}
+              </nav>
+
+            {%- when 'switcher' -%}
+              {%- if block.settings.products.size > 1 -%}
+                <nav class="main-product__switcher" aria-label="{{ block.settings.label | escape }}" {{ block.shopify_attributes }}>
+                  {%- for item in block.settings.products -%}
+                    <a class="chip main-product__switch" href="{{ item.url }}" {% if item.id == product.id %}aria-current="page"{% endif %}>
+                      {{- item.metafields.custom.short_title.value | default: item.title | escape -}}
+                    </a>
+                  {%- endfor -%}
+                </nav>
+              {%- endif -%}
+
+            {%- when 'title' -%}
+              {%- liquid
+                assign words = product.title | split: ' '
+                assign last_word = words | last
+                assign head_words = ''
+                for word in words
+                  unless forloop.last
+                    assign head_words = head_words | append: word | append: ' '
+                  endunless
+                endfor
+              -%}
+              <h1 class="title-product main-product__title" {{ block.shopify_attributes }}>
+                {%- if block.settings.accent and words.size > 1 -%}
+                  {{ head_words | escape }}<em class="main-product__accent" style="--accent: var(--color-{{ block.settings.accent_color }});">{{ last_word | escape }}</em>
+                {%- else -%}
+                  {{ product.title | escape }}
+                {%- endif -%}
+              </h1>
+
+            {%- when 'artist' -%}
+              {%- liquid
+                assign artist_name = artist.name.value
+                if artist_name == blank and block.settings.vendor_fallback
+                  assign artist_name = product.vendor
+                endif
+                assign year = product.metafields.custom.year.value
+              -%}
+              {%- if artist_name != blank -%}
+                {%- if artist.system.url != blank -%}
+                  <a class="link-mono main-product__artist" href="{{ artist.system.url }}" {{ block.shopify_attributes }}>
+                    {{- artist_name | escape }}{% if year != blank %} · {{ year }}{% endif -%}
+                  </a>
+                {%- else -%}
+                  <p class="label main-product__artist" {{ block.shopify_attributes }}>
+                    {{- artist_name | escape }}{% if year != blank %} · {{ year }}{% endif -%}
+                  </p>
+                {%- endif -%}
+              {%- endif -%}
+
+            {%- when 'price' -%}
+              <div class="main-product__price-block" id="Price-{{ section.id }}" data-dynamic {{ block.shopify_attributes }}>
+                {%- render 'product-price-block', product: product, variant: current_variant, block: block -%}
+              </div>
+
+            {%- when 'specs' -%}
+              {%- render 'product-specs', product: product, block: block -%}
+
+            {%- when 'variant_picker' -%}
+              <div id="Picker-{{ section.id }}" data-dynamic-picker {{ block.shopify_attributes }}>
+                {%- render 'product-variant-picker', product: product, variant: current_variant, form_id: form_id, section_id: section.id -%}
+              </div>
+
+            {%- when 'buy_buttons' -%}
+              <div class="main-product__buy" id="Buy-{{ section.id }}" data-dynamic {{ block.shopify_attributes }}>
+                {%- render 'product-buy-buttons', product: product, variant: current_variant, block: block, form_id: form_id -%}
+              </div>
+
+            {%- when 'guide_link' -%}
+              {%- if section.settings.guide_enabled -%}
+                <button type="button" class="link-mono main-product__guide" data-overlay-open="SizeGuide-{{ section.id }}" aria-haspopup="dialog" {{ block.shopify_attributes }}>
+                  {{- block.settings.label | escape -}}
+                </button>
+              {%- endif -%}
+
+            {%- when 'description' -%}
+              {%- if product.description != blank -%}
+                <div class="rte main-product__description" {{ block.shopify_attributes }}>{{ product.description }}</div>
+              {%- endif -%}
+
+            {%- when 'text' -%}
+              {%- if block.settings.text != blank -%}
+                <div class="rte main-product__text" {{ block.shopify_attributes }}>{{ block.settings.text }}</div>
+              {%- endif -%}
+          {%- endcase -%}
+        {%- endfor -%}
       </div>
-    {%- else -%}
-      <div class="media" style="--ratio: 4 / 3;">{%- render 'image', placeholder: 'product-1' -%}</div>
-    {%- endfor -%}
+    </div>
   </div>
 
-  <div class="main-product__info">
-    <h1 class="title-product">{{ product.title | escape }}</h1>
-    <p class="main-product__price">
-      {%- if current_variant.compare_at_price > current_variant.price -%}
-        <span class="visually-hidden">{{ 'products.price.sale' | t }}</span>
-        {{ current_variant.price | money }}
-        <s class="label">{{ current_variant.compare_at_price | money }}</s>
-      {%- else -%}
-        {{ current_variant.price | money }}
-      {%- endif -%}
-    </p>
+  {%- if section.settings.guide_enabled -%}
+    {%- assign guide_id = 'SizeGuide-' | append: section.id -%}
+    {%- render 'size-guide', settings: section.settings, id: guide_id -%}
+  {%- endif -%}
+</product-info>
 
-    {%- form 'product', product, class: 'main-product__form' -%}
-      {%- unless product.has_only_default_variant -%}
-        <label class="label" for="ProductVariant-{{ section.id }}">{{ 'products.variant' | t }}</label>
-        <select class="field" id="ProductVariant-{{ section.id }}" name="id">
-          {%- for variant in product.variants -%}
-            <option
-              value="{{ variant.id }}"
-              {% if variant == current_variant %}selected{% endif %}
-              {% unless variant.available %}disabled{% endunless %}
-            >
-              {{ variant.title | escape }} – {{ variant.price | money }}
-              {%- unless variant.available %} ({{ 'products.sold_out' | t }}){% endunless -%}
-            </option>
-          {%- endfor -%}
-        </select>
-      {%- else -%}
-        <input type="hidden" name="id" value="{{ current_variant.id }}">
-      {%- endunless -%}
-
-      <label class="label" for="Quantity-{{ section.id }}">{{ 'products.quantity' | t }}</label>
-      <input
-        class="field"
-        id="Quantity-{{ section.id }}"
-        type="number"
-        name="quantity"
-        value="{{ current_variant.quantity_rule.min | default: 1 }}"
-        min="{{ current_variant.quantity_rule.min | default: 1 }}"
-        {% if current_variant.quantity_rule.max %}max="{{ current_variant.quantity_rule.max }}"{% endif %}
-        step="{{ current_variant.quantity_rule.increment | default: 1 }}"
-      >
-
-      <button type="submit" class="button button--full" {% unless current_variant.available %}disabled{% endunless %}>
-        {%- if current_variant.available -%}
-          {{ 'products.add_to_cart' | t }}
-        {%- else -%}
-          {{ 'products.sold_out' | t }}
-        {%- endif -%}
-      </button>
-      {{ form | payment_button }}
-    {%- endform -%}
-
-    <div class="rte">{{ product.description }}</div>
-  </div>
-</div>
+<script src="{{ 'product-info.js' | asset_url }}" type="module"></script>
+<script src="{{ 'product-form.js' | asset_url }}" type="module"></script>
+<script src="{{ 'quantity-input.js' | asset_url }}" type="module"></script>
 
 {% stylesheet %}
-  .main-product__media {
-    display: flex;
-    flex-direction: column;
+  .main-product__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: var(--grid-gap);
   }
 
+  .main-product__media {
+    grid-column: span 2;
+  }
+
   .main-product__info {
+    padding-left: 12px;
+  }
+
+  .main-product__info-inner {
     display: flex;
     flex-direction: column;
-    gap: 16px;
-    align-self: start;
+    gap: 14px;
+    padding-top: 16px;
   }
 
-  .main-product__price {
-    font: 500 32px / 1 var(--font-display);
+  [data-sticky] .main-product__info-inner {
+    position: sticky;
+    top: 64px;
   }
 
-  .main-product__form {
+  .main-product__crumb a {
+    color: var(--color-ink);
+  }
+
+  .main-product__switcher {
     display: flex;
-    flex-direction: column;
-    gap: 8px;
+    gap: 4px;
   }
 
-  @media screen and (min-width: 750px) {
+  .main-product__switch {
+    flex: 1;
+    justify-content: center;
+    padding: 8px;
+  }
+
+  .main-product__title {
+    margin: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .main-product__accent {
+    color: var(--accent, var(--color-blue));
+    font-style: italic;
+    font-weight: 500;
+  }
+
+  .main-product__artist {
+    align-self: flex-start;
+  }
+
+  .main-product__guide {
+    align-self: flex-start;
+  }
+
+  .main-product__description,
+  .main-product__text {
+    max-width: 40ch;
+  }
+
+  @media screen and (max-width: 749px) {
+    .main-product__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .main-product__media {
+      grid-column: auto;
+    }
+
     .main-product__info {
-      position: sticky;
-      top: 64px;
+      padding-left: 0;
+    }
+
+    [data-sticky] .main-product__info-inner {
+      position: static;
     }
   }
 {% endstylesheet %}
@@ -114,6 +246,147 @@
 {
   "name": "Product",
   "class": "section-main-product",
-  "settings": []
+  "max_blocks": 20,
+  "settings": [
+    {
+      "type": "select",
+      "id": "gallery_layout",
+      "label": "Gallery layout",
+      "options": [
+        { "value": "stack", "label": "Stacked (one column, 4:3)" },
+        { "value": "grid", "label": "Grid (large first, then two-up)" }
+      ],
+      "default": "stack"
+    },
+    {
+      "type": "select",
+      "id": "gallery_ground",
+      "label": "Image background while loading",
+      "options": [
+        { "value": "blue", "label": "Blue" },
+        { "value": "red", "label": "Red" },
+        { "value": "grey", "label": "Grey" },
+        { "value": "ink", "label": "Ink" }
+      ],
+      "default": "blue"
+    },
+    { "type": "checkbox", "id": "captions", "label": "Show image alt text as a caption on secondary images", "default": true },
+    { "type": "checkbox", "id": "sticky_info", "label": "Sticky info column on desktop", "default": true },
+    { "type": "header", "content": "Size & shipping guide" },
+    { "type": "checkbox", "id": "guide_enabled", "label": "Enable guide drawer", "default": true },
+    { "type": "text", "id": "guide_title", "label": "Title", "default": "Guide" },
+    {
+      "type": "textarea",
+      "id": "guide_sizes",
+      "label": "Sizes",
+      "info": "One per line: Size | Dimensions | Note",
+      "default": "A2 | 420 × 594 mm | Poster\nA3 | 297 × 420 mm | Print\nA4 | 210 × 297 mm | Zine spread"
+    },
+    { "type": "richtext", "id": "guide_sizes_note", "label": "Sizes note" },
+    {
+      "type": "textarea",
+      "id": "guide_shipping",
+      "label": "Shipping zones",
+      "info": "One per line: Zone | Delivery time | Price. Keep in sync with Settings > Shipping.",
+      "default": "UK | 3–4 working days | £6\nEurope | 5–8 working days | £12\nWorldwide | 7–14 working days | £18"
+    },
+    { "type": "richtext", "id": "guide_shipping_note", "label": "Shipping note", "default": "<p>Free UK shipping over £75. Everything ships flat in a board envelope with tracking.</p>" },
+    { "type": "text", "id": "guide_returns_heading", "label": "Returns heading", "default": "14 days to change your mind." },
+    { "type": "richtext", "id": "guide_returns_text", "label": "Returns text", "default": "<p>Send unused prints back flat in the original envelope. We refund once they arrive. Damaged in the post? Send us a photo and we'll reprint or refund.</p>" }
+  ],
+  "blocks": [
+    { "type": "@app" },
+    { "type": "breadcrumb", "name": "Breadcrumb", "limit": 1, "settings": [] },
+    {
+      "type": "switcher",
+      "name": "Product switcher",
+      "limit": 1,
+      "settings": [
+        { "type": "paragraph", "content": "Chips linking sibling products, e.g. Tee / Hoodie / Tote. Uses the custom.short_title metafield when set." },
+        { "type": "product_list", "id": "products", "label": "Products", "limit": 6 },
+        { "type": "text", "id": "label", "label": "Accessible label", "default": "Related items" }
+      ]
+    },
+    {
+      "type": "title",
+      "name": "Title",
+      "limit": 1,
+      "settings": [
+        { "type": "checkbox", "id": "accent", "label": "Accent the last word (italic, coloured)", "default": true },
+        {
+          "type": "select",
+          "id": "accent_color",
+          "label": "Accent colour",
+          "options": [
+            { "value": "blue", "label": "Blue" },
+            { "value": "red", "label": "Red" },
+            { "value": "ink", "label": "Ink" }
+          ],
+          "default": "blue"
+        }
+      ]
+    },
+    {
+      "type": "artist",
+      "name": "Artist line",
+      "limit": 1,
+      "settings": [
+        { "type": "paragraph", "content": "Shows the custom.artist metaobject's name and custom.year, linking to the artist page." },
+        { "type": "checkbox", "id": "vendor_fallback", "label": "Use the vendor when no artist is set", "default": false }
+      ]
+    },
+    {
+      "type": "price",
+      "name": "Price and stock",
+      "limit": 1,
+      "settings": [
+        { "type": "checkbox", "id": "show_edition", "label": "Show edition stock (needs custom.edition_size and tracked inventory)", "default": true },
+        { "type": "checkbox", "id": "show_in_stock", "label": "Show “In stock” otherwise", "default": true },
+        { "type": "checkbox", "id": "show_tax_note", "label": "Show tax and shipping note", "default": false }
+      ]
+    },
+    {
+      "type": "specs",
+      "name": "Specs",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "label_edition", "label": "Edition label", "default": "Edition" },
+        { "type": "text", "id": "label_inks", "label": "Inks label", "default": "Inks" },
+        { "type": "text", "id": "label_paper", "label": "Paper label", "default": "Paper" },
+        { "type": "text", "id": "label_dimensions", "label": "Size label", "default": "Size" },
+        { "type": "text", "id": "label_format", "label": "Format label", "default": "Format" },
+        { "type": "text", "id": "label_material", "label": "Material label", "default": "Material" },
+        { "type": "textarea", "id": "extra_rows", "label": "Extra rows", "info": "Same for every product using this template. One per line: Label | Value" }
+      ]
+    },
+    { "type": "variant_picker", "name": "Variant picker", "limit": 1, "settings": [] },
+    {
+      "type": "buy_buttons",
+      "name": "Buy buttons",
+      "limit": 1,
+      "settings": [
+        { "type": "checkbox", "id": "show_quantity", "label": "Show quantity selector", "default": false },
+        { "type": "checkbox", "id": "show_total", "label": "Show total on the button", "info": "E.g. “Add to cart · £56”, updated with the quantity.", "default": false },
+        { "type": "checkbox", "id": "show_dynamic_checkout", "label": "Show express checkout buttons", "default": false },
+        { "type": "checkbox", "id": "show_view_cart", "label": "Show “View cart” after adding", "default": true }
+      ]
+    },
+    {
+      "type": "guide_link",
+      "name": "Guide link",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label", "default": "Size & shipping guide →" }
+      ]
+    },
+    { "type": "description", "name": "Description", "limit": 1, "settings": [] },
+    {
+      "type": "text",
+      "name": "Text",
+      "settings": [
+        { "type": "richtext", "id": "text", "label": "Text", "default": "<p>Each piece is printed by hand, so ink density and registration vary slightly.</p>" }
+      ]
+    }
+  ]
 }
 {% endschema %}

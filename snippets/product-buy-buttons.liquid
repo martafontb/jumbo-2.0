@@ -1,0 +1,139 @@
+{% doc %}
+  Product form: optional quantity stepper, Add to cart (with an optional live
+  total), optional express checkout and a "View cart (n)" link revealed
+  after adding. Respects quantity rules (min / max / increment).
+
+  For products with several variants, the hidden id input starts disabled:
+  JS enables it, and without JS the variant picker's <noscript> select
+  supplies the id instead.
+
+  @param {object} product - Product
+  @param {object} variant - Selected variant
+  @param {object} block - "Buy buttons" block
+  @param {string} form_id - Form id
+{% enddoc %}
+{%- liquid
+  assign rule = variant.quantity_rule
+  assign min_qty = rule.min | default: 1
+  assign step = rule.increment | default: 1
+  assign label = 'products.add_to_cart' | t
+  if variant.available == false
+    assign label = 'products.sold_out' | t
+  endif
+-%}
+<product-form
+  class="buy-buttons"
+  data-added-label="{{ 'products.added_another' | t | escape }}"
+  data-price="{{ variant.price }}"
+  data-money-format="{{ shop.money_format | escape }}"
+>
+  {%- form 'product', product, id: form_id, class: 'buy-buttons__form', novalidate: 'novalidate' -%}
+    <input
+      type="hidden"
+      name="id"
+      value="{{ variant.id }}"
+      data-variant-input
+      {% unless product.has_only_default_variant %}disabled{% endunless %}
+    >
+    <div class="buy-buttons__row">
+      {%- if block.settings.show_quantity -%}
+        <quantity-input class="stepper buy-buttons__qty" style="--stepper-size: 48px;">
+          <button type="button" class="stepper__button" data-step="down" aria-label="{{ 'products.quantity_decrease' | t }}">−</button>
+          <label class="visually-hidden" for="Quantity-{{ form_id }}">{{ 'products.quantity' | t }}</label>
+          <input
+            class="stepper__input"
+            type="number"
+            id="Quantity-{{ form_id }}"
+            name="quantity"
+            value="{{ min_qty }}"
+            min="{{ min_qty }}"
+            {% if rule.max %}max="{{ rule.max }}"{% endif %}
+            step="{{ step }}"
+            inputmode="numeric"
+          >
+          <button type="button" class="stepper__button" data-step="up" aria-label="{{ 'products.quantity_increase' | t }}">+</button>
+        </quantity-input>
+      {%- else -%}
+        <input type="hidden" name="quantity" value="{{ min_qty }}">
+      {%- endif -%}
+
+      <button
+        type="submit"
+        name="add"
+        class="button buy-buttons__add"
+        {% unless variant.available %}disabled{% endunless %}
+      >
+        <span data-label>
+          {{- label -}}
+          {%- if block.settings.show_total and variant.available %} · <span data-total>{{ variant.price | times: min_qty | money }}</span>{% endif -%}
+        </span>
+      </button>
+    </div>
+
+    <p class="form-message form-message--error" role="alert" data-error hidden></p>
+
+    {%- if block.settings.show_dynamic_checkout and variant.available -%}
+      {{ form | payment_button }}
+    {%- endif -%}
+  {%- endform -%}
+
+  {%- if block.settings.show_view_cart -%}
+    <a class="buy-buttons__view-cart" href="{{ routes.cart_url }}" data-overlay-open="CartDrawer" data-view-cart hidden>
+      {{- 'products.view_cart' | t -}} (<span data-cart-count>{{ cart.item_count }}</span>) →
+    </a>
+  {%- endif -%}
+</product-form>
+
+{% stylesheet %}
+  .buy-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .buy-buttons__form {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .buy-buttons__row {
+    display: flex;
+    gap: 4px;
+    align-items: stretch;
+  }
+
+  .buy-buttons__qty {
+    flex: none;
+  }
+
+  .buy-buttons__qty .stepper__button {
+    font-size: 18px;
+  }
+
+  .buy-buttons__add {
+    flex: 1;
+  }
+
+  .buy-buttons__view-cart {
+    padding: 12px;
+    border: var(--border);
+    background: var(--color-blue);
+    color: var(--color-white);
+    font: 400 var(--text-label) / 1.2 var(--font-mono);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    text-align: center;
+    text-decoration: none;
+  }
+
+  .buy-buttons__view-cart:hover {
+    background: var(--color-grey);
+    color: var(--color-ink);
+  }
+
+  .shopify-payment-button__button {
+    border-radius: var(--radius-pill);
+    overflow: hidden;
+  }
+{% endstylesheet %}

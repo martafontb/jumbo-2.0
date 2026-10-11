@@ -1,0 +1,145 @@
+import { parseHTML } from '@theme/global';
+
+/**
+ * <product-info>
+ * - Resolves the selected options to a variant (JSON embedded by the picker),
+ *   updates the URL and re-renders the dynamic regions ([data-dynamic]: price,
+ *   buy buttons, gallery) through the Section Rendering API.
+ * - Keeps focus on the picker: only its availability classes are refreshed.
+ * - Size chart toggle (highlights the selected size row), guide tabs.
+ */
+class ProductInfo extends HTMLElement {
+  connectedCallback() {
+    this.sectionId = this.dataset.sectionId;
+    this.picker = this.querySelector('[data-variant-picker]');
+    const json = this.querySelector('[data-variants]');
+    this.variants = json ? JSON.parse(json.textContent) : [];
+
+    this.enableVariantInput();
+    this.picker?.addEventListener('change', this.onOptionChange);
+    this.addEventListener('click', this.onClick);
+    this.addEventListener('keydown', this.onTabKeydown);
+  }
+
+  /** The id input is disabled in markup so the <noscript> select wins without JS. */
+  enableVariantInput() {
+    this.querySelectorAll('[data-variant-input]').forEach((input) => {
+      input.disabled = false;
+    });
+  }
+
+  selectedOptions() {
+    return [...this.picker.querySelectorAll('fieldset')].map(
+      (fieldset) => fieldset.querySelector('input:checked')?.value
+    );
+  }
+
+  onOptionChange = async (event) => {
+    if (!event.target.matches('input[type="radio"]')) return;
+    const fieldset = event.target.closest('fieldset');
+    const label = fieldset.querySelector('[data-selected-value]');
+    if (label) label.textContent = event.target.value;
+
+    const options = this.selectedOptions();
+    const variant = this.variants.find((v) => v.options.every((value, i) => value === options[i]));
+    this.highlightSizeRow(event.target.value, fieldset);
+
+    if (!variant) {
+      this.setUnavailable();
+      return;
+    }
+
+    const url = new URL(this.dataset.url, window.location.origin);
+    url.searchParams.set('variant', variant.id);
+    window.history.replaceState({}, '', `${url.pathname}${url.search}`);
+    await this.render(variant.id);
+  };
+
+  async render(variantId) {
+    this.controller?.abort();
+    this.controller = new AbortController();
+    this.setAttribute('aria-busy', 'true');
+    try {
+      const response = await fetch(`${this.dataset.url}?variant=${variantId}&section_id=${this.sectionId}`, {
+        signal: this.controller.signal,
+      });
+      if (!response.ok) throw new Error(String(response.status));
+      const doc = parseHTML(await response.text());
+
+      this.querySelectorAll('[data-dynamic]').forEach((region) => {
+        const fresh = doc.getElementById(region.id);
+        if (fresh) region.replaceWith(fresh);
+      });
+
+      // Refresh availability on the picker without replacing it (keeps focus).
+      const freshPicker = doc.querySelector('[data-variant-picker]');
+      freshPicker?.querySelectorAll('label[for]').forEach((freshLabel) => {
+        const current = this.picker.querySelector(`label[for="${freshLabel.htmlFor}"]`);
+        if (current) current.className = freshLabel.className;
+      });
+
+      this.enableVariantInput();
+    } catch (error) {
+      if (error.name !== 'AbortError') window.location.reload();
+    } finally {
+      this.removeAttribute('aria-busy');
+    }
+  }
+
+  setUnavailable() {
+    const button = this.querySelector('.buy-buttons__add');
+    if (!button) return;
+    button.disabled = true;
+    const label = button.querySelector('[data-label]') || button;
+    label.textContent = window.JumboPress.strings?.unavailable || label.textContent;
+  }
+
+  highlightSizeRow(value, fieldset) {
+    fieldset.querySelectorAll('[data-size-row]').forEach((row) => {
+      row.classList.toggle('is-selected', row.dataset.sizeRow === value);
+    });
+  }
+
+  onClick = (event) => {
+    const toggle = event.target.closest('[data-chart-toggle]');
+    if (toggle) {
+      const chart = document.getElementById(toggle.getAttribute('aria-controls'));
+      const open = toggle.getAttribute('aria-expanded') !== 'true';
+      toggle.setAttribute('aria-expanded', String(open));
+      chart.hidden = !open;
+      toggle.textContent = open ? toggle.dataset.hideLabel || toggle.textContent : toggle.dataset.showLabel || toggle.textContent;
+      return;
+    }
+
+    const tab = event.target.closest('[role="tab"]');
+    if (tab) this.selectTab(tab);
+  };
+
+  selectTab(tab) {
+    const list = tab.closest('[role="tablist"]');
+    list.querySelectorAll('[role="tab"]').forEach((t) => {
+      const selected = t === tab;
+      t.setAttribute('aria-selected', String(selected));
+      t.tabIndex = selected ? 0 : -1;
+      document.getElementById(t.getAttribute('aria-controls')).hidden = !selected;
+    });
+    tab.focus();
+  }
+
+  onTabKeydown = (event) => {
+    const tab = event.target.closest('[role="tab"]');
+    if (!tab || !['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+    const tabs = [...tab.closest('[role="tablist"]').querySelectorAll('[role="tab"]')];
+    const i = tabs.indexOf(tab);
+    const next = {
+      ArrowLeft: tabs[(i - 1 + tabs.length) % tabs.length],
+      ArrowRight: tabs[(i + 1) % tabs.length],
+      Home: tabs[0],
+      End: tabs[tabs.length - 1],
+    }[event.key];
+    event.preventDefault();
+    this.selectTab(next);
+  };
+}
+
+if (!customElements.get('product-info')) customElements.define('product-info', ProductInfo);

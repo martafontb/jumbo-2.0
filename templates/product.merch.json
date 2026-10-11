@@ -1,0 +1,36 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "breadcrumb": { "type": "breadcrumb", "settings": {} },
+        "switcher": { "type": "switcher", "settings": { "label": "Merch items" } },
+        "title": { "type": "title", "settings": { "accent": false, "accent_color": "ink" } },
+        "price": { "type": "price", "settings": { "show_edition": false, "show_in_stock": true, "show_tax_note": false } },
+        "variant_picker": { "type": "variant_picker", "settings": {} },
+        "buy_buttons": { "type": "buy_buttons", "settings": { "show_quantity": true, "show_total": true, "show_dynamic_checkout": false, "show_view_cart": true } },
+        "specs": {
+          "type": "specs",
+          "settings": { "extra_rows": "Print | Risograph, one ink\nMade | Printed in the studio" }
+        },
+        "note": {
+          "type": "text",
+          "settings": { "text": "<p>Each piece is printed by hand, so ink density and registration vary slightly. Ships in 3 working days.</p>" }
+        }
+      },
+      "block_order": ["breadcrumb", "switcher", "title", "price", "variant_picker", "buy_buttons", "specs", "note"],
+      "settings": { "gallery_layout": "grid", "gallery_ground": "grey", "captions": false, "sticky_info": true, "guide_enabled": false }
+    },
+    "pairs": {
+      "type": "product-pairs",
+      "settings": { "limit": 3, "label": "Pairs well with", "caption": "Add to the same parcel", "heading": "Complete the set", "spacing": "large" }
+    },
+    "reviews": {
+      "type": "product-reviews",
+      "blocks": {},
+      "block_order": [],
+      "settings": { "label": "Reviews", "spacing": "large" }
+    }
+  },
+  "order": ["main", "pairs", "reviews"]
+}
