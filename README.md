@@ -18,7 +18,7 @@ See `CLAUDE.md` for coding rules and `docs/phase-1-audit.md` for the architectur
 | 4 | Collection, product (editions + merch), cart drawer, cart page, print guide, price guide, FAQ, artists, journal, policies, about | Done |
 | 5 | Interactions and polish: newsletter popup, sticky mobile add-to-cart bar, touch targets, reduced motion, contrast fixes | Done |
 | 6 | Validation: Theme Check, axe, keyboard, touch, reduced motion, no-JS, editor reloads, edge cases, Lighthouse. See `docs/phase-6-validation.md` | Done (local render; store testing pending) |
-| 7 | Handover | Planned |
+| 7 | Handover: quote form page, go-live checklist, placeholder list, maintenance notes | Done |
 
 ## Development
 
@@ -32,7 +32,66 @@ shopify theme push --unpublished --store jakelucas.myshopify.com   # upload as a
 
 Never push to the live theme without approval. `config/settings_data.json` is gitignored and listed in `.shopifyignore`, so the store's live customisations are never overwritten from git.
 
-## Store setup checklist
+## Going live: checklist
+
+Work through these in order on an **unpublished** copy of the theme. Sections further down explain each item in detail.
+
+1. **Upload the theme unpublished.** Either `shopify theme push --unpublished --store jakelucas.myshopify.com`, or Online Store > Themes > Add theme > Connect from GitHub. With GitHub, connect a dedicated branch (e.g. `store/live`): Shopify commits theme editor changes, including `config/settings_data.json`, back to the connected branch. `settings_data.json` isn't in this repository, so the theme starts with the defaults from the schemas and templates.
+2. **Theme settings** (Customize > Theme settings): logo, favicon, the five colours (see [Colour contrast](#accessibility-notes) for the blue), cart type and free-shipping threshold (default £75; must match Settings > Shipping), social links.
+3. **Navigation:** create the five menus in [Menus](#menus-online-store--navigation).
+4. **Custom data:** create the product metafields, the `artist` metaobject (turn on **Web pages**) and the article metafield in [Metafields and metaobjects](#metafields-and-metaobjects).
+5. **Apps:** Shop app (reviews; add its blocks to the Reviews strip and Product reviews sections), Search & Discovery (collection filters), and optionally Shopify Bundles (packs). See [Apps](#apps).
+6. **Pages:** create the pages in [Pages and templates](#pages-and-templates) and assign their templates.
+7. **Products and collections:** assign `product.merch` to merch, fill in metafields, create the `editions` collection (homepage carousel) and an add-ons collection for the cart drawer.
+8. **Replace placeholder content** listed in [Placeholder content](#placeholder-content). Every item is editable in the theme editor or in Shopify admin.
+9. **Test on the preview** using "What still needs the store" in `docs/phase-6-validation.md`: real cart, contact and newsletter forms, filters, reviews blocks, Safari/iOS, a screen reader.
+10. **Publish** (Online Store > Themes > … > Publish) only once that passes and the owner approves. Keep the previous theme as a backup.
+
+## Pages and templates
+
+Create each page in Online Store > Pages, then pick its template under "Theme template". Handles are what the default links expect; change the links in the theme editor if you use others.
+
+| Page (handle) | Template | Notes |
+|---|---|---|
+| Print guide (`print-guide`) | `page.print` | Tabs link to the print and price guides |
+| Price guide (`price-guide`) | `page.prices` | "Request this quote" links to `/pages/contact` |
+| Get a quote (`contact`) | `page.contact` | Contact form with quote fields; prefilled from the calculator |
+| FAQ (`faq`) | `page.faq` | |
+| Artists (`artists`) | `page.artists` | |
+| Policies (`policies`) | `page.policies` | Content comes from Settings > Policies |
+| About (`about`) | `page.about` | |
+
+Artist pages use `templates/metaobject/artist.json` automatically once web pages are on for the `artist` definition. The journal is a regular Shopify blog using `blog.json` and `article.json`; add it to your menus.
+
+After creating the quote page, point these buttons at it (theme editor): header **Print** mega menu > "Get a quote" card button, and any CTA band or statement button that should start a quote.
+
+## Apps
+
+| App | Used for | Theme side |
+|---|---|---|
+| Shop app (Product Reviews) | Star ratings and reviews | Reads `reviews.rating` / `reviews.rating_count`; app blocks in the Reviews strip and Product reviews sections. Nothing shows until there are real reviews |
+| Search & Discovery | Collection filters | Filter chips fall back to its first list filter when no "Filter chips menu" is set |
+| Shopify Bundles (optional) | Homepage packs | Packs are ordinary products; the saving comes from the compare-at price |
+
+## Placeholder content
+
+The design's copy, images and figures ship as editable defaults. Replace or confirm all of these before launch:
+
+- **Announcement bar:** the "WELCOME" 10% code (create the discount in Discounts, or change the message), "Free UK shipping over £75", the fair date.
+- **Header mega menus:** product cards (pick products), Print specs card values, "Get a quote" card text and link.
+- **Footer:** Visit address and next workshop text.
+- **Homepage:** hero video and images, product carousel collection, events (dates, places), stories (images or videos), packs. Review quotes and the studio note are empty by default and stay hidden until filled with real content.
+- **Newsletter popup:** image, "Next drop: 24 Oct" label and copy.
+- **Product section:** size guide sizes, shipping zones and prices, returns text (keep in sync with Settings > Shipping and the refund policy).
+- **Print guide:** ink names, colours and notes (placeholder risograph inks), file checklist, spec card values, process steps.
+- **Price guide:** sizes and rates, setup fee, run range. **The defaults are the design's placeholder rates.**
+- **Quote page:** heading ("price within 2 days") and success text.
+- **FAQ:** every question and answer.
+- **About:** studio text, figures ("2 / 14 / 40", "Est. 2019"), opening hours, photos, contact email.
+- **Policies:** write them in Settings > Policies.
+- **Cart drawer:** add-ons collection; cart page note ("Ships flat in board envelopes").
+
+## Store setup reference
 
 Everything visible in the design is editable in the theme editor. The theme also expects these store-side resources.
 
@@ -59,7 +118,7 @@ Each header "Menu" block picks its menu in the theme editor, so other handles wo
 
 Reviews come from the Shop app. The theme never invents review content:
 
-- **Star ratings** on product cards read the standard `reviews.rating` product metafield and render only when it's populated. Product pages (Phase 4) also accept the Shop app's app blocks.
+- **Star ratings** on product cards read the standard `reviews.rating` product metafield and render only when it's populated. Product pages also accept the Shop app's app blocks.
 - **Reviews strip** (homepage): add the Shop app's block, and/or fill in the average rating, review count and "Review quote" blocks with real reviews. It stays hidden until something is filled in.
 - **Hero review card:** "Review quote" blocks on the Hero section. Empty by default; the card is hidden until you add one.
 
@@ -115,7 +174,7 @@ All optional. Create product metafields in Settings > Custom data > Products, an
 
 ### Print service and FAQ pages
 
-Create these pages in Online Store > Pages and pick the matching template:
+What each page contains (create them as in [Pages and templates](#pages-and-templates)):
 
 | Page (handle) | Template | Contents |
 |---|---|---|
@@ -163,6 +222,14 @@ Every homepage section is editable in the theme editor. All text, images and vid
 - **Packs:** pick bundle products (e.g. made with Shopify Bundles). Set a compare-at price to show the saving.
 - **Events:** one block per event, with start/end as `YYYY-MM-DD HH:MM`. Past events hide automatically. "Remind me" downloads a calendar file.
 - **Stories:** upload portrait images or videos per story. The follow button uses the Instagram link from Theme settings.
+
+## Working on the theme after launch
+
+- **Theme editor changes live in the store.** Before editing a JSON template or section group in git, pull the store's copy first so you don't overwrite the merchant's work: `shopify theme pull --theme <id> --only 'templates/*.json' --only 'sections/*.json'`, then commit it.
+- **Branches and pull requests:** branch from `main` (`feature/`, `fix/`, `chore/`), run `shopify theme check` (zero offenses) and open a pull request. Preview with `shopify theme dev` or an unpublished push, never on the live theme.
+- **Releases:** update `CHANGELOG.md`, bump `theme_version` in `config/settings_schema.json`, and tag `main` (`v1.0.0`).
+- **Adding a section:** start with a `{% comment %}` block, give the schema a `name`, `class` and `presets`, use tokens from `snippets/css-variables.liquid`, put customer-facing strings in `locales/en.default.json`, and add any custom element to the `display: block` list in `assets/base.css`.
+- **JS modules** import shared helpers from `@theme/global`. Listen for theme-editor events on the component itself, or remove `document` listeners in `disconnectedCallback`, so editor re-renders don't stack listeners.
 
 ## Structure
 

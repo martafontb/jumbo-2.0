@@ -4,7 +4,13 @@ All notable changes to this theme are documented here. The format follows [Keep 
 
 ## [Unreleased]
 
+## [1.0.0-rc.1] - 2026-10-11
+
+Release candidate: the full design is built and validated on a local render. It becomes 1.0.0 after testing on the store (see `docs/phase-6-validation.md`).
+
 ### Added
+- Quote page (`page.contact`): contact form section with size, colours, run and artwork-link fields, prefilled from the price calculator, with success and error states.
+- README handover: go-live checklist, pages and templates, apps, placeholder content list, maintenance notes.
 - Announcement bar "Text colour" setting (ink by default, white optional).
 - `docs/phase-6-validation.md`: what was tested, how, and what still needs the store.
 - Newsletter popup (Overlays group): opens once per visitor after a delay, from the footer link, or on section select in the editor; Shopify customer form tagged `newsletter` with success and error states.

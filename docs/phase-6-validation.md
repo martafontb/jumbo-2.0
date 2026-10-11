@@ -12,6 +12,8 @@ The dev store (`jakelucas.myshopify.com`) can't be reached from the build enviro
 
 **Not tested here, still needed on the store:** see [What still needs the store](#what-still-needs-the-store).
 
+The quote page (`page.contact`), added in Phase 7, went through the same axe, layout, no-JS and editor reload checks.
+
 ## Results
 
 | Check | Tool | Result |
