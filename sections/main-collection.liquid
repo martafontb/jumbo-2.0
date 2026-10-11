@@ -1,9 +1,11 @@
 {% comment %}
   Collection (PLP)
   Title with product count and intro, a sticky filter bar (chips + sort) and
-  a gap-free grid where products span one or two columns.
+  a gap-free grid where products span one, two or three columns.
 
-  - Span: product metafield `custom.card_span` (1 or 2). Wide cards are
+  - Span: a "Product layout" block for that product (which can also replace
+    its image with another image or a video), otherwise the product
+    metafield `custom.card_span` (1, 2 or 3). Wide cards are
     clamped to fit the row and the last card stretches to finish it, as in
     the design. Ratio follows span: 1 → 3/4, 2 → 3/2, 3 → 9/4. On mobile
     every card is one column (3/4).
@@ -11,16 +13,17 @@
     otherwise the section's repeating colour list.
   - Chips: either links from a menu (e.g. Editions, Zines, Books) or the
     values of the first list-type Storefront filter (e.g. Product type).
-  - "Studio note" blocks are coloured quote tiles inserted after the Nth
-    product on the first page.
+  - "Studio note" (coloured quote) and "Media" (image or video, optional
+    link) blocks are tiles inserted after the Nth product on the first page.
   Filtering and sorting use Shopify's URL parameters, so they work without JS.
 {% endcomment %}
+{%- render 'section-border', section: section -%}
 {%- liquid
   assign grounds = section.settings.grounds | split: ','
   if grounds.size == 0
     assign grounds = 'grey' | split: ','
   endif
-  assign notes = section.blocks | where: 'type', 'note'
+  assign layouts = section.blocks | where: 'type', 'product_layout'
   assign title = section.settings.title | default: collection.title
   assign intro = collection.description
   if section.settings.intro != blank
@@ -115,10 +118,14 @@
       <ul class="main-collection__grid" role="list">
         {%- liquid
           assign col = 0
+          assign placed_tiles = ''
           assign product_total = collection.products.size
           assign trailing_note = false
           if paginate.current_page == 1
-            for note in notes
+            for note in section.blocks
+              if note.type == 'product_layout'
+                continue
+              endif
               if note.settings.position >= product_total
                 assign trailing_note = true
               endif
@@ -127,7 +134,18 @@
         -%}
         {%- for product in collection.products -%}
           {%- liquid
-            assign span = product.metafields.custom.card_span.value | default: 1 | at_least: 1 | at_most: 2
+            assign layout = nil
+            for candidate in layouts
+              if candidate.settings.product.id == product.id
+                assign layout = candidate
+                break
+              endif
+            endfor
+            assign span = product.metafields.custom.card_span.value | default: 1
+            if layout
+              assign span = layout.settings.span | plus: 0
+            endif
+            assign span = span | at_least: 1 | at_most: 3
             assign remaining = 3 | minus: col
             if span > remaining
               assign span = remaining
@@ -152,19 +170,24 @@
               assign ground = grounds[ground_index] | strip
             endif
 
-            if span == 1
-              assign card_sizes = '(min-width: 750px) 33vw, 50vw'
-            else
-              assign card_sizes = '(min-width: 750px) 66vw, 50vw'
-            endif
+            case span
+              when 1
+                assign card_sizes = '(min-width: 750px) 33vw, 50vw'
+              when 2
+                assign card_sizes = '(min-width: 750px) 66vw, 50vw'
+              else
+                assign card_sizes = '(min-width: 750px) 100vw, 50vw'
+            endcase
             assign eager = false
             if forloop.index <= 3
               assign eager = true
             endif
           -%}
-          <li class="main-collection__item" style="--span: {{ span }};">
+          <li class="main-collection__item" style="--span: {{ span }};" {% if layout %}{{ layout.shopify_attributes }}{% endif %}>
             {%- render 'product-card',
               product: product,
+              image: layout.settings.image,
+              video: layout.settings.video,
               ground: ground,
               ratio: ratio,
               show_tag: true,
@@ -180,28 +203,38 @@
             assign product_is_last = forloop.last
           -%}
           {%- if paginate.current_page == 1 -%}
-            {%- for note in notes -%}
+            {%- comment -%}
+              Tiles due after this product are placed if they fit the space
+              left in the row; a wide tile that doesn't fit waits for the next
+              row, so it keeps its width and the grid stays gap-free. After
+              the last product, each remaining tile fills the rest of its row.
+            {%- endcomment -%}
+            {%- for tile in section.blocks -%}
               {%- liquid
-                assign show_note = false
-                if note.settings.position == product_index
-                  assign show_note = true
-                elsif product_is_last and note.settings.position > product_total
-                  assign show_note = true
+                if tile.type == 'product_layout'
+                  continue
                 endif
+                assign tile_key = '|' | append: tile.id | append: '|'
+                if placed_tiles contains tile_key
+                  continue
+                endif
+                if tile.settings.position > product_index and product_is_last == false
+                  continue
+                endif
+                assign tile_span = 1
+                if tile.type == 'media'
+                  assign tile_span = tile.settings.span | plus: 0
+                endif
+                assign tile_remaining = 3 | minus: col
+                if product_is_last
+                  assign tile_span = tile_remaining
+                elsif tile_span > tile_remaining
+                  continue
+                endif
+                assign col = col | plus: tile_span | modulo: 3
+                assign placed_tiles = placed_tiles | append: tile_key
               -%}
-              {%- if show_note -%}
-                {%- liquid
-                  assign note_span = 1
-                  if product_is_last
-                    assign note_span = 3 | minus: col
-                  endif
-                  assign col = col | plus: note_span | modulo: 3
-                -%}
-                <li class="main-collection__item main-collection__note" style="--span: {{ note_span }}; --note-bg: var(--color-{{ note.settings.color }});{% if note.settings.color == 'ink' %} --note-fg: var(--color-white);{% endif %}" {{ note.shopify_attributes }}>
-                  <span class="label label--sm">{{ note.settings.label | escape }}</span>
-                  <p class="main-collection__note-text">{{ note.settings.text | escape }}</p>
-                </li>
-              {%- endif -%}
+              {%- render 'collection-tile', block: tile, span: tile_span -%}
             {%- endfor -%}
           {%- endif -%}
         {%- endfor -%}
@@ -259,7 +292,7 @@
     gap: 12px;
     margin-bottom: 4px;
     padding: 10px 0;
-    border-top: var(--border);
+    border-top: var(--section-border, var(--border));
     border-bottom: var(--border);
     background: var(--color-bg);
   }
@@ -347,6 +380,23 @@
     color: var(--note-fg, var(--color-ink)); /* white only on ink: white on blue or red is below 4.5:1 */
   }
 
+  .main-collection__media-tile {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .main-collection__media-link {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+  }
+
+  .main-collection__media {
+    flex: 1;
+    min-height: 220px;
+    aspect-ratio: auto;
+  }
+
   .main-collection__note-text {
     font: 400 clamp(28px, 3.4vw, 52px) / 1.04 var(--font-display);
     letter-spacing: -0.02em;
@@ -375,8 +425,13 @@
       --ratio: 3 / 4;
     }
 
-    .main-collection__note {
+    .main-collection__note,
+    .main-collection__media-tile {
       grid-column: 1 / -1;
+    }
+
+    .main-collection__media {
+      aspect-ratio: 3 / 2;
     }
 
     .main-collection .product-card__title {
@@ -391,6 +446,7 @@
   "class": "section-main-collection",
   "max_blocks": 6,
   "settings": [
+    { "type": "checkbox", "id": "show_border", "label": "Show top border", "default": true },
     { "type": "text", "id": "title", "label": "Title", "info": "Defaults to the collection title." },
     { "type": "richtext", "id": "intro", "label": "Intro", "info": "Defaults to the collection description." },
     {
@@ -428,6 +484,61 @@
           ],
           "default": "blue"
         }
+      ]
+    },
+    {
+      "type": "media",
+      "name": "Media",
+      "settings": [
+        { "type": "range", "id": "position", "label": "Show after product", "min": 1, "max": 24, "step": 1, "default": 5 },
+        {
+          "type": "select",
+          "id": "span",
+          "label": "Width",
+          "options": [
+            { "value": "1", "label": "1 column" },
+            { "value": "2", "label": "2 columns" },
+            { "value": "3", "label": "3 columns" }
+          ],
+          "default": "2"
+        },
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "video", "id": "video", "label": "Video", "info": "Optional. Plays muted on a loop instead of the image; the image becomes its poster." },
+        { "type": "text", "id": "caption", "label": "Label", "info": "Optional pill on the tile. Also used as the image's alt text." },
+        { "type": "url", "id": "link", "label": "Link" },
+        {
+          "type": "select",
+          "id": "color",
+          "label": "Background",
+          "options": [
+            { "value": "grey", "label": "Grey" },
+            { "value": "blue", "label": "Blue" },
+            { "value": "red", "label": "Red" },
+            { "value": "ink", "label": "Ink" }
+          ],
+          "default": "grey"
+        }
+      ]
+    },
+    {
+      "type": "product_layout",
+      "name": "Product layout",
+      "settings": [
+        { "type": "product", "id": "product", "label": "Product" },
+        {
+          "type": "select",
+          "id": "span",
+          "label": "Width",
+          "info": "Overrides the product's custom.card_span metafield in this collection grid.",
+          "options": [
+            { "value": "1", "label": "1 column" },
+            { "value": "2", "label": "2 columns" },
+            { "value": "3", "label": "3 columns" }
+          ],
+          "default": "2"
+        },
+        { "type": "image_picker", "id": "image", "label": "Image", "info": "Optional. Replaces the product's image on its card here." },
+        { "type": "video", "id": "video", "label": "Video", "info": "Optional. Plays muted on a loop instead of the image." }
       ]
     }
   ]

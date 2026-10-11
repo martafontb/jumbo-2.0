@@ -1,0 +1,30 @@
+{% doc %}
+  A tile in the collection grid: a "Media" block (image or video, optional
+  label and link) or a "Studio note" block (coloured quote).
+
+  @param {object} block - Collection section block (media or note)
+  @param {number} span - Columns the tile spans
+{% enddoc %}
+{%- if block.type == 'media' -%}
+  <li class="main-collection__item main-collection__media-tile" style="--span: {{ span }};" {{ block.shopify_attributes }}>
+    {%- if block.settings.link != blank -%}<a class="main-collection__media-link" href="{{ block.settings.link }}">{%- endif -%}
+    <div class="media main-collection__media" style="--media-bg: var(--color-{{ block.settings.color }});">
+      {%- render 'image-or-video',
+        video: block.settings.video,
+        image: block.settings.image,
+        sizes: '(min-width: 750px) 66vw, 100vw',
+        alt_fallback: block.settings.caption,
+        placeholder: 'lifestyle-1'
+      -%}
+      {%- if block.settings.caption != blank -%}
+        <span class="pill pill--bg">{{ block.settings.caption | escape }}</span>
+      {%- endif -%}
+    </div>
+    {%- if block.settings.link != blank -%}</a>{%- endif -%}
+  </li>
+{%- else -%}
+  <li class="main-collection__item main-collection__note" style="--span: {{ span }}; --note-bg: var(--color-{{ block.settings.color }});{% if block.settings.color == 'ink' %} --note-fg: var(--color-white);{% endif %}" {{ block.shopify_attributes }}>
+    <span class="label label--sm">{{ block.settings.label | escape }}</span>
+    <p class="main-collection__note-text">{{ block.settings.text | escape }}</p>
+  </li>
+{%- endif -%}

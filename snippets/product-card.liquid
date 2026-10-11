@@ -11,6 +11,8 @@
   @param {boolean} [show_tag] - Show the tag pill on the image
   @param {string} [sizes] - Image `sizes` attribute
   @param {boolean} [eager] - Load the image eagerly
+  @param {image} [image] - Replaces the product's featured image
+  @param {object} [video] - Plays instead of the image (muted, looping)
   @param {string} [class] - Extra classes on the card
   @param {string} [heading_tag] - Title element, default 'span' (use 'h2'/'h3' in grids)
 {% enddoc %}
@@ -21,15 +23,17 @@
   assign sizes = sizes | default: '(min-width: 750px) 33vw, 60vw'
   assign caption = product.metafields.custom.card_meta.value
   assign tag = product.metafields.custom.card_tag.value
+  assign card_image = image | default: product.featured_media
   if product == blank
     assign placeholder_title = 'products.placeholder_title' | t
   endif
 -%}
-<div class="product-card product-card--{{ card_size }} {{ class }}">
+<div class="product-card product-card--{{ card_size }} product-card--bg-{{ settings.card_background | default: 'hover' }} {{ class }}">
   <a class="product-card__link" href="{{ product.url | default: '#' }}">
-    <div class="media product-card__media" style="--ratio: {{ ratio }}; --media-bg: var(--color-{{ ground }});">
-      {%- render 'image',
-        image: product.featured_media,
+    <div class="media product-card__media" style="--ratio: {{ ratio }}; --card-ground: var(--color-{{ ground }}); --media-fit: {{ settings.card_image_fit | default: 'cover' }};">
+      {%- render 'image-or-video',
+        video: video,
+        image: card_image,
         sizes: sizes,
         alt_fallback: product.title,
         eager: eager,
@@ -78,14 +82,19 @@
     color: var(--color-ink);
   }
 
-  .product-card__media .media__img {
-    transition: transform 0.6s var(--ease-out-expo);
+  /* Card colour: always the product's colour, or only on hover and focus. */
+  .product-card__media {
+    background: var(--card-ground);
+    transition: background-color 0.3s var(--ease-out-expo);
   }
 
-  @media (hover: hover) {
-    .product-card__link:hover .media__img {
-      transform: scale(1.02);
-    }
+  .product-card--bg-hover .product-card__media {
+    background: var(--color-bg);
+  }
+
+  .product-card--bg-hover .product-card__link:hover .product-card__media,
+  .product-card--bg-hover .product-card__link:focus-visible .product-card__media {
+    background: var(--card-ground);
   }
 
   .product-card__status {

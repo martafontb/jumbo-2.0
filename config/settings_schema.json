@@ -96,6 +96,45 @@
     ]
   },
   {
+    "name": "Product cards",
+    "settings": [
+      {
+        "type": "select",
+        "id": "card_background",
+        "label": "Card background",
+        "options": [
+          {
+            "value": "hover",
+            "label": "Product colour on hover"
+          },
+          {
+            "value": "always",
+            "label": "Always product colour"
+          }
+        ],
+        "default": "hover",
+        "info": "With \"on hover\", cards sit on the page background (good for transparent PNGs) and fill with the product's colour on hover. The colour comes from the product's custom.card_ground metafield."
+      },
+      {
+        "type": "select",
+        "id": "card_image_fit",
+        "label": "Image fit",
+        "options": [
+          {
+            "value": "cover",
+            "label": "Fill the card (crop)"
+          },
+          {
+            "value": "contain",
+            "label": "Show the whole image"
+          }
+        ],
+        "default": "cover",
+        "info": "Use \"Show the whole image\" for packshots on transparent backgrounds."
+      }
+    ]
+  },
+  {
     "name": "Cart",
     "settings": [
       {
@@ -103,8 +142,14 @@
         "id": "cart_type",
         "label": "When a product is added",
         "options": [
-          { "value": "drawer", "label": "Open the cart drawer" },
-          { "value": "page", "label": "Go to the cart page" }
+          {
+            "value": "drawer",
+            "label": "Open the cart drawer"
+          },
+          {
+            "value": "page",
+            "label": "Go to the cart page"
+          }
         ],
         "default": "drawer"
       },
