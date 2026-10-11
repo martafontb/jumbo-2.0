@@ -1,0 +1,76 @@
+{% comment %}
+  Cart (baseline)
+  Working cart page as a plain form: quantities post to /cart, checkout
+  button submits to checkout. Phase 4 replaces this with the designed cart
+  (ink summary card, steppers, shipping progress) plus the cart drawer.
+{% endcomment %}
+<div class="page main-cart">
+  {%- assign title = 'cart.title' | t -%}
+  {%- render 'page-title', title: title, count: cart.item_count, count_style: 'accent' -%}
+
+  {%- if cart.item_count > 0 -%}
+    <form action="{{ routes.cart_url }}" method="post" class="main-cart__form">
+      <ul class="main-cart__lines" role="list">
+        {%- for item in cart.items -%}
+          <li class="main-cart__line">
+            <a href="{{ item.url }}" class="title-card">{{ item.product.title | escape }}</a>
+            {%- unless item.product.has_only_default_variant -%}
+              <span class="pill pill--blue">{{ item.variant.title | escape }}</span>
+            {%- endunless -%}
+            <label class="visually-hidden" for="Updates-{{ item.key }}">{{ 'products.quantity' | t }}</label>
+            <input class="field main-cart__qty" id="Updates-{{ item.key }}" type="number" name="updates[]" value="{{ item.quantity }}" min="0">
+            <span class="label">{{ item.final_line_price | money }}</span>
+          </li>
+        {%- endfor -%}
+      </ul>
+      <p class="main-cart__total">{{ 'cart.subtotal' | t }} {{ cart.total_price | money_with_currency }}</p>
+      <div class="main-cart__actions">
+        <button type="submit" class="button button--secondary" name="update">{{ 'cart.update' | t }}</button>
+        <button type="submit" class="button" name="checkout">{{ 'cart.checkout' | t }}</button>
+      </div>
+    </form>
+  {%- else -%}
+    <p class="title-statement">{{ 'cart.empty' | t }}</p>
+  {%- endif -%}
+</div>
+
+{% stylesheet %}
+  .main-cart__lines {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: var(--border);
+  }
+
+  .main-cart__line {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: var(--border);
+  }
+
+  .main-cart__qty {
+    width: 90px;
+  }
+
+  .main-cart__total {
+    margin-top: 24px;
+    font: 500 32px / 1 var(--font-display);
+  }
+
+  .main-cart__actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 16px;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Cart",
+  "class": "section-main-cart",
+  "settings": []
+}
+{% endschema %}

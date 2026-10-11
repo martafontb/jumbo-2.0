@@ -1,0 +1,58 @@
+{% comment %}
+  404
+  Title, a short line of copy and a button back to the shop. Copy defaults
+  come from the locale file and can be overridden here.
+{% endcomment %}
+<div class="page main-404">
+  {%- liquid
+    assign heading = 'sections.not_found.title' | t
+    if section.settings.heading != blank
+      assign heading = section.settings.heading
+    endif
+  -%}
+  {%- render 'page-title', title: heading -%}
+  <div class="main-404__body">
+    <p class="title-statement">
+      {%- if section.settings.text != blank -%}
+        {{ section.settings.text | escape }}
+      {%- else -%}
+        {{ 'sections.not_found.text' | t }}
+      {%- endif -%}
+    </p>
+    <a class="button" href="{{ section.settings.button_link | default: routes.all_products_collection_url }}">
+      {%- if section.settings.button_label != blank -%}
+        {{ section.settings.button_label | escape }}
+      {%- else -%}
+        {{ 'sections.not_found.button' | t }}
+      {%- endif -%}
+    </a>
+  </div>
+</div>
+
+{% stylesheet %}
+  .main-404__body {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+    padding-top: 24px;
+    border-top: var(--border);
+  }
+
+  .main-404__body .title-statement {
+    max-width: 30ch;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "404",
+  "class": "section-main-404",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading" },
+    { "type": "text", "id": "text", "label": "Text" },
+    { "type": "text", "id": "button_label", "label": "Button label" },
+    { "type": "url", "id": "button_link", "label": "Button link" }
+  ]
+}
+{% endschema %}

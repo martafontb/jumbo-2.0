@@ -1,0 +1,51 @@
+{% comment %}
+  Article (baseline)
+  Title, date, hero image and content in a 60ch column. Phase 4 replaces
+  this with the designed journal article (reading progress, meta bar,
+  featured product, pull quotes, read next).
+{% endcomment %}
+<article class="page main-article">
+  <p class="label main-article__crumb"><a href="{{ blog.url }}">{{ blog.title | escape }}</a></p>
+  <h1 class="main-article__title">{{ article.title | escape }}</h1>
+  <p class="label label--sm">
+    <time datetime="{{ article.published_at | date: '%Y-%m-%d' }}">{{ article.published_at | date: format: 'date' }}</time>
+  </p>
+  {%- if article.image -%}
+    <div class="media main-article__hero" style="--ratio: 21 / 9;">
+      {%- render 'image', image: article.image, sizes: '100vw', alt_fallback: article.title, eager: true -%}
+    </div>
+  {%- endif -%}
+  <div class="rte main-article__content">{{ article.content }}</div>
+</article>
+
+{% stylesheet %}
+  .main-article {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .main-article__crumb a {
+    text-decoration: none;
+  }
+
+  .main-article__title {
+    font: 500 clamp(44px, 8.4vw, 140px) / 0.88 var(--font-display);
+    letter-spacing: -0.05em;
+    text-wrap: balance;
+  }
+
+  .main-article__content {
+    max-width: 60ch;
+    font-size: var(--text-article);
+    line-height: 1.6;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Article",
+  "class": "section-main-article",
+  "settings": []
+}
+{% endschema %}

@@ -1,0 +1,44 @@
+{% doc %}
+  Previous / numbered / next pagination for a `paginate` block.
+
+  @param {object} paginate - The paginate object
+{% enddoc %}
+{%- if paginate.pages > 1 -%}
+  <nav class="pagination" aria-label="{{ 'general.pagination.label' | t }}">
+    <ul class="pagination__list" role="list">
+      {%- if paginate.previous -%}
+        <li><a class="chip" href="{{ paginate.previous.url }}" aria-label="{{ 'general.pagination.previous' | t }}">←</a></li>
+      {%- endif -%}
+      {%- for part in paginate.parts -%}
+        <li>
+          {%- if part.is_link -%}
+            <a class="chip" href="{{ part.url }}" aria-label="{{ 'general.pagination.page' | t: number: part.title }}">{{ part.title }}</a>
+          {%- elsif part.title == paginate.current_page -%}
+            <span class="chip is-selected" aria-current="page">{{ part.title }}</span>
+          {%- else -%}
+            <span class="chip" aria-hidden="true">{{ part.title }}</span>
+          {%- endif -%}
+        </li>
+      {%- endfor -%}
+      {%- if paginate.next -%}
+        <li><a class="chip" href="{{ paginate.next.url }}" aria-label="{{ 'general.pagination.next' | t }}">→</a></li>
+      {%- endif -%}
+    </ul>
+  </nav>
+{%- endif -%}
+
+{% stylesheet %}
+  .pagination {
+    margin-top: 40px;
+  }
+
+  .pagination__list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+{% endstylesheet %}

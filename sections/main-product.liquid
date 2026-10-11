@@ -1,0 +1,119 @@
+{% comment %}
+  Product (baseline)
+  Working product page: media, title, price, variant select, quantity and a
+  plain product form (no JS required). Phase 4 replaces this with the
+  designed PDP (gallery, sticky info column, edition stock, specs, size
+  guide, upsells, reviews, artist block).
+{% endcomment %}
+{%- assign current_variant = product.selected_or_first_available_variant -%}
+<div class="page main-product grid">
+  <div class="main-product__media span-2">
+    {%- for media in product.media limit: 3 -%}
+      <div class="media" style="--ratio: 4 / 3;">
+        {%- if forloop.first -%}
+          {%- render 'image', image: media.preview_image, sizes: '(min-width: 750px) 66vw, 100vw', alt_fallback: product.title, eager: true -%}
+        {%- else -%}
+          {%- render 'image', image: media.preview_image, sizes: '(min-width: 750px) 66vw, 100vw', alt_fallback: product.title -%}
+        {%- endif -%}
+      </div>
+    {%- else -%}
+      <div class="media" style="--ratio: 4 / 3;">{%- render 'image', placeholder: 'product-1' -%}</div>
+    {%- endfor -%}
+  </div>
+
+  <div class="main-product__info">
+    <h1 class="title-product">{{ product.title | escape }}</h1>
+    <p class="main-product__price">
+      {%- if current_variant.compare_at_price > current_variant.price -%}
+        <span class="visually-hidden">{{ 'products.price.sale' | t }}</span>
+        {{ current_variant.price | money }}
+        <s class="label">{{ current_variant.compare_at_price | money }}</s>
+      {%- else -%}
+        {{ current_variant.price | money }}
+      {%- endif -%}
+    </p>
+
+    {%- form 'product', product, class: 'main-product__form' -%}
+      {%- unless product.has_only_default_variant -%}
+        <label class="label" for="ProductVariant-{{ section.id }}">{{ 'products.variant' | t }}</label>
+        <select class="field" id="ProductVariant-{{ section.id }}" name="id">
+          {%- for variant in product.variants -%}
+            <option
+              value="{{ variant.id }}"
+              {% if variant == current_variant %}selected{% endif %}
+              {% unless variant.available %}disabled{% endunless %}
+            >
+              {{ variant.title | escape }} – {{ variant.price | money }}
+              {%- unless variant.available %} ({{ 'products.sold_out' | t }}){% endunless -%}
+            </option>
+          {%- endfor -%}
+        </select>
+      {%- else -%}
+        <input type="hidden" name="id" value="{{ current_variant.id }}">
+      {%- endunless -%}
+
+      <label class="label" for="Quantity-{{ section.id }}">{{ 'products.quantity' | t }}</label>
+      <input
+        class="field"
+        id="Quantity-{{ section.id }}"
+        type="number"
+        name="quantity"
+        value="{{ current_variant.quantity_rule.min | default: 1 }}"
+        min="{{ current_variant.quantity_rule.min | default: 1 }}"
+        {% if current_variant.quantity_rule.max %}max="{{ current_variant.quantity_rule.max }}"{% endif %}
+        step="{{ current_variant.quantity_rule.increment | default: 1 }}"
+      >
+
+      <button type="submit" class="button button--full" {% unless current_variant.available %}disabled{% endunless %}>
+        {%- if current_variant.available -%}
+          {{ 'products.add_to_cart' | t }}
+        {%- else -%}
+          {{ 'products.sold_out' | t }}
+        {%- endif -%}
+      </button>
+      {{ form | payment_button }}
+    {%- endform -%}
+
+    <div class="rte">{{ product.description }}</div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .main-product__media {
+    display: flex;
+    flex-direction: column;
+    gap: var(--grid-gap);
+  }
+
+  .main-product__info {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-self: start;
+  }
+
+  .main-product__price {
+    font: 500 32px / 1 var(--font-display);
+  }
+
+  .main-product__form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .main-product__info {
+      position: sticky;
+      top: 64px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Product",
+  "class": "section-main-product",
+  "settings": []
+}
+{% endschema %}

@@ -1,0 +1,32 @@
+{% comment %}
+  Blog (baseline)
+  Article cards with image, title and date, plus pagination. The design has
+  no blog index; Phase 4 aligns it with the "Read next" cards of the
+  article page.
+{% endcomment %}
+{%- paginate blog.articles by 12 -%}
+  <div class="page main-blog">
+    {%- render 'page-title', title: blog.title -%}
+    {%- if blog.articles.size > 0 -%}
+      <ul class="card-grid" role="list">
+        {%- for article in blog.articles -%}
+          <li>
+            {%- assign published = article.published_at | date: format: 'date' -%}
+            {%- render 'card-basic', url: article.url, title: article.title, image: article.image, meta: published, placeholder: 'lifestyle-1' -%}
+          </li>
+        {%- endfor -%}
+      </ul>
+      {%- render 'pagination', paginate: paginate -%}
+    {%- else -%}
+      <p class="title-statement">{{ 'sections.blog.empty' | t }}</p>
+    {%- endif -%}
+  </div>
+{%- endpaginate -%}
+
+{% schema %}
+{
+  "name": "Blog",
+  "class": "section-main-blog",
+  "settings": []
+}
+{% endschema %}

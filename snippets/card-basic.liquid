@@ -1,0 +1,44 @@
+{% doc %}
+  Simple image card: media, then title and a mono meta value on a ruled line.
+  Used by baseline grids (collections list, blog). Product cards have their
+  own richer snippet.
+
+  @param {string} url - Destination
+  @param {string} title - Card title (escaped here)
+  @param {image} [image] - Card image
+  @param {string} [meta] - Right-aligned mono text (e.g. price, date, count)
+  @param {string} [ratio] - CSS aspect ratio, default '4 / 3'
+  @param {string} [placeholder] - placeholder_svg_tag name
+{% enddoc %}
+<a class="card-basic" href="{{ url }}">
+  <div class="media" style="--ratio: {{ ratio | default: '4 / 3' }};">
+    {%- render 'image', image: image, sizes: '(min-width: 750px) 33vw, 100vw', alt_fallback: title, placeholder: placeholder -%}
+  </div>
+  <span class="card-basic__meta">
+    <span class="title-card">{{ title | escape }}</span>
+    {%- if meta != blank -%}<span class="label label--sm">{{ meta }}</span>{%- endif -%}
+  </span>
+</a>
+
+{% stylesheet %}
+  .card-basic {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    color: var(--color-ink);
+    text-decoration: none;
+  }
+
+  .card-basic:hover {
+    color: var(--color-ink);
+  }
+
+  .card-basic__meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    padding-top: 6px;
+    border-top: var(--border);
+  }
+{% endstylesheet %}

@@ -1,0 +1,29 @@
+{% comment %}
+  Collections list (baseline)
+  All collections as image cards. Not in the design; built from the shared
+  card and grid styles. Refined in Phase 4.
+{% endcomment %}
+{%- paginate collections by 24 -%}
+  <div class="page main-list-collections">
+    {%- assign title = section.settings.title | default: page_title -%}
+    {%- render 'page-title', title: title -%}
+    <ul class="card-grid" role="list">
+      {%- for collection in collections -%}
+        <li>
+          {%- render 'card-basic', url: collection.url, title: collection.title, image: collection.featured_image, meta: collection.products_count, placeholder: 'collection-1' -%}
+        </li>
+      {%- endfor -%}
+    </ul>
+    {%- render 'pagination', paginate: paginate -%}
+  </div>
+{%- endpaginate -%}
+
+{% schema %}
+{
+  "name": "Collections list",
+  "class": "section-main-list-collections",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Title", "default": "Shop" }
+  ]
+}
+{% endschema %}

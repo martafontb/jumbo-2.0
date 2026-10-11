@@ -1,0 +1,57 @@
+{% doc %}
+  Index-page title block: huge heading with an accent full stop, an optional
+  superscript count, and an optional intro in the right-hand column.
+
+  @param {string} title - Heading text (escaped here)
+  @param {number} [count] - Count, e.g. products in a collection
+  @param {string} [count_style] - 'sup' (default, "(n)" superscript) or 'accent' (italic blue)
+  @param {string} [intro] - Intro HTML (rich text) for the right column
+  @param {boolean} [show_dot] - Accent full stop, default true
+{% enddoc %}
+<div class="page-title grid">
+  <h1 class="title-page page-title__heading span-2">
+    {{- title | escape -}}
+    {%- unless show_dot == false -%}<span class="dot">.</span>{%- endunless -%}
+    {%- if count != blank -%}
+      {%- if count_style == 'accent' %} <em class="accent">({{ count }})</em>
+      {%- else -%}<sup class="page-title__count label">({{ count }})</sup>
+      {%- endif -%}
+    {%- endif -%}
+  </h1>
+  {%- if intro != blank -%}
+    <div class="page-title__intro">{{ intro }}</div>
+  {%- endif -%}
+</div>
+
+{% stylesheet %}
+  .page-title {
+    align-items: end;
+    padding-top: 28px;
+    padding-bottom: 14px;
+  }
+
+  .page-title__heading {
+    overflow-wrap: anywhere;
+  }
+
+  .page-title__count {
+    margin-left: 0.2em;
+    vertical-align: super;
+    font-size: var(--text-label);
+  }
+
+  .page-title__intro {
+    max-width: 34ch;
+  }
+
+  .page-title .accent {
+    font-weight: 500;
+  }
+
+  @media screen and (max-width: 749px) {
+    .page-title {
+      padding-top: 16px;
+      gap: 16px;
+    }
+  }
+{% endstylesheet %}

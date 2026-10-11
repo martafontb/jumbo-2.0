@@ -1,0 +1,90 @@
+{% comment %}
+  Search results page
+  Title with result count, a search form (works without JS), results in the
+  same row style as the search overlay, pagination, and an empty state.
+{% endcomment %}
+{%- paginate search.results by section.settings.per_page -%}
+  <div class="page main-search">
+    {%- liquid
+      assign title = 'sections.search.page_title' | t
+      assign count = blank
+      if search.performed
+        assign count = search.results_count
+      endif
+    -%}
+    {%- render 'page-title', title: title, count: count, intro: section.settings.intro -%}
+
+    <form action="{{ routes.search_url }}" method="get" role="search" class="main-search__form">
+      <label class="visually-hidden" for="MainSearchInput">{{ 'sections.search.label' | t }}</label>
+      <input
+        id="MainSearchInput"
+        class="main-search__input"
+        type="search"
+        name="q"
+        value="{{ search.terms | escape }}"
+        placeholder="{{ section.settings.placeholder | escape }}"
+      >
+      <input type="hidden" name="options[prefix]" value="last">
+      <button type="submit" class="button">{{ 'sections.search.submit' | t }}</button>
+    </form>
+
+    {%- if search.performed -%}
+      {%- if search.results_count > 0 -%}
+        <ul class="search-results main-search__results" role="list">
+          {%- for item in search.results -%}
+            {%- render 'search-result', item: item, index: forloop.index0 -%}
+          {%- endfor -%}
+        </ul>
+        {%- render 'pagination', paginate: paginate -%}
+      {%- else -%}
+        <p class="search-results__empty">
+          {%- assign safe_terms = search.terms | escape -%}
+          {{ 'sections.search.no_results_html' | t: terms: safe_terms }}
+          {{ section.settings.empty_hint | escape }}
+        </p>
+      {%- endif -%}
+    {%- endif -%}
+  </div>
+{%- endpaginate -%}
+
+{% stylesheet %}
+  .main-search__form {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--color-ink);
+  }
+
+  .main-search__input {
+    flex: 1;
+    min-width: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    font: 500 clamp(32px, 5vw, 72px) / 1 var(--font-display);
+    letter-spacing: -0.05em;
+  }
+
+  .main-search__input:focus-visible {
+    outline: none;
+  }
+
+  .main-search__form:focus-within {
+    border-bottom-color: var(--color-blue);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Search results",
+  "class": "section-main-search",
+  "settings": [
+    { "type": "richtext", "id": "intro", "label": "Intro" },
+    { "type": "text", "id": "placeholder", "label": "Placeholder", "default": "Search editions, zines, artists…" },
+    { "type": "text", "id": "empty_hint", "label": "No results hint", "default": "Try zines or editions." },
+    { "type": "range", "id": "per_page", "label": "Results per page", "min": 12, "max": 48, "step": 6, "default": 24 }
+  ]
+}
+{% endschema %}

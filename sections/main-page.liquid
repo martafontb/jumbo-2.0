@@ -1,0 +1,64 @@
+{% comment %}
+  Standard page
+  Page title (with accent full stop) and the page's rich-text content in a
+  readable column. Used by templates/page.json.
+{% endcomment %}
+<div class="page main-page">
+  {%- render 'page-title', title: page.title, intro: section.settings.intro, show_dot: section.settings.show_dot -%}
+  <div class="main-page__body grid">
+    <div class="rte main-page__content span-2">
+      {{ page.content }}
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .main-page__body {
+    margin-top: 24px;
+    padding-top: 24px;
+    border-top: var(--border);
+  }
+
+  .main-page__content {
+    max-width: 60ch;
+    font-size: var(--text-article);
+    line-height: 1.6;
+  }
+
+  .main-page__content h2,
+  .main-page__content h3 {
+    margin: 1.4em 0 0.4em;
+    font-weight: 500;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+  }
+
+  .main-page__content h2 {
+    font-size: clamp(28px, 3vw, 40px);
+  }
+
+  .main-page__content img {
+    border-radius: var(--radius-lg);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Page",
+  "class": "section-main-page",
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "intro",
+      "label": "Intro",
+      "info": "Shown beside the title."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_dot",
+      "label": "Accent full stop after title",
+      "default": true
+    }
+  ]
+}
+{% endschema %}
