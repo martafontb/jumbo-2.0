@@ -4,7 +4,11 @@
   labelled with the ink's name and an optional code (e.g. a Pantone or hex
   reference). Each ink is a block. With "Overprint", blocks overlap and
   their colour layers multiply, so neighbouring inks mix where they cross,
-  like a risograph overprint; "Misregistration" nudges blocks up and down. The row pauses on hover and keyboard
+  like a risograph overprint; "Misregistration" nudges blocks up and down.
+  Shape "Worm" turns each run of inks into a wiggling worm of overlapping
+  round segments (they overprint too), with eyes on the head; ink names
+  appear on hover (always on touch screens and under reduced motion) and
+  are always available to screen readers. The row pauses on hover and keyboard
   focus and has a pause button (WCAG 2.2.2). Under reduced motion it doesn't
   move; it becomes a row you can scroll.
 
@@ -27,9 +31,15 @@
     assign region_label = 'sections.ink_marquee.label' | t
   endif
 -%}
+{%- liquid
+  assign worm = false
+  if section.settings.shape == 'worm'
+    assign worm = true
+  endif
+-%}
 {%- if inks.size > 0 -%}
   <ink-marquee
-    class="ink-marquee space-{{ section.settings.spacing }}{% if section.settings.direction == 'right' %} ink-marquee--reverse{% endif %}{% if section.settings.overprint > 0 %} ink-marquee--overprint{% endif %}{% if section.settings.misregister %} ink-marquee--misregister{% endif %}"
+    class="ink-marquee space-{{ section.settings.spacing }}{% if section.settings.direction == 'right' %} ink-marquee--reverse{% endif %}{% if worm %} ink-marquee--worm{% else %}{% if section.settings.overprint > 0 %} ink-marquee--overprint{% endif %}{% if section.settings.misregister %} ink-marquee--misregister{% endif %}{% endif %}"
     style="--marquee-duration: {{ section.settings.speed | times: inks.size }}s; --ink-block: {{ block_width }}; --overlap: {{ section.settings.overprint | divided_by: 100.0 }};"
     data-play-label="{{ 'sections.ink_marquee.play' | t | escape }}"
     data-pause-label="{{ 'sections.ink_marquee.pause' | t | escape }}"
@@ -45,7 +55,7 @@
         {%- for copy in (1..2) -%}
           <ul class="ink-marquee__group" role="list" {% if copy == 2 %}aria-hidden="true" inert{% endif %}>
             {%- for block in inks -%}
-              <li class="ink-marquee__ink" style="--ink: {{ block.settings.color }};" {% if copy == 1 %}{{ block.shopify_attributes }}{% endif %}>
+              <li class="ink-marquee__ink" style="--ink: {{ block.settings.color }}; --i: {{ forloop.index0 }};" {% if copy == 1 %}{{ block.shopify_attributes }}{% endif %}>
                 <span class="pill pill--bg ink-marquee__name">{{ block.settings.name | escape }}</span>
                 {%- if block.settings.code != blank -%}
                   <span class="pill pill--bg ink-marquee__code">{{ block.settings.code | escape }}</span>
@@ -93,7 +103,10 @@
 
   .ink-marquee:hover .ink-marquee__track,
   .ink-marquee:focus-within .ink-marquee__track,
-  .ink-marquee.is-paused .ink-marquee__track {
+  .ink-marquee.is-paused .ink-marquee__track,
+  .ink-marquee.is-paused .ink-marquee__ink::before,
+  .ink-marquee.is-paused .ink-marquee__ink::after,
+  .ink-marquee.is-paused .ink-marquee__ink .pill {
     animation-play-state: paused;
   }
 
@@ -158,6 +171,130 @@
   .ink-marquee--misregister .ink-marquee__ink:nth-child(3n + 2) { top: 5px; }
   .ink-marquee--misregister .ink-marquee__ink:nth-child(4n) { top: -2px; }
 
+  /* Worm: round segments that overlap and multiply, a wave running down the
+     body (each segment's colour layer and label move; the <li> itself never
+     transforms, so the blends still mix), and eyes on the leading segment. */
+  .ink-marquee--worm {
+    --seg: calc(var(--ink-block) * 0.6);
+    --amp: calc(var(--seg) * 0.14);
+  }
+
+  .ink-marquee--worm .ink-marquee__group {
+    gap: 0;
+    align-items: center;
+    margin-right: var(--seg);
+    padding: calc(var(--amp) + 8px) 0;
+  }
+
+  .ink-marquee--worm .ink-marquee__ink {
+    justify-content: center;
+    align-items: center;
+    width: var(--seg);
+    aspect-ratio: 1;
+    padding: 0;
+    border-radius: 50%;
+    background: none;
+  }
+
+  .ink-marquee--worm .ink-marquee__ink + .ink-marquee__ink {
+    margin-left: calc(var(--seg) * -0.4);
+  }
+
+  .ink-marquee--worm .ink-marquee__ink:last-child {
+    width: calc(var(--seg) * 0.8);
+  }
+
+  .ink-marquee--worm.ink-marquee--reverse .ink-marquee__ink:last-child {
+    width: var(--seg);
+  }
+
+  .ink-marquee--worm.ink-marquee--reverse .ink-marquee__ink:first-child {
+    width: calc(var(--seg) * 0.8);
+  }
+
+  .ink-marquee--worm .ink-marquee__ink::before,
+  .ink-marquee--worm .ink-marquee__ink::after,
+  .ink-marquee--worm .ink-marquee__ink .pill {
+    animation: ink-worm 1.4s ease-in-out infinite alternate;
+    animation-delay: calc(var(--i) * -0.2s);
+  }
+
+  .ink-marquee--worm .ink-marquee__ink::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: var(--ink);
+    mix-blend-mode: multiply;
+  }
+
+  /* Eyes on the head: the first segment, or the last when moving right. */
+  .ink-marquee--worm .ink-marquee__ink:first-child::after,
+  .ink-marquee--worm.ink-marquee--reverse .ink-marquee__ink:last-child::after {
+    content: '';
+    position: absolute;
+    top: 26%;
+    left: 14%;
+    z-index: 2;
+    width: 44%;
+    height: 22%;
+    background:
+      radial-gradient(circle at 30% 55%, var(--color-ink) 0 14%, transparent 15%),
+      radial-gradient(circle at 78% 55%, var(--color-ink) 0 14%, transparent 15%),
+      radial-gradient(circle at 25% 50%, var(--color-white) 0 27%, transparent 28%),
+      radial-gradient(circle at 75% 50%, var(--color-white) 0 27%, transparent 28%);
+  }
+
+  .ink-marquee--worm.ink-marquee--reverse .ink-marquee__ink:first-child::after {
+    content: none;
+  }
+
+  .ink-marquee--worm.ink-marquee--reverse .ink-marquee__ink:last-child::after {
+    left: auto;
+    right: 14%;
+  }
+
+  .ink-marquee--worm .ink-marquee__ink .pill {
+    position: absolute;
+    bottom: calc(100% + 4px);
+    left: 50%;
+    z-index: 3;
+    margin-left: -50%;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+  }
+
+  .ink-marquee--worm .ink-marquee__code {
+    display: none;
+  }
+
+  .ink-marquee--worm .ink-marquee__ink:hover .ink-marquee__name {
+    opacity: 1;
+  }
+
+  /* No hover on touch screens (and no wiggle under reduced motion): names
+     stay visible, alternating above and below so neighbours don't collide. */
+  @media (hover: none), (prefers-reduced-motion: reduce) {
+    .ink-marquee--worm .ink-marquee__group {
+      padding-block: calc(var(--amp) + 36px);
+    }
+
+    .ink-marquee--worm .ink-marquee__ink .ink-marquee__name {
+      opacity: 1;
+    }
+
+    .ink-marquee--worm .ink-marquee__ink:nth-child(even) .pill {
+      top: calc(100% + 4px);
+      bottom: auto;
+    }
+  }
+
+  @keyframes ink-worm {
+    from { transform: translateY(calc(var(--amp) * -1)); }
+    to { transform: translateY(var(--amp)); }
+  }
+
   .ink-marquee__controls {
     display: flex;
     justify-content: flex-end;
@@ -175,7 +312,10 @@
       overflow-x: auto;
     }
 
-    .ink-marquee__track {
+    .ink-marquee__track,
+    .ink-marquee--worm .ink-marquee__ink::before,
+    .ink-marquee--worm .ink-marquee__ink::after,
+    .ink-marquee--worm .ink-marquee__ink .pill {
       animation: none;
     }
 
@@ -188,6 +328,10 @@
   @media screen and (max-width: 749px) {
     .ink-marquee__ink {
       width: calc(var(--ink-block) * 0.7);
+    }
+
+    .ink-marquee--worm {
+      --seg: calc(var(--ink-block) * 0.42);
     }
   }
 {% endstylesheet %}
@@ -224,8 +368,19 @@
       ],
       "default": "medium"
     },
-    { "type": "range", "id": "overprint", "label": "Overprint", "info": "How much neighbouring inks overlap and mix. 0 turns it off.", "min": 0, "max": 40, "step": 5, "unit": "%", "default": 25 },
-    { "type": "checkbox", "id": "misregister", "label": "Misregistration", "info": "Nudges blocks slightly up and down, like a hand-fed print run.", "default": true },
+    {
+      "type": "select",
+      "id": "shape",
+      "label": "Shape",
+      "options": [
+        { "value": "blocks", "label": "Blocks" },
+        { "value": "worm", "label": "Worm" }
+      ],
+      "default": "worm",
+      "info": "Worm: each run of inks becomes a wiggling worm of round segments; ink names show on hover."
+    },
+    { "type": "range", "id": "overprint", "label": "Overprint", "info": "Blocks only. How much neighbouring inks overlap and mix. 0 turns it off.", "min": 0, "max": 40, "step": 5, "unit": "%", "default": 25 },
+    { "type": "checkbox", "id": "misregister", "label": "Misregistration", "info": "Blocks only. Nudges blocks slightly up and down, like a hand-fed print run.", "default": true },
     { "type": "range", "id": "speed", "label": "Seconds per ink", "info": "Higher is slower.", "min": 2, "max": 12, "step": 1, "unit": "s", "default": 5 },
     {
       "type": "select",
