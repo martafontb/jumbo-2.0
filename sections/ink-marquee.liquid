@@ -2,7 +2,9 @@
   Ink marquee
   A continuously scrolling row of rounded colour blocks, one per ink, each
   labelled with the ink's name and an optional code (e.g. a Pantone or hex
-  reference). Each ink is a block. The row pauses on hover and keyboard
+  reference). Each ink is a block. With "Overprint", blocks overlap and
+  their colour layers multiply, so neighbouring inks mix where they cross,
+  like a risograph overprint; "Misregistration" nudges blocks up and down. The row pauses on hover and keyboard
   focus and has a pause button (WCAG 2.2.2). Under reduced motion it doesn't
   move; it becomes a row you can scroll.
 
@@ -27,8 +29,8 @@
 -%}
 {%- if inks.size > 0 -%}
   <ink-marquee
-    class="ink-marquee space-{{ section.settings.spacing }}{% if section.settings.direction == 'right' %} ink-marquee--reverse{% endif %}"
-    style="--marquee-duration: {{ section.settings.speed | times: inks.size }}s; --ink-block: {{ block_width }};"
+    class="ink-marquee space-{{ section.settings.spacing }}{% if section.settings.direction == 'right' %} ink-marquee--reverse{% endif %}{% if section.settings.overprint > 0 %} ink-marquee--overprint{% endif %}{% if section.settings.misregister %} ink-marquee--misregister{% endif %}"
+    style="--marquee-duration: {{ section.settings.speed | times: inks.size }}s; --ink-block: {{ block_width }}; --overlap: {{ section.settings.overprint | divided_by: 100.0 }};"
     data-play-label="{{ 'sections.ink_marquee.play' | t | escape }}"
     data-pause-label="{{ 'sections.ink_marquee.pause' | t | escape }}"
   >
@@ -116,6 +118,46 @@
     background: var(--ink);
   }
 
+  /* Overprint: blocks overlap; the colour sits on a multiplied layer so the
+     overlaps mix, while the labels stay on top, unblended. Each group ends
+     with the same negative overlap, so the -50% loop stays seamless. */
+  .ink-marquee--overprint .ink-marquee__group {
+    gap: 0;
+    margin-right: calc(var(--ink-block) * var(--overlap) * -1);
+    padding: 0;
+  }
+
+  .ink-marquee--overprint .ink-marquee__ink {
+    background: none;
+  }
+
+  .ink-marquee--overprint .ink-marquee__ink + .ink-marquee__ink {
+    margin-left: calc(var(--ink-block) * var(--overlap) * -1);
+  }
+
+  .ink-marquee--overprint .ink-marquee__ink::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: var(--ink);
+    mix-blend-mode: multiply;
+  }
+
+  .ink-marquee--overprint .ink-marquee__ink .pill {
+    position: relative;
+    z-index: 1;
+  }
+
+  .ink-marquee--misregister .ink-marquee__group {
+    padding-block: 10px;
+  }
+
+  /* `top`, not transform: a transform would isolate each block's blend. */
+  .ink-marquee--misregister .ink-marquee__ink:nth-child(3n + 1) { top: -6px; }
+  .ink-marquee--misregister .ink-marquee__ink:nth-child(3n + 2) { top: 5px; }
+  .ink-marquee--misregister .ink-marquee__ink:nth-child(4n) { top: -2px; }
+
   .ink-marquee__controls {
     display: flex;
     justify-content: flex-end;
@@ -182,6 +224,8 @@
       ],
       "default": "medium"
     },
+    { "type": "range", "id": "overprint", "label": "Overprint", "info": "How much neighbouring inks overlap and mix. 0 turns it off.", "min": 0, "max": 40, "step": 5, "unit": "%", "default": 25 },
+    { "type": "checkbox", "id": "misregister", "label": "Misregistration", "info": "Nudges blocks slightly up and down, like a hand-fed print run.", "default": true },
     { "type": "range", "id": "speed", "label": "Seconds per ink", "info": "Higher is slower.", "min": 2, "max": 12, "step": 1, "unit": "s", "default": 5 },
     {
       "type": "select",
