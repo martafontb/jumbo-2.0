@@ -107,6 +107,10 @@ Everything visible in the design is editable in the theme editor. The theme also
 
 Each header "Menu" block picks its menu in the theme editor, so other handles work too.
 
+### Mobile menu
+
+The full-screen menu shows the Shop menu (header "Menu" blocks) and a second group from the header's **Mobile menu** setting (e.g. About, Artists, Print guide, FAQ) plus Search. If that setting is empty, the second group shows only Search. While the menu is open the page behind it doesn't scroll and the announcement bar is hidden.
+
 ### Theme settings
 
 - **Logo:** upload a dark logo (SVG or PNG, transparent background). The header inverts it for the difference-blend effect. Until one is uploaded, the store name renders as a wordmark.
@@ -243,7 +247,7 @@ Every homepage section is editable in the theme editor. All text, images and vid
 - **Product carousel:** pick a collection (defaults to the `editions` handle). The end card's note and button are editable.
 - **Studio note:** hidden until a real quote is added.
 - **Video grid** and **Shop the look:** included but switched off, as in the design. Enable them in the theme editor.
-- **Ink marquee:** a scrolling row of ink colours; one block per ink (name, colour, optional code). Size, speed and direction are section settings. "Overprint" makes blocks overlap and mix where they cross, like a riso overprint (0 turns it off); "Misregistration" nudges them slightly out of line. It pauses on hover, keyboard focus and with its pause button, and stays still for visitors who prefer reduced motion.
+- **Ink marquee:** a scrolling row of ink colours; one block per ink (name, colour, optional code). Size, speed and direction are section settings. **Shape:** "Worm" (default) turns each run of inks into a wiggling worm of overlapping round segments with eyes on its head; ink names show on hover (always on touch screens). "Blocks" shows tall colour blocks, where "Overprint" sets how much they overlap and mix (0 turns it off) and "Misregistration" nudges them slightly out of line. Every shape overprints where colours cross. It pauses on hover, keyboard focus and with its pause button, and stays still for visitors who prefer reduced motion.
 - **Packs:** pick bundle products (e.g. made with Shopify Bundles). Set a compare-at price to show the saving.
 - **Events:** one block per event, with start/end as `YYYY-MM-DD HH:MM`. Past events hide automatically. "Remind me" downloads an `.ics` calendar file with the event's title, time and place, which opens in Apple Calendar, Google Calendar or Outlook; the button then reads "Reminder set ✓". No email or account is involved.
 - **Stories:** upload portrait images or videos per story. The follow button uses the Instagram link from Theme settings.

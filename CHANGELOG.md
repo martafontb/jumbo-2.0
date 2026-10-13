@@ -5,6 +5,13 @@ All notable changes to this theme are documented here. The format follows [Keep 
 ## [Unreleased]
 
 ### Added
+- Ink marquee "Worm" shape (now the default): wiggling worms of overlapping, overprinting round segments with eyes; names on hover, always visible on touch screens and under reduced motion. Pausing stops the wiggle too.
+
+### Fixed
+- Page no longer scrolls behind the mobile menu or overlays on iOS: a shared scroll lock pins the page and restores the position.
+- The announcement bar hides while the mobile menu is open.
+
+### Added
 - Gift wrapping: a gift wrap product (Theme settings > Cart) added or removed with a checkbox in the cart drawer and cart page, plus an optional gift message saved as the "Gift message" cart attribute. Works without JS on the cart page.
 - Ink marquee: "Overprint" (overlapping blocks that multiply where they cross) and "Misregistration" settings.
 - Product gallery: "Auto" image fit (portrait images shown whole) as the default; swipeable carousel with a counter on phones.
