@@ -81,9 +81,30 @@ export function formatMoney(cents, format = '{{amount}}') {
 
 const openers = new WeakMap();
 
-function syncScrollLock() {
-  const anyOpen = document.querySelector('dialog.overlay[open]');
-  document.documentElement.classList.toggle('has-overlay', Boolean(anyOpen));
+/**
+ * Page scroll lock while an overlay or the mobile menu is open. iOS Safari
+ * ignores overflow: hidden for touch scrolling, so the body is pinned with
+ * position: fixed and the scroll position restored afterwards.
+ */
+let lockedScrollY = null;
+
+export function syncScrollLock() {
+  const root = document.documentElement;
+  const locked = Boolean(document.querySelector('dialog.overlay[open]')) || root.classList.contains('menu-open');
+  root.classList.toggle('has-overlay', locked);
+  const body = document.body;
+  if (locked && lockedScrollY === null) {
+    lockedScrollY = window.scrollY;
+    body.style.position = 'fixed';
+    body.style.top = `-${lockedScrollY}px`;
+    body.style.insetInline = '0';
+  } else if (!locked && lockedScrollY !== null) {
+    body.style.position = '';
+    body.style.top = '';
+    body.style.insetInline = '';
+    window.scrollTo({ top: lockedScrollY, behavior: 'instant' });
+    lockedScrollY = null;
+  }
 }
 
 export function openOverlay(dialog, opener = document.activeElement) {

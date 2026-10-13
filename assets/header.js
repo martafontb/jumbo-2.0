@@ -1,4 +1,4 @@
-import { openOverlay, closeOverlay } from '@theme/global';
+import { openOverlay, closeOverlay, syncScrollLock } from '@theme/global';
 
 const CLOSE_DELAY = 180;
 const DESKTOP = window.matchMedia('(min-width: 750px)');
@@ -115,8 +115,11 @@ class SiteHeader extends HTMLElement {
     const open = typeof force === 'boolean' ? force : !this.mobileOpen;
     if (open === this.mobileOpen) return;
 
+    // menu-open hides the announcement bar and locks page scroll (global.js).
+    if (open) window.scrollTo({ top: 0, behavior: 'instant' });
+    document.documentElement.classList.toggle('menu-open', open);
+    syncScrollLock();
     if (open) {
-      window.scrollTo({ top: 0 });
       const headerBottom = this.header.getBoundingClientRect().bottom;
       this.mobileMenu.style.setProperty('--mobile-menu-top', `${Math.round(headerBottom + 16)}px`);
     }
@@ -125,7 +128,6 @@ class SiteHeader extends HTMLElement {
     this.mobileToggle.setAttribute('aria-expanded', String(open));
     this.mobileToggle.querySelector('[data-toggle-label-closed]').hidden = open;
     this.mobileToggle.querySelector('[data-toggle-label-open]').hidden = !open;
-    document.documentElement.classList.toggle('has-overlay', open);
     this.setPageInert(open);
 
     if (open) {
