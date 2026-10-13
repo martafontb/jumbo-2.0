@@ -1,0 +1,153 @@
+{% doc %}
+  Gift options in the cart drawer and on the cart page: a checkbox that adds
+  or removes the gift wrap product (Theme settings > Cart), and a gift
+  message saved as the cart attribute "Gift message", which Shopify copies
+  to the order. The message field belongs to the cart form, so it's also
+  sent with Checkout and Update without JS; without JS, gift wrap is added
+  with a plain link and removed like any other line.
+
+  @param {string} form_id - id of the cart form the message belongs to
+  @param {string} [tone] - 'light' (default) or 'dark' (on the ink summary card)
+{% enddoc %}
+{%- liquid
+  assign wrap = settings.gift_wrap_product
+  assign wrap_variant = wrap.selected_or_first_available_variant
+  assign has_wrap = false
+  if wrap != blank and wrap_variant.available
+    assign has_wrap = true
+  endif
+  assign wrapped = false
+  if has_wrap
+    for item in cart.items
+      if item.variant_id == wrap_variant.id
+        assign wrapped = true
+        break
+      endif
+    endfor
+  endif
+  assign gift_message = cart.attributes['Gift message']
+  assign show_message = false
+  if settings.gift_message
+    if has_wrap == false or wrapped or gift_message != blank
+      assign show_message = true
+    endif
+  endif
+-%}
+{%- if has_wrap or settings.gift_message -%}
+  <cart-gift class="cart-gift cart-gift--{{ tone | default: 'light' }}" data-variant-id="{{ wrap_variant.id }}">
+    {%- if has_wrap -%}
+      <label class="cart-gift__option">
+        <input type="checkbox" class="cart-gift__check" data-gift-wrap {% if wrapped %}checked{% endif %}>
+        <span class="cart-gift__box" aria-hidden="true"></span>
+        <span class="cart-gift__text">
+          {{- 'cart.gift.wrap' | t -}}
+          <span class="cart-gift__price">+ {{ wrap_variant.price | money }}</span>
+        </span>
+      </label>
+      {%- unless wrapped -%}
+        <noscript>
+          <a class="link-mono" href="{{ routes.cart_add_url }}?id={{ wrap_variant.id }}&quantity=1">{{ 'cart.gift.add' | t }}</a>
+        </noscript>
+      {%- endunless -%}
+    {%- endif -%}
+
+    {%- if settings.gift_message -%}
+      <div class="cart-gift__message" data-gift-message-wrap {% unless show_message %}hidden{% endunless %}>
+        <label class="label label--sm" for="GiftMessage-{{ form_id }}">{{ 'cart.gift.message' | t }}</label>
+        <textarea
+          class="field cart-gift__textarea"
+          id="GiftMessage-{{ form_id }}"
+          name="attributes[Gift message]"
+          form="{{ form_id }}"
+          rows="3"
+          maxlength="{{ settings.gift_message_max | default: 250 }}"
+          data-gift-message
+        >{{ gift_message | escape }}</textarea>
+        <p class="cart-gift__status label label--sm" data-gift-status role="status"></p>
+      </div>
+    {%- endif -%}
+    <p class="form-message form-message--error" role="alert" data-gift-error hidden></p>
+  </cart-gift>
+  <script src="{{ 'cart-gift.js' | asset_url }}" type="module"></script>
+{%- endif -%}
+
+{% stylesheet %}
+  .cart-gift {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .cart-gift__option {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 44px;
+    cursor: pointer;
+    font: 400 var(--text-label) / 1.3 var(--font-mono);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+  }
+
+  .cart-gift__check {
+    position: absolute;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+  }
+
+  .cart-gift__box {
+    flex: none;
+    width: 20px;
+    height: 20px;
+    border: 1px solid currentColor;
+    border-radius: 6px;
+  }
+
+  .cart-gift__check:checked + .cart-gift__box {
+    background: var(--color-blue);
+    box-shadow: inset 0 0 0 3px var(--color-bg);
+  }
+
+  .cart-gift__check:focus-visible + .cart-gift__box {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+  }
+
+  .cart-gift__text {
+    display: flex;
+    flex: 1;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .cart-gift__message {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .cart-gift__textarea {
+    border-radius: var(--radius-md);
+    resize: vertical;
+    font-family: var(--font-display);
+    font-size: 15px;
+  }
+
+  .cart-gift__status {
+    min-height: 1.3em;
+    margin: 0;
+    opacity: var(--opacity-muted);
+  }
+
+  .cart-gift--dark .cart-gift__textarea {
+    border-color: var(--color-white);
+    background: transparent;
+    color: var(--color-white);
+  }
+
+  .cart-gift--dark .cart-gift__check:checked + .cart-gift__box {
+    box-shadow: inset 0 0 0 3px var(--color-ink);
+  }
+{% endstylesheet %}

@@ -159,6 +159,33 @@
         "label": "Free shipping threshold",
         "info": "In your store's default currency. Drives the progress bar in the cart. Leave empty to hide it. It must match your shipping rates in Settings > Shipping.",
         "default": 75
+      },
+      {
+        "type": "header",
+        "content": "Gift wrapping"
+      },
+      {
+        "type": "product",
+        "id": "gift_wrap_product",
+        "label": "Gift wrap product",
+        "info": "Create a product such as \"Gift wrap\" with its price. Customers add or remove it with a checkbox in the cart; it shows on the order as a line item. Leave empty to hide the option."
+      },
+      {
+        "type": "checkbox",
+        "id": "gift_message",
+        "label": "Gift message field",
+        "default": true,
+        "info": "Saved on the order under \"Additional details\" as \"Gift message\". Shown when gift wrap is ticked, or always if there's no gift wrap product."
+      },
+      {
+        "type": "range",
+        "id": "gift_message_max",
+        "label": "Gift message length",
+        "min": 50,
+        "max": 500,
+        "step": 10,
+        "unit": "chr",
+        "default": 250
       }
     ]
   },

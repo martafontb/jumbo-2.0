@@ -194,6 +194,7 @@
       "label": "Rated {{ rating }} out of {{ max }}"
     },
     "breadcrumb": "Breadcrumb",
+    "gallery": "{{ title }} images",
     "shop": "Shop",
     "size_chart": {
       "show": "View size chart",
@@ -258,6 +259,12 @@
     "shipping_calculated": "Calculated at checkout",
     "total": "Total",
     "updated": "Cart updated",
+    "gift": {
+      "wrap": "Gift wrap",
+      "add": "Add gift wrap",
+      "message": "Gift message (optional)",
+      "saved": "Message saved ✓"
+    },
     "shipping": {
       "away": "{{ amount }} away from free shipping",
       "unlocked": "Free shipping unlocked",

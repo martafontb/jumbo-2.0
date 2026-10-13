@@ -249,6 +249,11 @@ export const cart = {
     return data;
   },
 
+  /** Cart attributes (e.g. a gift message); Shopify copies them to the order. Nothing re-renders. */
+  async attributes(attributes) {
+    return cartRequest(`${JumboPress.routes.cartUpdate}.js`, { attributes });
+  },
+
   /** /cart/add.js returns the added items, not the cart, so fetch the cart afterwards. */
   async refresh(sections, source = 'refresh', added = null) {
     const cartState = await this.get();

@@ -39,7 +39,7 @@
         {%- assign shown = 0 -%}
         {%- for product in drawer.upsell_collection.products -%}
           {%- assign needle = ',' | append: product.id | append: ',' -%}
-          {%- if in_cart contains needle or product.available == false or product.has_only_default_variant == false -%}{%- continue -%}{%- endif -%}
+          {%- if in_cart contains needle or product.available == false or product.has_only_default_variant == false or product.id == settings.gift_wrap_product.id -%}{%- continue -%}{%- endif -%}
           {%- if shown >= drawer.upsell_limit -%}{%- break -%}{%- endif -%}
           {%- assign shown = shown | plus: 1 -%}
           <li class="cart-upsell">
@@ -79,6 +79,7 @@
 {%- if cart.item_count > 0 -%}
   <div class="cart-drawer__foot">
     {%- render 'cart-shipping-progress', variant: 'light' -%}
+    {%- render 'cart-gift', form_id: 'CartDrawerForm' -%}
     <p class="cart-drawer__subtotal">
       <span class="label">{{ 'cart.subtotal' | t }}</span>
       <span class="cart-drawer__amount">{{ cart.total_price | money }}</span>

@@ -41,6 +41,10 @@
     </div>
 
     <div class="cart-line__actions">
+      {%- if settings.gift_wrap_product != blank and item.product_id == settings.gift_wrap_product.id -%}
+        {%- comment -%} Gift wrap is one per order: no stepper, but keep the line's slot in updates[]. {%- endcomment -%}
+        <input type="hidden" name="updates[]" value="{{ item.quantity }}" data-line-quantity>
+      {%- else -%}
       <quantity-input class="stepper cart-line__qty">
         <button type="button" class="stepper__button" data-step="down" aria-label="{{ 'products.quantity_decrease' | t }}: {{ item.product.title | escape }}">−</button>
         <label class="visually-hidden" for="Qty-{{ size }}-{{ index }}">{{ 'products.quantity' | t }}: {{ item.product.title | escape }}</label>
@@ -58,6 +62,7 @@
         >
         <button type="button" class="stepper__button" data-step="up" aria-label="{{ 'products.quantity_increase' | t }}: {{ item.product.title | escape }}">+</button>
       </quantity-input>
+      {%- endif -%}
       <a class="link-mono cart-line__remove" href="{{ item.url_to_remove }}" data-remove>
         {{- 'cart.remove' | t -}}<span class="visually-hidden">: {{ item.product.title | escape }}</span>
       </a>
