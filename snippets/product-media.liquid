@@ -7,10 +7,20 @@
   @param {string} ground - Background token
   @param {boolean} first - First item: eager-loaded, full width
   @param {boolean} [caption] - Show alt text as a caption pill
+  @param {string} [fit] - 'auto' (portrait contained), 'cover' or 'contain'
 {% enddoc %}
+{%- liquid
+  assign media_fit = fit | default: 'auto'
+  if media_fit == 'auto'
+    assign media_fit = 'cover'
+    if media.preview_image.aspect_ratio < 1
+      assign media_fit = 'contain'
+    endif
+  endif
+-%}
 <div
   class="media product-gallery__item{% if first %} product-gallery__item--first{% endif %}"
-  style="--media-bg: var(--color-{{ ground }});"
+  style="--media-bg: var(--color-{{ ground }}); --media-fit: {{ media_fit }};"
   data-media-id="{{ media.id }}"
 >
   {%- case media.media_type -%}

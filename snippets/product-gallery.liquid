@@ -10,26 +10,43 @@
   @param {string} layout - 'stack' or 'grid'
   @param {string} ground - Background token while images load
   @param {boolean} [captions] - Show alt text as captions on secondary images
+  @param {string} [fit] - 'auto' (portrait images contained), 'cover' or 'contain'
+
+  Under 750px the gallery is a swipeable carousel with a counter.
 {% enddoc %}
 {%- liquid
   assign featured = variant.featured_media | default: product.featured_media
   assign ground = ground | default: 'blue'
+  assign fit = fit | default: 'auto'
+  assign media_count = product.media.size | at_least: 1
 -%}
-<div class="product-gallery product-gallery--{{ layout }}" data-gallery>
+<product-gallery class="product-gallery-wrap">
+<div
+  class="product-gallery product-gallery--{{ layout }}"
+  data-gallery
+  role="region"
+  aria-label="{{ 'products.gallery' | t: title: product.title | escape }}"
+  tabindex="-1"
+>
   {%- if product.media.size == 0 -%}
     <div class="media product-gallery__item product-gallery__item--first" style="--media-bg: var(--color-{{ ground }});">
       {%- render 'image', placeholder: 'product-1' -%}
     </div>
   {%- else -%}
     {%- if featured -%}
-      {%- render 'product-media', media: featured, product: product, ground: ground, first: true -%}
+      {%- render 'product-media', media: featured, product: product, ground: ground, first: true, fit: fit -%}
     {%- endif -%}
     {%- for media in product.media -%}
       {%- if media.id == featured.id -%}{%- continue -%}{%- endif -%}
-      {%- render 'product-media', media: media, product: product, ground: ground, first: false, caption: captions -%}
+      {%- render 'product-media', media: media, product: product, ground: ground, first: false, caption: captions, fit: fit -%}
     {%- endfor -%}
   {%- endif -%}
 </div>
+{%- if media_count > 1 -%}
+  <span class="pill pill--bg product-gallery__counter" aria-hidden="true"><span data-gallery-index>1</span> / {{ media_count }}</span>
+{%- endif -%}
+</product-gallery>
+<script src="{{ 'product-gallery.js' | asset_url }}" type="module"></script>
 
 {% stylesheet %}
   .product-gallery {
@@ -54,6 +71,45 @@
   .product-gallery--grid .product-gallery__item--first {
     grid-column: 1 / -1;
     --ratio: 4 / 3;
+  }
+
+  .product-gallery-wrap {
+    position: relative;
+  }
+
+  .product-gallery__counter {
+    display: none;
+  }
+
+  /* Mobile: one image per screen, swiped sideways, with a counter. */
+  @media screen and (max-width: 749px) {
+    .product-gallery,
+    .product-gallery--grid {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      overscroll-behavior-x: contain;
+      scrollbar-width: none;
+    }
+
+    .product-gallery::-webkit-scrollbar {
+      display: none;
+    }
+
+    .product-gallery .product-gallery__item,
+    .product-gallery--grid .product-gallery__item {
+      flex: 0 0 100%;
+      scroll-snap-align: start;
+      --ratio: 4 / 5;
+    }
+
+    .product-gallery__counter {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      z-index: 1;
+      display: inline-flex;
+    }
   }
 
   .product-gallery__caption {
