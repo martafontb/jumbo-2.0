@@ -5,6 +5,16 @@ All notable changes to this theme are documented here. The format follows [Keep 
 ## [Unreleased]
 
 ### Added
+- Gift wrapping: a gift wrap product (Theme settings > Cart) added or removed with a checkbox in the cart drawer and cart page, plus an optional gift message saved as the "Gift message" cart attribute. Works without JS on the cart page.
+- Ink marquee: "Overprint" (overlapping blocks that multiply where they cross) and "Misregistration" settings.
+- Product gallery: "Auto" image fit (portrait images shown whole) as the default; swipeable carousel with a counter on phones.
+
+### Changed
+- Related products ("Also from …") is a drag-to-scroll carousel; default limit 9.
+- The gift wrap product is never suggested as a cart add-on; the add-on setting explains that only single-variant products are shown.
+- README: Judge.me setup, cart upsell and gift wrap instructions.
+
+### Added
 - "Show top border" setting on every section that opens with a ruled line.
 - Video option next to most image settings, through a shared `image-or-video` snippet and `<auto-video>` (muted loop, pause button, pauses off screen, no autoplay under reduced motion).
 - Ink marquee section: scrolling row of ink colour blocks with names and optional codes, pause button, static under reduced motion. Added to the homepage.

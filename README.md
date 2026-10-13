@@ -120,9 +120,15 @@ Each header "Menu" block picks its menu in the theme editor, so other handles wo
 - **Show top border:** sections that open with a ruled line have a "Show top border" checkbox.
 - **Video instead of an image:** most image settings have a "Video" setting next to them (hero side image, about intro, media and text, visit hours, events feature, process steps, carousel end card, shop the look, newsletter popup, mega menu product cards, collection tiles and product layouts). Videos play muted on a loop, pause off screen and when the visitor presses pause, and don't autoplay for visitors who prefer reduced motion. The image becomes the poster.
 
-### Reviews (Shop app)
+### Reviews (Judge.me)
 
-Reviews come from the Shop app. The theme never invents review content:
+Reviews come from **Judge.me**, which also shares them with the Shop app. The theme never invents review content:
+
+1. Install Judge.me and import or collect reviews.
+2. **Written reviews on product pages:** Theme editor > a product page > Product reviews section > Add block > Apps > Judge.me's review widget block. (Its star-rating badge block can go in the Product section too.)
+3. **Stars on product cards and the rating summary** read Shopify's standard `reviews.rating` / `reviews.rating_count` product metafields. Turn on Judge.me's option that syncs ratings to these Shopify product metafields (it's used for Google Shopping and SEO; the exact setting name is in Judge.me's settings and may change). Until then, cards show no stars.
+4. Homepage reviews strip and hero review card: add Judge.me's blocks there, or fill in the "Review quote" blocks with real reviews.
+
 
 - **Star ratings** on product cards read the standard `reviews.rating` product metafield and render only when it's populated.
 - **Written reviews on product pages** come from your reviews app's block, which you add in the theme editor (Product reviews section > Add block > Apps). Liquid can't read individual reviews, so until the block is added the section shows only the average and the editor shows a prompt. Make sure the app you use publishes reviews to the Shop app.
@@ -176,7 +182,18 @@ All optional. Create product metafields in Settings > Custom data > Products, an
 - **Templates:** editions use the default product template. Assign **product.merch** to tees, totes and cushions (product page > Theme template). Merch colour options show as swatches when the option values are linked to Shopify's colour swatches; otherwise they show as pills.
 - **Collection chips:** set a "Filter chips menu" on the Collection section (e.g. All, Editions, Zines, Books). Without one, the chips use the first list filter from the Search & Discovery app (e.g. Product type). Sorting uses Shopify's sort options.
 - **Collection grid blocks** (Collection section): "Studio note" (coloured quote) and "Media" (image or video, 1–3 columns, optional label and link) tiles appear after the product you choose; a wide tile that doesn't fit the current row moves to the next so the grid stays gap-free. "Product layout" picks a product and sets its width (1–3 columns) and an optional replacement image or video for its card.
-- **Cart drawer:** Theme settings > Cart chooses the drawer or the cart page. The drawer's add-ons come from a collection set on the Cart drawer section (Theme editor > any page > Cart drawer). The free-shipping bar uses the threshold in Theme settings > Cart.
+- **Cart drawer:** Theme settings > Cart chooses the drawer or the cart page. The free-shipping bar uses the threshold in Theme settings > Cart.
+- **Upsells in the cart drawer ("Fancy a little extra?"):**
+  1. Create a collection (e.g. "Add-ons", manual) with the products to suggest. Use single-variant products: they're added in one tap. Their `custom.card_meta` metafield is shown as a one-line blurb.
+  2. Theme editor > open any page > in the sidebar, **Cart drawer** > Add-on products: pick that collection. Set how many to show (up to 3) and the heading.
+  3. Products already in the cart, sold out, or with several variants are skipped. An add-on that would reach free shipping is labelled "Gets you free shipping".
+- **Gift wrapping and gift message:**
+  1. Create a product called e.g. "Gift wrap" with its price (one variant). Untick "Track quantity" or keep stock on it. Keep it available on the Online Store sales channel (otherwise it can't be added to the cart), but leave it out of your collections and menus so it isn't browsed.
+  2. Theme settings > Cart > Gift wrapping: pick that product, and choose whether to show the gift message field and its maximum length.
+  3. Customers tick "Gift wrap" in the cart drawer or cart page; it's added as a line item (one per order, no quantity stepper). The message is saved as the cart attribute "Gift message".
+  4. On the order in Shopify admin, gift wrap appears as a line item and the message under **Additional details**. To print the message on packing slips, edit the packing slip template (Settings > Shipping and delivery) using the order attribute variables listed in Shopify's packing slip documentation.
+- **Product images:** Product section > Image fit. "Auto" (default) crops landscape images to the frame and shows portrait images whole; you can also always crop or always show the whole image. On phones the gallery is a swipeable carousel with an "n / total" counter.
+- **Related products** ("Also from …") is a drag-to-scroll carousel: three cards in view on desktop, about 1.7 on phones. Set "Products" above 3 to make it scroll on desktop.
 - **Size & shipping guide:** content lives on the Product section (sizes, shipping zones, returns text). Keep the shipping zones in sync with Settings > Shipping.
 
 ### Print service and FAQ pages
@@ -226,7 +243,7 @@ Every homepage section is editable in the theme editor. All text, images and vid
 - **Product carousel:** pick a collection (defaults to the `editions` handle). The end card's note and button are editable.
 - **Studio note:** hidden until a real quote is added.
 - **Video grid** and **Shop the look:** included but switched off, as in the design. Enable them in the theme editor.
-- **Ink marquee:** a scrolling row of ink colours; one block per ink (name, colour, optional code). Size, speed and direction are section settings. It pauses on hover, keyboard focus and with its pause button, and stays still for visitors who prefer reduced motion.
+- **Ink marquee:** a scrolling row of ink colours; one block per ink (name, colour, optional code). Size, speed and direction are section settings. "Overprint" makes blocks overlap and mix where they cross, like a riso overprint (0 turns it off); "Misregistration" nudges them slightly out of line. It pauses on hover, keyboard focus and with its pause button, and stays still for visitors who prefer reduced motion.
 - **Packs:** pick bundle products (e.g. made with Shopify Bundles). Set a compare-at price to show the saving.
 - **Events:** one block per event, with start/end as `YYYY-MM-DD HH:MM`. Past events hide automatically. "Remind me" downloads an `.ics` calendar file with the event's title, time and place, which opens in Apple Calendar, Google Calendar or Outlook; the button then reads "Reminder set ✓". No email or account is involved.
 - **Stories:** upload portrait images or videos per story. The follow button uses the Instagram link from Theme settings.
