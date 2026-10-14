@@ -53,6 +53,7 @@
       "type": "reviews-strip",
       "disabled": true,
       "settings": {
+        "show_border": true,
         "label": "Loved by buyers",
         "rating": "",
         "count_text": "",
@@ -62,6 +63,7 @@
     "editions": {
       "type": "product-carousel",
       "settings": {
+        "show_border": true,
         "collection": "soft-goods",
         "limit": 8,
         "grounds": "blue, red, grey, red, blue",
@@ -83,49 +85,56 @@
           "type": "ink",
           "settings": {
             "name": "Jumbo Red",
-            "color": "#EA5A46"
+            "color": "#ea5a46",
+            "code": ""
           }
         },
         "ink-2": {
           "type": "ink",
           "settings": {
             "name": "Jumbo Yellow",
-            "color": "#FFE800"
+            "color": "#ffe800",
+            "code": ""
           }
         },
         "ink-3": {
           "type": "ink",
           "settings": {
             "name": "Jumbo Green",
-            "color": "#00A95C"
+            "color": "#00a95c",
+            "code": ""
           }
         },
         "ink-4": {
           "type": "ink",
           "settings": {
             "name": "Jumbo Blue",
-            "color": "#0078BF"
+            "color": "#0078bf",
+            "code": ""
           }
         },
         "ink-5": {
           "type": "ink",
           "settings": {
             "name": "Jumbo Aqua",
-            "color": "#5EC8E5"
+            "color": "#5ec8e5",
+            "code": ""
           }
         },
         "ink-6": {
           "type": "ink",
           "settings": {
             "name": "Jumbo Purple",
-            "color": "#765BA7"
+            "color": "#765ba7",
+            "code": ""
           }
         },
         "ink-7": {
           "type": "ink",
           "settings": {
             "name": "Jumbo Fluo-Green",
-            "color": "#44D62C"
+            "color": "#44d62c",
+            "code": ""
           }
         }
       },
@@ -138,11 +147,25 @@
         "ink-6",
         "ink-7"
       ],
-      "settings": {}
+      "settings": {
+        "show_border": true,
+        "label": "Our inks",
+        "label_color": "red",
+        "caption": "Every colour we print",
+        "size": "medium",
+        "shape": "worm",
+        "overprint": 25,
+        "misregister": true,
+        "speed": 5,
+        "direction": "left",
+        "spacing": "large"
+      }
     },
     "studio-note": {
       "type": "studio-note",
+      "disabled": true,
       "settings": {
+        "show_border": true,
         "label": "Studio note",
         "date": "09.10.2026",
         "quote": "I wanted the green to bleed into the paper a little. Jumbo let it.",
@@ -184,6 +207,7 @@
         "pack-1"
       ],
       "settings": {
+        "show_border": true,
         "label": "Packs",
         "label_color": "blue",
         "caption": "Buy together, pay less",
@@ -227,6 +251,7 @@
       ],
       "disabled": true,
       "settings": {
+        "show_border": true,
         "label": "On the press",
         "label_color": "blue",
         "caption": "Tap to play",
@@ -274,6 +299,7 @@
       ],
       "disabled": true,
       "settings": {
+        "show_border": true,
         "image_alt": "",
         "heading": "Get the look",
         "label": "Shop the studio",
@@ -369,6 +395,7 @@
         "event-market"
       ],
       "settings": {
+        "show_border": true,
         "label": "Find us",
         "label_color": "blue",
         "caption": "Fairs, workshops, launches",
@@ -426,6 +453,7 @@
         "story-3"
       ],
       "settings": {
+        "show_border": true,
         "label": "@jumbopress",
         "label_color": "blue",
         "caption": "Follow along",
