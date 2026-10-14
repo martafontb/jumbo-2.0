@@ -2,7 +2,8 @@
   Announcement bar
   Full-width red strip above the header. Each "Message" block is one rotating
   message. If a block has a "Code to copy", clicking the message copies that
-  code and briefly confirms it. Rotation pauses on hover and keyboard focus.
+  code and briefly confirms it. Rotation pauses on hover and keyboard focus, has a pause/play
+  button (2+ messages) and does not auto-rotate under reduced motion.
   Dismissal is remembered for the browser session.
 {% endcomment %}
 {%- liquid
@@ -18,8 +19,24 @@
       data-design-mode
     {% endif %}
   >
-    <span aria-hidden="true"></span>
-    <div class="announcement__track" aria-roledescription="{{ 'sections.announcement.carousel' | t }}" aria-live="off">
+    {%- if messages.size > 1 -%}
+      <button
+        type="button"
+        class="announcement__toggle"
+        data-announcement-toggle
+        aria-pressed="false"
+        aria-label="{{ 'sections.announcement.pause' | t }}"
+        data-play-label="{{ 'sections.announcement.play' | t | escape }}"
+        data-pause-label="{{ 'sections.announcement.pause' | t | escape }}"
+        hidden
+      >
+        <span data-icon-pause aria-hidden="true">❚❚</span>
+        <span data-icon-play aria-hidden="true" hidden>▶</span>
+      </button>
+    {%- else -%}
+      <span aria-hidden="true"></span>
+    {%- endif -%}
+    <div class="announcement__track" role="group" aria-label="{{ 'sections.announcement.carousel' | t }}" aria-live="off">
       {%- for block in messages -%}
         <div
           class="announcement__slide"
@@ -114,12 +131,40 @@
     font: 400 16px / 1 var(--font-mono);
   }
 
+  .announcement__toggle {
+    height: 36px;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: 400 10px / 1 var(--font-mono);
+  }
+
+  .announcement__toggle:hover {
+    background: var(--color-bg);
+    color: var(--announcement-bg, var(--color-red));
+  }
+
+  .announcement__toggle:focus-visible,
+  .announcement__close:focus-visible {
+    outline: 2px solid currentcolor;
+    outline-offset: -4px;
+  }
+
   .announcement__close:hover {
     background: var(--color-bg);
     color: var(--announcement-bg, var(--color-red));
   }
 
+  @media (pointer: coarse) {
+    .announcement__toggle,
+    .announcement__close {
+      min-width: 44px;
+      min-height: 44px;
+    }
+  }
+
   @media screen and (max-width: 749px) {
+    .announcement__toggle,
     .announcement__close {
       height: 44px;
     }

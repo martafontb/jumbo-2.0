@@ -44,7 +44,9 @@
     "announcement": {
       "carousel": "Announcements",
       "code_copied": "Code {{ code }} copied ✓",
-      "close": "Close announcements"
+      "close": "Close announcements",
+      "pause": "Pause announcements",
+      "play": "Play announcements"
     },
     "header": {
       "menu": "Menu",
@@ -84,7 +86,9 @@
     },
     "hero": {
       "play": "Play video",
-      "pause": "Pause video"
+      "pause": "Pause video",
+      "play_reviews": "Play review rotation",
+      "pause_reviews": "Pause review rotation"
     },
     "studio_note": {
       "empty": "Studio note: add a quote in the theme editor to show this section."

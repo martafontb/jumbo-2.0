@@ -54,6 +54,21 @@
 
       {%- if reviews.size > 0 -%}
         <quote-rotator class="hero__review" data-interval="6000">
+          {%- if reviews.size > 1 -%}
+            <button
+              type="button"
+              class="hero__review-toggle icon-button"
+              data-rotator-toggle
+              aria-pressed="false"
+              aria-label="{{ 'sections.hero.pause_reviews' | t }}"
+              data-play-label="{{ 'sections.hero.play_reviews' | t | escape }}"
+              data-pause-label="{{ 'sections.hero.pause_reviews' | t | escape }}"
+              hidden
+            >
+              <span data-icon-pause aria-hidden="true">❚❚</span>
+              <span data-icon-play aria-hidden="true" hidden>▶</span>
+            </button>
+          {%- endif -%}
           {%- for block in reviews -%}
             <figure class="hero__quote" data-quote {% unless forloop.first %}hidden{% endunless %} {{ block.shopify_attributes }}>
               {%- render 'stars', rating: block.settings.rating -%}
@@ -152,6 +167,25 @@
     border-radius: var(--radius-md);
     background: var(--color-bg);
     color: var(--color-ink);
+  }
+
+  .hero__review-toggle {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    font-size: 10px;
+  }
+
+  .hero__review-toggle:focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 2px;
+  }
+
+  @media (pointer: coarse) {
+    .hero__review-toggle {
+      width: 44px;
+      height: 44px;
+    }
   }
 
   .hero__quote {
