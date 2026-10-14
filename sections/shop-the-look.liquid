@@ -61,7 +61,7 @@
 
     <div class="shop-look__list">
       {%- if section.settings.heading != blank -%}
-        <h3 class="shop-look__heading">{{ section.settings.heading | escape }}<span class="dot">.</span></h3>
+        <h2 class="shop-look__heading">{{ section.settings.heading | escape }}<span class="dot">.</span></h2>
       {%- endif -%}
       <ol class="shop-look__items" role="list">
         {%- for block in hotspots -%}

@@ -41,7 +41,7 @@
         </div>
       {%- else -%}
         {%- if form.errors -%}
-          <div class="form-message form-message--error contact-form__errors" role="alert" tabindex="-1" data-posted>
+          <div class="form-message form-message--error contact-form__errors" id="{{ form_id }}-errors" role="alert" tabindex="-1" data-posted>
             {{ form.errors | default_errors }}
           </div>
         {%- endif -%}
@@ -49,7 +49,7 @@
         <div class="contact-form__fields">
           <div class="contact-form__field">
             <label class="label label--sm" for="{{ form_id }}-name">{{ 'contact.name' | t }}</label>
-            <input class="field" type="text" id="{{ form_id }}-name" name="contact[name]" value="{{ form.name }}" autocomplete="name">
+            <input class="field" type="text" id="{{ form_id }}-name" name="contact[name]" value="{{ form.name }}" autocomplete="name"{% if form.errors contains 'name' %} aria-invalid="true" aria-describedby="{{ form_id }}-errors"{% endif %}>
           </div>
           <div class="contact-form__field">
             <label class="label label--sm" for="{{ form_id }}-email">{{ 'contact.email' | t }} <span aria-hidden="true">*</span></label>
@@ -63,9 +63,7 @@
               autocapitalize="off"
               spellcheck="false"
               required
-              {% if form.errors contains 'email' %}
-                aria-invalid="true"
-              {% endif %}
+              {% if form.errors contains 'email' %} aria-invalid="true" aria-describedby="{{ form_id }}-errors"{% endif %}
             >
           </div>
 
@@ -91,7 +89,7 @@
 
           <div class="contact-form__field contact-form__field--full">
             <label class="label label--sm" for="{{ form_id }}-body">{{ 'contact.message' | t }}</label>
-            <textarea class="field contact-form__textarea" id="{{ form_id }}-body" name="contact[body]" rows="6">{{ form.body }}</textarea>
+            <textarea class="field contact-form__textarea" id="{{ form_id }}-body" name="contact[body]" rows="6"{% if form.errors contains 'body' %} aria-invalid="true" aria-describedby="{{ form_id }}-errors"{% endif %}>{{ form.body }}</textarea>
           </div>
         </div>
 

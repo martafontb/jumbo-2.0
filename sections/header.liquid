@@ -60,10 +60,16 @@
                       {%- render 'roll-text', text: label -%}
                     </button>
                   {%- else -%}
-                    <a class="site-header__link" href="{{ block.settings.link | default: '#' }}">
-                      {%- assign label = block.settings.label | escape -%}
-                      {%- render 'roll-text', text: label -%}
-                    </a>
+                    {%- assign label = block.settings.label | escape -%}
+                    {%- if block.settings.link != blank -%}
+                      <a class="site-header__link" href="{{ block.settings.link }}">
+                        {%- render 'roll-text', text: label -%}
+                      </a>
+                    {%- else -%}
+                      <span class="site-header__link site-header__link--static">
+                        {%- render 'roll-text', text: label -%}
+                      </span>
+                    {%- endif -%}
                   {%- endif -%}
                 </span>
               </li>
@@ -207,7 +213,8 @@
 
   .site-header a,
   .site-header button,
-  .site-header a:hover {
+  .site-header a:hover,
+  .site-header__link--static {
     color: var(--color-white);
   }
 
@@ -245,6 +252,10 @@
     text-transform: inherit;
     text-decoration: none;
     cursor: pointer;
+  }
+
+  .site-header__link--static {
+    cursor: default;
   }
 
   .site-header__caret {
