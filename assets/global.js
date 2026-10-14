@@ -247,14 +247,32 @@ export const cart = {
   sections: new Set(),
 
   async get() {
-    const response = await fetch(`${JumboPress.routes.cart}.js`, { headers: { Accept: 'application/json' } });
-    return response.json();
+    const fallback = JumboPress.strings?.cartError || 'Something went wrong.';
+    let response;
+    try {
+      response = await fetch(`${JumboPress.routes.cart}.js`, { headers: { Accept: 'application/json' } });
+    } catch (networkError) {
+      throw new CartError(fallback, 0);
+    }
+    if (!response.ok) throw new CartError(fallback, response.status);
+    try {
+      return await response.json();
+    } catch (parseError) {
+      throw new CartError(fallback, response.status);
+    }
   },
 
   /** @param {FormData|{items: Array}} body */
   async add(body) {
     const data = await cartRequest(`${JumboPress.routes.cartAdd}.js`, body, [...this.sections]);
-    await this.refresh(data.sections, 'add', data);
+    // The add itself succeeded. If the follow-up cart fetch fails, still tell
+    // listeners (cart: null = unknown) so the drawer renders from data.sections,
+    // and never report it as an add failure.
+    try {
+      await this.refresh(data.sections, 'add', data);
+    } catch (refreshError) {
+      this.dispatch(null, data.sections, 'add', data);
+    }
     return data;
   },
 

@@ -1,4 +1,4 @@
-import { parseHTML } from '@theme/global';
+import { parseHTML, announce } from '@theme/global';
 
 /**
  * <product-info>
@@ -17,6 +17,7 @@ class ProductInfo extends HTMLElement {
     const json = this.querySelector('[data-variants]');
     this.variants = json ? JSON.parse(json.textContent) : [];
 
+    this.lastOptions = this.picker ? this.selectedOptions() : [];
     this.enableVariantInput();
     this.picker?.addEventListener('change', this.onOptionChange);
     this.addEventListener('click', this.onClick);
@@ -75,6 +76,7 @@ class ProductInfo extends HTMLElement {
     const options = this.selectedOptions();
     const variant = this.variants.find((v) => v.options.every((value, i) => value === options[i]));
     this.highlightSizeRow(event.target.value, fieldset);
+    const previous = this.lastOptions;
 
     if (!variant) {
       this.setUnavailable();
@@ -84,8 +86,30 @@ class ProductInfo extends HTMLElement {
     const url = new URL(this.dataset.url, window.location.origin);
     url.searchParams.set('variant', variant.id);
     window.history.replaceState({}, '', `${url.pathname}${url.search}`);
-    await this.render(variant.id);
+    const ok = await this.render(variant.id);
+    if (ok === true) this.lastOptions = options;
+    else if (ok === false) this.restoreOptions(previous);
   };
+
+  /** Put the picker, URL and labels back on the last variant that rendered. */
+  restoreOptions(previous) {
+    const fieldsets = [...this.picker.querySelectorAll('fieldset')];
+    fieldsets.forEach((fieldset, i) => {
+      const value = previous?.[i];
+      const input = [...fieldset.querySelectorAll('input[type="radio"]')].find((r) => r.value === value);
+      if (!input) return;
+      input.checked = true;
+      const label = fieldset.querySelector('[data-selected-value]');
+      if (label) label.textContent = value;
+      this.highlightSizeRow(value, fieldset);
+    });
+    const prev = this.variants.find((v) => v.options.every((value, i) => value === previous?.[i]));
+    if (prev) {
+      const url = new URL(this.dataset.url, window.location.origin);
+      url.searchParams.set('variant', prev.id);
+      window.history.replaceState({}, '', `${url.pathname}${url.search}`);
+    }
+  }
 
   async render(variantId) {
     this.controller?.abort();
@@ -113,8 +137,12 @@ class ProductInfo extends HTMLElement {
       this.enableVariantInput();
       this.observeBuyButtons();
       this.syncStickyBar();
+      return true;
     } catch (error) {
-      if (error.name !== 'AbortError') window.location.reload();
+      // Superseded by a newer selection: nothing to report.
+      if (error.name === 'AbortError') return null;
+      announce(window.JumboPress.strings?.variantError || window.JumboPress.strings?.cartError || '');
+      return false;
     } finally {
       this.removeAttribute('aria-busy');
     }

@@ -8,7 +8,9 @@ class ProductRelated extends HTMLElement {
     const url = this.dataset.recommendationsUrl;
     if (!url || this.children.length) return;
     try {
-      const html = await (await fetch(url)).text();
+      const response = await fetch(url);
+      if (!response.ok) return;
+      const html = await response.text();
       const fresh = new DOMParser().parseFromString(html, 'text/html').querySelector('product-related');
       if (fresh?.children.length) this.replaceChildren(...fresh.children);
     } catch (error) {
