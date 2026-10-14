@@ -112,7 +112,9 @@ a {
 
 @media (hover: hover) {
   a:hover {
-    color: var(--color-blue);
+    color: var(--color-ink);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
   }
 }
 
@@ -273,9 +275,14 @@ a {
   color: var(--color-blue);
 }
 
+/* Text stays ink for contrast; the accent colour sits on a non-text underline. */
 .accent {
-  color: var(--color-blue);
+  color: var(--color-ink);
   font-style: italic;
+  text-decoration: underline;
+  text-decoration-color: var(--color-blue);
+  text-decoration-thickness: 0.08em;
+  text-underline-offset: 0.12em;
 }
 
 .rte p + p {

@@ -84,9 +84,15 @@
                   endunless
                 endfor
               -%}
+              {%- liquid
+                assign accent_color = block.settings.accent_color
+                unless accent_color == 'blue' or accent_color == 'red' or accent_color == 'ink'
+                  assign accent_color = 'blue'
+                endunless
+              -%}
               <h1 class="title-product main-product__title" {{ block.shopify_attributes }}>
                 {%- if block.settings.accent and words.size > 1 -%}
-                  {{ head_words | escape }}<em class="main-product__accent" style="--accent: var(--color-{{ block.settings.accent_color }});">{{ last_word | escape }}</em>
+                  {{ head_words | escape }}<em class="main-product__accent" style="--accent: var(--color-{{ accent_color }});">{{ last_word | escape }}</em>
                 {%- else -%}
                   {{ product.title | escape }}
                 {%- endif -%}
@@ -309,8 +315,12 @@
   }
 
   .main-product__accent {
-    color: var(--accent, var(--color-blue));
+    color: var(--color-ink);
     font-style: italic;
+    text-decoration: underline;
+    text-decoration-color: var(--accent, var(--color-blue));
+    text-decoration-thickness: 0.08em;
+    text-underline-offset: 0.12em;
     font-weight: 500;
   }
 
