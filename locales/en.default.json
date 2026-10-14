@@ -14,12 +14,16 @@
         "other": "{{ count }} items"
       }
     },
+    "social": {
+      "instagram": "Instagram",
+      "tiktok": "TikTok",
+      "facebook": "Facebook"
+    },
     "password": {
       "title": "Opening soon",
       "enter": "Enter store",
       "label": "Password",
-      "admin_link": "Are you the store owner? Log in here",
-      "powered_by_html": "Powered by {{ shopify }}"
+      "admin_link": "Are you the store owner? Log in here"
     },
     "pagination": {
       "label": "Pagination",
@@ -152,6 +156,7 @@
       "all": "All"
     },
     "artists": {
+      "title": "Artists",
       "filter": "Filter artists",
       "all": "All",
       "editions": {
@@ -276,7 +281,6 @@
     "expired": "This gift card has expired.",
     "expires_on": "Expires {{ expires_on }}",
     "use_at_checkout": "Use this code at checkout",
-    "copy_code": "Copy code",
     "add_to_apple_wallet": "Add to Apple Wallet",
     "print": "Print"
   },

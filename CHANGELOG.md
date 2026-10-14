@@ -6,22 +6,9 @@ All notable changes to this theme are documented here. The format follows [Keep 
 
 ### Added
 - Ink marquee "Worm" shape (now the default): wiggling worms of overlapping, overprinting round segments with eyes; names on hover, always visible on touch screens and under reduced motion. Pausing stops the wiggle too.
-
-### Fixed
-- Page no longer scrolls behind the mobile menu or overlays on iOS: a shared scroll lock pins the page and restores the position.
-- The announcement bar hides while the mobile menu is open.
-
-### Added
 - Gift wrapping: a gift wrap product (Theme settings > Cart) added or removed with a checkbox in the cart drawer and cart page, plus an optional gift message saved as the "Gift message" cart attribute. Works without JS on the cart page.
 - Ink marquee: "Overprint" (overlapping blocks that multiply where they cross) and "Misregistration" settings.
 - Product gallery: "Auto" image fit (portrait images shown whole) as the default; swipeable carousel with a counter on phones.
-
-### Changed
-- Related products ("Also from …") is a drag-to-scroll carousel; default limit 9.
-- The gift wrap product is never suggested as a cart add-on; the add-on setting explains that only single-variant products are shown.
-- README: Judge.me setup, cart upsell and gift wrap instructions.
-
-### Added
 - "Show top border" setting on every section that opens with a ruled line.
 - Video option next to most image settings, through a shared `image-or-video` snippet and `<auto-video>` (muted loop, pause button, pauses off screen, no autoplay under reduced motion).
 - Ink marquee section: scrolling row of ink colour blocks with names and optional codes, pause button, static under reduced motion. Added to the homepage.
@@ -29,14 +16,28 @@ All notable changes to this theme are documented here. The format follows [Keep 
 - Theme settings > Product cards: card background (product colour on hover or always) and image fit.
 - Product section: image fit (crop or show the whole image).
 - Product reviews: theme editor prompt to add the reviews app block.
+- Artists index and Policies sections can be added from the theme editor (presets).
+- Cart: app blocks in the order summary.
+- 404: default heading, text and button label in the section settings.
 
 ### Changed
+- Related products ("Also from …") is a drag-to-scroll carousel; default limit 9.
+- The gift wrap product is never suggested as a cart add-on; the add-on setting explains that only single-variant products are shown.
+- README: Judge.me setup, cart upsell and gift wrap instructions.
 - Product cards no longer zoom on hover; by default they fill with the product's colour on hover and keyboard focus.
 - Cart and size guide drawers slide in from the right and back out (instant under reduced motion). The design specified a fade.
 - Mega menu product cards fill the full height of the menu panel.
 - Product carousel shows the open-hand cursor over cards, not just between them.
 - Stories: more space under the label and caption, and inside tiles.
 - Colour swatches are smaller (28px) and round, with a 44px touch area.
+- Footer social link names come from locale keys.
+- `.shopifyignore` also excludes `.theme-check.yml` and `AUDIT.md`.
+
+### Fixed
+- Page no longer scrolls behind the mobile menu or overlays on iOS: a shared scroll lock pins the page and restores the position.
+- The announcement bar hides while the mobile menu is open.
+- FAQ contact email is escaped in the mailto link and its text.
+- Removed unused locale keys `gift_card.copy_code` and `general.password.powered_by_html`.
 
 ## [1.0.0-rc.1] - 2026-10-11
 

@@ -37,13 +37,13 @@
             {%- when 'social' -%}
               <ul class="site-footer__links" role="list">
                 {%- if settings.social_instagram_link != blank -%}
-                  <li><a href="{{ settings.social_instagram_link }}" rel="noopener" target="_blank">Instagram<span class="visually-hidden"> {{ 'accessibility.opens_new_window' | t }}</span></a></li>
+                  <li><a href="{{ settings.social_instagram_link }}" rel="noopener" target="_blank">{{ 'general.social.instagram' | t }}<span class="visually-hidden"> {{ 'accessibility.opens_new_window' | t }}</span></a></li>
                 {%- endif -%}
                 {%- if settings.social_tiktok_link != blank -%}
-                  <li><a href="{{ settings.social_tiktok_link }}" rel="noopener" target="_blank">TikTok<span class="visually-hidden"> {{ 'accessibility.opens_new_window' | t }}</span></a></li>
+                  <li><a href="{{ settings.social_tiktok_link }}" rel="noopener" target="_blank">{{ 'general.social.tiktok' | t }}<span class="visually-hidden"> {{ 'accessibility.opens_new_window' | t }}</span></a></li>
                 {%- endif -%}
                 {%- if settings.social_facebook_link != blank -%}
-                  <li><a href="{{ settings.social_facebook_link }}" rel="noopener" target="_blank">Facebook<span class="visually-hidden"> {{ 'accessibility.opens_new_window' | t }}</span></a></li>
+                  <li><a href="{{ settings.social_facebook_link }}" rel="noopener" target="_blank">{{ 'general.social.facebook' | t }}<span class="visually-hidden"> {{ 'accessibility.opens_new_window' | t }}</span></a></li>
                 {%- endif -%}
                 {%- if block.settings.newsletter_label != blank -%}
                   <li>

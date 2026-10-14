@@ -5,6 +5,8 @@ docs/**
 CLAUDE.md
 README.md
 CHANGELOG.md
+AUDIT.md
+.theme-check.yml
 
 # Live merchant settings: never overwrite the remote copy from git.
 config/settings_data.json
