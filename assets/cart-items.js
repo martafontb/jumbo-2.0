@@ -65,10 +65,12 @@ class CartItems extends HTMLElement {
   async refresh() {
     try {
       const response = await fetch(`${window.location.pathname}?sections=${encodeURIComponent(this.sectionId)}`);
+      if (!response.ok) throw new Error(String(response.status));
       const data = await response.json();
       if (data[this.sectionId]) this.render(data[this.sectionId]);
     } catch (error) {
-      /* Leave the current markup; the next interaction will retry. */
+      // Leave the current markup and tell the customer.
+      announce(window.JumboPress.strings?.cartError || '');
     }
   }
 

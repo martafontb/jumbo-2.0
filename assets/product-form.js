@@ -38,7 +38,7 @@ class ProductForm extends HTMLElement {
     const restore = () => labels.forEach((label, i) => (label.innerHTML = originals[i]));
     buttons.forEach((button) => {
       button.setAttribute('aria-busy', 'true');
-      button.disabled = true;
+      button.setAttribute('aria-disabled', 'true');
     });
     this.setError('');
 
@@ -65,7 +65,7 @@ class ProductForm extends HTMLElement {
     } finally {
       buttons.forEach((button) => {
         button.removeAttribute('aria-busy');
-        button.disabled = false;
+        button.removeAttribute('aria-disabled');
       });
     }
   };

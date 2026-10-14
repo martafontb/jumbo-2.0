@@ -188,6 +188,7 @@
       "sale": "Sale price"
     },
     "sold_out": "Sold out",
+    "variant_error": "We couldn't load that option. Please try again.",
     "unavailable": "Unavailable",
     "add_to_cart": "Add to cart",
     "quantity": "Quantity",
