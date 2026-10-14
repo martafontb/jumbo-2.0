@@ -53,6 +53,11 @@
           <p class="label label--sm main-cart__fine">{{ 'products.tax_included' | t }}</p>
         {%- endif -%}
         {%- render 'cart-gift', form_id: 'CartPageForm', tone: 'dark' -%}
+        {%- for block in section.blocks -%}
+          {%- if block.type == '@app' -%}
+            <div class="main-cart__app">{% render block %}</div>
+          {%- endif -%}
+        {%- endfor -%}
         <button type="submit" name="checkout" form="CartPageForm" class="button button--full main-cart__checkout">{{ 'cart.checkout' | t }}</button>
         {%- if section.settings.note != blank -%}
           <p class="label label--sm main-cart__fine">{{ section.settings.note | escape }}</p>
@@ -232,6 +237,9 @@
 {
   "name": "Cart",
   "class": "section-main-cart",
+  "blocks": [
+    { "type": "@app" }
+  ],
   "settings": [
     { "type": "text", "id": "summary_label", "label": "Summary label", "default": "Order summary" },
     { "type": "text", "id": "note", "label": "Note under Checkout", "default": "Ships flat in board envelopes. Tracked delivery." },

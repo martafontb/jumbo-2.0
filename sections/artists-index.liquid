@@ -19,6 +19,9 @@
   endfor
   assign kind_list = kinds | split: '|' | uniq
   assign title = section.settings.title | default: page.title
+  if title == blank
+    assign title = 'sections.artists.title' | t
+  endif
 -%}
 <artists-index class="page artists-index">
   {%- render 'page-title', title: title, count: artists.size, count_style: 'accent', intro: section.settings.intro -%}
@@ -202,6 +205,9 @@
     { "type": "paragraph", "content": "Lists every entry of the artist metaobject (Content > Metaobjects). Turn on web pages for artists so each row links to its page." },
     { "type": "text", "id": "title", "label": "Title", "info": "Defaults to the page title." },
     { "type": "richtext", "id": "intro", "label": "Intro", "default": "<p>The people we print with. Hover a name to see their work, click to see their editions.</p>" }
+  ],
+  "presets": [
+    { "name": "Artists index" }
   ]
 }
 {% endschema %}
