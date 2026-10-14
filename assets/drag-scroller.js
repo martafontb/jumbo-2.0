@@ -1,3 +1,5 @@
+import { prefersReducedMotion } from '@theme/global';
+
 /**
  * <drag-scroller>: mouse drag-to-scroll for a horizontal scroll-snap row.
  * Touch and trackpads use native scrolling. A drag suppresses the click
@@ -44,7 +46,7 @@ class DragScroller extends HTMLElement {
           : best,
       this.children[0]
     );
-    if (item) this.scrollTo({ left: item.offsetLeft - this.offsetLeft, behavior: 'smooth' });
+    if (item) this.scrollTo({ left: item.offsetLeft - this.offsetLeft, behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
   };
 
   onClick = (event) => {

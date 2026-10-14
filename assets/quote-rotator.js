@@ -1,8 +1,12 @@
+import { prefersReducedMotion } from '@theme/global';
+
 /**
  * <quote-rotator> cycles through child [data-quote] items.
  * Optional controls: [data-prev], [data-next], [data-counter] ("n / N").
  * Auto-advances every data-interval ms (0 = manual only), pausing on hover
  * and focus, and never auto-advancing under reduced motion.
+ * Optional [data-rotator-toggle] (with data-play-label / data-pause-label) is a
+ * pause/play button; a user pause holds until the user resumes.
  */
 class QuoteRotator extends HTMLElement {
   connectedCallback() {
@@ -11,6 +15,17 @@ class QuoteRotator extends HTMLElement {
     this.index = Math.max(0, this.items.findIndex((item) => !item.hidden));
     this.interval = Number(this.dataset.interval || 0);
     this.counter = this.querySelector('[data-counter]');
+    this.toggle = this.querySelector('[data-rotator-toggle]');
+    this.userPaused = prefersReducedMotion();
+    if (this.toggle) {
+      this.toggle.hidden = false;
+      this.toggle.addEventListener('click', () => {
+        this.userPaused = !this.userPaused;
+        this.syncToggle();
+        this.start();
+      });
+      this.syncToggle();
+    }
 
     this.querySelector('[data-prev]')?.addEventListener('click', () => this.go(this.index - 1, true));
     this.querySelector('[data-next]')?.addEventListener('click', () => this.go(this.index + 1, true));
@@ -30,9 +45,17 @@ class QuoteRotator extends HTMLElement {
 
   start = () => {
     this.stop();
-    if (!this.interval || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (!this.interval || this.userPaused) return;
     this.timer = setInterval(() => this.go(this.index + 1), this.interval);
   };
+
+  syncToggle() {
+    const paused = this.userPaused;
+    this.toggle.setAttribute('aria-label', paused ? this.toggle.dataset.playLabel : this.toggle.dataset.pauseLabel);
+    this.toggle.setAttribute('aria-pressed', String(paused));
+    this.toggle.querySelector('[data-icon-pause]').hidden = paused;
+    this.toggle.querySelector('[data-icon-play]').hidden = !paused;
+  }
 
   stop = () => clearInterval(this.timer);
 

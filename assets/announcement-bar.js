@@ -1,4 +1,4 @@
-import { copyText, announce } from '@theme/global';
+import { copyText, announce, prefersReducedMotion } from '@theme/global';
 
 const STORAGE_KEY = 'jumbo:announcement-dismissed';
 
@@ -8,12 +8,19 @@ class AnnouncementBar extends HTMLElement {
     this.index = 0;
     this.interval = Number(this.dataset.interval) || 5000;
     this.designMode = this.hasAttribute('data-design-mode');
+    this.toggle = this.querySelector('[data-announcement-toggle]');
+    // A user pause (or reduced motion) holds until the user resumes.
+    this.userPaused = prefersReducedMotion();
 
     if (!this.designMode && this.isDismissed()) {
       this.classList.add('is-dismissed');
       return;
     }
 
+    if (this.toggle && this.slides.length > 1) {
+      this.toggle.hidden = false;
+      this.syncToggle();
+    }
     this.addEventListener('click', this.onClick);
     this.addEventListener('mouseenter', this.pause);
     this.addEventListener('mouseleave', this.play);
@@ -40,13 +47,21 @@ class AnnouncementBar extends HTMLElement {
 
   play = () => {
     this.pause();
-    if (this.slides.length < 2) return;
+    if (this.slides.length < 2 || this.userPaused) return;
     this.timer = setInterval(() => this.show(this.index + 1), this.interval);
   };
 
   pause = () => {
     clearInterval(this.timer);
   };
+
+  syncToggle() {
+    const paused = this.userPaused;
+    this.toggle.setAttribute('aria-label', paused ? this.toggle.dataset.playLabel : this.toggle.dataset.pauseLabel);
+    this.toggle.setAttribute('aria-pressed', String(paused));
+    this.toggle.querySelector('[data-icon-pause]').hidden = paused;
+    this.toggle.querySelector('[data-icon-play]').hidden = !paused;
+  }
 
   show(index) {
     const next = (index + this.slides.length) % this.slides.length;
@@ -67,6 +82,13 @@ class AnnouncementBar extends HTMLElement {
   };
 
   onClick = async (event) => {
+    if (event.target.closest('[data-announcement-toggle]')) {
+      this.userPaused = !this.userPaused;
+      this.syncToggle();
+      this.play();
+      return;
+    }
+
     if (event.target.closest('[data-announcement-close]')) {
       this.pause();
       this.classList.add('is-dismissed');
