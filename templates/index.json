@@ -49,17 +49,6 @@
         "spacing": "none"
       }
     },
-    "reviews": {
-      "type": "reviews-strip",
-      "disabled": true,
-      "settings": {
-        "show_border": true,
-        "label": "Loved by buyers",
-        "rating": "",
-        "count_text": "",
-        "spacing": "none"
-      }
-    },
     "editions": {
       "type": "product-carousel",
       "settings": {
@@ -161,18 +150,6 @@
         "spacing": "large"
       }
     },
-    "studio-note": {
-      "type": "studio-note",
-      "disabled": true,
-      "settings": {
-        "show_border": true,
-        "label": "Studio note",
-        "date": "09.10.2026",
-        "quote": "I wanted the green to bleed into the paper a little. Jumbo let it.",
-        "attribution": "Jake Lucas",
-        "spacing": "none"
-      }
-    },
     "packs": {
       "type": "packs",
       "blocks": {
@@ -213,98 +190,6 @@
         "caption": "Buy together, pay less",
         "button_label": "Add",
         "grounds": "grey, blue, red",
-        "spacing": "medium"
-      }
-    },
-    "on-the-press": {
-      "type": "video-grid",
-      "blocks": {
-        "video-1": {
-          "type": "video",
-          "settings": {
-            "title": "How a print is made",
-            "pill_color": "red",
-            "ground": "blue"
-          }
-        },
-        "video-2": {
-          "type": "video",
-          "settings": {
-            "title": "Studio tour",
-            "pill_color": "blue",
-            "ground": "blue"
-          }
-        },
-        "video-3": {
-          "type": "video",
-          "settings": {
-            "title": "New drop unboxing",
-            "pill_color": "grey",
-            "ground": "red"
-          }
-        }
-      },
-      "block_order": [
-        "video-1",
-        "video-2",
-        "video-3"
-      ],
-      "disabled": true,
-      "settings": {
-        "show_border": true,
-        "label": "On the press",
-        "label_color": "blue",
-        "caption": "Tap to play",
-        "spacing": "medium"
-      }
-    },
-    "shop-the-studio": {
-      "type": "shop-the-look",
-      "blocks": {
-        "spot-1": {
-          "type": "hotspot",
-          "settings": {
-            "product": "",
-            "title": "",
-            "x": 22,
-            "y": 34,
-            "color": "blue"
-          }
-        },
-        "spot-2": {
-          "type": "hotspot",
-          "settings": {
-            "product": "",
-            "title": "",
-            "x": 62,
-            "y": 46,
-            "color": "grey"
-          }
-        },
-        "spot-3": {
-          "type": "hotspot",
-          "settings": {
-            "product": "",
-            "title": "",
-            "x": 40,
-            "y": 78,
-            "color": "blue"
-          }
-        }
-      },
-      "block_order": [
-        "spot-1",
-        "spot-2",
-        "spot-3"
-      ],
-      "disabled": true,
-      "settings": {
-        "show_border": true,
-        "image_alt": "",
-        "heading": "Get the look",
-        "label": "Shop the studio",
-        "label_color": "blue",
-        "caption": "Tap the dots",
         "spacing": "medium"
       }
     },
@@ -463,19 +348,134 @@
         "button_link": "",
         "spacing": "medium"
       }
+    },
+    "studio-note": {
+      "type": "studio-note",
+      "disabled": true,
+      "settings": {
+        "show_border": true,
+        "label": "Studio note",
+        "date": "09.10.2026",
+        "quote": "I wanted the green to bleed into the paper a little. Jumbo let it.",
+        "attribution": "Jake Lucas",
+        "spacing": "none"
+      }
+    },
+    "reviews": {
+      "type": "reviews-strip",
+      "disabled": true,
+      "settings": {
+        "show_border": true,
+        "label": "Loved by buyers",
+        "rating": "",
+        "count_text": "",
+        "spacing": "none"
+      }
+    },
+    "on-the-press": {
+      "type": "video-grid",
+      "blocks": {
+        "video-1": {
+          "type": "video",
+          "settings": {
+            "title": "How a print is made",
+            "pill_color": "red",
+            "ground": "blue"
+          }
+        },
+        "video-2": {
+          "type": "video",
+          "settings": {
+            "title": "Studio tour",
+            "pill_color": "blue",
+            "ground": "blue"
+          }
+        },
+        "video-3": {
+          "type": "video",
+          "settings": {
+            "title": "New drop unboxing",
+            "pill_color": "grey",
+            "ground": "red"
+          }
+        }
+      },
+      "block_order": [
+        "video-1",
+        "video-2",
+        "video-3"
+      ],
+      "disabled": true,
+      "settings": {
+        "show_border": true,
+        "label": "On the press",
+        "label_color": "blue",
+        "caption": "Tap to play",
+        "spacing": "medium"
+      }
+    },
+    "shop-the-studio": {
+      "type": "shop-the-look",
+      "blocks": {
+        "spot-1": {
+          "type": "hotspot",
+          "settings": {
+            "product": "",
+            "title": "",
+            "x": 22,
+            "y": 34,
+            "color": "blue"
+          }
+        },
+        "spot-2": {
+          "type": "hotspot",
+          "settings": {
+            "product": "",
+            "title": "",
+            "x": 62,
+            "y": 46,
+            "color": "grey"
+          }
+        },
+        "spot-3": {
+          "type": "hotspot",
+          "settings": {
+            "product": "",
+            "title": "",
+            "x": 40,
+            "y": 78,
+            "color": "blue"
+          }
+        }
+      },
+      "block_order": [
+        "spot-1",
+        "spot-2",
+        "spot-3"
+      ],
+      "disabled": true,
+      "settings": {
+        "show_border": true,
+        "image_alt": "",
+        "heading": "Get the look",
+        "label": "Shop the studio",
+        "label_color": "blue",
+        "caption": "Tap the dots",
+        "spacing": "medium"
+      }
     }
   },
   "order": [
     "hero",
     "intro",
-    "reviews",
     "editions",
     "inks",
-    "studio-note",
     "packs",
-    "on-the-press",
-    "shop-the-studio",
     "events",
-    "stories"
+    "stories",
+    "studio-note",
+    "reviews",
+    "on-the-press",
+    "shop-the-studio"
   ]
 }
