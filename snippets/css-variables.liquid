@@ -13,8 +13,10 @@
     --color-grey: {{ settings.color_grey }};
     --color-white: {{ settings.color_white }};
     --color-ink-rgb: {{ settings.color_ink.red }}, {{ settings.color_ink.green }}, {{ settings.color_ink.blue }};
-    --color-scrim: rgb(17 17 17 / 0.55);
-    --color-scrim-strong: rgb(17 17 17 / 0.85);
+    --color-bg-rgb: {{ settings.color_bg.red }}, {{ settings.color_bg.green }}, {{ settings.color_bg.blue }};
+    --color-white-rgb: {{ settings.color_white.red }}, {{ settings.color_white.green }}, {{ settings.color_white.blue }};
+    --color-scrim: rgb(var(--color-ink-rgb) / 0.55);
+    --color-scrim-strong: rgb(var(--color-ink-rgb) / 0.85);
     --opacity-muted: 0.68; /* muted ink text: keeps ≥ 4.5:1 on the page background */
 
     /* Type */

@@ -12,7 +12,7 @@
   assign ship_rows = settings.guide_shipping | newline_to_br | split: '<br />'
   assign palette = 'blue,grey,blue' | split: ','
 -%}
-<dialog class="overlay drawer size-guide" id="{{ id }}" aria-labelledby="{{ id }}-title" style="--drawer-width: 480px;">
+<dialog class="overlay drawer size-guide" id="{{ id }}" aria-labelledby="{{ id }}-title">
   <div class="drawer__inner">
     <div class="drawer__head">
       <h2 class="drawer__title" id="{{ id }}-title">{{ settings.guide_title | escape }}</h2>
@@ -84,6 +84,10 @@
 </dialog>
 
 {% stylesheet %}
+  .size-guide {
+    --drawer-width: 480px;
+  }
+
   .size-guide__tabs {
     display: flex;
     gap: 6px;
