@@ -5,6 +5,14 @@ All notable changes to this theme are documented here. The format follows [Keep 
 ## [Unreleased]
 
 ### Added
+- Contact page (`page.contact`, `sections/contact.liquid`): portrait image and contact rows (blocks: pill, heading, text, email or link).
+- Wholesale page (`page.wholesale`, `sections/wholesale.liquid`): statement, intro, image, reason cards (blocks, up to four) and an email call to action. Copy from the design handoff as defaults.
+- Shared Contact / Wholesale tab strip (`snippets/contact-tabs.liquid`) and a "Contact" link in the header nav.
+
+### Changed
+- The quote form moved from `page.contact` to `page.quote` (`/pages/quote`); the price calculator's default link follows it.
+
+### Added
 - Ink marquee "Worm" shape (now the default): wiggling worms of overlapping, overprinting round segments with eyes; names on hover, always visible on touch screens and under reduced motion. Pausing stops the wiggle too.
 - Gift wrapping: a gift wrap product (Theme settings > Cart) added or removed with a checkbox in the cart drawer and cart page, plus an optional gift message saved as the "Gift message" cart attribute. Works without JS on the cart page.
 - Ink marquee: "Overprint" (overlapping blocks that multiply where they cross) and "Misregistration" settings.

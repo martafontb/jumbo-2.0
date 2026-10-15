@@ -54,14 +54,18 @@ Create each page in Online Store > Pages, then pick its template under "Theme te
 | Page (handle) | Template | Notes |
 |---|---|---|
 | Print guide (`print-guide`) | `page.print` | Tabs link to the print and price guides |
-| Price guide (`price-guide`) | `page.prices` | "Request this quote" links to `/pages/contact` |
-| Get a quote (`contact`) | `page.contact` | Contact form with quote fields; prefilled from the calculator |
+| Price guide (`price-guide`) | `page.prices` | "Request this quote" links to `/pages/quote` |
+| Get a quote (`quote`) | `page.quote` | Contact form with quote fields; prefilled from the calculator |
+| Contact (`contact`) | `page.contact` | Contact / Wholesale tabs, portrait image, contact rows (blocks) with emails |
+| Wholesale (`wholesale`) | `page.wholesale` | Contact / Wholesale tabs, statement, intro and image, four reason cards (blocks), email call to action |
 | FAQ (`faq`) | `page.faq` | |
 | Artists (`artists`) | `page.artists` | |
 | Policies (`policies`) | `page.policies` | Content comes from Settings > Policies |
 | About (`about`) | `page.about` | |
 
 Artist pages use `templates/metaobject/artist.json` automatically once web pages are on for the `artist` definition. The journal is a regular Shopify blog using `blog.json` and `article.json`; add it to your menus.
+
+**Contact and Wholesale** share a tab strip (`snippets/contact-tabs.liquid`); tab labels and links are section settings and default to `/pages/contact` and `/pages/wholesale`. Every email field defaults to `hey@jumbo-press.com` and falls back to the store's email if cleared. Contact rows can show an email or a link (the Wholesale row links to the Wholesale page). There are no forms on these pages: wholesale enquiries go by email. The header's **Contact** link is a "Menu" block in the header with a label and a link but no menu, so it uses the same rolling label as Shop and Print.
 
 After creating the quote page, point these buttons at it (theme editor): header **Print** mega menu > "Get a quote" card button, and any CTA band or statement button that should start a quote.
 
@@ -211,7 +215,7 @@ What each page contains (create them as in [Pages and templates](#pages-and-temp
 | FAQ (`faq`) | `page.faq` | Header, category chips, questions, "Still stuck?" card, FAQPage structured data |
 
 - **Inks:** the ink picker and overprint simulator ship with standard risograph ink colours as placeholders. Replace them with Jumbo's real ink colours (each ink is a block with a colour setting).
-- **Price calculator:** estimate = run × rate per sheet per colour × colours + setup fee × colours. The rates, setup fee, run range and sizes are section settings in the store's currency. **The defaults are the design's placeholder rates** and the note under the rate card says so until you change it. "Request this quote" links to `/pages/contact` by default and adds the chosen size, colours and run to the URL.
+- **Price calculator:** estimate = run × rate per sheet per colour × colours + setup fee × colours. The rates, setup fee, run range and sizes are section settings in the store's currency. **The defaults are the design's placeholder rates** and the note under the rate card says so until you change it. "Request this quote" links to `/pages/quote` by default and adds the chosen size, colours and run to the URL.
 - **FAQ:** one block per question. Questions with the same category share a filter chip. The contact card uses the store's email unless one is set.
 
 ### Artists, journal, policies and about

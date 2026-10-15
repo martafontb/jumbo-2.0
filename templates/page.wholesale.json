@@ -1,0 +1,70 @@
+{
+  "sections": {
+    "main": {
+      "type": "wholesale",
+      "blocks": {
+        "reason-1": {
+          "type": "reason",
+          "settings": {
+            "number": "01",
+            "heading": "Printed in-house",
+            "text": "Every edition is printed on our risograph in Barcelona using soy-based inks and sustainably sourced paper. Your customers are getting something genuinely handmade.",
+            "color": "blue"
+          }
+        },
+        "reason-2": {
+          "type": "reason",
+          "settings": {
+            "number": "02",
+            "heading": "Artist-led, every time",
+            "text": "Every product is made in collaboration with a credited artist. We work with emerging and established illustrators and artists from around the world, so your range stays varied and always worth looking at.",
+            "color": "grey"
+          }
+        },
+        "reason-3": {
+          "type": "reason",
+          "settings": {
+            "number": "03",
+            "heading": "Small runs, high desirability",
+            "text": "We produce limited editions on purpose. Low stock levels mean your customers know they're getting something worth owning before it's gone.",
+            "color": "red"
+          }
+        },
+        "reason-4": {
+          "type": "reason",
+          "settings": {
+            "number": "04",
+            "heading": "One supplier, many styles",
+            "text": "From artist books and zines to apparel and objects, you can carry a varied range of aesthetics and formats, all from one place.",
+            "color": "grey"
+          }
+        }
+      },
+      "block_order": [
+        "reason-1",
+        "reason-2",
+        "reason-3",
+        "reason-4"
+      ],
+      "settings": {
+        "title": "Jumbo Wholesale",
+        "intro": "<p>If that sounds like you, we'd love to hear from you.</p>",
+        "email": "hey@jumbo-press.com",
+        "statement": "Our full collection of risograph editions, artist books, prints and objects is available to stock wholesale.",
+        "button_label": "Email us →",
+        "text": "We work with independent bookshops, design stores, galleries and concept stores who share our belief that print is worth doing properly.",
+        "image_color": "blue",
+        "reasons_label": "Why stock Jumbo?",
+        "reasons_label_color": "red",
+        "reasons_caption": "Four reasons",
+        "cta_label": "How to stock Jumbo",
+        "cta_heading": "Email us about your store.",
+        "cta_text": "You can order directly by emailing us at hey@jumbo-press.com with a few details about your store, your social profiles and what draws you to Jumbo.",
+        "cta_color": "blue"
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

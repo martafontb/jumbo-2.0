@@ -1,0 +1,367 @@
+{% comment %}
+  Wholesale
+  Title with an intro on the right, the Contact / Wholesale tab strip, a
+  statement with an "Email us" button, an intro paragraph beside a portrait
+  image, a "Why stock Jumbo?" row of reason cards (blocks, up to four), and
+  a coloured call-to-action panel with the email address. Wholesale is by
+  email only, so there is no form. Every email defaults to
+  hey@jumbo-press.com; if a field is cleared, the store's email is used.
+{% endcomment %}
+{%- liquid
+  assign title = section.settings.title | default: page.title
+  assign reasons = section.blocks | where: 'type', 'reason'
+  assign email = section.settings.email | default: shop.email | strip
+  assign image_alt = section.settings.image_alt | default: section.settings.image.alt
+  assign cta_button = section.settings.cta_button_label
+  if cta_button == blank
+    assign cta_button = email | append: ' →'
+  endif
+-%}
+<div class="page wholesale-page">
+  {%- render 'page-title', title: title, intro: section.settings.intro -%}
+  {%- render 'contact-tabs',
+    active: 'wholesale',
+    contact_label: section.settings.tab_contact_label,
+    contact_url: section.settings.tab_contact_link,
+    wholesale_label: section.settings.tab_wholesale_label,
+    wholesale_url: section.settings.tab_wholesale_link
+  -%}
+
+  <div class="wholesale-page__grid">
+    {%- if section.settings.statement != blank -%}
+      <p class="wholesale-page__statement">{{ section.settings.statement | escape }}</p>
+    {%- endif -%}
+    {%- if section.settings.button_label != blank and email != blank -%}
+      <div class="wholesale-page__action">
+        <a class="button wholesale-page__button" href="mailto:{{ email }}">{{ section.settings.button_label | escape }}</a>
+      </div>
+    {%- endif -%}
+
+    {%- if section.settings.text != blank -%}
+      <p class="wholesale-page__text">{{ section.settings.text | escape }}</p>
+    {%- endif -%}
+    <div class="media wholesale-page__image" style="--ratio: 3 / 4; --media-bg: var(--color-{{ section.settings.image_color }});">
+      {%- render 'image',
+        image: section.settings.image,
+        sizes: '(min-width: 750px) 33vw, 100vw',
+        alt: image_alt,
+        placeholder: 'lifestyle-2'
+      -%}
+    </div>
+
+    {%- if reasons.size > 0 -%}
+      <div class="wholesale-page__reasons">
+        {%- render 'section-head', label: section.settings.reasons_label, color: section.settings.reasons_label_color, caption: section.settings.reasons_caption -%}
+        <ul class="wholesale-page__cards" role="list">
+          {%- for block in reasons limit: 4 -%}
+            <li class="wholesale-card" style="--card-bg: var(--color-{{ block.settings.color }});" {{ block.shopify_attributes }}>
+              {%- if block.settings.number != blank -%}
+                <span class="pill pill--bg">{{ block.settings.number | escape }}</span>
+              {%- endif -%}
+              <div class="wholesale-card__body">
+                {%- if block.settings.heading != blank -%}
+                  <h3 class="wholesale-card__heading">{{ block.settings.heading | escape }}</h3>
+                {%- endif -%}
+                {%- if block.settings.text != blank -%}
+                  <p class="wholesale-card__text">{{ block.settings.text | escape }}</p>
+                {%- endif -%}
+              </div>
+            </li>
+          {%- endfor -%}
+        </ul>
+      </div>
+    {%- endif -%}
+
+    {%- if section.settings.cta_heading != blank -%}
+      <div class="wholesale-cta" style="--cta-bg: var(--color-{{ section.settings.cta_color }});">
+        <div class="wholesale-cta__head">
+          {%- if section.settings.cta_label != blank -%}
+            <span class="pill pill--bg">{{ section.settings.cta_label | escape }}</span>
+          {%- endif -%}
+          <h2 class="wholesale-cta__heading">{{ section.settings.cta_heading | escape }}</h2>
+        </div>
+        <div class="wholesale-cta__body">
+          {%- if section.settings.cta_text != blank -%}
+            <p class="wholesale-cta__text">{{ section.settings.cta_text | escape }}</p>
+          {%- endif -%}
+          {%- if email != blank -%}
+            <a class="button wholesale-page__button wholesale-cta__button" href="mailto:{{ email }}">{{ cta_button | escape }}</a>
+          {%- endif -%}
+        </div>
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% stylesheet %}
+  .wholesale-page {
+    animation: fade 0.4s both;
+  }
+
+  .wholesale-page__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--grid-gap);
+  }
+
+  .wholesale-page__statement {
+    grid-column: span 2;
+    margin: 0;
+    padding-top: 12px;
+    font: 500 var(--text-statement) / 1.04 var(--font-display);
+    letter-spacing: -0.04em;
+  }
+
+  .wholesale-page__action {
+    display: flex;
+    align-items: flex-end;
+    padding-top: 12px;
+  }
+
+  /* Square ink buttons, as in the design; base .button supplies hover red. */
+  .wholesale-page__button {
+    border-radius: 0;
+    transition: background-color 0.15s, border-color 0.15s, color 0.15s;
+  }
+
+  .wholesale-page__action .wholesale-page__button {
+    flex: 1;
+  }
+
+  .wholesale-page__button:focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 2px;
+  }
+
+  .wholesale-page__text {
+    grid-column: span 2;
+    max-width: 60ch;
+    margin: 24px 0 0;
+    font: 400 var(--text-article) / 1.5 var(--font-display);
+  }
+
+  .wholesale-page__image {
+    grid-row: span 2;
+    margin-top: 24px;
+    border-radius: var(--radius-lg);
+  }
+
+  .wholesale-page__reasons {
+    grid-column: 1 / -1;
+    margin-top: 80px;
+  }
+
+  .wholesale-page__cards {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--grid-gap);
+    margin: 8px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .wholesale-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 16px;
+    min-height: calc(340px + 32px); /* the design's 340px content height plus padding */
+    padding: 16px;
+    border-radius: var(--radius-lg);
+    background: var(--card-bg, var(--color-grey));
+  }
+
+  .wholesale-card__body {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .wholesale-card__heading {
+    margin: 0;
+    font: 500 clamp(24px, 2.4vw, 38px) / 1 var(--font-display);
+    letter-spacing: -0.04em;
+  }
+
+  .wholesale-card__text,
+  .wholesale-cta__text {
+    margin: 0;
+    font: 400 var(--text-body) / 1.4 var(--font-display);
+  }
+
+  .wholesale-cta {
+    display: grid;
+    grid-column: 1 / -1;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--grid-gap);
+    margin-top: 104px;
+    padding: clamp(20px, 3vw, 48px);
+    border-radius: var(--radius-lg);
+    background: var(--cta-bg, var(--color-blue));
+  }
+
+  .wholesale-cta__head {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 24px;
+    grid-column: span 2;
+  }
+
+  .wholesale-cta__heading {
+    margin: 0;
+    font: 500 clamp(40px, 6vw, 96px) / 0.9 var(--font-display);
+    letter-spacing: -0.05em;
+  }
+
+  .wholesale-cta__body {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .wholesale-cta__button {
+    padding: 16px 24px;
+    overflow-wrap: anywhere;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .wholesale-page {
+      animation: none;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .wholesale-page__grid,
+    .wholesale-page__cards,
+    .wholesale-cta {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .wholesale-page__statement,
+    .wholesale-page__text,
+    .wholesale-cta__head {
+      grid-column: auto;
+    }
+
+    .wholesale-page__image {
+      grid-row: auto;
+    }
+
+    .wholesale-card {
+      min-height: 260px;
+    }
+
+    .wholesale-page__reasons {
+      margin-top: 56px;
+    }
+
+    .wholesale-cta {
+      gap: 24px;
+      margin-top: 56px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Wholesale",
+  "class": "section-wholesale",
+  "tag": "section",
+  "max_blocks": 4,
+  "settings": [
+    { "type": "text", "id": "title", "label": "Title", "default": "Jumbo Wholesale", "info": "Defaults to the page title." },
+    { "type": "richtext", "id": "intro", "label": "Intro", "default": "<p>If that sounds like you, we'd love to hear from you.</p>" },
+    { "type": "text", "id": "email", "label": "Email", "default": "hey@jumbo-press.com", "info": "Used by both buttons. If empty, the store's email is used." },
+    { "type": "header", "content": "Tabs" },
+    { "type": "text", "id": "tab_contact_label", "label": "Contact tab label", "default": "Contact" },
+    { "type": "url", "id": "tab_contact_link", "label": "Contact tab link", "info": "Defaults to /pages/contact." },
+    { "type": "text", "id": "tab_wholesale_label", "label": "Wholesale tab label", "default": "Wholesale" },
+    { "type": "url", "id": "tab_wholesale_link", "label": "Wholesale tab link", "info": "Defaults to /pages/wholesale." },
+    { "type": "header", "content": "Statement" },
+    { "type": "textarea", "id": "statement", "label": "Statement", "default": "Our full collection of risograph editions, artist books, prints and objects is available to stock wholesale." },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Email us →" },
+    { "type": "textarea", "id": "text", "label": "Text", "default": "We work with independent bookshops, design stores, galleries and concept stores who share our belief that print is worth doing properly." },
+    { "type": "header", "content": "Image" },
+    { "type": "image_picker", "id": "image", "label": "Image", "info": "Portrait, 3:4." },
+    { "type": "text", "id": "image_alt", "label": "Image alt text", "info": "Describe the image. Defaults to the image's own alt text." },
+    {
+      "type": "select",
+      "id": "image_color",
+      "label": "Image background",
+      "options": [
+        { "value": "blue", "label": "Blue" },
+        { "value": "red", "label": "Red" },
+        { "value": "grey", "label": "Grey" }
+      ],
+      "default": "blue"
+    },
+    { "type": "header", "content": "Reasons" },
+    { "type": "text", "id": "reasons_label", "label": "Label", "default": "Why stock Jumbo?" },
+    {
+      "type": "select",
+      "id": "reasons_label_color",
+      "label": "Label colour",
+      "options": [
+        { "value": "blue", "label": "Blue" },
+        { "value": "red", "label": "Red" },
+        { "value": "grey", "label": "Grey" }
+      ],
+      "default": "red"
+    },
+    { "type": "text", "id": "reasons_caption", "label": "Caption", "default": "Four reasons" },
+    { "type": "header", "content": "Call to action" },
+    { "type": "text", "id": "cta_label", "label": "Label", "default": "How to stock Jumbo" },
+    { "type": "text", "id": "cta_heading", "label": "Heading", "default": "Email us about your store." },
+    { "type": "textarea", "id": "cta_text", "label": "Text", "default": "You can order directly by emailing us at hey@jumbo-press.com with a few details about your store, your social profiles and what draws you to Jumbo." },
+    { "type": "text", "id": "cta_button_label", "label": "Button label", "info": "Defaults to the email address followed by →." },
+    {
+      "type": "select",
+      "id": "cta_color",
+      "label": "Background",
+      "options": [
+        { "value": "blue", "label": "Blue" },
+        { "value": "red", "label": "Red" },
+        { "value": "grey", "label": "Grey" }
+      ],
+      "default": "blue"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "reason",
+      "name": "Reason",
+      "settings": [
+        { "type": "text", "id": "number", "label": "Number", "default": "01" },
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Printed in-house" },
+        { "type": "textarea", "id": "text", "label": "Text", "default": "Every edition is printed on our risograph in Barcelona using soy-based inks and sustainably sourced paper. Your customers are getting something genuinely handmade." },
+        {
+          "type": "select",
+          "id": "color",
+          "label": "Colour",
+          "options": [
+            { "value": "blue", "label": "Blue" },
+            { "value": "red", "label": "Red" },
+            { "value": "grey", "label": "Grey" }
+          ],
+          "default": "blue"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Wholesale",
+      "blocks": [
+        { "type": "reason", "settings": { "number": "01", "heading": "Printed in-house", "text": "Every edition is printed on our risograph in Barcelona using soy-based inks and sustainably sourced paper. Your customers are getting something genuinely handmade.", "color": "blue" } },
+        { "type": "reason", "settings": { "number": "02", "heading": "Artist-led, every time", "text": "Every product is made in collaboration with a credited artist. We work with emerging and established illustrators and artists from around the world, so your range stays varied and always worth looking at.", "color": "grey" } },
+        { "type": "reason", "settings": { "number": "03", "heading": "Small runs, high desirability", "text": "We produce limited editions on purpose. Low stock levels mean your customers know they're getting something worth owning before it's gone.", "color": "red" } },
+        { "type": "reason", "settings": { "number": "04", "heading": "One supplier, many styles", "text": "From artist books and zines to apparel and objects, you can carry a varied range of aesthetics and formats, all from one place.", "color": "grey" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
