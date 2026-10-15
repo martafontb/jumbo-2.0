@@ -143,11 +143,11 @@
         "label": "Our inks",
         "label_color": "red",
         "caption": "Every colour we print",
-        "size": "medium",
+        "size": "small",
         "shape": "blocks",
         "overprint": 0,
-        "misregister": true,
-        "speed": 5,
+        "misregister": false,
+        "speed": 6,
         "direction": "left",
         "spacing": "small"
       }
