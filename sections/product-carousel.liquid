@@ -43,7 +43,7 @@
         {%- for product in collection.products limit: section.settings.limit -%}
           {%- assign ground_index = forloop.index0 | modulo: grounds.size -%}
           {%- assign ground = grounds[ground_index] | strip -%}
-          {%- render 'product-card', product: product, ground: ground, sizes: '(min-width: 750px) 33vw, 60vw', class: 'product-carousel__item' -%}
+          {%- render 'product-card', product: product, ground: ground, sizes: '(min-width: 750px) 33vw, 60vw', class: 'product-carousel__item', quick_add: section.settings.quick_add, reserve_stars: true -%}
         {%- endfor -%}
       {%- else -%}
         {%- for i in (1..4) -%}
@@ -133,6 +133,7 @@
     { "type": "checkbox", "id": "show_border", "label": "Show top border", "default": true },
     { "type": "collection", "id": "collection", "label": "Collection" },
     { "type": "range", "id": "limit", "label": "Products", "min": 3, "max": 16, "step": 1, "default": 8 },
+    { "type": "checkbox", "id": "quick_add", "label": "Show quick add to cart", "info": "Products with several variants link to the product page instead.", "default": true },
     {
       "type": "text",
       "id": "grounds",

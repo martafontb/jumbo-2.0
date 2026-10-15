@@ -15,6 +15,8 @@
   @param {object} [video] - Plays instead of the image (muted, looping)
   @param {string} [class] - Extra classes on the card
   @param {string} [heading_tag] - Title element, default 'span' (use 'h2'/'h3' in grids)
+  @param {boolean} [reserve_stars] - Keep the rating row's height when a product has no rating, so cards in a row stay the same height
+  @param {boolean} [quick_add] - Show an add-to-cart button under the card. Products with several variants get a "Choose options" link instead.
 {% enddoc %}
 {%- liquid
   assign ground = ground | default: 'grey'
@@ -59,6 +61,17 @@
   {%- endif -%}
   {%- if product != blank and product.metafields.reviews.rating.value != blank -%}
     {%- render 'stars', rating: product.metafields.reviews.rating.value.rating, class: 'product-card__stars' -%}
+  {%- elsif reserve_stars and product != blank -%}
+    <span class="product-card__stars product-card__stars--empty" aria-hidden="true"></span>
+  {%- endif -%}
+  {%- if quick_add and product != blank -%}
+    <div class="product-card__quick-add">
+      {%- if product.has_only_default_variant -%}
+        {%- render 'add-to-cart-form', product: product, class: 'button--full' -%}
+      {%- else -%}
+        <a class="button button--small button--full" href="{{ product.url }}">{{ 'products.choose_options' | t }}</a>
+      {%- endif -%}
+    </div>
   {%- endif -%}
 </div>
 
@@ -138,5 +151,14 @@
 
   .product-card__stars {
     font-size: 12px;
+  }
+
+  .product-card__stars--empty {
+    display: block;
+    height: 12px;
+  }
+
+  .product-card__quick-add {
+    margin-top: 4px;
   }
 {% endstylesheet %}

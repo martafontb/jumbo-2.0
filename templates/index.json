@@ -55,6 +55,7 @@
         "show_border": true,
         "collection": "soft-goods",
         "limit": 8,
+        "quick_add": true,
         "grounds": "blue, red, grey, red, blue",
         "label": "",
         "label_color": "blue",
@@ -191,7 +192,7 @@
         "caption": "Buy together, pay less",
         "button_label": "Add",
         "grounds": "grey, blue, red",
-        "spacing": "medium"
+        "spacing": "small"
       }
     },
     "events": {
@@ -290,7 +291,7 @@
         "feature_image_alt": "",
         "feature_label": "Next fair",
         "empty_text": "New dates coming soon.",
-        "spacing": "medium"
+        "spacing": "small"
       }
     },
     "stories": {
@@ -339,7 +340,7 @@
         "story-3"
       ],
       "settings": {
-        "show_border": true,
+        "show_border": false,
         "label": "@jumbopress",
         "label_color": "blue",
         "caption": "Follow along",
@@ -347,7 +348,7 @@
         "shop_label": "Shop this →",
         "button_label": "Follow on Instagram →",
         "button_link": "",
-        "spacing": "medium"
+        "spacing": "small"
       }
     },
     "studio-note": {

@@ -1,22 +1,39 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "intro": {
       "type": "about-intro",
       "settings": {
         "title": "About",
+        "image": "shopify://shop_images/Some_photos_taken_at_the_jumbopress_HQ_-_it_s_a_real_family_affair_Taken_a_few_months_back_for_3.jpg",
+        "image_alt": "",
         "text": "<p>An independent risograph studio and publisher. Small runs, made with artists, one colour at a time.</p>",
-        "caption": "Est. 2019 · Canal Yard",
+        "caption": "Est. 2018 · Deptford, London",
         "page_color": "red"
       }
     },
     "story": {
       "type": "media-text",
       "settings": {
+        "show_border": true,
         "label": "01 — Our story",
         "label_color": "blue",
         "caption": "2019 to now",
-        "text": "<p>Jumbo Press began in a shared unit at Canal Yard with one secondhand risograph and a stack of uncoated paper. We publish artists' books, zines and prints, and we print for people who want the same grain and layered colour. Every job is set up by hand, one drum per colour, tested on the paper you chose.</p>",
+        "text": "<p>Jumbo is an independent risograph studio and publishing platform. Since 2018 we've been making small-run editions, artist books, zines and objects, all designed and printed in-house, in collaboration with some of the most exciting emerging illustrators and artists working today, from wherever in the world they happen to be making things.</p>",
+        "image": "shopify://shop_images/Some_photos_taken_at_the_jumbopress_HQ_-_it_s_a_real_family_affair_Taken_a_few_months_back_for_4.jpg",
+        "image_alt": "",
         "show_image_placeholder": true,
+        "use_shop_email": false,
+        "button_label": "",
+        "button_link": "",
         "spacing": "large"
       }
     },
@@ -59,47 +76,49 @@
     "visit": {
       "type": "visit-hours",
       "blocks": {
-        "h1": {
-          "type": "hours",
-          "settings": {
-            "days": "Monday",
-            "hours": "closed"
-          }
-        },
         "h2": {
           "type": "hours",
           "settings": {
-            "days": "Tuesday to Saturday",
-            "hours": "10.00–18.00"
+            "days": "Monday to Friday",
+            "hours": "10.00–16.00"
           }
         },
         "h3": {
           "type": "hours",
           "settings": {
-            "days": "Sunday",
-            "hours": "11.00–16.00"
+            "days": "Saturday & Sunday",
+            "hours": "Closed"
           }
         }
       },
       "block_order": [
-        "h1",
         "h2",
         "h3"
       ],
       "settings": {
+        "show_border": false,
         "label": "02 — Visit the studio",
+        "label_color": "blue",
         "caption": "Canal Yard",
+        "image": "shopify://shop_images/Some_photos_taken_at_the_jumbopress_HQ_-_it_s_a_real_family_affair_Taken_a_few_months_back_for.jpg",
+        "image_alt": "",
+        "text": "<p>Come and see the machines run. Visit our Barcelona studio, appointments required. Email us to arrange a time that works for you, and we'll show you the presses in action.</p>",
         "spacing": "large"
       }
     },
     "work": {
       "type": "media-text",
       "settings": {
+        "show_border": true,
         "label": "03 — Work with us",
         "label_color": "blue",
         "caption": "Commissions and collaborations",
         "text": "<p>We print for artists, small publishers and festivals. Tell us the size, the colours and the run.</p>",
+        "image_alt": "",
+        "show_image_placeholder": false,
         "use_shop_email": true,
+        "button_label": "",
+        "button_link": "",
         "spacing": "large"
       }
     }

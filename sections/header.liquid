@@ -353,8 +353,32 @@
     height: 0;
   }
 
+  /* Backdrop behind the open mega menu; page scroll is locked meanwhile. */
+  .mega-menus::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100vh;
+    background: rgb(0 0 0 / 0.4);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+  }
+
+  html.mega-open .mega-menus::before {
+    opacity: 1;
+  }
+
+  html.mega-open {
+    overflow: hidden;
+    scrollbar-gutter: stable;
+  }
+
   .mega {
     position: absolute;
+    z-index: 1;
     top: 0;
     left: 0;
     right: 0;

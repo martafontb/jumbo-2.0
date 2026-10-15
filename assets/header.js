@@ -47,6 +47,7 @@ class SiteHeader extends HTMLElement {
     document.removeEventListener('shopify:block:select', this.onBlockSelect);
     document.removeEventListener('shopify:block:deselect', this.onBlockDeselect);
     this.setPageInert(false);
+    document.documentElement.classList.remove('mega-open');
   }
 
   /* ----- Mega menus ----- */
@@ -64,6 +65,8 @@ class SiteHeader extends HTMLElement {
     trigger.setAttribute('aria-expanded', 'true');
     this.openPanel = panel;
     this.openTrigger = trigger;
+    // mega-open locks page scroll and shows the backdrop (header.liquid styles).
+    document.documentElement.classList.add('mega-open');
   }
 
   closeMega = () => {
@@ -72,6 +75,7 @@ class SiteHeader extends HTMLElement {
     this.openTrigger.setAttribute('aria-expanded', 'false');
     this.openPanel = null;
     this.openTrigger = null;
+    document.documentElement.classList.remove('mega-open');
   };
 
   toggleMega(trigger) {
