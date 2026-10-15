@@ -113,8 +113,8 @@
       "type": "product-related",
       "settings": {
         "show_border": true,
-        "heading": "Also from [artist] & Jumbo Press",
-        "limit": 3,
+        "heading": "Related products",
+        "limit": 6,
         "quick_add": true,
         "spacing": "small"
       }
