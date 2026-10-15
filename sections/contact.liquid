@@ -1,0 +1,253 @@
+{% comment %}
+  Contact
+  Page title, the Contact / Wholesale tab strip, then a portrait image in the
+  first column and a ruled list of contact rows across the other two. Each
+  row is a block: coloured pill, heading, optional text, and either an email
+  link or a text link (e.g. "Wholesale →"). A row's email defaults to
+  hey@jumbo-press.com; if it's cleared, the store's email is used. Rows with
+  a link show the link instead of an email. No form: enquiries go by email.
+{% endcomment %}
+{%- liquid
+  assign title = section.settings.title | default: page.title
+  assign rows = section.blocks | where: 'type', 'contact_row'
+  assign image_alt = section.settings.image_alt | default: section.settings.image.alt
+-%}
+<div class="page contact-page">
+  {%- render 'page-title', title: title -%}
+  {%- render 'contact-tabs',
+    active: 'contact',
+    contact_label: section.settings.tab_contact_label,
+    contact_url: section.settings.tab_contact_link,
+    wholesale_label: section.settings.tab_wholesale_label,
+    wholesale_url: section.settings.tab_wholesale_link
+  -%}
+
+  <div class="contact-page__grid">
+    <div class="media contact-page__image" style="--ratio: 3 / 4; --media-bg: var(--color-{{ section.settings.image_color }});">
+      {%- render 'image',
+        image: section.settings.image,
+        sizes: '(min-width: 750px) 33vw, 100vw',
+        alt: image_alt,
+        placeholder: 'lifestyle-1'
+      -%}
+    </div>
+
+    <div class="contact-page__rows">
+      {%- for block in rows -%}
+        {%- liquid
+          assign row_email = block.settings.email | default: shop.email | strip
+          assign has_link = false
+          if block.settings.link != blank and block.settings.link_label != blank
+            assign has_link = true
+          endif
+        -%}
+        <div class="contact-row" {{ block.shopify_attributes }}>
+          <div class="contact-row__head">
+            {%- if block.settings.label != blank -%}
+              <span class="pill pill--{{ block.settings.label_color }}">{{ block.settings.label | escape }}</span>
+            {%- endif -%}
+            {%- if block.settings.heading != blank -%}
+              <h2 class="contact-row__heading">{{ block.settings.heading | escape }}</h2>
+            {%- endif -%}
+          </div>
+          <div class="contact-row__body">
+            {%- if block.settings.text != blank -%}
+              <p class="contact-row__text">{{ block.settings.text | escape }}</p>
+            {%- endif -%}
+            {%- if has_link -%}
+              <a class="contact-row__link" href="{{ block.settings.link }}">{{ block.settings.link_label | escape }}</a>
+            {%- elsif row_email != blank -%}
+              <a class="contact-row__email" href="mailto:{{ row_email }}">{{ row_email | escape }}</a>
+            {%- endif -%}
+          </div>
+        </div>
+      {%- endfor -%}
+      <div class="contact-page__end" aria-hidden="true"></div>
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .contact-page {
+    animation: fade 0.4s both;
+  }
+
+  .contact-page__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 4px 12px;
+  }
+
+  .contact-page__image {
+    margin-top: 12px;
+    border-radius: var(--radius-lg);
+  }
+
+  .contact-page__rows {
+    display: flex;
+    flex-direction: column;
+    grid-column: span 2;
+    margin-top: 12px;
+  }
+
+  .contact-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 12px;
+    align-items: start;
+    padding: 16px 0 28px;
+    border-top: var(--border);
+  }
+
+  .contact-row__head,
+  .contact-row__body {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .contact-row__head {
+    gap: 12px;
+  }
+
+  .contact-row__body {
+    gap: 14px;
+  }
+
+  .contact-row__heading {
+    margin: 0;
+    font: 500 var(--text-menu-row) / 0.95 var(--font-display);
+    letter-spacing: -0.04em;
+  }
+
+  .contact-row__text {
+    max-width: 44ch;
+    margin: 0;
+    font: 400 var(--text-body) / 1.4 var(--font-display);
+  }
+
+  /* Ink text for contrast; the hover colour is on the underline. */
+  .contact-row__email,
+  .contact-row__link {
+    color: var(--color-ink);
+    font: 400 13px / 1.3 var(--font-mono);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+    overflow-wrap: anywhere;
+    transition: text-decoration-color 0.15s, text-decoration-thickness 0.15s;
+  }
+
+  .contact-row__link {
+    font-size: var(--text-label-sm);
+  }
+
+  .contact-row__email:hover,
+  .contact-row__link:hover {
+    color: var(--color-ink);
+    text-decoration-color: var(--color-red);
+    text-decoration-thickness: 3px;
+  }
+
+  .contact-row__email:focus-visible,
+  .contact-row__link:focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 2px;
+  }
+
+  .contact-page__end {
+    border-top: var(--border);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .contact-page {
+      animation: none;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .contact-page__grid,
+    .contact-row {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .contact-page__rows {
+      grid-column: auto;
+      margin-top: 24px;
+    }
+
+    .contact-row {
+      gap: 14px;
+      padding-bottom: 24px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Contact",
+  "class": "section-contact",
+  "tag": "section",
+  "max_blocks": 8,
+  "settings": [
+    { "type": "text", "id": "title", "label": "Title", "default": "Contact", "info": "Defaults to the page title." },
+    { "type": "header", "content": "Tabs" },
+    { "type": "text", "id": "tab_contact_label", "label": "Contact tab label", "default": "Contact" },
+    { "type": "url", "id": "tab_contact_link", "label": "Contact tab link", "info": "Defaults to /pages/contact." },
+    { "type": "text", "id": "tab_wholesale_label", "label": "Wholesale tab label", "default": "Wholesale" },
+    { "type": "url", "id": "tab_wholesale_link", "label": "Wholesale tab link", "info": "Defaults to /pages/wholesale." },
+    { "type": "header", "content": "Image" },
+    { "type": "image_picker", "id": "image", "label": "Image", "info": "Portrait, 3:4." },
+    { "type": "text", "id": "image_alt", "label": "Image alt text", "info": "Describe the image. Defaults to the image's own alt text." },
+    {
+      "type": "select",
+      "id": "image_color",
+      "label": "Image background",
+      "options": [
+        { "value": "blue", "label": "Blue" },
+        { "value": "red", "label": "Red" },
+        { "value": "grey", "label": "Grey" }
+      ],
+      "default": "blue"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "contact_row",
+      "name": "Contact row",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Pill text", "default": "General" },
+        {
+          "type": "select",
+          "id": "label_color",
+          "label": "Pill colour",
+          "options": [
+            { "value": "blue", "label": "Blue" },
+            { "value": "red", "label": "Red" },
+            { "value": "grey", "label": "Grey" }
+          ],
+          "default": "grey"
+        },
+        { "type": "text", "id": "heading", "label": "Heading", "default": "General enquiries" },
+        { "type": "textarea", "id": "text", "label": "Text" },
+        { "type": "text", "id": "email", "label": "Email", "default": "hey@jumbo-press.com", "info": "Shown as a mailto link. If empty, the store's email is used. Hidden when the row has a link." },
+        { "type": "text", "id": "link_label", "label": "Link label", "info": "E.g. \"Wholesale →\". Shown instead of the email." },
+        { "type": "url", "id": "link", "label": "Link" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Contact",
+      "blocks": [
+        { "type": "contact_row", "settings": { "label": "General", "label_color": "grey", "heading": "General enquiries" } },
+        { "type": "contact_row", "settings": { "label": "Print", "label_color": "red", "heading": "Print quotes", "text": "Send your artwork and run size. We reply with a price within 2 days." } },
+        { "type": "contact_row", "settings": { "label": "Shop", "label_color": "blue", "heading": "Online orders" } },
+        { "type": "contact_row", "settings": { "label": "Wholesale", "label_color": "grey", "heading": "Stock Jumbo", "text": "If you are a retailer interested in stocking our products, see how it works.", "link_label": "Wholesale →", "link": "shopify://pages/wholesale" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

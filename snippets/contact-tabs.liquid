@@ -1,0 +1,92 @@
+{% doc %}
+  Tab strip shared by the Contact and Wholesale pages: two plain links, the
+  current page marked with aria-current="page" (filled ink). Labels and
+  links come from the calling section's settings.
+
+  @param {string} active - 'contact' or 'wholesale'
+  @param {string} [contact_label] - Contact tab label
+  @param {string} [contact_url] - Contact tab link, default /pages/contact
+  @param {string} [wholesale_label] - Wholesale tab label
+  @param {string} [wholesale_url] - Wholesale tab link, default /pages/wholesale
+{% enddoc %}
+{%- liquid
+  assign default_contact = routes.root_url | append: 'pages/contact' | replace: '//', '/'
+  assign default_wholesale = routes.root_url | append: 'pages/wholesale' | replace: '//', '/'
+  assign contact_href = contact_url | default: default_contact
+  assign wholesale_href = wholesale_url | default: default_wholesale
+  assign contact_text = contact_label
+  if contact_text == blank
+    assign contact_text = 'sections.contact.tab_contact' | t
+  endif
+  assign wholesale_text = wholesale_label
+  if wholesale_text == blank
+    assign wholesale_text = 'sections.contact.tab_wholesale' | t
+  endif
+-%}
+<nav class="contact-tabs" aria-label="{{ 'sections.contact.tabs' | t }}">
+  <a class="contact-tabs__tab" href="{{ contact_href }}" {% if active == 'contact' %}aria-current="page"{% endif %}>
+    {{- contact_text | escape -}}
+  </a>
+  <a class="contact-tabs__tab" href="{{ wholesale_href }}" {% if active == 'wholesale' %}aria-current="page"{% endif %}>
+    {{- wholesale_text | escape -}}
+  </a>
+</nav>
+
+{% stylesheet %}
+  .contact-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 10px 0;
+    border-top: var(--border);
+    border-bottom: var(--border);
+  }
+
+  .contact-tabs__tab {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 14px;
+    border: var(--border);
+    border-radius: var(--radius-pill);
+    background: transparent;
+    color: var(--color-ink);
+    font: 400 var(--text-label) / 1.35 var(--font-mono);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background-color 0.15s, color 0.15s;
+  }
+
+  .contact-tabs__tab:hover {
+    background: var(--color-grey);
+    color: var(--color-ink);
+    text-decoration: none;
+  }
+
+  .contact-tabs__tab[aria-current='page'] {
+    background: var(--color-ink);
+    color: var(--color-white);
+  }
+
+  .contact-tabs__tab:focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 2px;
+  }
+
+  /* 44px tap area on touch screens without changing the pill. */
+  @media (pointer: coarse) {
+    .contact-tabs__tab {
+      position: relative;
+    }
+
+    .contact-tabs__tab::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      width: 100%;
+      height: 44px;
+      translate: 0 -50%;
+    }
+  }
+{% endstylesheet %}

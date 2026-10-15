@@ -1,19 +1,63 @@
 {
   "sections": {
-    "header": {
-      "type": "page-header",
+    "main": {
+      "type": "contact",
+      "blocks": {
+        "row-general": {
+          "type": "contact_row",
+          "settings": {
+            "label": "General",
+            "label_color": "grey",
+            "heading": "General enquiries",
+            "text": "",
+            "email": "hey@jumbo-press.com",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "row-print": {
+          "type": "contact_row",
+          "settings": {
+            "label": "Print",
+            "label_color": "red",
+            "heading": "Print quotes",
+            "text": "Send your artwork and run size. We reply with a price within 2 days.",
+            "email": "hey@jumbo-press.com",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "row-shop": {
+          "type": "contact_row",
+          "settings": {
+            "label": "Shop",
+            "label_color": "blue",
+            "heading": "Online orders",
+            "text": "",
+            "email": "hey@jumbo-press.com",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "row-wholesale": {
+          "type": "contact_row",
+          "settings": {
+            "label": "Wholesale",
+            "label_color": "grey",
+            "heading": "Stock Jumbo",
+            "text": "If you are a retailer interested in stocking our products, see how it works.",
+            "email": "",
+            "link_label": "Wholesale →",
+            "link": "shopify://pages/wholesale"
+          }
+        }
+      },
+      "block_order": ["row-general", "row-print", "row-shop", "row-wholesale"],
       "settings": {
-        "title": "Get a quote",
-        "intro": "<p>Risograph printing for artists, small publishers and festivals. Runs from 25 to 300 copies.</p>"
+        "title": "Contact",
+        "image_color": "blue"
       }
-    },
-    "form": {
-      "type": "contact-form",
-      "settings": {}
     }
   },
-  "order": [
-    "header",
-    "form"
-  ]
+  "order": ["main"]
 }

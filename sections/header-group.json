@@ -119,6 +119,18 @@
             "button_label": "Start a quote →",
             "button_link": ""
           }
+        },
+        "menu-contact": {
+          "type": "menu",
+          "settings": {
+            "label": "Contact",
+            "menu": "",
+            "link": "shopify://pages/contact",
+            "row_colors": "blue, grey, red, grey",
+            "row_pills": "Overview\nFrom £0.40\n12 inks\nPDF",
+            "show_on_mobile": false,
+            "mobile_pill_color": "blue"
+          }
         }
       },
       "block_order": [
@@ -127,7 +139,8 @@
         "card-shop-zines",
         "menu-print",
         "card-print-specs",
-        "card-print-quote"
+        "card-print-quote",
+        "menu-contact"
       ],
       "settings": {
         "sticky": true,

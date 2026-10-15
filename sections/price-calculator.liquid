@@ -76,7 +76,7 @@
         <p class="label label--sm price-calc__each"><span data-each>{{ estimate_each | money }}</span> {{ 'sections.prices.each_note' | t }}</p>
       </div>
       {%- if section.settings.button_label != blank -%}
-        <a class="price-calc__button" href="{{ section.settings.button_link | default: '/pages/contact' }}" data-quote-link>{{ section.settings.button_label | escape }}</a>
+        <a class="price-calc__button" href="{{ section.settings.button_link | default: '/pages/quote' }}" data-quote-link>{{ section.settings.button_label | escape }}</a>
       {%- endif -%}
     </div>
   </form>
@@ -311,7 +311,7 @@
     { "type": "number", "id": "default_run", "label": "Starting run", "default": 100 },
     { "type": "text", "id": "estimate_label", "label": "Estimate label", "default": "Estimate" },
     { "type": "text", "id": "button_label", "label": "Button label", "default": "Request this quote →" },
-    { "type": "url", "id": "button_link", "label": "Button link", "info": "Your quote form. Defaults to /pages/contact. The chosen size, colours and run are added to the link." },
+    { "type": "url", "id": "button_link", "label": "Button link", "info": "Your quote form. Defaults to /pages/quote. The chosen size, colours and run are added to the link." },
     { "type": "header", "content": "Rate card" },
     { "type": "text", "id": "rate_label", "label": "Label", "default": "Rate card" },
     { "type": "number", "id": "rate_card_run", "label": "Copies per row", "default": 100 },

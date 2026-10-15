@@ -183,6 +183,11 @@
       "website": "Visit website ↗",
       "next": "Next: {{ name }}"
     },
+    "contact": {
+      "tabs": "Contact and wholesale",
+      "tab_contact": "Contact",
+      "tab_wholesale": "Wholesale"
+    },
     "ink_marquee": {
       "label": "Ink colours",
       "play": "Play ink colours",

@@ -1,0 +1,19 @@
+{
+  "sections": {
+    "header": {
+      "type": "page-header",
+      "settings": {
+        "title": "Get a quote",
+        "intro": "<p>Risograph printing for artists, small publishers and festivals. Runs from 25 to 300 copies.</p>"
+      }
+    },
+    "form": {
+      "type": "contact-form",
+      "settings": {}
+    }
+  },
+  "order": [
+    "header",
+    "form"
+  ]
+}
