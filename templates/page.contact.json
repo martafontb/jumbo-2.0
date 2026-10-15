@@ -61,12 +61,25 @@
           }
         }
       },
-      "block_order": ["row-general", "row-print", "row-shop", "row-wholesale"],
+      "block_order": [
+        "row-general",
+        "row-print",
+        "row-shop",
+        "row-wholesale"
+      ],
       "settings": {
         "title": "Contact",
+        "tab_contact_label": "Contact",
+        "tab_contact_link": "",
+        "tab_wholesale_label": "Wholesale",
+        "tab_wholesale_link": "",
+        "image": "shopify://shop_images/651930444_18035261399789750_360268133662106530_n.webp",
+        "image_alt": "",
         "image_color": "blue"
       }
     }
   },
-  "order": ["main"]
+  "order": [
+    "main"
+  ]
 }
