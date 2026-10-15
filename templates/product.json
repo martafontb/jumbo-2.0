@@ -88,7 +88,7 @@
         "gallery_layout": "two-up",
         "gallery_ground": "blue",
         "gallery_fit": "auto",
-        "captions": true,
+        "captions": false,
         "sticky_info": true,
         "sticky_bar": true,
         "guide_enabled": true,
