@@ -1,0 +1,56 @@
+{%- comment -%}
+  Newsletter with elephant. Usage: {%- render 'newsletter-elephant', block: block -%}
+  Posts to Shopify's customer form via fetch (no page reload).
+{%- endcomment -%}
+<newsletter-elephant class="nl-elephant" data-success="{{ block.settings.success | default: 'You are on the list.' | escape }}">
+  <svg class="nl-elephant__svg" viewBox="0 0 400 310" role="img" aria-label="" aria-hidden="true" focusable="false">
+    <g data-ear-l style="transform-origin:150px 110px"><ellipse cx="88" cy="150" rx="72" ry="92" fill="var(--color-blue, #22A8E1)"/><ellipse cx="96" cy="152" rx="44" ry="62" fill="#111" opacity="0.12"/></g>
+    <g data-ear-r style="transform-origin:250px 110px"><ellipse cx="312" cy="150" rx="72" ry="92" fill="var(--color-blue, #22A8E1)"/><ellipse cx="304" cy="152" rx="44" ry="62" fill="#111" opacity="0.12"/></g>
+    <path data-trunk d="M200 200 C200 240 200 262 200 282" fill="none" stroke="var(--color-grey, #C8C9D0)" stroke-width="58" stroke-linecap="round"/>
+    <circle cx="200" cy="140" r="104" fill="var(--color-grey, #C8C9D0)"/>
+    <circle cx="160" cy="125" r="23" fill="#fff"/><circle data-pupil cx="160" cy="125" r="11" fill="#111"/>
+    <circle cx="240" cy="125" r="23" fill="#fff"/><circle data-pupil cx="240" cy="125" r="11" fill="#111"/>
+    <path data-lid d="" fill="var(--color-grey, #C8C9D0)"/><path data-lid d="" fill="var(--color-grey, #C8C9D0)"/>
+  </svg>
+
+  {%- form 'customer', class: 'nl-elephant__form', id: 'NewsletterElephant' -%}
+    <input type="hidden" name="contact[tags]" value="newsletter">
+    <label class="nl-elephant__label" for="NewsletterElephantEmail">{{ block.settings.label | default: 'Newsletter' | escape }}</label>
+    <div class="nl-elephant__field">
+      <input id="NewsletterElephantEmail" type="email" name="contact[email]" required autocomplete="email" placeholder="{{ block.settings.placeholder | escape }}">
+      <button type="submit" data-submit>{{ block.settings.button | default: 'Join' | escape }}</button>
+    </div>
+    <p class="nl-elephant__msg" role="status" data-msg>
+      {%- if form.posted_successfully? -%}{{ block.settings.success | default: 'You are on the list.' | escape }}{%- endif -%}
+    </p>
+  {%- endform -%}
+</newsletter-elephant>
+<script src="{{ 'newsletter-elephant.js' | asset_url }}" type="module"></script>
+
+{% stylesheet %}
+  .nl-elephant {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    width: min(440px, 100%);
+  }
+  .nl-elephant__svg { display: block; width: 100%; overflow: visible; }
+  .nl-elephant [data-trunk] {
+    transition: d 0.55s cubic-bezier(0.3, 1.6, 0.5, 1);
+    d: path('M200 200 C200 240 200 262 200 282');
+  }
+  .nl-elephant[data-open] [data-trunk] { d: path('M200 200 C200 262 262 288 300 244'); }
+  .nl-elephant__form { display: flex; flex-direction: column; gap: 12px; margin-top: -6px; }
+  .nl-elephant__field { display: flex; border: 2px solid var(--color-ink); background: #fff; }
+  .nl-elephant__field input {
+    flex: 1; min-width: 0; padding: 14px 16px; border: 0; background: transparent;
+    font: inherit; font-size: 16px; color: var(--color-ink); text-transform: none; outline: none;
+  }
+  .nl-elephant__field:focus-within { outline: 2px solid var(--color-ink); outline-offset: 2px; }
+  .nl-elephant__field button {
+    min-height: 48px; padding: 0 20px; border: 0; border-left: 2px solid var(--color-ink);
+    background: var(--color-ink); color: var(--color-bg); font: inherit; text-transform: uppercase; cursor: pointer;
+  }
+  .nl-elephant__field button:hover { background: var(--color-red, #EA5A46); color: var(--color-ink); }
+  .nl-elephant__msg { margin: 0; min-height: 1.5em; }
+{% endstylesheet %}

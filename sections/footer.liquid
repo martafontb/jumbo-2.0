@@ -9,7 +9,10 @@
 <footer class="site-footer">
   <div class="site-footer__top">
     {%- if section.settings.statement != blank -%}
-      <div class="site-footer__statement">{{ section.settings.statement }}</div>
+      <div class="site-footer__statement">
+        {{ section.settings.statement }}
+      </div>
+
     {%- endif -%}
 
     <div class="site-footer__columns">

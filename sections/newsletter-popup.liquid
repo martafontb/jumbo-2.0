@@ -24,9 +24,12 @@
   <dialog class="overlay newsletter-popup" id="NewsletterPopup" aria-labelledby="NewsletterPopup-title">
     <div class="newsletter-popup__inner">
       <div class="media newsletter-popup__media" style="--media-bg: var(--color-{{ color }});">
-        {%- render 'image-or-video', video: section.settings.video, image: section.settings.image, sizes: '(min-width: 750px) 430px, 100vw', widths: '430, 640, 860, 1200', placeholder: 'lifestyle-1' -%}
-        {%- if section.settings.image_label != blank -%}
-          <span class="pill pill--{{ color }}">{{ section.settings.image_label | escape }}</span>
+        {%- if section.settings.show_elephant -%}
+          {%- assign ear = 'red' -%}
+              {%- if color == 'red' %}{% assign ear = 'blue' %}{% endif -%}
+          {%- render 'popup-elephant', ears: ear -%}
+            {%- else -%}
+          {%- render 'image-or-video', video: section.settings.video, image: section.settings.image, sizes: '(min-width: 750px) 430px, 100vw', widths: '430, 640, 860, 1200', placeholder: 'lifestyle-1' -%}
         {%- endif -%}
       </div>
 
@@ -193,6 +196,7 @@
     { "type": "checkbox", "id": "auto_open", "label": "Open automatically", "default": true, "info": "Opens once per visitor. Visitors who close it or subscribe don't see it again on that browser." },
     { "type": "range", "id": "delay", "label": "Delay before opening", "min": 1, "max": 30, "step": 1, "unit": "s", "default": 3 },
     { "type": "header", "content": "Image" },
+    { "type": "checkbox", "id": "show_elephant", "label": "Show elephant instead of image", "default": true },
     { "type": "image_picker", "id": "image", "label": "Image" },
     { "type": "video", "id": "video", "label": "Video", "info": "Optional. Plays muted on a loop instead of the image; the image becomes its poster." },
     { "type": "text", "id": "image_label", "label": "Image label", "default": "Next drop: 24 Oct" },

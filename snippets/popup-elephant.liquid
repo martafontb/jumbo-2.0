@@ -1,0 +1,33 @@
+{%- comment -%}
+  Elephant for the newsletter popup media panel.
+  Usage (inside .newsletter-popup__media): {%- render 'popup-elephant', ears: ear_color -%}
+  Reacts to the popup's email field and to the posted (success) state.
+{%- endcomment -%}
+<popup-elephant class="popup-elephant" style="--ear: var(--color-{{ ears | default: 'red' }});">
+  <svg viewBox="0 0 400 310" aria-hidden="true" focusable="false">
+    <g data-ear-l style="transform-origin:150px 110px"><ellipse cx="88" cy="150" rx="72" ry="92" fill="var(--ear)"/><ellipse cx="96" cy="152" rx="44" ry="62" fill="#111" opacity="0.12"/></g>
+    <g data-ear-r style="transform-origin:250px 110px"><ellipse cx="312" cy="150" rx="72" ry="92" fill="var(--ear)"/><ellipse cx="304" cy="152" rx="44" ry="62" fill="#111" opacity="0.12"/></g>
+    <path data-trunk d="M200 200 C200 240 200 262 200 282" fill="none" stroke="var(--color-grey, #C8C9D0)" stroke-width="58" stroke-linecap="round"/>
+    <circle cx="200" cy="140" r="104" fill="var(--color-grey, #C8C9D0)"/>
+    <circle cx="160" cy="125" r="23" fill="#fff"/><circle data-pupil cx="160" cy="125" r="11" fill="#111"/>
+    <circle cx="240" cy="125" r="23" fill="#fff"/><circle data-pupil cx="240" cy="125" r="11" fill="#111"/>
+    <path data-lid d="" fill="var(--color-grey, #C8C9D0)"/><path data-lid d="" fill="var(--color-grey, #C8C9D0)"/>
+  </svg>
+</popup-elephant>
+<script src="{{ 'popup-elephant.js' | asset_url }}" type="module"></script>
+
+{% stylesheet %}
+  .popup-elephant {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    padding: 8%;
+  }
+  .popup-elephant svg { width: 100%; max-height: 100%; overflow: visible; }
+  .popup-elephant [data-trunk] {
+    transition: d 0.55s cubic-bezier(0.3, 1.6, 0.5, 1);
+    d: path('M200 200 C200 240 200 262 200 282');
+  }
+  .popup-elephant[data-open] [data-trunk] { d: path('M200 200 C200 262 262 288 300 244'); }
+{% endstylesheet %}
