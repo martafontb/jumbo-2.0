@@ -59,9 +59,15 @@
         "title": "Jumbo Wholesale",
         "intro": "<p>If that sounds like you, we'd love to hear from you.</p>",
         "email": "hey@jumbo-press.com",
+        "tab_contact_label": "Contact",
+        "tab_contact_link": "",
+        "tab_wholesale_label": "Wholesale",
+        "tab_wholesale_link": "",
         "statement": "Our full collection of risograph editions, artist books, prints and objects is available to stock wholesale.",
         "button_label": "Email us →",
         "text": "We work with independent bookshops, design stores, galleries and concept stores who share our belief that print is worth doing properly.",
+        "image": "shopify://shop_images/467524751_18304846459205119_3654848127412538487_n.webp",
+        "image_alt": "",
         "image_color": "blue",
         "reasons_label": "Why stock Jumbo?",
         "reasons_label_color": "red",
@@ -69,6 +75,7 @@
         "cta_label": "How to stock Jumbo",
         "cta_heading": "Email us about your store.",
         "cta_text": "You can order directly by emailing us at hey@jumbo-press.com with a few details about your store, your social profiles and what draws you to Jumbo.",
+        "cta_button_label": "",
         "cta_color": "blue"
       }
     }
