@@ -1,11 +1,37 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "type": "custom.overlay",
   "name": "Overlays",
   "sections": {
     "newsletter_popup": {
       "type": "newsletter-popup",
-      "settings": {}
+      "settings": {
+        "enabled": true,
+        "auto_open": true,
+        "delay": 3,
+        "show_elephant": true,
+        "image_label": "Next drop: 24 Oct",
+        "image_color": "blue",
+        "label": "Newsletter",
+        "heading": "Get the next drop first.",
+        "text": "New editions, zines and drops. Subscribers see every run 24 hours early.",
+        "button": "Subscribe →",
+        "dismiss": "No thanks",
+        "success_heading": "You're on the list",
+        "success_text": "We'll write before the next drop. Nothing else.",
+        "success_button": "Keep browsing →"
+      }
     }
   },
-  "order": ["newsletter_popup"]
+  "order": [
+    "newsletter_popup"
+  ]
 }
