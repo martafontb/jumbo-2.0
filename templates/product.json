@@ -116,7 +116,7 @@
         "heading": "Related products",
         "limit": 6,
         "quick_add": true,
-        "spacing": "small"
+        "spacing": "medium"
       }
     },
     "pairs": {
@@ -151,7 +151,7 @@
       "settings": {
         "show_border": true,
         "label": "Reviews",
-        "spacing": "small"
+        "spacing": "medium"
       }
     }
   },
