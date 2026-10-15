@@ -39,7 +39,15 @@
         },
         "specs": {
           "type": "specs",
-          "settings": {}
+          "settings": {
+            "label_edition": "Edition",
+            "label_inks": "Inks",
+            "label_paper": "Paper",
+            "label_dimensions": "Size",
+            "label_format": "Format",
+            "label_material": "Material",
+            "extra_rows": ""
+          }
         },
         "variant_picker": {
           "type": "variant_picker",
@@ -79,14 +87,24 @@
       "settings": {
         "gallery_layout": "two-up",
         "gallery_ground": "blue",
+        "gallery_fit": "auto",
         "captions": true,
         "sticky_info": true,
-        "guide_enabled": true
+        "sticky_bar": true,
+        "guide_enabled": true,
+        "guide_title": "Guide",
+        "guide_sizes": "A2 | 420 × 594 mm | Poster\nA3 | 297 × 420 mm | Print\nA4 | 210 × 297 mm | Zine spread",
+        "guide_sizes_note": "",
+        "guide_shipping": "UK | 3–4 working days | £6\nEurope | 5–8 working days | £12\nWorldwide | 7–14 working days | £18",
+        "guide_shipping_note": "<p>Free UK shipping over £75. Everything ships flat in a board envelope with tracking.</p>",
+        "guide_returns_heading": "14 days to change your mind.",
+        "guide_returns_text": "<p>Send unused prints back flat in the original envelope. We refund once they arrive. Damaged in the post? Send us a photo and we'll reprint or refund.</p>"
       }
     },
     "artist": {
       "type": "artist-block",
       "settings": {
+        "show_border": true,
         "label": "The artist",
         "spacing": "large"
       }
@@ -94,24 +112,44 @@
     "related": {
       "type": "product-related",
       "settings": {
+        "show_border": true,
         "heading": "Also from [artist] & Jumbo Press",
         "limit": 3,
+        "quick_add": true,
         "spacing": "small"
       }
     },
     "pairs": {
       "type": "product-pairs",
       "settings": {
+        "show_border": true,
+        "collection": "",
         "limit": 3,
         "label": "Pairs well with",
         "caption": "Add to the same parcel",
         "heading": "Complete the set",
+        "done_text": "Everything's in your cart. Nice set.",
         "spacing": "large"
       }
     },
     "reviews": {
       "type": "product-reviews",
+      "blocks": {
+        "judge_me_reviews_review_widget_fAMXJr": {
+          "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {
+            "review_data": "sample_data",
+            "max_width": 1200,
+            "show_shop_reviews": false,
+            "empty_state": "empty_widget"
+          }
+        }
+      },
+      "block_order": [
+        "judge_me_reviews_review_widget_fAMXJr"
+      ],
       "settings": {
+        "show_border": true,
         "label": "Reviews",
         "spacing": "large"
       }
