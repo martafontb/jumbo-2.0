@@ -143,12 +143,12 @@
         "label_color": "red",
         "caption": "Every colour we print",
         "size": "medium",
-        "shape": "worm",
-        "overprint": 25,
+        "shape": "blocks",
+        "overprint": 0,
         "misregister": true,
         "speed": 5,
         "direction": "left",
-        "spacing": "large"
+        "spacing": "small"
       }
     },
     "packs": {
