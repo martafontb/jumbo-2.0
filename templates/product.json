@@ -106,7 +106,7 @@
       "settings": {
         "show_border": true,
         "label": "The artist",
-        "spacing": "large"
+        "spacing": "small"
       }
     },
     "related": {
@@ -129,7 +129,7 @@
         "caption": "Add to the same parcel",
         "heading": "Complete the set",
         "done_text": "Everything's in your cart. Nice set.",
-        "spacing": "large"
+        "spacing": "small"
       }
     },
     "reviews": {
@@ -151,7 +151,7 @@
       "settings": {
         "show_border": true,
         "label": "Reviews",
-        "spacing": "large"
+        "spacing": "small"
       }
     }
   },
