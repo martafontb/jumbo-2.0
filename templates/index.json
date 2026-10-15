@@ -59,12 +59,13 @@
         "label": "",
         "label_color": "blue",
         "caption": "",
+        "end_image": "shopify://shop_images/DSC_5456.jpg",
         "end_image_alt": "",
         "end_ground": "blue",
-        "end_note": "<p>Sold out · Bloom Fields Vol. 2<br/>Back in print: November</p>",
+        "end_note": "",
         "end_button_label": "Shop all editions →",
         "end_button_link": "",
-        "spacing": "none"
+        "spacing": "small"
       }
     },
     "inks": {
