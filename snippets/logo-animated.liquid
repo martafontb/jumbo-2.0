@@ -1,0 +1,63 @@
+{%- comment -%}
+  Animated JUMBO logo. Letters react on hover (desktop only), static otherwise.
+  Usage: {%- render 'logo-animated', invert: settings.logo_invert -%}
+  Upload logo-g0.png … logo-g6.png to /assets (J, U, M, B, O, TM "T", TM "M").
+{%- endcomment -%}
+{%- assign lefts = '0,18.47,36.39,57.36,75.34' | split: ',' -%}
+{%- assign tops = '2,2,2,1.7,0' | split: ',' -%}
+{%- assign widths = '17.82,17.42,20.27,17.87,20.62' | split: ',' -%}
+{%- assign heights = '97,97,96,96,100' | split: ',' -%}
+{%- assign letters = 'J,U,M,B,O' | split: ',' -%}
+<jumbo-logo class="jumbo-logo{% if invert %} jumbo-logo--invert{% endif %}" role="img" aria-label="{{ shop.name | escape }}">
+  {%- for l in letters -%}
+    <span class="jumbo-logo__letter" data-letter style="left:{{ lefts[forloop.index0] }}%;top:{{ tops[forloop.index0] }}%;width:{{ widths[forloop.index0] }}%;height:{{ heights[forloop.index0] }}%">
+      <img src="{{ 'logo-g' | append: forloop.index0 | append: '.png' | asset_url }}" alt="" aria-hidden="true" draggable="false" loading="eager">
+    </span>
+  {%- endfor -%}
+  <span class="jumbo-logo__tm" aria-hidden="true">
+    <img src="{{ 'logo-g5.png' | asset_url }}" alt="" style="left:0;width:41.3%">
+    <img src="{{ 'logo-g6.png' | asset_url }}" alt="" style="left:42.1%;width:57.9%">
+  </span>
+</jumbo-logo>
+<script src="{{ 'jumbo-logo.js' | asset_url }}" type="module"></script>
+
+{% stylesheet %}
+  .jumbo-logo {
+    position: relative;
+    display: block;
+    height: var(--logo-height);
+    width: calc(var(--logo-height) * 2003 / 401);
+    flex-shrink: 0;
+  }
+  /* The header's entrance wrapper clips overflow; open it so hops and swells aren't cut off. */
+  .site-header__logo.nav-in--done,
+  .site-header__logo.nav-in--done .nav-in__inner,
+  .site-header__logo.nav-in--done .site-header__logo-link {
+    overflow: visible;
+  }
+  .jumbo-logo--invert { filter: invert(1); }
+  .jumbo-logo__letter {
+    position: absolute;
+    transform-origin: 50% 100%;
+    will-change: transform;
+  }
+  .jumbo-logo img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    user-select: none;
+  }
+  .jumbo-logo__tm {
+    position: absolute;
+    left: 93.86%;
+    top: 2%;
+    width: 6.29%;
+    height: 15.5%;
+  }
+  .jumbo-logo__tm img {
+    position: absolute;
+    top: 0;
+    height: 100%;
+  }
+{% endstylesheet %}

@@ -83,12 +83,17 @@
 <script src="{{ 'story-viewer.js' | asset_url }}" type="module"></script>
 
 {% stylesheet %}
+  .stories .section-head {
+    margin-bottom: 16px;
+    padding-top: 12px;
+  }
+
   .stories__grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: var(--grid-gap);
     margin: 0;
-    padding: 16px 0 0;
+    padding: 0;
     list-style: none;
   }
 

@@ -77,7 +77,7 @@
         "description"
       ],
       "settings": {
-        "gallery_layout": "stack",
+        "gallery_layout": "two-up",
         "gallery_ground": "blue",
         "captions": true,
         "sticky_info": true,

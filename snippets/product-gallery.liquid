@@ -2,12 +2,13 @@
   Product media gallery.
   - stack: every media item 4/3 in one column (editions).
   - grid: first item 4/3 full width, then 1/1 two-up (merch).
+  - two-up: every item 4/5 portrait, two per row (portrait photography).
   The selected variant's media is shown first. Image alt text can double as
   a small caption pill on secondary images (e.g. "Detail × 12").
 
   @param {object} product - Product
   @param {object} variant - Selected variant
-  @param {string} layout - 'stack' or 'grid'
+  @param {string} layout - 'stack', 'grid' or 'two-up'
   @param {string} ground - Background token while images load
   @param {boolean} [captions] - Show alt text as captions on secondary images
   @param {string} [fit] - 'auto' (portrait images contained), 'cover' or 'contain'
@@ -60,7 +61,8 @@
     --ratio: 4 / 3;
   }
 
-  .product-gallery--grid {
+  .product-gallery--grid,
+  .product-gallery--two-up {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
@@ -71,6 +73,10 @@
   .product-gallery--grid .product-gallery__item--first {
     grid-column: 1 / -1;
     --ratio: 4 / 3;
+  }
+
+  .product-gallery--two-up .product-gallery__item {
+    --ratio: 4 / 5;
   }
 
   .product-gallery-wrap {
@@ -84,7 +90,8 @@
   /* Mobile: one image per screen, swiped sideways, with a counter. */
   @media screen and (max-width: 749px) {
     .product-gallery,
-    .product-gallery--grid {
+    .product-gallery--grid,
+    .product-gallery--two-up {
       display: flex;
       overflow-x: auto;
       scroll-snap-type: x mandatory;
@@ -97,7 +104,8 @@
     }
 
     .product-gallery .product-gallery__item,
-    .product-gallery--grid .product-gallery__item {
+    .product-gallery--grid .product-gallery__item,
+    .product-gallery--two-up .product-gallery__item {
       flex: 0 0 100%;
       scroll-snap-align: start;
       --ratio: 4 / 5;

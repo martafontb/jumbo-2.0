@@ -279,14 +279,14 @@
   }
 
   .main-product__info {
-    padding-left: 12px;
+    padding: 0 clamp(16px, 3vw, 48px);
   }
 
   .main-product__info-inner {
     display: flex;
     flex-direction: column;
-    gap: 14px;
-    padding-top: 16px;
+    gap: 20px;
+    padding-top: clamp(16px, 4vw, 64px);
   }
 
   [data-sticky] .main-product__info-inner {
@@ -315,12 +315,7 @@
   }
 
   .main-product__accent {
-    color: var(--color-ink);
-    font-style: italic;
-    text-decoration: underline;
-    text-decoration-color: var(--accent, var(--color-blue));
-    text-decoration-thickness: 0.08em;
-    text-underline-offset: 0.12em;
+    color: var(--accent);
     font-weight: 500;
   }
 
@@ -347,7 +342,7 @@
     }
 
     .main-product__info {
-      padding-left: 0;
+      padding: 0;
     }
 
     [data-sticky] .main-product__info-inner {
@@ -367,10 +362,11 @@
       "id": "gallery_layout",
       "label": "Gallery layout",
       "options": [
+        { "value": "two-up", "label": "Two-up (portrait 4:5, two per row)" },
         { "value": "stack", "label": "Stacked (one column, 4:3)" },
         { "value": "grid", "label": "Grid (large first, then two-up)" }
       ],
-      "default": "stack"
+      "default": "two-up"
     },
     {
       "type": "select",

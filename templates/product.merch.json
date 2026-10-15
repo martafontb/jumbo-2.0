@@ -74,7 +74,7 @@
         "note"
       ],
       "settings": {
-        "gallery_layout": "grid",
+        "gallery_layout": "two-up",
         "gallery_ground": "grey",
         "captions": false,
         "sticky_info": true,

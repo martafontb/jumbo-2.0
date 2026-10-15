@@ -83,7 +83,8 @@
       <span class="nav-in__inner">
         {%- if is_home -%}<h1 class="site-header__logo-heading">{%- endif -%}
         <a href="{{ routes.root_url }}" class="site-header__logo-link tap-target">
-          {%- if settings.logo != blank -%}
+          {%- render 'logo-animated', invert: settings.logo_invert -%}  
+        {% comment %} {%- if settings.logo != blank -%}
             {{
               settings.logo
               | image_url: height: 160
@@ -95,7 +96,7 @@
             }}
           {%- else -%}
             <span class="site-header__wordmark">{{ shop.name | escape }}</span>
-          {%- endif -%}
+          {%- endif -%} {% endcomment %}
         </a>
         {%- if is_home -%}</h1>{%- endif -%}
       </span>

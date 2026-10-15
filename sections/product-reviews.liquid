@@ -70,8 +70,53 @@
 
   .product-reviews__list {
     grid-column: span 2;
-    padding-left: 12px;
-    border-top: var(--border);
+    min-width: 0;
+    margin-top: -8px;
+  }
+
+  /* Judge.me widget overrides. The app injects its own markup, so these hook
+     its documented jdgm-* classes. The theme's left column already shows the
+     average and stars, so the widget's own summary is hidden. */
+  .product-reviews__list .jdgm-rev-widg {
+    padding: 0;
+    border: 0;
+    font-family: inherit;
+    color: var(--color-ink);
+  }
+
+  .product-reviews__list .jdgm-rev-widg__title,
+  .product-reviews__list .jdgm-rev-widg__summary-inner,
+  .product-reviews__list .jdgm-rev-widg__summary-average,
+  .product-reviews__list .jdgm-rev-widg__summary-text {
+    display: none;
+  }
+
+  .product-reviews__list .jdgm-rev-widg__summary {
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .product-reviews__list .jdgm-star,
+  .product-reviews__list .jdgm-prev-badge__stars {
+    color: var(--color-ink);
+    font-size: 16px;
+  }
+
+  .product-reviews__list .jdgm-write-rev-link,
+  .product-reviews__list .jdgm-write-rev-link:hover {
+    padding: 8px 16px;
+    border: 2px solid var(--color-ink);
+    border-radius: var(--radius-pill);
+    background: transparent;
+    color: var(--color-ink);
+    font: inherit;
+    font-size: 14px;
+  }
+
+  .product-reviews__list .jdgm-write-rev-link:hover {
+    background: var(--color-ink);
+    color: var(--color-bg);
   }
 
   .product-reviews__empty {
@@ -85,7 +130,7 @@
 
     .product-reviews__list {
       grid-column: auto;
-      padding-left: 0;
+      margin-top: 0;
     }
   }
 {% endstylesheet %}

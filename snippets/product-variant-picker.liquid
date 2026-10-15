@@ -21,6 +21,7 @@
 {%- liquid
   assign size_chart = product.metafields.custom.size_chart.value
   assign size_names = 'size,talla,taille,größe'
+  assign size_order = 'xxs,xs,s,m,l,xl,xxl,xxxl' | split: ','
 -%}
 {%- unless product.has_only_default_variant -%}
   <div class="variant-picker" data-variant-picker>
@@ -35,6 +36,27 @@
         if size_names contains option_handle
           assign is_size = true
         endif
+
+        comment
+          Size values are shown smallest to largest whatever order they were
+          entered in the admin. Unknown labels keep their relative order after
+          the known ones. Keys are "rank-index" strings so a plain sort works.
+        endcomment
+        assign sort_keys = ''
+        for value in option.values
+          assign rank = forloop.index0 | plus: 200
+          if is_size
+            assign size_key = value | downcase | strip
+            for known in size_order
+              if known == size_key
+                assign rank = forloop.index0 | plus: 100
+                break
+              endif
+            endfor
+          endif
+          assign sort_keys = sort_keys | append: rank | append: '-' | append: forloop.index0 | append: ','
+        endfor
+        assign sorted_keys = sort_keys | split: ',' | sort
       -%}
       <fieldset class="variant-picker__option" data-option-index="{{ forloop.index0 }}">
         <legend class="variant-picker__legend">
@@ -49,8 +71,12 @@
         </legend>
 
         <div class="variant-picker__values{% if uses_swatches %} variant-picker__values--swatches{% endif %}">
-          {%- for value in option.values -%}
-            {%- assign input_id = section_id | append: '-' | append: option.position | append: '-' | append: forloop.index0 -%}
+          {%- for sorted_key in sorted_keys -%}
+            {%- liquid
+              assign value_index = sorted_key | split: '-' | last | plus: 0
+              assign value = option.values[value_index]
+              assign input_id = section_id | append: '-' | append: option.position | append: '-' | append: value_index
+            -%}
             <input
               class="visually-hidden variant-picker__input"
               type="radio"
