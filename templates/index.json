@@ -38,6 +38,17 @@
         "spacing": "none"
       }
     },
+    "intro": {
+      "type": "statement",
+      "settings": {
+        "text": "<p>Jumbo Press is a risograph studio and publisher. We print editions, zines and books with artists, one colour at a time, in small runs.</p>",
+        "size": "regular",
+        "button_label": "",
+        "button_link": "",
+        "button_style": "pill",
+        "spacing": "medium"
+      }
+    },
     "editions": {
       "type": "product-carousel",
       "settings": {
@@ -56,17 +67,6 @@
         "end_button_label": "Shop all editions →",
         "end_button_link": "",
         "spacing": "medium"
-      }
-    },
-    "intro": {
-      "type": "statement",
-      "settings": {
-        "text": "<p>Jumbo Press is a risograph studio and publisher. We print editions, zines and books with artists, one colour at a time, in small runs.</p>",
-        "size": "regular",
-        "button_label": "",
-        "button_link": "",
-        "button_style": "pill",
-        "spacing": "small"
       }
     },
     "packs": {
@@ -469,8 +469,8 @@
   },
   "order": [
     "hero",
-    "editions",
     "intro",
+    "editions",
     "packs",
     "inks",
     "events",
