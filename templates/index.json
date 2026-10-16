@@ -69,49 +69,6 @@
         "spacing": "medium"
       }
     },
-    "packs": {
-      "type": "packs",
-      "blocks": {
-        "pack-2": {
-          "type": "pack",
-          "settings": {
-            "product": "elephants-never-forget",
-            "title": "Zine Pack",
-            "blurb": ""
-          }
-        },
-        "pack-3": {
-          "type": "pack",
-          "settings": {
-            "product": "a-cat-cap",
-            "title": "Studio Pack",
-            "blurb": ""
-          }
-        },
-        "pack-1": {
-          "type": "pack",
-          "settings": {
-            "product": "cowgirl-risograph-print",
-            "title": "Starter Pack",
-            "blurb": ""
-          }
-        }
-      },
-      "block_order": [
-        "pack-2",
-        "pack-3",
-        "pack-1"
-      ],
-      "settings": {
-        "show_border": true,
-        "label": "Packs",
-        "label_color": "blue",
-        "caption": "Buy together, pay less",
-        "button_label": "Add",
-        "grounds": "grey, blue, red",
-        "spacing": "small"
-      }
-    },
     "inks": {
       "type": "ink-marquee",
       "blocks": {
@@ -192,6 +149,49 @@
         "misregister": false,
         "speed": 6,
         "direction": "left",
+        "spacing": "small"
+      }
+    },
+    "packs": {
+      "type": "packs",
+      "blocks": {
+        "pack-2": {
+          "type": "pack",
+          "settings": {
+            "product": "elephants-never-forget",
+            "title": "Zine Pack",
+            "blurb": ""
+          }
+        },
+        "pack-3": {
+          "type": "pack",
+          "settings": {
+            "product": "a-cat-cap",
+            "title": "Studio Pack",
+            "blurb": ""
+          }
+        },
+        "pack-1": {
+          "type": "pack",
+          "settings": {
+            "product": "cowgirl-risograph-print",
+            "title": "Starter Pack",
+            "blurb": ""
+          }
+        }
+      },
+      "block_order": [
+        "pack-2",
+        "pack-3",
+        "pack-1"
+      ],
+      "settings": {
+        "show_border": true,
+        "label": "Packs",
+        "label_color": "blue",
+        "caption": "Buy together, pay less",
+        "button_label": "Add",
+        "grounds": "grey, blue, red",
         "spacing": "small"
       }
     },
@@ -471,8 +471,8 @@
     "hero",
     "intro",
     "editions",
-    "packs",
     "inks",
+    "packs",
     "events",
     "stories",
     "studio-note",
