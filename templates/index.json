@@ -38,17 +38,6 @@
         "spacing": "none"
       }
     },
-    "intro": {
-      "type": "statement",
-      "settings": {
-        "text": "<p>Jumbo Press is a risograph studio and publisher. We print editions, zines and books with artists, one colour at a time, in small runs.</p>",
-        "size": "regular",
-        "button_label": "",
-        "button_link": "",
-        "button_style": "pill",
-        "spacing": "small"
-      }
-    },
     "editions": {
       "type": "product-carousel",
       "settings": {
@@ -66,6 +55,60 @@
         "end_note": "",
         "end_button_label": "Shop all editions →",
         "end_button_link": "",
+        "spacing": "medium"
+      }
+    },
+    "intro": {
+      "type": "statement",
+      "settings": {
+        "text": "<p>Jumbo Press is a risograph studio and publisher. We print editions, zines and books with artists, one colour at a time, in small runs.</p>",
+        "size": "regular",
+        "button_label": "",
+        "button_link": "",
+        "button_style": "pill",
+        "spacing": "small"
+      }
+    },
+    "packs": {
+      "type": "packs",
+      "blocks": {
+        "pack-2": {
+          "type": "pack",
+          "settings": {
+            "product": "elephants-never-forget",
+            "title": "Zine Pack",
+            "blurb": ""
+          }
+        },
+        "pack-3": {
+          "type": "pack",
+          "settings": {
+            "product": "a-cat-cap",
+            "title": "Studio Pack",
+            "blurb": ""
+          }
+        },
+        "pack-1": {
+          "type": "pack",
+          "settings": {
+            "product": "cowgirl-risograph-print",
+            "title": "Starter Pack",
+            "blurb": ""
+          }
+        }
+      },
+      "block_order": [
+        "pack-2",
+        "pack-3",
+        "pack-1"
+      ],
+      "settings": {
+        "show_border": true,
+        "label": "Packs",
+        "label_color": "blue",
+        "caption": "Buy together, pay less",
+        "button_label": "Add",
+        "grounds": "grey, blue, red",
         "spacing": "small"
       }
     },
@@ -149,49 +192,6 @@
         "misregister": false,
         "speed": 6,
         "direction": "left",
-        "spacing": "small"
-      }
-    },
-    "packs": {
-      "type": "packs",
-      "blocks": {
-        "pack-2": {
-          "type": "pack",
-          "settings": {
-            "product": "elephants-never-forget",
-            "title": "Zine Pack",
-            "blurb": ""
-          }
-        },
-        "pack-3": {
-          "type": "pack",
-          "settings": {
-            "product": "a-cat-cap",
-            "title": "Studio Pack",
-            "blurb": ""
-          }
-        },
-        "pack-1": {
-          "type": "pack",
-          "settings": {
-            "product": "cowgirl-risograph-print",
-            "title": "Starter Pack",
-            "blurb": ""
-          }
-        }
-      },
-      "block_order": [
-        "pack-2",
-        "pack-3",
-        "pack-1"
-      ],
-      "settings": {
-        "show_border": true,
-        "label": "Packs",
-        "label_color": "blue",
-        "caption": "Buy together, pay less",
-        "button_label": "Add",
-        "grounds": "grey, blue, red",
         "spacing": "small"
       }
     },
@@ -469,10 +469,10 @@
   },
   "order": [
     "hero",
-    "intro",
     "editions",
-    "inks",
+    "intro",
     "packs",
+    "inks",
     "events",
     "stories",
     "studio-note",
