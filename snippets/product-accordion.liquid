@@ -1,0 +1,87 @@
+{% doc %}
+  Collapsible row for the product info column (native <details>, works
+  without JS). Content is passed in the block body. If heading is blank the
+  content renders as plain markup.
+
+  @param {string} heading - Summary text
+  @param {string} content - Pre-rendered HTML for the panel
+  @param {boolean} [open] - Start expanded
+  @param {string} [attributes] - Extra attributes, e.g. block.shopify_attributes
+{% enddoc %}
+{%- if heading == blank -%}
+  {{ content }}
+{%- else -%}
+  <details class="product-accordion" {% if open %}open{% endif %} {{ attributes }}>
+    <summary class="product-accordion__summary">
+      <span>{{ heading | escape }}</span>
+      <span class="product-accordion__icon" aria-hidden="true"></span>
+    </summary>
+    <div class="product-accordion__panel">{{ content }}</div>
+  </details>
+{%- endif -%}
+
+{% stylesheet %}
+  .product-accordion {
+    border-top: var(--border);
+  }
+
+  .product-accordion:last-of-type {
+    border-bottom: var(--border);
+  }
+
+  .product-accordion__summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    min-height: 48px;
+    cursor: pointer;
+    font: 500 16px / 1.2 var(--font-display);
+    letter-spacing: -0.01em;
+    list-style: none;
+  }
+
+  .product-accordion__summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .product-accordion__summary:focus-visible {
+    outline: 2px solid currentcolor;
+    outline-offset: 2px;
+  }
+
+  .product-accordion__icon {
+    position: relative;
+    flex-shrink: 0;
+    width: 12px;
+    height: 12px;
+  }
+
+  .product-accordion__icon::before,
+  .product-accordion__icon::after {
+    content: '';
+    position: absolute;
+    inset: 50% 0 auto;
+    height: 1.5px;
+    background: currentcolor;
+  }
+
+  .product-accordion__icon::after {
+    rotate: 90deg;
+    transition: rotate 0.2s;
+  }
+
+  .product-accordion[open] .product-accordion__icon::after {
+    rotate: 0deg;
+  }
+
+  .product-accordion__panel {
+    padding-bottom: 16px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .product-accordion__icon::after {
+      transition: none;
+    }
+  }
+{% endstylesheet %}

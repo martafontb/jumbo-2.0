@@ -124,10 +124,11 @@
               </div>
 
             {%- when 'specs' -%}
-              {%- render 'product-specs', product: product, block: block -%}
+              {%- capture specs_html -%}{%- render 'product-specs', product: product, block: block -%}{%- endcapture -%}
+              {%- render 'product-accordion', heading: block.settings.accordion_heading, content: specs_html, open: block.settings.accordion_open -%}
 
             {%- when 'variant_picker' -%}
-              <div id="Picker-{{ section.id }}" data-dynamic-picker {{ block.shopify_attributes }}>
+              <div class="main-product__picker" id="Picker-{{ section.id }}" data-dynamic-picker {{ block.shopify_attributes }}>
                 {%- render 'product-variant-picker', product: product, variant: current_variant, form_id: form_id, section_id: section.id -%}
               </div>
 
@@ -145,12 +146,14 @@
 
             {%- when 'description' -%}
               {%- if product.description != blank -%}
-                <div class="rte main-product__description" {{ block.shopify_attributes }}>{{ product.description }}</div>
+                {%- capture description_html -%}<div class="rte main-product__description" {{ block.shopify_attributes }}>{{ product.description }}</div>{%- endcapture -%}
+                {%- render 'product-accordion', heading: block.settings.accordion_heading, content: description_html, open: block.settings.accordion_open -%}
               {%- endif -%}
 
             {%- when 'text' -%}
               {%- if block.settings.text != blank -%}
-                <div class="rte main-product__text" {{ block.shopify_attributes }}>{{ block.settings.text }}</div>
+                {%- capture text_html -%}<div class="rte main-product__text" {{ block.shopify_attributes }}>{{ block.settings.text }}</div>{%- endcapture -%}
+                {%- render 'product-accordion', heading: block.settings.accordion_heading, content: text_html, open: block.settings.accordion_open -%}
               {%- endif -%}
           {%- endcase -%}
         {%- endfor -%}
@@ -282,11 +285,43 @@
     padding: 0 clamp(16px, 3vw, 48px);
   }
 
+  /*
+    Vertical rhythm for the info column. Blocks are flat siblings, so the
+    space above each one is set here: 24px by default (one step), tighter
+    inside a group (title, artist, price) and looser before the accordions.
+  */
   .main-product__info-inner {
+    --space-tight: 8px;
+    --space-step: 24px;
+    --space-group: 40px;
+
     display: flex;
     flex-direction: column;
-    gap: 20px;
     padding-top: clamp(16px, 4vw, 54px);
+  }
+
+  .main-product__info-inner > * + * {
+    margin-top: var(--space-step);
+  }
+
+  .main-product__info-inner > .main-product__artist {
+    margin-top: var(--space-tight);
+  }
+
+  .main-product__info-inner > .main-product__price-block {
+    margin-top: 16px;
+  }
+
+  .main-product__info-inner > .main-product__buy + * {
+    margin-top: var(--space-group);
+  }
+
+  .main-product__info-inner > .product-accordion + .product-accordion {
+    margin-top: 0;
+  }
+
+  .main-product__info-inner > .main-product__guide {
+    margin-top: 16px;
   }
 
   [data-sticky] .main-product__info-inner {
@@ -312,6 +347,7 @@
   .main-product__title {
     margin: 0;
     overflow-wrap: anywhere;
+    font-size: clamp(32px, 3.4vw, 52px);
   }
 
   .main-product__accent {
@@ -479,7 +515,9 @@
         { "type": "text", "id": "label_dimensions", "label": "Size label", "default": "Size" },
         { "type": "text", "id": "label_format", "label": "Format label", "default": "Format" },
         { "type": "text", "id": "label_material", "label": "Material label", "default": "Material" },
-        { "type": "textarea", "id": "extra_rows", "label": "Extra rows", "info": "Same for every product using this template. One per line: Label | Value" }
+        { "type": "textarea", "id": "extra_rows", "label": "Extra rows", "info": "Same for every product using this template. One per line: Label | Value" },
+        { "type": "text", "id": "accordion_heading", "label": "Accordion heading", "info": "Collapses this block under a heading. Leave blank to show it as plain content." },
+        { "type": "checkbox", "id": "accordion_open", "label": "Accordion open by default", "default": false }
       ]
     },
     { "type": "variant_picker", "name": "Variant picker", "limit": 1, "settings": [] },
@@ -502,12 +540,22 @@
         { "type": "text", "id": "label", "label": "Label", "default": "Size & shipping guide →" }
       ]
     },
-    { "type": "description", "name": "Description", "limit": 1, "settings": [] },
+    {
+      "type": "description",
+      "name": "Description",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "accordion_heading", "label": "Accordion heading", "info": "Collapses this block under a heading. Leave blank to show it as plain content." },
+        { "type": "checkbox", "id": "accordion_open", "label": "Accordion open by default", "default": false }
+      ]
+    },
     {
       "type": "text",
       "name": "Text",
       "settings": [
-        { "type": "richtext", "id": "text", "label": "Text", "default": "<p>Each piece is printed by hand, so ink density and registration vary slightly.</p>" }
+        { "type": "richtext", "id": "text", "label": "Text", "default": "<p>Each piece is printed by hand, so ink density and registration vary slightly.</p>" },
+        { "type": "text", "id": "accordion_heading", "label": "Accordion heading", "info": "Collapses this block under a heading. Leave blank to show it as plain content." },
+        { "type": "checkbox", "id": "accordion_open", "label": "Accordion open by default", "default": false }
       ]
     }
   ]

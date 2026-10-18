@@ -1,5 +1,5 @@
 {% doc %}
-  Product price (32px) with a stock note, plus the edition progress bar.
+  Product price (28px) with a stock note, plus the edition progress bar.
   - Edition stock: when custom.edition_size is set and the variant's
     inventory is tracked by Shopify: "● 38 of 120 remaining" and a bar.
   - Otherwise "● In stock", or "● Sold out".
@@ -66,13 +66,12 @@
     display: flex;
     flex-wrap: wrap;
     align-items: baseline;
-    gap: 12px;
-    padding-top: 10px;
-    border-top: var(--border);
+    gap: 4px 12px;
   }
 
   .price-block__price {
-    font: 500 32px / 1 var(--font-display);
+    font: 500 28px / 1 var(--font-display);
+    letter-spacing: -0.02em;
   }
 
   .price-block__compare {

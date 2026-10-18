@@ -35,11 +35,11 @@
       data-variant-input
       {% unless product.has_only_default_variant %}disabled{% endunless %}
     >
-    <div class="buy-buttons__row">
-      {%- if block.settings.show_quantity -%}
-        <quantity-input class="stepper buy-buttons__qty" style="--stepper-size: 48px;">
+    {%- if block.settings.show_quantity -%}
+      <div class="buy-buttons__qty-group">
+        <label class="buy-buttons__qty-label" for="Quantity-{{ form_id }}">{{ 'products.quantity' | t }}</label>
+        <quantity-input class="stepper buy-buttons__qty" style="--stepper-size: 44px;">
           <button type="button" class="stepper__button" data-step="down" aria-label="{{ 'products.quantity_decrease' | t }}">−</button>
-          <label class="visually-hidden" for="Quantity-{{ form_id }}">{{ 'products.quantity' | t }}</label>
           <input
             class="stepper__input"
             type="number"
@@ -53,10 +53,12 @@
           >
           <button type="button" class="stepper__button" data-step="up" aria-label="{{ 'products.quantity_increase' | t }}">+</button>
         </quantity-input>
-      {%- else -%}
-        <input type="hidden" name="quantity" value="{{ min_qty }}">
-      {%- endif -%}
+      </div>
+    {%- else -%}
+      <input type="hidden" name="quantity" value="{{ min_qty }}">
+    {%- endif -%}
 
+    <div class="buy-buttons__row">
       <button
         type="submit"
         name="add"
@@ -88,35 +90,45 @@
   .buy-buttons {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 12px;
   }
 
   .buy-buttons__form {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 24px;
   }
 
-  .buy-buttons__row {
+  .buy-buttons__qty-group {
     display: flex;
-    gap: 4px;
-    align-items: stretch;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
   }
 
-  .buy-buttons__qty {
-    flex: none;
+  .buy-buttons__qty-label {
+    font: 400 var(--text-label) / 1.35 var(--font-mono);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    opacity: var(--opacity-muted);
   }
 
   .buy-buttons__qty .stepper__button {
     font-size: 18px;
   }
 
+  .buy-buttons__row {
+    display: flex;
+  }
+
   .buy-buttons__add {
     flex: 1;
+    min-height: 64px;
+    font-size: 15px;
   }
 
   .buy-buttons__view-cart {
-    padding: 12px;
+    padding: 18px 12px;
     border: var(--border);
     background: var(--color-blue);
     color: var(--color-white);

@@ -12,14 +12,10 @@
     "main": {
       "type": "main-product",
       "blocks": {
-        "breadcrumb": {
-          "type": "breadcrumb",
-          "settings": {}
-        },
         "title": {
           "type": "title",
           "settings": {
-            "accent": true,
+            "accent": false,
             "accent_color": "blue"
           }
         },
@@ -46,7 +42,8 @@
             "label_dimensions": "Size",
             "label_format": "Format",
             "label_material": "Material",
-            "extra_rows": ""
+            "extra_rows": "",
+            "accordion_heading": "Details"
           }
         },
         "variant_picker": {
@@ -56,7 +53,7 @@
         "buy_buttons": {
           "type": "buy_buttons",
           "settings": {
-            "show_quantity": false,
+            "show_quantity": true,
             "show_total": false,
             "show_dynamic_checkout": false,
             "show_view_cart": true
@@ -70,24 +67,26 @@
         },
         "description": {
           "type": "description",
-          "settings": {}
+          "settings": {
+            "accordion_heading": "Description",
+            "accordion_open": true
+          }
         }
       },
       "block_order": [
-        "breadcrumb",
         "title",
         "artist",
         "price",
-        "specs",
         "variant_picker",
         "buy_buttons",
-        "guide_link",
-        "description"
+        "description",
+        "specs",
+        "guide_link"
       ],
       "settings": {
         "gallery_layout": "two-up",
-        "gallery_ground": "blue",
-        "gallery_fit": "auto",
+        "gallery_ground": "grey",
+        "gallery_fit": "contain",
         "captions": false,
         "sticky_info": true,
         "sticky_bar": true,
