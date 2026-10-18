@@ -166,6 +166,12 @@ All optional. Create product metafields in Settings > Custom data > Products, an
 | `custom.pairs_with` | List of products | "Complete the set" |
 | `reviews.rating`, `reviews.rating_count` | Set by the reviews app | Stars on cards, product reviews summary |
 
+**Variant metafields**
+
+| Namespace.key | Type | Used for |
+|---|---|---|
+| `color.value` | Color (one) | Colour circle in the variant picker for options named Colour, Color or Colourway. Shopify's own swatches take priority |
+
 **Artist metaobject (`artist`)**. Turn on **Web pages** for the definition (Settings > Custom data > Metaobjects > Artist > Options) so each artist gets a URL using the `metaobject/artist` template.
 
 | Field key | Type | Used for |
