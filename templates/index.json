@@ -30,9 +30,9 @@
         "video": "shopify://files/videos/video horizontal.mov",
         "image_alt": "",
         "main_ground": "blue",
-        "side_image": "shopify://shop_images/657760298_18156740725433464_4927516774514660040_n_1af85bcd-52c0-43a2-be99-a15626521b34.webp",
+        "side_image": "shopify://shop_images/467524751_18304846459205119_3654848127412538487_n.webp",
         "side_image_alt": "",
-        "side_label": "Now printing",
+        "side_label": "Printed in Barcelona",
         "side_link": "",
         "side_ground": "grey",
         "spacing": "none"
@@ -138,6 +138,7 @@
         "ink-6",
         "ink-7"
       ],
+      "disabled": true,
       "settings": {
         "show_border": true,
         "label": "Our inks",
