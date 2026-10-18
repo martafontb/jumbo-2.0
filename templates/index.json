@@ -32,8 +32,8 @@
         "main_ground": "blue",
         "side_image": "shopify://shop_images/467524751_18304846459205119_3654848127412538487_n.webp",
         "side_image_alt": "",
-        "side_label": "printed in barcelona",
-        "side_link": "",
+        "side_label": "shop all books",
+        "side_link": "shopify://collections/books",
         "side_ground": "grey",
         "spacing": "none"
       }
