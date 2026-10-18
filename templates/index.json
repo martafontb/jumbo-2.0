@@ -41,7 +41,7 @@
     "intro": {
       "type": "statement",
       "settings": {
-        "text": "<p>Jumbo Press is a risograph studio and publisher. We print editions, zines and books with artists, one colour at a time, in small runs.</p>",
+        "text": "<p>Jumbo Press is a risograph studio and publisher. We print editions, zines and books with artists, one colour at a time.</p>",
         "size": "regular",
         "button_label": "",
         "button_link": "",
