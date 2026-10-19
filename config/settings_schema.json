@@ -131,6 +131,27 @@
         ],
         "default": "cover",
         "info": "Use \"Show the whole image\" for packshots on transparent backgrounds."
+      },
+      {
+        "type": "select",
+        "id": "quick_add_style",
+        "label": "Quick add style",
+        "options": [
+          {
+            "value": "pill",
+            "label": "Pill on the image (on hover)"
+          },
+          {
+            "value": "bar",
+            "label": "Full-width bar on the image (on hover)"
+          },
+          {
+            "value": "below",
+            "label": "Button under the card"
+          }
+        ],
+        "default": "pill",
+        "info": "Applies where a section's \"Show quick add to cart\" is on. On touch screens the overlay styles are always visible."
       }
     ]
   },

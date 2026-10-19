@@ -1,0 +1,113 @@
+{% doc %}
+  Quick add-to-cart button for a product card. The style comes from the theme
+  setting `quick_add_style`: pill | bar (overlay on the image, revealed on
+  hover) | below (plain button under the card).
+
+  The overlay styles sit in a box with the media's aspect ratio pinned to the
+  top of the nearest `.quick-add-host`, so the host card must have the image
+  first and the same `ratio`. Products with several variants get a "Choose
+  options" link instead, unless `choose_options` is false.
+
+  @param {object} product - Product
+  @param {string} ratio - CSS aspect ratio of the card image, e.g. '3 / 4'
+  @param {string} [label] - Button label, default "Add to cart"
+  @param {boolean} [choose_options] - Link multi-variant products to their page, default true
+{% enddoc %}
+{%- liquid
+  assign quick_add_style = settings.quick_add_style | default: 'pill'
+  assign button_class = 'quick-add__button'
+  unless quick_add_style == 'pill'
+    assign button_class = 'quick-add__button button--full'
+  endunless
+-%}
+<div class="quick-add quick-add--{{ quick_add_style }}" style="--ratio: {{ ratio }};">
+  {%- if product.has_only_default_variant or choose_options == false -%}
+    {%- render 'add-to-cart-form', product: product, label: label, class: button_class -%}
+  {%- else -%}
+    <a class="button button--small {{ button_class }}" href="{{ product.url }}">{{ 'products.choose_options' | t }}</a>
+  {%- endif -%}
+</div>
+
+{% stylesheet %}
+  /* Quick add. "below" is a plain block under the card. The overlay styles
+     sit in a box with the media's aspect ratio pinned to the top of the card,
+     so they land on the image without nesting a button inside the link. */
+  .quick-add-host {
+    position: relative;
+  }
+
+  .quick-add--below {
+    margin-top: auto;
+    padding-top: 4px;
+  }
+
+  .quick-add--pill,
+  .quick-add--bar {
+    position: absolute;
+    inset: 0 0 auto;
+    z-index: 2;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    aspect-ratio: var(--ratio);
+    padding: 16px;
+    pointer-events: none;
+  }
+
+  .quick-add--bar {
+    padding: 10px;
+  }
+
+  .quick-add--pill .add-to-cart,
+  .quick-add--bar .add-to-cart {
+    display: block;
+  }
+
+  /* Pill: a wide target (70% of the image), centred rather than a small chip. */
+  .quick-add--pill > .add-to-cart,
+  .quick-add--pill > .quick-add__button {
+    width: 70%;
+  }
+
+  .quick-add--pill .add-to-cart .quick-add__button {
+    width: 100%;
+  }
+
+  .quick-add--bar .add-to-cart {
+    width: 100%;
+  }
+
+  .quick-add--pill .quick-add__button,
+  .quick-add--bar .quick-add__button {
+    min-height: 48px;
+    padding: 14px 28px;
+    font-size: var(--text-label);
+    border-color: var(--color-ink);
+    background: var(--color-bg);
+    color: var(--color-ink);
+    pointer-events: auto;
+    transition: opacity 0.25s var(--ease-out-expo), transform 0.25s var(--ease-out-expo), background-color 0.15s, color 0.15s, border-color 0.15s;
+  }
+
+  .quick-add--pill .quick-add__button:hover,
+  .quick-add--bar .quick-add__button:hover {
+    border-color: var(--color-ink);
+    background: var(--color-ink);
+    color: var(--color-white);
+  }
+
+  /* Hover devices: hidden until the card is hovered or focused. */
+  @media (hover: hover) {
+    .quick-add--pill .quick-add__button,
+    .quick-add--bar .quick-add__button {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+
+    .quick-add-host:hover .quick-add__button,
+    .quick-add-host:focus-within .quick-add__button {
+      opacity: 1;
+      transform: none;
+    }
+  }
+{% endstylesheet %}

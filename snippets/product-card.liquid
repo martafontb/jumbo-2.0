@@ -16,7 +16,7 @@
   @param {string} [class] - Extra classes on the card
   @param {string} [heading_tag] - Title element, default 'span' (use 'h2'/'h3' in grids)
   @param {boolean} [reserve_stars] - Keep the rating row's height when a product has no rating, so cards in a row stay the same height
-  @param {boolean} [quick_add] - Show an add-to-cart button under the card. Products with several variants get a "Choose options" link instead.
+  @param {boolean} [quick_add] - Show an add-to-cart button. Products with several variants get a "Choose options" link instead. Style comes from the theme setting `quick_add_style`: pill | bar (overlay on the image, revealed on hover) | below.
 {% enddoc %}
 {%- liquid
   assign ground = ground | default: 'grey'
@@ -30,7 +30,7 @@
     assign placeholder_title = 'products.placeholder_title' | t
   endif
 -%}
-<div class="product-card product-card--{{ card_size }} product-card--bg-{{ settings.card_background | default: 'hover' }} {{ class }}">
+<div class="product-card quick-add-host product-card--{{ card_size }} product-card--bg-{{ settings.card_background | default: 'hover' }} {{ class }}">
   <a class="product-card__link" href="{{ product.url | default: '#' }}">
     <div class="media product-card__media" style="--ratio: {{ ratio }}; --card-ground: var(--color-{{ ground }}); --media-fit: {{ settings.card_image_fit | default: 'cover' }};">
       {%- render 'image-or-video',
@@ -65,13 +65,7 @@
     <span class="product-card__stars product-card__stars--empty" aria-hidden="true"></span>
   {%- endif -%}
   {%- if quick_add and product != blank -%}
-    <div class="product-card__quick-add">
-      {%- if product.has_only_default_variant -%}
-        {%- render 'add-to-cart-form', product: product, class: 'button--full' -%}
-      {%- else -%}
-        <a class="button button--small button--full" href="{{ product.url }}">{{ 'products.choose_options' | t }}</a>
-      {%- endif -%}
-    </div>
+    {%- render 'quick-add', product: product, ratio: ratio -%}
   {%- endif -%}
 </div>
 
@@ -131,7 +125,7 @@
   .product-card__title {
     margin: 0;
     min-width: 0;
-    font: 400 var(--text-card-lg) / 1.05 var(--font-display);
+    font: 400 var(--text-card-sm) / 1.05 var(--font-display);
     letter-spacing: -0.02em;
   }
 
@@ -156,9 +150,5 @@
   .product-card__stars--empty {
     display: block;
     height: 12px;
-  }
-
-  .product-card__quick-add {
-    margin-top: 4px;
   }
 {% endstylesheet %}

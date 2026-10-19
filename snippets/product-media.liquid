@@ -1,6 +1,7 @@
 {% doc %}
   One product media item (image, video, external video or 3D model) in a
-  rounded 4/3 frame.
+  rounded 4/3 frame. Images carry a magnifier icon button in the corner that
+  opens the zoom lightbox (see product-gallery.js).
 
   @param {object} media - Product media
   @param {object} product - Product (for alt fallback)
@@ -37,6 +38,15 @@
         alt_fallback: product.title,
         eager: first
       -%}
+      <button
+        type="button"
+        class="icon-button product-gallery__zoom"
+        data-zoom-src="{{ media.preview_image | image_url: width: 2400 }}"
+        data-zoom-alt="{{ media.preview_image.alt | default: product.title | escape }}"
+        aria-label="{{ 'products.zoom.open' | t }}"
+      >
+        <svg aria-hidden="true" focusable="false" width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7.5" cy="7.5" r="5.25"/><path d="M11.5 11.5 16 16M7.5 5v5M5 7.5h5"/></svg>
+      </button>
       {%- if caption and first == false and media.alt != blank -%}
         <span class="product-gallery__caption" aria-hidden="true">{{ media.alt | escape }}</span>
       {%- endif -%}

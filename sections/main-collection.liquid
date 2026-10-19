@@ -6,8 +6,8 @@
   - Span: a "Product layout" block for that product (which can also replace
     its image with another image or a video), otherwise the product
     metafield `custom.card_span` (1, 2 or 3). Wide cards are
-    clamped to fit the row and the last card stretches to finish it, as in
-    the design. Ratio follows span: 1 → 3/4, 2 → 3/2, 3 → 9/4. On mobile
+    clamped to fit the row; the last card stretches to finish it only when
+    "Stretch the last card" is on. Ratio follows span: 1 → 3/4, 2 → 3/2, 3 → 9/4. On mobile
     every card is one column (3/4).
   - Card colour: metafield `custom.card_ground` (blue, red, grey, ink, bg),
     otherwise the section's repeating colour list.
@@ -150,7 +150,7 @@
             if span > remaining
               assign span = remaining
             endif
-            if forloop.last and trailing_note == false
+            if forloop.last and trailing_note == false and section.settings.fill_last_row
               assign span = remaining
             endif
             assign col = col | plus: span | modulo: 3
@@ -444,7 +444,7 @@
 {
   "name": "Collection",
   "class": "section-main-collection",
-  "max_blocks": 6,
+  "max_blocks": 50,
   "settings": [
     { "type": "checkbox", "id": "show_border", "label": "Show top border", "default": true },
     { "type": "text", "id": "title", "label": "Title", "info": "Defaults to the collection title." },
@@ -463,7 +463,14 @@
       "info": "Comma-separated, repeating: blue, red, grey, ink, bg. A product's custom.card_ground metafield overrides this.",
       "default": "blue, grey, red, ink, blue, red"
     },
-    { "type": "range", "id": "per_page", "label": "Products per page", "min": 6, "max": 48, "step": 3, "default": 24 }
+    { "type": "range", "id": "per_page", "label": "Products per page", "min": 6, "max": 50, "step": 1, "default": 24, "info": "Shopify allows at most 50 per page. Multiples of 3 fill the grid rows." },
+    {
+      "type": "checkbox",
+      "id": "fill_last_row",
+      "label": "Stretch the last card to fill its row",
+      "info": "Off: a lone last product keeps its own width instead of spanning all three columns.",
+      "default": false
+    }
   ],
   "blocks": [
     {

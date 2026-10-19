@@ -1,15 +1,15 @@
 {% doc %}
   Index-page title block: huge heading with an accent full stop, an optional
-  superscript count, and an optional intro in the right-hand column.
+  superscript count, and an optional intro spanning the two right-hand columns.
 
   @param {string} title - Heading text (escaped here)
   @param {number} [count] - Count, e.g. products in a collection
   @param {string} [count_style] - 'sup' (default, "(n)" superscript) or 'accent' (italic blue)
-  @param {string} [intro] - Intro HTML (rich text) for the right column
+  @param {string} [intro] - Intro HTML (rich text) for the right two columns
   @param {boolean} [show_dot] - Accent full stop, default true
 {% enddoc %}
 <div class="page-title grid">
-  <h1 class="title-page page-title__heading span-2">
+  <h1 class="title-page page-title__heading">
     {{- title | escape -}}
     {%- unless show_dot == false -%}<span class="dot">.</span>{%- endunless -%}
     {%- if count != blank -%}
@@ -41,7 +41,8 @@
   }
 
   .page-title__intro {
-    max-width: 34ch;
+    grid-column: span min(2, var(--grid-columns));
+    max-width: 50ch;
   }
 
   .page-title .accent {

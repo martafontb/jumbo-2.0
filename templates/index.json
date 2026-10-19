@@ -38,17 +38,6 @@
         "spacing": "none"
       }
     },
-    "intro": {
-      "type": "statement",
-      "settings": {
-        "text": "<p>Jumbo Press is a risograph studio and publisher. We print editions, zines and books with artists, one colour at a time.</p>",
-        "size": "regular",
-        "button_label": "",
-        "button_link": "",
-        "button_style": "pill",
-        "spacing": "medium"
-      }
-    },
     "editions": {
       "type": "product-carousel",
       "settings": {
@@ -57,15 +46,29 @@
         "limit": 8,
         "quick_add": true,
         "grounds": "blue, red, grey, red, blue",
-        "label": "",
-        "label_color": "blue",
+        "label": "New & Best Sellers",
+        "label_color": "red",
         "caption": "",
         "end_image": "shopify://shop_images/DSC_5456.jpg",
         "end_image_alt": "",
         "end_ground": "blue",
         "end_note": "",
         "end_button_label": "Shop all editions →",
-        "end_button_link": "",
+        "end_button_link": "shopify://collections/new",
+        "spacing": "medium"
+      }
+    },
+    "intro": {
+      "type": "statement",
+      "settings": {
+        "text": "<p>Jumbo Press is a risograph studio and publisher. We print editions, zines and books with artists, one colour at a time.</p>",
+        "size": "regular",
+        "image": "shopify://shop_images/JUMBOBOOK3.jpg",
+        "image_alt": "",
+        "media_ratio": "4 / 5",
+        "button_label": "",
+        "button_link": "",
+        "button_style": "block",
         "spacing": "medium"
       }
     },
@@ -193,7 +196,7 @@
         "caption": "Buy together, pay less",
         "button_label": "Add",
         "grounds": "grey, blue, red",
-        "spacing": "small"
+        "spacing": "medium"
       }
     },
     "events": {
@@ -470,8 +473,8 @@
   },
   "order": [
     "hero",
-    "intro",
     "editions",
+    "intro",
     "inks",
     "packs",
     "events",

@@ -1,6 +1,7 @@
 {% comment %}
   Product related ("Also from …")
-  A drag-to-scroll carousel of square image cards (three in view on
+  A drag-to-scroll carousel of 3:4 product cards, the same ratio as the collection grid (image, title,
+  price) (three in view on
   desktop, about 1.7 on mobile). Source: the artist's collection (field
   `collection` on the custom.artist metaobject), excluding this product;
   otherwise Shopify's related-product recommendations, fetched after load
@@ -47,18 +48,14 @@
         {%- assign shown = shown | plus: 1 -%}
         {%- assign ground_index = shown | modulo: 3 -%}
         <div class="product-related__card">
-          <a class="media product-related__link" href="{{ item.url }}" style="--ratio: 1; --media-bg: var(--color-{{ palette[ground_index] }});">
-            {%- render 'image', image: item.featured_media, sizes: '(min-width: 750px) 33vw, 60vw', alt: item.title, placeholder: 'product-3' -%}
-          </a>
-          {%- if section.settings.quick_add -%}
-            <div class="product-related__quick-add">
-              {%- if item.has_only_default_variant -%}
-                {%- render 'add-to-cart-form', product: item, class: 'button--full' -%}
-              {%- else -%}
-                <a class="button button--small button--full" href="{{ item.url }}">{{ 'products.choose_options' | t }}</a>
-              {%- endif -%}
-            </div>
-          {%- endif -%}
+          {%- render 'product-card',
+            product: item,
+            ground: palette[ground_index],
+            ratio: '3 / 4',
+            scale: 'sm',
+            sizes: '(min-width: 750px) 33vw, 60vw',
+            quick_add: section.settings.quick_add
+          -%}
         </div>
       {%- endfor -%}
     </drag-scroller>
@@ -75,14 +72,6 @@
     margin: 0 0 4px;
     padding-top: 8px;
     border-top: var(--section-border, var(--border));
-  }
-
-  .product-related__link {
-    display: block;
-  }
-
-  .product-related__quick-add {
-    margin-top: 4px;
   }
 
   .product-related__card {

@@ -14,6 +14,9 @@
   @param {string} [fit] - 'auto' (portrait images contained), 'cover' or 'contain'
 
   Under 750px the gallery is a swipeable carousel with a counter.
+
+  Zoom: a magnifier icon button on each image opens a full-screen lightbox
+  where the image can be panned at 2.5x and stepped with arrow keys.
 {% enddoc %}
 {%- liquid
   assign featured = variant.featured_media | default: product.featured_media
@@ -46,6 +49,14 @@
 {%- if media_count > 1 -%}
   <span class="pill pill--bg product-gallery__counter" aria-hidden="true"><span data-gallery-index>1</span> / {{ media_count }}</span>
 {%- endif -%}
+<dialog class="overlay zoom-dialog" data-zoom-dialog aria-label="{{ 'products.zoom.dialog' | t: title: product.title | escape }}">
+  <div class="zoom-dialog__stage" data-zoom-stage>
+    <img class="zoom-dialog__img" data-zoom-img alt="" width="2400" height="2400">
+  </div>
+  <button type="button" class="icon-button icon-button--lg zoom-dialog__close" data-zoom-close aria-label="{{ 'products.zoom.close' | t }}">✕</button>
+  <button type="button" class="icon-button icon-button--lg zoom-dialog__nav zoom-dialog__nav--prev" data-zoom-prev aria-label="{{ 'products.zoom.previous' | t }}">←</button>
+  <button type="button" class="icon-button icon-button--lg zoom-dialog__nav zoom-dialog__nav--next" data-zoom-next aria-label="{{ 'products.zoom.next' | t }}">→</button>
+</dialog>
 </product-gallery>
 <script src="{{ 'product-gallery.js' | asset_url }}" type="module"></script>
 
@@ -119,6 +130,80 @@
       display: inline-flex;
     }
   }
+
+  .product-gallery__zoom {
+    position: absolute;
+    right: 8px;
+    bottom: 8px;
+    z-index: 1;
+    background: var(--color-bg);
+  }
+
+  .product-gallery__zoom:focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 2px;
+  }
+
+  /* Desktop: the magnifier fades in on hover or keyboard focus. Touch keeps it visible. */
+  @media (hover: hover) and (pointer: fine) {
+    .product-gallery__zoom {
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .product-gallery__item:hover .product-gallery__zoom,
+    .product-gallery__zoom:focus-visible {
+      opacity: 1;
+    }
+  }
+
+  .zoom-dialog {
+    inset: 0;
+    width: 100vw;
+    height: 100%;
+    background: var(--color-bg);
+  }
+
+  .zoom-dialog__stage {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    cursor: zoom-in;
+  }
+
+  .zoom-dialog__stage.is-zoomed {
+    cursor: zoom-out;
+  }
+
+  .zoom-dialog__img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transform-origin: var(--zoom-x, 50%) var(--zoom-y, 50%);
+    transition: transform 0.25s ease-out;
+    user-select: none;
+  }
+
+  .zoom-dialog__stage.is-zoomed .zoom-dialog__img {
+    transform: scale(2.5);
+  }
+
+  .zoom-dialog__close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: var(--color-bg);
+  }
+
+  .zoom-dialog__nav {
+    position: absolute;
+    top: 50%;
+    translate: 0 -50%;
+    background: var(--color-bg);
+  }
+
+  .zoom-dialog__nav--prev { left: 16px; }
+  .zoom-dialog__nav--next { right: 16px; }
 
   .product-gallery__caption {
     position: absolute;

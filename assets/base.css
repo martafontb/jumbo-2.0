@@ -245,8 +245,8 @@ a {
 .title-product {
   font-weight: 500;
   font-size: var(--text-product-title);
-  line-height: 0.9;
-  letter-spacing: -0.045em;
+  line-height: 1;
+  letter-spacing: -0.035em;
 }
 
 .title-statement {

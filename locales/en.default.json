@@ -219,6 +219,13 @@
     },
     "breadcrumb": "Breadcrumb",
     "gallery": "{{ title }} images",
+    "zoom": {
+      "open": "Zoom image",
+      "close": "Close zoom",
+      "previous": "Previous image",
+      "next": "Next image",
+      "dialog": "{{ title }} image zoom"
+    },
     "shop": "Shop",
     "size_chart": {
       "show": "View size chart",
