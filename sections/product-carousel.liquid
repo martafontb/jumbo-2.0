@@ -70,7 +70,7 @@
             {%- render 'image-or-video', video: section.settings.end_video, image: section.settings.end_image, sizes: '(min-width: 750px) 33vw, 60vw', alt: section.settings.end_image_alt, placeholder: 'image' -%}
           </div>
           {%- if section.settings.end_note != blank -%}
-            <div class="product-carousel__note label label--sm">{{ section.settings.end_note }}</div>
+            <div class="product-carousel__note">{{ section.settings.end_note }}</div>
           {%- endif -%}
           {%- if section.settings.end_button_label != blank -%}
             <a class="product-carousel__cta tap-target" href="{{ section.settings.end_button_link | default: collection.url | default: routes.all_products_collection_url }}">
@@ -108,7 +108,7 @@
     padding: 8px;
     border: var(--border);
     border-radius: var(--radius-sm);
-    text-transform: uppercase;
+    font: 400 14px / 1.4 var(--font-display);
   }
 
   .product-carousel__cta {

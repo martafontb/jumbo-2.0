@@ -11,13 +11,30 @@
   "sections": {
     "hero": {
       "type": "hero",
+      "blocks": {
+        "review_fgQwwW": {
+          "type": "review",
+          "settings": {
+            "quote": "Colour is richer than the photos. Slight blue misregistration is exactly why I bought it.",
+            "name": "Ines M.",
+            "caption": "",
+            "rating": 5,
+            "color": "blue"
+          }
+        }
+      },
+      "block_order": [
+        "review_fgQwwW"
+      ],
       "settings": {
         "video": "shopify://files/videos/video horizontal.mov",
         "image_alt": "",
         "main_ground": "blue",
-        "headline": "Independent publisher and risograph printer.",
-        "button_label": "Shop editions",
-        "button_link": "shopify://collections/books",
+        "side_image": "shopify://shop_images/1_845a0577-2ea1-4bc0-8348-4178367af369.jpg",
+        "side_image_alt": "",
+        "side_label": "shop all books",
+        "side_link": "shopify://collections/books",
+        "side_ground": "grey",
         "spacing": "none"
       }
     },
@@ -353,26 +370,13 @@
     },
     "reviews": {
       "type": "reviews-strip",
-      "blocks": {
-        "review_hero": {
-          "type": "review",
-          "settings": {
-            "quote": "Colour is richer than the photos. Slight blue misregistration is exactly why I bought it.",
-            "name": "Ines M.",
-            "caption": "",
-            "color": "blue"
-          }
-        }
-      },
-      "block_order": [
-        "review_hero"
-      ],
+      "disabled": true,
       "settings": {
-        "show_border": false,
+        "show_border": true,
         "label": "Loved by buyers",
         "rating": "",
         "count_text": "",
-        "spacing": "small"
+        "spacing": "none"
       }
     },
     "on-the-press": {
@@ -470,7 +474,6 @@
   },
   "order": [
     "hero",
-    "reviews",
     "editions",
     "intro",
     "inks",
@@ -478,6 +481,7 @@
     "events",
     "stories",
     "studio-note",
+    "reviews",
     "on-the-press",
     "shop-the-studio"
   ]

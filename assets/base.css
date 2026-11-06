@@ -110,11 +110,21 @@ a {
   color: var(--color-ink);
 }
 
-/* Blue text on the pale background is 2.3:1, so hover underlines instead of recolouring. */
+/* Blue text on the pale background is 2.3:1, so plain links fade on hover instead of recolouring.
+   Classed links (buttons, cards, nav) keep their own hover styles. */
+a:not([class]) {
+  transition: opacity 0.2s var(--ease-out-expo);
+}
+
 @media (hover: hover) {
-  a:hover {
-    text-decoration: underline;
-    text-underline-offset: 0.2em;
+  a:not([class]):hover {
+    opacity: 0.55;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  a:not([class]) {
+    transition: none;
   }
 }
 

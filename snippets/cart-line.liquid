@@ -167,8 +167,12 @@
     --stepper-size: 34px;
   }
 
+  .cart-line__remove {
+    transition: opacity 0.2s var(--ease-out-expo);
+  }
+
   .cart-line__remove:hover {
-    text-decoration: underline; /* red text on the pale background fails contrast */
+    opacity: 0.55; /* red text on the pale background fails contrast */
   }
 
   .cart-line__price {

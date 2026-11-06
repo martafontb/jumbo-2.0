@@ -31,7 +31,7 @@
           {%- endfor -%}
         </div>
       {%- elsif request.design_mode -%}
-        <p class="product-reviews__list product-reviews__hint label">{{ 'products.reviews.add_app' | t }}</p>
+        <p class="product-reviews__list product-reviews__hint">{{ 'products.reviews.add_app' | t }}</p>
       {%- endif -%}
     </div>
   </section>
@@ -63,6 +63,7 @@
   }
 
   .product-reviews__hint {
+    font: 400 14px / 1.4 var(--font-display);
     padding: 16px;
     border: 1px dashed var(--color-ink);
     border-radius: var(--radius-lg);

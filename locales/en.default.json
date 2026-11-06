@@ -100,7 +100,9 @@
     },
     "hero": {
       "play": "Play video",
-      "pause": "Pause video"
+      "pause": "Pause video",
+      "play_reviews": "Play review rotation",
+      "pause_reviews": "Pause review rotation"
     },
     "studio_note": {
       "empty": "Studio note: add a quote in the theme editor to show this section."

@@ -108,7 +108,7 @@
       </tbody>
     </table>
     {%- if section.settings.note != blank -%}
-      <p class="label label--sm price-calc__note">{{ section.settings.note | escape }}</p>
+      <p class="price-calc__note">{{ section.settings.note | escape }}</p>
     {%- endif -%}
   </div>
 </price-calculator>
@@ -259,6 +259,7 @@
 
   .price-calc__note {
     margin-top: 16px;
+    font: 400 14px / 1.4 var(--font-display);
     opacity: var(--opacity-muted);
   }
 

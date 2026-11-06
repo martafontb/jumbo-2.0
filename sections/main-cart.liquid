@@ -60,7 +60,7 @@
         {%- endfor -%}
         <button type="submit" name="checkout" form="CartPageForm" class="button button--full main-cart__checkout">{{ 'cart.checkout' | t }}</button>
         {%- if section.settings.note != blank -%}
-          <p class="label label--sm main-cart__fine">{{ section.settings.note | escape }}</p>
+          <p class="main-cart__fine main-cart__note">{{ section.settings.note | escape }}</p>
         {%- endif -%}
       </aside>
     </div>
@@ -183,6 +183,10 @@
 
   .main-cart__fine {
     opacity: 0.8;
+  }
+
+  .main-cart__note {
+    font: 400 14px / 1.4 var(--font-display);
   }
 
   .main-cart__empty {
