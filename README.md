@@ -4,7 +4,7 @@ A Shopify Online Store 2.0 theme for Jumbo Press, a risograph studio, print work
 
 - Liquid, JSON templates, sections, blocks and section groups. No build step.
 - Vanilla JS ES modules and custom elements. No frameworks or jQuery.
-- Self-hosted Outfit and DM Mono fonts (SIL OFL).
+- Self-hosted Instrument Sans and DM Mono fonts (SIL OFL).
 
 See `CLAUDE.md` for coding rules and `docs/phase-1-audit.md` for the architecture plan.
 
@@ -303,4 +303,4 @@ Shared JS: feature modules import from `@theme/global` (an import map in `snippe
 
 ## Credits
 
-Based on Shopify's Skeleton theme (© Shopify Inc., used under its licence for themes that integrate with Shopify). Outfit and DM Mono are licensed under the SIL Open Font License 1.1.
+Based on Shopify's Skeleton theme (© Shopify Inc., used under its licence for themes that integrate with Shopify). Instrument Sans and DM Mono are licensed under the SIL Open Font License 1.1.

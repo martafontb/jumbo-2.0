@@ -4,6 +4,13 @@ All notable changes to this theme are documented here. The format follows [Keep 
 
 ## [Unreleased]
 
+### Changed (art direction: type and colour)
+- Main font is now Instrument Sans (self-hosted variable woff2, 400 to 700) in place of Outfit. DM Mono stays for labels. Variables are in `snippets/css-variables.liquid`.
+- Type scale variables (`--text-page-title`, `--text-section-title`, `--text-card-title` and tracking tokens) with `clamp()` between phone and desktop. Body text is 16px. The product description now uses the full column width.
+- Ink text on blue fills (view cart button, set reminder button). Blue and red no longer colour small text: link hover underlines, the cart count and the accent are ink.
+- Review stars (Judge.me) are ink, not teal.
+- Media frames and product cards have a 1px ink border and a 16px radius.
+
 ### Added
 - Contact page (`page.contact`, `sections/contact.liquid`): portrait image and contact rows (blocks: pill, heading, text, email or link).
 - Wholesale page (`page.wholesale`, `sections/wholesale.liquid`): statement, intro, image, reason cards (blocks, up to four) and an email call to action. Copy from the design handoff as defaults.

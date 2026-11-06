@@ -110,9 +110,11 @@ a {
   color: var(--color-ink);
 }
 
+/* Blue text on the pale background is 2.3:1, so hover underlines instead of recolouring. */
 @media (hover: hover) {
   a:hover {
-    color: var(--color-blue);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
   }
 }
 
@@ -238,29 +240,29 @@ a {
 .title-page {
   font-weight: 500;
   font-size: var(--text-page-title);
-  line-height: 0.85;
-  letter-spacing: -0.05em;
+  line-height: 0.95;
+  letter-spacing: var(--tracking-page-title);
 }
 
 .title-product {
   font-weight: 500;
   font-size: var(--text-product-title);
   line-height: 1;
-  letter-spacing: -0.035em;
+  letter-spacing: var(--tracking-section-title);
 }
 
 .title-statement {
   font-weight: 400;
   font-size: var(--text-statement);
   line-height: 1.02;
-  letter-spacing: -0.04em;
+  letter-spacing: var(--tracking-section-title);
 }
 
 .title-card {
   font-weight: 400;
   font-size: var(--text-card-lg);
   line-height: 1.05;
-  letter-spacing: -0.02em;
+  letter-spacing: var(--tracking-card-title);
 }
 
 .title-card--sm {
@@ -274,8 +276,7 @@ a {
 }
 
 .accent {
-  color: var(--color-blue);
-  font-style: italic;
+  font-style: italic; /* colour goes in fills, not text */
 }
 
 .rte p + p {
@@ -572,7 +573,8 @@ a {
 .media {
   position: relative;
   overflow: hidden;
-  border-radius: var(--radius-lg);
+  border: var(--border);
+  border-radius: var(--radius-md);
   background: var(--media-bg, var(--color-grey));
   aspect-ratio: var(--ratio, 4 / 3);
 }
@@ -804,8 +806,8 @@ html.has-overlay {
 
 .shopify-policy__title h1 {
   margin-bottom: 24px;
-  font: 500 var(--text-page-title) / 0.85 var(--font-display);
-  letter-spacing: -0.05em;
+  font: 500 var(--text-page-title) / 0.95 var(--font-display);
+  letter-spacing: var(--tracking-page-title);
   text-align: left;
 }
 
@@ -814,4 +816,13 @@ html.has-overlay {
   padding-top: 24px;
   border-top: var(--border);
   font: 400 17px / 1.5 var(--font-display);
+}
+
+/* ---------- Review stars ---------- */
+/* The review app (Judge.me) ships teal stars (#108474), which is not in the palette. Two-class selectors beat its single-class rule. */
+.jdgm-prev-badge .jdgm-star,
+.jdgm-widget .jdgm-star,
+.jdgm-rev-widg .jdgm-star,
+.jdgm-prev-badge__stars .jdgm-star {
+  color: var(--color-ink);
 }
