@@ -4,6 +4,10 @@ All notable changes to this theme are documented here. The format follows [Keep 
 
 ## [Unreleased]
 
+### Changed (nav feel)
+- Mega menu: calmer fade-and-settle instead of a clip reveal; pill uses a fixed half-height radius so its corners ease evenly.
+- Pill nav has 24px of space below it.
+
 ### Changed (motion and gallery)
 - Mega menu opens and closes with a reveal that grows from the pill (switching between menus is instant); pill corners ease between round and square.
 - Product gallery: a single image fills both columns.

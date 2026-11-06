@@ -415,7 +415,7 @@
     padding: 4px var(--page-pad-x) 20px;
     border-bottom: var(--border);
     background: var(--color-bg);
-    animation: mega-in 0.28s var(--ease-out-expo) both;
+    animation: mega-in 0.24s ease-out both;
   }
 
   .mega[data-instant] {
@@ -427,13 +427,13 @@
   }
 
   @keyframes mega-in {
-    from { clip-path: inset(0 0 100% 0); opacity: 0.4; }
-    to { clip-path: inset(0 0 0 0); opacity: 1; }
+    from { clip-path: inset(0 0 30% 0); opacity: 0; transform: translateY(-6px); }
+    to { clip-path: inset(0 0 0 0); opacity: 1; transform: none; }
   }
 
   @keyframes mega-out {
-    from { clip-path: inset(0 0 0 0); opacity: 1; }
-    to { clip-path: inset(0 0 100% 0); opacity: 0; }
+    from { opacity: 1; }
+    to { opacity: 0; }
   }
 
   .mega__rows {
@@ -512,10 +512,10 @@
       left: var(--page-pad-x);
       right: var(--page-pad-x);
       top: 0;
-      padding: 8px 24px 24px;
+      padding: 8px 28px 28px;
       border: var(--border);
       border-top: 0;
-      border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+      border-radius: 0 0 calc(var(--pill-height) / 2) calc(var(--pill-height) / 2);
     }
 
     .mega__rows {
@@ -524,7 +524,7 @@
     }
 
     html.mega-open .site-header {
-      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+      border-radius: calc(var(--pill-height) / 2) calc(var(--pill-height) / 2) 0 0;
       border-bottom-color: transparent;
       background: var(--color-bg);
     }
@@ -539,11 +539,11 @@
       align-items: center;
       gap: 8px;
       height: var(--pill-height);
-      margin: 16px var(--page-pad-x) 0;
+      margin: 16px var(--page-pad-x) 24px;
       padding: 0 8px 0 24px;
       border: var(--border);
-      border-radius: var(--radius-pill);
-      transition: border-radius 0.28s var(--ease-out-expo), background-color 0.2s;
+      border-radius: calc(var(--pill-height) / 2);
+      transition: border-radius 0.24s ease-out, background-color 0.2s;
       background: var(--color-bg);
       mix-blend-mode: normal;
       color: var(--color-ink);
