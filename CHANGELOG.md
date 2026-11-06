@@ -5,6 +5,9 @@ All notable changes to this theme are documented here. The format follows [Keep 
 ## [Unreleased]
 
 ### Changed
+- Pill nav logo is a little larger (32px high).
+
+### Changed
 - Pill nav: logo centred, links on the left, Search and Cart on the right; the divider next to the logo is gone.
 
 ### Fixed
