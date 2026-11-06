@@ -11,6 +11,14 @@
   "type": "custom.overlay",
   "name": "Overlays",
   "sections": {
+    "shipping_pill": {
+      "type": "shipping-pill",
+      "settings": {
+        "enabled": true,
+        "text": "",
+        "link": ""
+      }
+    },
     "newsletter_popup": {
       "type": "newsletter-popup",
       "settings": {
@@ -33,6 +41,7 @@
     }
   },
   "order": [
+    "shipping_pill",
     "newsletter_popup"
   ]
 }

@@ -16,7 +16,9 @@
     {%- if has_media -%}
       <div class="statement__sticky">
     {%- endif -%}
-    {%- if section.settings.text != blank -%}
+    {%- if section.settings.use_brand_line and settings.position_line != blank -%}
+      <div class="statement__text statement__text--{{ section.settings.size }}"><p>{{ settings.position_line | escape }}</p></div>
+    {%- elsif section.settings.text != blank -%}
       <div class="statement__text statement__text--{{ section.settings.size }}">{{ section.settings.text }}</div>
     {%- endif -%}
     {%- if section.settings.button_label != blank -%}
@@ -120,6 +122,7 @@
   "class": "section-statement",
   "tag": "div",
   "settings": [
+    { "type": "checkbox", "id": "use_brand_line", "label": "Use the brand line", "info": "Shows the line from Theme settings > Brand and studio instead of the text below.", "default": false },
     {
       "type": "richtext",
       "id": "text",

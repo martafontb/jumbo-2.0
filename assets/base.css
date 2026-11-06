@@ -405,9 +405,20 @@ a:not([class]) {
   cursor: pointer;
 }
 
+.chip {
+  transition: background-color 0.15s;
+}
+
+/* Same hover as the header pills: blue fill, ink text (6.0:1). */
 .chip:hover {
-  background: var(--color-grey);
+  background: var(--color-blue);
   color: var(--color-ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chip {
+    transition: none;
+  }
 }
 
 .chip[aria-pressed='true'],

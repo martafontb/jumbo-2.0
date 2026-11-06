@@ -1,12 +1,19 @@
 {% comment %}
   CTA band
   Full-width grey band with a big line of text across two columns and a
-  button in the third (e.g. "Ready? Send us the file.").
+  button in the third (e.g. "Ready? Send us the file."). An optional small
+  detail line sits under the text. Used on the home page as the "Print with us"
+  door.
 {% endcomment %}
 <section class="page cta-band space-{{ section.settings.spacing }}">
   <div class="cta-band__inner" style="--band-bg: var(--color-{{ section.settings.color }});">
     {%- if section.settings.text != blank -%}
-      <p class="cta-band__text">{{ section.settings.text | escape }}</p>
+      <div class="cta-band__copy">
+        <p class="cta-band__text">{{ section.settings.text | escape }}</p>
+        {%- if section.settings.detail != blank -%}
+          <p class="cta-band__detail">{{ section.settings.detail | escape }}</p>
+        {%- endif -%}
+      </div>
     {%- endif -%}
     {%- if section.settings.button_label != blank -%}
       <a class="button cta-band__button" href="{{ section.settings.button_link | default: '#' }}">{{ section.settings.button_label | escape }}</a>
@@ -24,10 +31,22 @@
     background: var(--band-bg, var(--color-grey));
   }
 
-  .cta-band__text {
+  .cta-band__copy {
     grid-column: span 2;
-    font: 500 clamp(36px, 5vw, 60px) / 0.92 var(--font-display);
-    letter-spacing: -0.05em;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .cta-band__text {
+    font: 500 var(--text-page-title) / 0.95 var(--font-display);
+    letter-spacing: var(--tracking-page-title);
+  }
+
+  .cta-band__detail {
+    font: 400 var(--text-label) / 1.35 var(--font-mono);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
   }
 
   .cta-band__button {
@@ -40,7 +59,7 @@
       gap: 20px;
     }
 
-    .cta-band__text {
+    .cta-band__copy {
       grid-column: auto;
     }
   }
@@ -53,6 +72,7 @@
   "tag": "div",
   "settings": [
     { "type": "text", "id": "text", "label": "Text", "default": "Ready? Send us the file." },
+    { "type": "text", "id": "detail", "label": "Detail line", "info": "Optional small line under the text, e.g. the size, run and turnaround." },
     { "type": "text", "id": "button_label", "label": "Button label", "default": "See the price guide →" },
     { "type": "url", "id": "button_link", "label": "Button link" },
     {

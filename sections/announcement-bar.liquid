@@ -6,7 +6,8 @@
   button (2+ messages) and does not auto-rotate under reduced motion.
   Dismissal is remembered for the browser session.
 
-  Block types: "Message" (free text) and "Free shipping" (text built from
+  Block types: "Message" (free text), "Brand line" (first sentence of the line in
+  Theme settings > Brand and studio) and "Free shipping" (text built from
   Theme settings > Cart > Free shipping threshold, so the amount is set in one
   place; it hides itself when the threshold is empty). Add a shipping block and a
   message block (for the next fair) to rotate both.
@@ -16,6 +17,9 @@
   assign message_count = 0
   for block in section.blocks
     if block.type == 'shipping' and threshold == 0
+      continue
+    endif
+    if block.type == 'position' and settings.position_line == blank
       continue
     endif
     assign message_count = message_count | plus: 1
@@ -54,6 +58,9 @@
         {%- if block.type == 'shipping' and threshold == 0 -%}
           {%- continue -%}
         {%- endif -%}
+        {%- if block.type == 'position' and settings.position_line == blank -%}
+          {%- continue -%}
+        {%- endif -%}
         <div
           class="announcement__slide"
           {% if rendered > 0 %}
@@ -62,7 +69,9 @@
           {{ block.shopify_attributes }}
         >
           {%- assign rendered = rendered | plus: 1 -%}
-          {%- if block.type == 'shipping' -%}
+          {%- if block.type == 'position' -%}
+            <p class="announcement__message">{{ settings.position_line | split: '. ' | first | escape }}</p>
+          {%- elsif block.type == 'shipping' -%}
             {%- assign threshold_money = threshold | money_without_trailing_zeros -%}
             <p class="announcement__message">{{ 'sections.announcement.free_shipping' | t: amount: threshold_money }}</p>
           {%- elsif block.settings.code != blank -%}
@@ -259,6 +268,17 @@
           "id": "code",
           "label": "Code to copy",
           "info": "Optional. Clicking the message copies this discount code instead of following the link."
+        }
+      ]
+    },
+    {
+      "type": "position",
+      "name": "Brand line",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Shows the first sentence of the brand line from Theme settings > Brand and studio."
         }
       ]
     },

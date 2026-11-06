@@ -28,12 +28,8 @@
           "settings": {}
         },
         "message-fair": {
-          "type": "message",
-          "settings": {
-            "text": "Independent prints, zines and books. Made with artists, printed in Barcelona.",
-            "link": "",
-            "code": ""
-          }
+          "type": "position",
+          "settings": {}
         }
       },
       "block_order": [
@@ -86,7 +82,7 @@
           "settings": {
             "label": "Print",
             "menu": "",
-            "link": "",
+            "link": "shopify://pages/print",
             "row_colors": "blue, grey, red, grey",
             "row_pills": "Overview\nFrom £0.40\n12 inks\nPDF",
             "show_on_mobile": false,

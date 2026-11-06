@@ -16,8 +16,9 @@
         "image": "shopify://shop_images/Some_photos_taken_at_the_jumbopress_HQ_-_it_s_a_real_family_affair_Taken_a_few_months_back_for_3.jpg",
         "image_alt": "",
         "text": "<p>An independent risograph studio and publisher. Small runs, made with artists, one colour at a time.</p>",
-        "caption": "Est. 2018 · Deptford, London",
-        "page_color": "red"
+        "caption": "Started in London in 2018 · Now in Barcelona",
+        "page_color": "red",
+        "use_brand_line": true
       }
     },
     "story": {
@@ -27,7 +28,7 @@
         "label": "01 — Our story",
         "label_color": "blue",
         "caption": "2019 to now",
-        "text": "<p>Jumbo is an independent risograph studio and publishing platform. Since 2018 we've been making small-run editions, artist books, zines and objects, all designed and printed in-house, in collaboration with some of the most exciting emerging illustrators and artists working today, from wherever in the world they happen to be making things.</p>",
+        "text": "<p>Jumbo is an independent publisher and risograph printer. Since 2018 we've been making small-run editions, artist books, zines and objects, all designed and printed in-house, in collaboration with some of the most exciting emerging illustrators and artists working today, from wherever in the world they happen to be making things.</p>",
         "image": "shopify://shop_images/Some_photos_taken_at_the_jumbopress_HQ_-_it_s_a_real_family_affair_Taken_a_few_months_back_for_4.jpg",
         "image_alt": "",
         "show_image_placeholder": true,

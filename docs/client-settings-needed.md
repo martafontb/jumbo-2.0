@@ -23,9 +23,17 @@ Written after the art direction work (Notion: "Jumbo: Art Direction and Claude C
 - **Review app (Judge.me).** The rating next to the title and on cards needs the `reviews.rating` and `reviews.rating_count` metafields the app fills in. Check the 3-star rating on the first Books card there.
 - **Notify-me form.** Requests arrive as contact form messages in the store email inbox. Use a back-in-stock app later if the client wants automatic emails.
 
-## Waiting for the client (part 9)
+## Brand and navigation (part 9)
 
-- Main line: Option 1 was chosen. It is not in the theme yet.
-- Studio city and opening hours for the About page. Answer so far: started in London, now in Barcelona.
+- **Theme settings > Brand and studio.** The brand line is Option 1. The studio facts (2018, 2 machines, 14 inks, 40 artists a year) come from the About page: confirm them before publishing.
+- **Shop description.** Paste the brand line into Settings > Store details (the home page meta description in the theme already uses it).
+- **Shipping pill.** It is on by default and shows "Free shipping over [amount]" from the shipping threshold. Overlays group > Shipping pill.
+- **Menu.** Print links to `/pages/print`. Studio, Books and Info are not added yet.
+
+## Still waiting for the client
+
+- Opening hours on the About page: the page says Monday to Friday 10:00 to 16:00 and also "appointments required". Make it one line.
+- Studio name: the visit section is captioned "Canal Yard", which is also a fair venue.
 - Name for apparel and objects (not "PrintWorks").
 - Language switch: wanted, but the store needs Catalan or Spanish content first.
+- The "Print with us" block and the proof strip use A3, runs of 10 to 300 and about 7 days from the Notion notes. Confirm them.

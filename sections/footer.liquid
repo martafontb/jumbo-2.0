@@ -8,11 +8,16 @@
 {% endcomment %}
 <footer class="site-footer">
   <div class="site-footer__top">
-    {%- if section.settings.statement != blank -%}
+    {%- if section.settings.use_brand_line and settings.position_line != blank -%}
+      {%- comment -%} Big type: only the first sentence of the brand line. {%- endcomment -%}
+      {%- assign brand_first = settings.position_line | split: '. ' | first | strip -%}
+      <div class="site-footer__statement">
+        <p><strong>{{ brand_first | escape }}{% assign last_char = brand_first | slice: -1 %}{% if last_char != '.' %}.{% endif %}</strong></p>
+      </div>
+    {%- elsif section.settings.statement != blank -%}
       <div class="site-footer__statement">
         {{ section.settings.statement }}
       </div>
-
     {%- endif -%}
 
     <div class="site-footer__columns">
@@ -277,6 +282,7 @@
   "class": "section-footer",
   "max_blocks": 8,
   "settings": [
+    { "type": "checkbox", "id": "use_brand_line", "label": "Use the brand line", "info": "Shows the first sentence of the line from Theme settings > Brand and studio instead of the statement below.", "default": false },
     {
       "type": "richtext",
       "id": "statement",

@@ -156,6 +156,40 @@
     ]
   },
   {
+    "name": "Brand and studio",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "One line that says what Jumbo is. Use the same words everywhere: sections with a 'Use the brand line' checkbox read it from here."
+      },
+      {
+        "type": "textarea",
+        "id": "position_line",
+        "label": "Brand line",
+        "default": "Jumbo is an independent publisher and risograph printer. We make editions with artists, and we print for artists, publishers and festivals."
+      },
+      {
+        "type": "text",
+        "id": "position_title",
+        "label": "Short brand line",
+        "info": "Used in the browser tab title on the home page, after the store name.",
+        "default": "Independent publisher and risograph printer"
+      },
+      {
+        "type": "header",
+        "content": "Studio facts"
+      },
+      {
+        "type": "paragraph",
+        "content": "Shown in the proof strip on the home page. Confirm each number before you publish. Leave one empty to hide it."
+      },
+      { "type": "number", "id": "fact_since", "label": "Year started", "default": 2018 },
+      { "type": "number", "id": "fact_machines", "label": "Machines", "default": 2 },
+      { "type": "number", "id": "fact_inks", "label": "Ink colours", "default": 14 },
+      { "type": "number", "id": "fact_artists", "label": "Artists a year", "default": 40 }
+    ]
+  },
+  {
     "name": "Product page",
     "settings": [
       {

@@ -10,6 +10,15 @@ All notable changes to this theme are documented here. The format follows [Keep 
 - Packs hide sold-out packs. The saving still shows in the red tag from the compare-at price.
 - Events ("Find us") has a "Full-width blue band" setting, on by default.
 
+### Added (art direction: navigation and brand line)
+- Floating pill navigation from 750px: a logo pill, a nav pill and a Search and Cart pill, grey with ink text. The current page is a page-coloured pill and hover fills blue. The header stays sticky. The phone menu is unchanged. Print in the main menu now links to `/pages/print`.
+- Theme settings > Brand and studio: the brand line (Option 1) and a short version. The home page tab title and meta description, the home intro, the footer statement (first sentence), the About intro and a new "Brand line" announcement block read it.
+- Proof strip section ("Since 2018 · 2 machines · 14 inks · 40 artists a year") with its numbers in Theme settings > Brand and studio > Studio facts.
+- "Print with us" door under the hero (the CTA band now has a detail line).
+- Bottom shipping pill (`sections/shipping-pill.liquid`, Overlays group): close button, closed state kept for the visit. Text from its setting or built from the free shipping threshold.
+- Collection chips and filter pills use the same blue hover as the header pills.
+- About page: the intro says it started in London and is now in Barcelona, and the story text leads with "publisher and risograph printer".
+
 ### Added (art direction: cart, pop-ups and footer)
 - Free-shipping bar is a blue block with ink text at the top of the cart page and the cart drawer.
 - Add-on row (`snippets/cart-upsell.liquid`) on the cart page as well as the drawer, with its own collection setting. Two buttons in the empty cart and empty drawer.

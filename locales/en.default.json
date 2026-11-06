@@ -192,6 +192,25 @@
     "footer": {
       "payment_methods": "Payment methods"
     },
+    "proof": {
+      "label": "About Jumbo in numbers",
+      "since": "Since {{ year }}",
+      "machines": {
+        "one": "{{ count }} machine",
+        "other": "{{ count }} machines"
+      },
+      "inks": {
+        "one": "{{ count }} ink",
+        "other": "{{ count }} inks"
+      },
+      "artists": {
+        "one": "{{ count }} artist a year",
+        "other": "{{ count }} artists a year"
+      }
+    },
+    "shipping_pill": {
+      "close": "Close the shipping message"
+    },
     "contact": {
       "tabs": "Contact and wholesale",
       "tab_contact": "Contact",

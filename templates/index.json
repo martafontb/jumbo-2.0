@@ -69,7 +69,8 @@
         "button_label": "",
         "button_link": "",
         "button_style": "block",
-        "spacing": "medium"
+        "spacing": "medium",
+        "use_brand_line": true
       }
     },
     "inks": {
@@ -470,10 +471,30 @@
         "caption": "Tap the dots",
         "spacing": "medium"
       }
+    },
+    "print-door": {
+      "type": "cta-band",
+      "settings": {
+        "text": "Print with us",
+        "detail": "A3 size · runs of 10 to 300 copies · about 7 days",
+        "button_label": "Print with us →",
+        "button_link": "shopify://pages/print",
+        "color": "grey",
+        "spacing": "small"
+      }
+    },
+    "proof": {
+      "type": "proof-strip",
+      "settings": {
+        "color": "grey",
+        "spacing": "small"
+      }
     }
   },
   "order": [
     "hero",
+    "print-door",
+    "proof",
     "editions",
     "intro",
     "inks",

@@ -55,6 +55,7 @@
       ],
       "settings": {
         "statement": "<p><strong>Jumbo Press</strong> is a risograph studio&nbsp;</p><p>and print shop.</p>",
+        "use_brand_line": true,
         "legal_menu": "footer",
         "copyright": ""
       }

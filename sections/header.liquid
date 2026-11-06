@@ -1,8 +1,13 @@
 {% comment %}
   Header
-  Sticky, transparent header using mix-blend-mode: difference, so it inverts
-  over any background. Left: menu triggers. Centre: logo. Right: Search and
-  Cart (n).
+  Phone (under 750px): sticky, transparent header using mix-blend-mode:
+  difference, so it inverts over any background. Menu button left, logo centre,
+  Search and Cart (n) right, and the full-screen menu.
+
+  Tablet and desktop (750px and up): floating pills that stay on screen while
+  scrolling. Left: a logo pill and a pill with the nav links. Right: a pill
+  with Search and Cart. Grey pills with ink text; the current page is a page-
+  coloured pill inside the bar; hover fills blue. Mono labels as before.
 
   Blocks, in order:
   - "Menu": one top-level nav item. If it has a Shopify menu, its links become
@@ -25,6 +30,7 @@
   if request.page_type == 'index'
     assign is_home = true
   endif
+  assign path = request.path
 -%}
 
 <site-header class="site-header-root">
@@ -45,13 +51,34 @@
         <nav class="site-header__nav" aria-label="{{ 'sections.header.main_navigation' | t }}">
           <ul class="site-header__list" role="list">
             {%- for block in menu_blocks -%}
-              {%- assign delay = forloop.index | times: 0.05 -%}
+              {%- liquid
+                assign delay = forloop.index | times: 0.05
+                comment
+                  Current page: the block's link matches the start of the path, or
+                  (Shop menu) we are on a collection or product page.
+                endcomment
+                assign is_current = false
+                assign block_link = block.settings.link
+                if block_link != blank
+                  assign link_size = block_link.size
+                  assign path_start = path | slice: 0, link_size
+                  if path_start == block_link
+                    assign is_current = true
+                  endif
+                endif
+                if block.settings.menu.links.size > 0
+                  if request.page_type == 'collection' or request.page_type == 'product' or request.page_type == 'list-collections'
+                    assign is_current = true
+                  endif
+                endif
+              -%}
               <li class="nav-in" style="--delay: {{ delay }}s;">
                 <span class="nav-in__inner">
                   {%- if block.settings.menu.links.size > 0 -%}
                     <button
                       type="button"
                       class="site-header__link"
+                      {% if is_current %}data-current{% endif %}
                       aria-expanded="false"
                       aria-controls="MegaMenu-{{ block.id }}"
                       data-mega-trigger="MegaMenu-{{ block.id }}"
@@ -62,7 +89,7 @@
                   {%- else -%}
                     {%- assign label = block.settings.label | escape -%}
                     {%- if block.settings.link != blank -%}
-                      <a class="site-header__link" href="{{ block.settings.link }}">
+                      <a class="site-header__link" href="{{ block.settings.link }}"{% if is_current %} aria-current="page" data-current{% endif %}>
                         {%- render 'roll-text', text: label -%}
                       </a>
                     {%- else -%}
@@ -456,6 +483,100 @@
       display: flex;
       align-items: center;
       min-height: 44px;
+    }
+  }
+
+  /* ---------- Floating pills: tablet and desktop ---------- */
+  @media screen and (min-width: 750px) {
+    .site-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 16px var(--page-pad-x) 0;
+      height: var(--header-height);
+      mix-blend-mode: normal;
+      color: var(--color-ink);
+      pointer-events: none; /* only the pills catch clicks */
+    }
+
+    .site-header a,
+    .site-header button,
+    .site-header a:hover,
+    .site-header__link--static {
+      color: var(--color-ink);
+    }
+
+    .site-header :focus-visible {
+      outline-color: var(--color-ink);
+      outline-offset: -2px;
+    }
+
+    .site-header__logo,
+    .site-header__start,
+    .site-header__actions {
+      display: flex;
+      align-items: center;
+      min-height: 48px;
+      padding: 0 6px;
+      border: var(--border);
+      border-radius: var(--radius-pill);
+      background: var(--color-grey);
+      pointer-events: auto;
+    }
+
+    .site-header__logo {
+      order: 1;
+      padding: 0 16px;
+    }
+
+    .site-header__start {
+      order: 2;
+      margin-right: auto;
+    }
+
+    .site-header__start:not(:has(.site-header__nav)) {
+      display: none;
+    }
+
+    .site-header__actions {
+      order: 3;
+    }
+
+    .site-header__list,
+    .site-header__actions {
+      gap: 2px;
+    }
+
+    .site-header__link {
+      padding: 8px 14px;
+      border-radius: var(--radius-pill);
+      transition: background-color 0.15s;
+    }
+
+    .site-header__link[aria-current='page'],
+    .site-header__link[data-current] {
+      background: var(--color-bg);
+    }
+
+    .site-header__link:hover,
+    .site-header__link[aria-expanded='true'] {
+      background: var(--color-blue);
+    }
+
+    /* The logo files are black; the header's blend trick needed them inverted. */
+    .site-header .jumbo-logo--invert {
+      filter: none;
+    }
+
+    .site-header__logo-link {
+      padding: 4px 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .site-header__link {
+      transition: none;
     }
   }
 

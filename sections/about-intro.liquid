@@ -18,7 +18,11 @@
       {%- render 'image-or-video', video: section.settings.video, image: section.settings.image, sizes: '(min-width: 750px) 66vw, 100vw', alt: section.settings.image_alt, eager: true, placeholder: 'lifestyle-2' -%}
     </div>
     <div class="about-intro__text">
-      {%- if section.settings.text != blank -%}<div class="about-intro__lead">{{ section.settings.text }}</div>{%- endif -%}
+      {%- if section.settings.use_brand_line and settings.position_line != blank -%}
+        <div class="about-intro__lead"><p>{{ settings.position_line | escape }}</p></div>
+      {%- elsif section.settings.text != blank -%}
+        <div class="about-intro__lead">{{ section.settings.text }}</div>
+      {%- endif -%}
       {%- if section.settings.caption != blank -%}<span class="label label--sm">{{ section.settings.caption | escape }}</span>{%- endif -%}
     </div>
   </div>
@@ -68,6 +72,7 @@
   "class": "section-about-intro",
   "tag": "div",
   "settings": [
+    { "type": "checkbox", "id": "use_brand_line", "label": "Use the brand line", "info": "Shows the line from Theme settings > Brand and studio instead of the text below.", "default": false },
     { "type": "text", "id": "title", "label": "Title", "info": "Defaults to the page title." },
     { "type": "image_picker", "id": "image", "label": "Image" },
     { "type": "video", "id": "video", "label": "Video", "info": "Optional. Plays muted on a loop instead of the image; the image becomes its poster." },
