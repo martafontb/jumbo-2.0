@@ -787,6 +787,8 @@ html.has-overlay {
   overflow-x: auto;
   overscroll-behavior-x: contain;
   scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
 }
 
@@ -802,6 +804,7 @@ html.has-overlay {
 .scroller.is-dragging {
   cursor: grabbing;
   scroll-snap-type: none;
+  scroll-behavior: auto;
   user-select: none;
 }
 

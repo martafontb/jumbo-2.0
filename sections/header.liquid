@@ -415,7 +415,25 @@
     padding: 4px var(--page-pad-x) 20px;
     border-bottom: var(--border);
     background: var(--color-bg);
-    animation: fade 0.2s both;
+    animation: mega-in 0.28s var(--ease-out-expo) both;
+  }
+
+  .mega[data-instant] {
+    animation: none;
+  }
+
+  .mega[data-closing] {
+    animation: mega-out 0.18s ease-in both;
+  }
+
+  @keyframes mega-in {
+    from { clip-path: inset(0 0 100% 0); opacity: 0.4; }
+    to { clip-path: inset(0 0 0 0); opacity: 1; }
+  }
+
+  @keyframes mega-out {
+    from { clip-path: inset(0 0 0 0); opacity: 1; }
+    to { clip-path: inset(0 0 100% 0); opacity: 0; }
   }
 
   .mega__rows {
@@ -525,7 +543,7 @@
       padding: 0 8px 0 24px;
       border: var(--border);
       border-radius: var(--radius-pill);
-      transition: border-radius 0.2s;
+      transition: border-radius 0.28s var(--ease-out-expo), background-color 0.2s;
       background: var(--color-bg);
       mix-blend-mode: normal;
       color: var(--color-ink);

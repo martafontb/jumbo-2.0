@@ -1,4 +1,4 @@
-import { openOverlay, closeOverlay, syncScrollLock } from '@theme/global';
+import { openOverlay, closeOverlay, syncScrollLock, prefersReducedMotion } from '@theme/global';
 
 const CLOSE_DELAY = 180;
 const DESKTOP = window.matchMedia('(min-width: 750px)');
@@ -60,8 +60,13 @@ class SiteHeader extends HTMLElement {
     this.cancelClose();
     const panel = this.panelFor(trigger);
     if (this.openPanel === panel) return;
-    this.closeMega();
+    // Switching panels: swap instantly. First open: animate.
+    const switching = Boolean(this.openPanel);
+    this.closeMega(true);
+    clearTimeout(this.hideTimer);
     panel.hidden = false;
+    panel.toggleAttribute('data-instant', switching);
+    panel.removeAttribute('data-closing');
     trigger.setAttribute('aria-expanded', 'true');
     this.openPanel = panel;
     this.openTrigger = trigger;
@@ -69,9 +74,19 @@ class SiteHeader extends HTMLElement {
     document.documentElement.classList.add('mega-open');
   }
 
-  closeMega = () => {
+  closeMega = (instant = false) => {
     if (!this.openPanel) return;
-    this.openPanel.hidden = true;
+    const panel = this.openPanel;
+    if (instant === true || prefersReducedMotion()) {
+      panel.hidden = true;
+    } else {
+      // Play the closing animation, then hide.
+      panel.setAttribute('data-closing', '');
+      this.hideTimer = setTimeout(() => {
+        panel.hidden = true;
+        panel.removeAttribute('data-closing');
+      }, 180);
+    }
     this.openTrigger.setAttribute('aria-expanded', 'false');
     this.openPanel = null;
     this.openTrigger = null;

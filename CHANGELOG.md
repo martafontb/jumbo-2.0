@@ -4,6 +4,11 @@ All notable changes to this theme are documented here. The format follows [Keep 
 
 ## [Unreleased]
 
+### Changed (motion and gallery)
+- Mega menu opens and closes with a reveal that grows from the pill (switching between menus is instant); pill corners ease between round and square.
+- Product gallery: a single image fills both columns.
+- Carousels: smooth snap scrolling, and mouse drag now flicks with momentum before snapping to the nearest card.
+
 ### Changed (type scale, mega menu, borders)
 - Smaller page title (34-60px), section title (24-32px); CTA band text uses the section title size.
 - Mega menu is now part of the pill: it opens straight under the bar with the same width and border, and the pill's bottom corners square off while it is open.
