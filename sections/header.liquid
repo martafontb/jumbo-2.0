@@ -488,6 +488,22 @@
 
   /* ---------- One floating pill: tablet and desktop ---------- */
   @media screen and (min-width: 750px) {
+    /* Mega menu drops from under the pill as a floating, rounded panel. */
+    .mega {
+      left: var(--page-pad-x);
+      right: var(--page-pad-x);
+      top: 8px;
+      padding: 16px;
+      border: var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: 0 12px 32px rgb(0 0 0 / 0.12);
+    }
+
+    .mega__rows {
+      margin-top: 0;
+      border-top: 0;
+    }
+
     .site-header {
       --pill-height: 56px;
       --logo-height: 26px; /* the logo sits inside the bar with room to breathe */

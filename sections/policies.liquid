@@ -103,7 +103,6 @@
     flex-direction: column;
     gap: 16px;
     padding-top: 14px;
-    border-top: var(--border);
   }
 
   .policies__panel + .policies__panel {
@@ -160,7 +159,7 @@
   "name": "Policies",
   "class": "section-policies",
   "settings": [
-    { "type": "checkbox", "id": "show_border", "label": "Show top border", "default": true },
+    { "type": "checkbox", "id": "show_border", "label": "Show top border", "default": false },
     { "type": "paragraph", "content": "Shows the policies from Settings > Policies." },
     { "type": "text", "id": "badge", "label": "Label above each policy", "info": "Optional, e.g. Last updated 9 Oct 2026" }
   ],

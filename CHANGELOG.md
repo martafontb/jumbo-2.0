@@ -4,6 +4,11 @@ All notable changes to this theme are documented here. The format follows [Keep 
 
 ## [Unreleased]
 
+### Changed (type scale, mega menu, borders)
+- Smaller page title (34-60px), section title (24-32px); CTA band text uses the section title size.
+- Mega menu is now a floating rounded panel that drops under the pill nav.
+- "Show top border" defaults to off in all sections; removed decorative border-tops inside list, article, artist, contact, checklist and shop-the-look sections.
+
 ### Changed (fewer border-tops)
 - Removed the border-top above card titles (basic card, article card, pairs, packs, mega card).
 - Section dividers (`show_border`) are off by default on the homepage, About, Print and product templates; still available per section in the editor.

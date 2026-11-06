@@ -171,7 +171,6 @@
     flex-direction: column;
     margin-top: 8px;
     padding-top: 8px;
-    border-top: var(--border);
   }
 
   .shop-look__heading {
@@ -194,7 +193,6 @@
     width: 100%;
     padding: 12px 0;
     border: 0;
-    border-top: var(--border);
     background: transparent;
     color: var(--color-ink);
     text-align: left;
@@ -239,7 +237,7 @@
   "tag": "div",
   "max_blocks": 8,
   "settings": [
-    { "type": "checkbox", "id": "show_border", "label": "Show top border", "default": true },
+    { "type": "checkbox", "id": "show_border", "label": "Show top border", "default": false },
     { "type": "image_picker", "id": "image", "label": "Image" },
     { "type": "video", "id": "video", "label": "Video", "info": "Optional. Plays muted on a loop instead of the image; the image becomes its poster." },
     { "type": "text", "id": "image_alt", "label": "Image alt text" },
