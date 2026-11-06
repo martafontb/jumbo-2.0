@@ -15,6 +15,11 @@
     values of the first list-type Storefront filter (e.g. Product type).
   - "Studio note" (coloured quote) and "Media" (image or video, optional
     link) blocks are tiles inserted after the Nth product on the first page.
+  - Filter pills (availability, price, product type …) come from the Storefront
+    filters set up in Shopify Search & Discovery. A bottom sheet on phone.
+  - In-stock products come first when no sort is chosen (the collection's
+    default order). Choosing a sort keeps that sort. This applies within each
+    page of results.
   Filtering and sorting use Shopify's URL parameters, so they work without JS.
 {% endcomment %}
 {%- render 'section-border', section: section -%}
@@ -30,6 +35,17 @@
     assign intro = section.settings.intro
   endif
   assign sort_by = collection.sort_by | default: collection.default_sort_by
+  assign stock_first = false
+  if collection.sort_by == blank
+    assign stock_first = true
+  endif
+  assign skip_param = ''
+  if section.settings.chip_menu.links.size == 0
+    assign chip_filter_skip = collection.filters | where: 'type', 'list' | first
+    if chip_filter_skip
+      assign skip_param = chip_filter_skip.param_name
+    endif
+  endif
 -%}
 
 {%- paginate collection.products by section.settings.per_page -%}
@@ -37,7 +53,7 @@
     {%- comment -%} Solid strip behind the blended header so the filter bar can stick under it. {%- endcomment -%}
     <div class="main-collection__strip" aria-hidden="true"><div></div></div>
 
-    {%- render 'page-title', title: title, count: collection.products_count, intro: intro -%}
+    {%- render 'page-title', title: title, count: collection.products_count, intro: intro, clamp_intro: true -%}
 
     <div class="main-collection__bar">
       <nav class="main-collection__chips" aria-label="{{ 'sections.collection.filter_label' | t }}">
@@ -89,6 +105,8 @@
         {%- endif -%}
       </nav>
 
+      {%- render 'collection-filters', collection: collection, skip_param: skip_param -%}
+
       {%- if section.settings.show_sort -%}
         <form class="main-collection__sort" method="get" action="{{ collection.url }}" data-auto-submit>
           {%- for filter in collection.filters -%}
@@ -118,6 +136,7 @@
       <ul class="main-collection__grid" role="list">
         {%- liquid
           assign col = 0
+          assign shown = 0
           assign placed_tiles = ''
           assign product_total = collection.products.size
           assign trailing_note = false
@@ -132,7 +151,23 @@
             endfor
           endif
         -%}
+        {%- comment -%}
+          Two passes: pass 1 renders in-stock products, pass 2 sold-out ones.
+          With a chosen sort, a single pass keeps that sort.
+        {%- endcomment -%}
+        {%- liquid
+          assign passes = (1..2)
+          if stock_first == false
+            assign passes = (1..1)
+          endif
+        -%}
+        {%- for pass in passes -%}
         {%- for product in collection.products -%}
+          {%- if stock_first -%}
+            {%- if pass == 1 and product.available == false -%}{%- continue -%}{%- endif -%}
+            {%- if pass == 2 and product.available -%}{%- continue -%}{%- endif -%}
+          {%- endif -%}
+          {%- assign shown = shown | plus: 1 -%}
           {%- liquid
             assign layout = nil
             for candidate in layouts
@@ -150,7 +185,7 @@
             if span > remaining
               assign span = remaining
             endif
-            if forloop.last and trailing_note == false and section.settings.fill_last_row
+            if shown == product_total and trailing_note == false and section.settings.fill_last_row
               assign span = remaining
             endif
             assign col = col | plus: span | modulo: 3
@@ -166,7 +201,7 @@
 
             assign ground = product.metafields.custom.card_ground.value | strip | downcase
             if ground == blank
-              assign ground_index = forloop.index0 | modulo: grounds.size
+              assign ground_index = shown | minus: 1 | modulo: grounds.size
               assign ground = grounds[ground_index] | strip
             endif
 
@@ -179,7 +214,7 @@
                 assign card_sizes = '(min-width: 750px) 100vw, 50vw'
             endcase
             assign eager = false
-            if forloop.index <= 3
+            if shown <= 3
               assign eager = true
             endif
           -%}
@@ -199,8 +234,11 @@
           </li>
 
           {%- liquid
-            assign product_index = forloop.index
-            assign product_is_last = forloop.last
+            assign product_index = shown
+            assign product_is_last = false
+            if shown == product_total
+              assign product_is_last = true
+            endif
           -%}
           {%- if paginate.current_page == 1 -%}
             {%- comment -%}
@@ -237,6 +275,7 @@
               {%- render 'collection-tile', block: tile, span: tile_span -%}
             {%- endfor -%}
           {%- endif -%}
+        {%- endfor -%}
         {%- endfor -%}
       </ul>
       {%- render 'pagination', paginate: paginate -%}

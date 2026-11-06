@@ -7,6 +7,7 @@
   @param {string} [count_style] - 'sup' (default, "(n)" superscript) or 'accent' (italic blue)
   @param {string} [intro] - Intro HTML (rich text) for the right two columns
   @param {boolean} [show_dot] - Accent full stop, default true
+  @param {boolean} [clamp_intro] - On phone, show two lines of a long intro with a Read more toggle. The full text stays in the page source.
 {% enddoc %}
 <div class="page-title grid">
   <h1 class="title-page page-title__heading">
@@ -19,7 +20,23 @@
     {%- endif -%}
   </h1>
   {%- if intro != blank -%}
-    <div class="page-title__intro">{{ intro }}</div>
+    {%- assign intro_length = intro | strip_html | size -%}
+    {%- assign intro_long = false -%}
+    {%- if clamp_intro and intro_length > 110 -%}
+      {%- assign intro_long = true -%}
+    {%- endif -%}
+    <div class="page-title__intro{% if intro_long %} page-title__intro--clamp{% endif %}">
+      {%- if intro_long -%}
+        <input type="checkbox" class="visually-hidden page-title__more-input" id="IntroMore-{{ title | handle }}">
+      {%- endif -%}
+      <div class="page-title__intro-text">{{ intro }}</div>
+      {%- if intro_long -%}
+        <label class="link-mono page-title__more" for="IntroMore-{{ title | handle }}">
+          <span class="page-title__more-open">{{ 'sections.collection.read_more' | t }}</span>
+          <span class="page-title__more-close">{{ 'sections.collection.read_less' | t }}</span>
+        </label>
+      {%- endif -%}
+    </div>
   {%- endif -%}
 </div>
 
@@ -43,6 +60,43 @@
   .page-title__intro {
     grid-column: span min(2, var(--grid-columns));
     max-width: 50ch;
+  }
+
+  .page-title__more {
+    display: none;
+  }
+
+  @media screen and (max-width: 749px) {
+    .page-title__intro--clamp .page-title__intro-text {
+      display: -webkit-box;
+      overflow: hidden;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+    }
+
+    .page-title__intro--clamp .page-title__more {
+      display: inline-block;
+      margin-top: 8px;
+    }
+
+    .page-title__more-close,
+    .page-title__more-input:checked ~ .page-title__more .page-title__more-open {
+      display: none;
+    }
+
+    .page-title__more-input:checked ~ .page-title__more .page-title__more-close {
+      display: inline;
+    }
+
+    .page-title__more-input:checked ~ .page-title__intro-text {
+      display: block;
+      -webkit-line-clamp: unset;
+    }
+
+    .page-title__more-input:focus-visible ~ .page-title__more {
+      outline: 2px solid var(--color-ink);
+      outline-offset: 2px;
+    }
   }
 
   .page-title .accent {

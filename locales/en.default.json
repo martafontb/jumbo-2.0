@@ -93,7 +93,12 @@
       "all": "All",
       "sort": "Sort:",
       "apply": "Apply",
-      "clear": "Clear filters"
+      "clear": "Clear filters",
+      "clear_one": "Clear",
+      "read_more": "Read more",
+      "read_less": "Read less",
+      "price_from": "From",
+      "price_to": "To"
     },
     "blog": {
       "empty": "No stories yet."
