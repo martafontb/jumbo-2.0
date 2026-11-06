@@ -505,6 +505,18 @@
 
   /* ---------- One floating pill: tablet and desktop ---------- */
   @media screen and (min-width: 750px) {
+    /* Sit flush under the pill (cancel its bottom margin) and never run off-screen. */
+    .mega-menus {
+      margin-top: -24px;
+    }
+
+    .mega {
+      max-height: calc(100vh - var(--header-height) - 16px);
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      scrollbar-width: none;
+    }
+
     /* Mega menu is the pill opening downwards: same width, same border,
        no gap. The pill's bottom corners square off while it is open. */
     .mega {
@@ -518,6 +530,8 @@
     }
 
     .mega__rows {
+      /* Rows shrink on short windows so the whole list fits. */
+      --text-menu-row: clamp(26px, min(4.2vw, 6.5vh), 60px);
       margin-top: 0;
       border-top: 0;
     }

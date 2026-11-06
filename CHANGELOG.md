@@ -4,6 +4,9 @@ All notable changes to this theme are documented here. The format follows [Keep 
 
 ## [Unreleased]
 
+### Fixed
+- Mega menu sits flush under the pill (no gap), is limited to the window height and scrolls if needed; its rows shrink on short windows so the list is not cut off.
+
 ### Changed
 - Blue pills (section labels and so on) are inverted: ink fill with white text. The accent blue stays for hovers, the cart band and small markers.
 
