@@ -99,7 +99,7 @@
       "settings": {
         "gallery_layout": "two-up",
         "gallery_ground": "grey",
-        "gallery_fit": "contain",
+        "gallery_fit": "cover",
         "captions": false,
         "sticky_info": true,
         "sticky_bar": true,

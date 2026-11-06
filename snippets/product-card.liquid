@@ -34,7 +34,7 @@
 -%}
 <div class="product-card quick-add-host product-card--{{ card_size }} product-card--bg-{{ settings.card_background | default: 'hover' }} {{ class }}">
   <a class="product-card__link" href="{{ product.url | default: '#' }}">
-    <div class="media product-card__media" style="--ratio: {{ ratio }}; --card-ground: var(--color-{{ ground }}); --media-fit: {{ settings.card_image_fit | default: 'cover' }};">
+    <div class="media product-card__media" style="--ratio: {{ ratio }}; --card-ground: var(--color-{{ ground }}); --media-fit: cover;">
       {%- render 'image-or-video',
         video: video,
         image: card_image,

@@ -4,6 +4,10 @@ All notable changes to this theme are documented here. The format follows [Keep 
 
 ## [Unreleased]
 
+### Changed (home and images)
+- Removed the Print CTA band and the proof strip from the homepage (section files kept; the Print page still uses the CTA band).
+- Product cards and the product gallery always crop to fill the frame (object-fit: cover).
+
 ### Changed (nav feel)
 - Mega menu: calmer fade-and-settle instead of a clip reveal; pill uses a fixed half-height radius so its corners ease evenly.
 - Pill nav has 24px of space below it.
