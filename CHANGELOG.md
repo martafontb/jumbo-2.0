@@ -4,6 +4,11 @@ All notable changes to this theme are documented here. The format follows [Keep 
 
 ## [Unreleased]
 
+### Changed (one type voice)
+- Buttons, chips, pills, the announcement bar and the shipping pill are Inter Tight medium in sentence case. Mono (DM Mono, uppercase) stays for small facts: stock, option and quantity labels, price tables.
+- Image frames (`.media`) no longer have a border; outlines stay on clickable things.
+- Selected option value (e.g. colour) matches the other labels.
+
 ### Changed (home and images)
 - Removed the Print CTA band and the proof strip from the homepage (section files kept; the Print page still uses the CTA band).
 - Product cards and the product gallery always crop to fill the frame (object-fit: cover).

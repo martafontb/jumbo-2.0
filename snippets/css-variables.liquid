@@ -22,7 +22,8 @@
     /* Type */
     --font-display: 'Inter Tight', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
     /* Labels, pills, chips, captions and buttons use the main sans. DM Mono is kept for prices and data tables only. */
-    --font-label: var(--font-mono);
+    --font-label: var(--font-display); /* buttons, chips, pills: sans, sentence case */
+    --font-data: var(--font-mono); /* small facts only: stock, option labels, price tables */
     --font-mono: 'DM Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
     /* Scale: phone to desktop (art direction, 390px to 1440px) */
     --text-body: 16px;
