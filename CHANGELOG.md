@@ -6,7 +6,7 @@ All notable changes to this theme are documented here. The format follows [Keep 
 
 ### Changed (type scale, mega menu, borders)
 - Smaller page title (34-60px), section title (24-32px); CTA band text uses the section title size.
-- Mega menu is now a floating rounded panel that drops under the pill nav.
+- Mega menu is now part of the pill: it opens straight under the bar with the same width and border, and the pill's bottom corners square off while it is open.
 - "Show top border" defaults to off in all sections; removed decorative border-tops inside list, article, artist, contact, checklist and shop-the-look sections.
 
 ### Changed (fewer border-tops)

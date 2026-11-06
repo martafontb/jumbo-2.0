@@ -488,20 +488,27 @@
 
   /* ---------- One floating pill: tablet and desktop ---------- */
   @media screen and (min-width: 750px) {
-    /* Mega menu drops from under the pill as a floating, rounded panel. */
+    /* Mega menu is the pill opening downwards: same width, same border,
+       no gap. The pill's bottom corners square off while it is open. */
     .mega {
       left: var(--page-pad-x);
       right: var(--page-pad-x);
-      top: 8px;
-      padding: 16px;
+      top: 0;
+      padding: 8px 24px 24px;
       border: var(--border);
-      border-radius: var(--radius-lg);
-      box-shadow: 0 12px 32px rgb(0 0 0 / 0.12);
+      border-top: 0;
+      border-radius: 0 0 var(--radius-lg) var(--radius-lg);
     }
 
     .mega__rows {
       margin-top: 0;
       border-top: 0;
+    }
+
+    html.mega-open .site-header {
+      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+      border-bottom-color: transparent;
+      background: var(--color-bg);
     }
 
     .site-header {
@@ -518,6 +525,7 @@
       padding: 0 8px 0 24px;
       border: var(--border);
       border-radius: var(--radius-pill);
+      transition: border-radius 0.2s;
       background: var(--color-bg);
       mix-blend-mode: normal;
       color: var(--color-ink);
