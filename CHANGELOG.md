@@ -5,6 +5,9 @@ All notable changes to this theme are documented here. The format follows [Keep 
 ## [Unreleased]
 
 ### Fixed
+- Mega menu bottom corners are rounded again (the radius used a variable that was not defined on the panel).
+
+### Fixed
 - Mega menu is part of the pill: it drops straight from the bar with the same width and border, rounded bottom corners, and the pill's bottom corners square off while it is open, is limited to the window height and scrolls if needed; its rows shrink on short windows so the list is not cut off.
 
 ### Changed
