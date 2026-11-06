@@ -4,6 +4,9 @@ All notable changes to this theme are documented here. The format follows [Keep 
 
 ## [Unreleased]
 
+### Changed (mono for small uppercase labels)
+- `--font-label` points back to DM Mono: small uppercase labels, chips and buttons are mono again. Sentence-case copy, form fields, stepper input and product-card captions stay in Inter Tight.
+
 ### Changed (art direction: header and homepage)
 - Announcement bar: new "Free shipping" block built from Theme settings > Cart > Free shipping threshold (hides when empty). The header group rotates it with a text message, and the text is ink on red.
 - Product carousel: the next card peeks in, sold-out products are skipped, and the heading and end button follow the chosen collection when the label is empty.

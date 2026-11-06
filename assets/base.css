@@ -579,7 +579,7 @@ a:not([class]) {
   border: 0;
   background: transparent;
   text-align: center;
-  font: 400 var(--text-label) var(--font-label);
+  font: 400 var(--text-label) var(--font-display);
   -moz-appearance: textfield;
   appearance: textfield;
 }
@@ -652,7 +652,7 @@ a:not([class]) {
   border: var(--border);
   border-radius: var(--radius-pill);
   background: var(--color-bg);
-  font: 400 13px var(--font-label);
+  font: 400 13px var(--font-display);
 }
 
 .field:focus-visible {
