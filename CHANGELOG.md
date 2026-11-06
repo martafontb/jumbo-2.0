@@ -4,6 +4,9 @@ All notable changes to this theme are documented here. The format follows [Keep 
 
 ## [Unreleased]
 
+### Changed
+- Pill nav: logo centred, links on the left, Search and Cart on the right; the divider next to the logo is gone.
+
 ### Fixed
 - Mega menu bottom corners are rounded again (the radius used a variable that was not defined on the panel).
 

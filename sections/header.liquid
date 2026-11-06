@@ -547,7 +547,8 @@
       position: sticky;
       top: 16px;
       z-index: var(--z-header);
-      display: flex;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr; /* links left, logo centred, actions right */
       align-items: center;
       gap: 8px;
       height: var(--pill-height);
@@ -576,24 +577,22 @@
       outline-offset: -2px;
     }
 
-    /* Logo first, then the links, then Search and Cart pushed to the right. */
-    .site-header__logo {
+    /* Links on the left, the logo in the middle, Search and Cart on the right. */
+    .site-header__start {
       order: 1;
-      display: flex;
-      align-items: center;
-      margin-right: 16px;
-      padding-right: 24px;
-      border-right: var(--border);
-      align-self: stretch;
+      justify-self: start;
     }
 
-    .site-header__start {
+    .site-header__logo {
       order: 2;
-      margin-right: auto;
+      display: flex;
+      align-items: center;
+      justify-self: center;
     }
 
     .site-header__actions {
       order: 3;
+      justify-self: end;
     }
 
     .site-header__list,
