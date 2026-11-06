@@ -11,6 +11,7 @@ All notable changes to this theme are documented here. The format follows [Keep 
 - Events ("Find us") has a "Full-width blue band" setting, on by default.
 
 ### Changed (art direction: round 2 feedback)
+- Main font is Inter Tight (variable woff2, 100 to 900), replacing Instrument Sans, which replaced Outfit in the first round. Earlier entries below that say "Inter Tight" were first written for Instrument Sans.
 - The blue band on the fairs section is off again (the option stays in the editor).
 - DM Mono is now only for prices and data tables. Labels, pills, chips, captions and buttons use the main sans through a new `--font-label` token.
 - Header from 750px is one floating pill (logo, a divider, links, then Search and Cart) instead of three pills. The logo is smaller inside it, the current page is an ink fill and hover is blue, like the chips.
@@ -37,7 +38,7 @@ All notable changes to this theme are documented here. The format follows [Keep 
 - Product page: Spec line block (format, size, paper), Delivery line block (Theme settings > Product page), rating beside the title, and a notify-me form on sold-out variants (posts to the store's contact form). The "Pair with" row now sits right under the product.
 
 ### Changed (art direction: type and colour)
-- Main font is now Instrument Sans (self-hosted variable woff2, 400 to 700) in place of Outfit. DM Mono stays for labels. Variables are in `snippets/css-variables.liquid`.
+- Main font is now Inter Tight (self-hosted variable woff2, 400 to 700) in place of Outfit. DM Mono stays for labels. Variables are in `snippets/css-variables.liquid`.
 - Type scale variables (`--text-page-title`, `--text-section-title`, `--text-card-title` and tracking tokens) with `clamp()` between phone and desktop. Body text is 16px. The product description now uses the full column width.
 - Ink text on blue fills (view cart button, set reminder button). Blue and red no longer colour small text: link hover underlines, the cart count and the accent are ink.
 - Review stars (Judge.me) are ink, not teal.
