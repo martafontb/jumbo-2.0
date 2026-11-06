@@ -311,7 +311,8 @@ a:not([class]) {
   white-space: nowrap;
 }
 
-.pill--blue { --pill-bg: var(--color-blue-deep); --pill-fg: var(--color-white); }
+/* "Blue" pills are inverted (ink with white text): the accent blue is too light to read as a label. */
+.pill--blue { --pill-bg: var(--color-ink); --pill-fg: var(--color-white); }
 .pill--red { --pill-bg: var(--color-red); }
 .pill--grey { --pill-bg: var(--color-grey); }
 .pill--bg { --pill-bg: var(--color-bg); }
