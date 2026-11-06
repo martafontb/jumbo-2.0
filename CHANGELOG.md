@@ -4,6 +4,10 @@ All notable changes to this theme are documented here. The format follows [Keep 
 
 ## [Unreleased]
 
+### Changed (fewer border-tops)
+- Removed the border-top above card titles (basic card, article card, pairs, packs, mega card).
+- Section dividers (`show_border`) are off by default on the homepage, About, Print and product templates; still available per section in the editor.
+
 ### Changed (mono for small uppercase labels)
 - `--font-label` points back to DM Mono: small uppercase labels, chips and buttons are mono again. Sentence-case copy, form fields, stepper input and product-card captions stay in Inter Tight.
 

@@ -24,7 +24,7 @@
     "story": {
       "type": "media-text",
       "settings": {
-        "show_border": true,
+        "show_border": false,
         "label": "01 — Our story",
         "label_color": "blue",
         "caption": "2019 to now",
@@ -110,7 +110,7 @@
     "work": {
       "type": "media-text",
       "settings": {
-        "show_border": true,
+        "show_border": false,
         "label": "03 — Work with us",
         "label_color": "blue",
         "caption": "Commissions and collaborations",

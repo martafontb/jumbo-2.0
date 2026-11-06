@@ -116,7 +116,7 @@
     "artist": {
       "type": "artist-block",
       "settings": {
-        "show_border": true,
+        "show_border": false,
         "label": "The artist",
         "spacing": "small"
       }
@@ -124,7 +124,7 @@
     "related": {
       "type": "product-related",
       "settings": {
-        "show_border": true,
+        "show_border": false,
         "heading": "Related products",
         "limit": 6,
         "quick_add": true,
@@ -134,7 +134,7 @@
     "pairs": {
       "type": "product-pairs",
       "settings": {
-        "show_border": true,
+        "show_border": false,
         "collection": "",
         "limit": 3,
         "label": "Pair with",
@@ -161,7 +161,7 @@
         "judge_me_reviews_review_widget_fAMXJr"
       ],
       "settings": {
-        "show_border": true,
+        "show_border": false,
         "label": "Reviews",
         "spacing": "medium"
       }
