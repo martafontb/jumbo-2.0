@@ -1,14 +1,15 @@
 {% comment %}
   About intro
   Big title, a 16:9 studio image across two columns and an intro line with
-  a small caption in the third. "Page background" recolours the whole main
-  area for this page (the design uses red on About); header and footer keep
-  the normal background.
+  a small caption in the third. "Page background" recolours the whole page
+  behind the menu and content (the design uses red on About); the footer
+  keeps the normal background.
 {% endcomment %}
 {%- if section.settings.page_color != 'none' -%}
   {% style %}
-    .main { background: var(--color-{{ section.settings.page_color }}); padding-bottom: 80px; }
-    .site-footer { margin-top: 0; }
+    body { background: var(--color-{{ section.settings.page_color }}); }
+    .main { padding-bottom: 80px; }
+    .site-footer { margin-top: 0; background: var(--color-bg); }
   {% endstyle %}
 {%- endif -%}
 <section class="page about-intro">

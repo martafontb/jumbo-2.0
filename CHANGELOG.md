@@ -4,6 +4,9 @@ All notable changes to this theme are documented here. The format follows [Keep 
 
 ## [Unreleased]
 
+### Changed
+- About page: the page colour now also sits behind the header and menu (the footer keeps the normal background).
+
 ### Changed (one type voice)
 - Buttons, chips, pills, the announcement bar and the shipping pill are Inter Tight medium in sentence case. Mono (DM Mono, uppercase) stays for small facts: stock, option and quantity labels, price tables.
 - Image frames (`.media`) no longer have a border; outlines stay on clickable things.
