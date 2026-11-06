@@ -4,6 +4,14 @@ All notable changes to this theme are documented here. The format follows [Keep 
 
 ## [Unreleased]
 
+### Changed (art direction: header and homepage)
+- Announcement bar: new "Free shipping" block built from Theme settings > Cart > Free shipping threshold (hides when empty). The header group rotates it with a text message, and the text is ink on red.
+- Hero is one block: full-width image or video, one headline and one button (all editable). The side image and the in-hero review card are removed.
+- The customer quote is now a block in the Reviews strip section, right below the hero.
+- Product carousel: the next card peeks in, sold-out products are skipped, and the heading and end button follow the chosen collection when the label is empty.
+- Packs hide sold-out packs. The saving still shows in the red tag from the compare-at price.
+- Events ("Find us") has a "Full-width blue band" setting, on by default.
+
 ### Changed (art direction: type and colour)
 - Main font is now Instrument Sans (self-hosted variable woff2, 400 to 700) in place of Outfit. DM Mono stays for labels. Variables are in `snippets/css-variables.liquid`.
 - Type scale variables (`--text-page-title`, `--text-section-title`, `--text-card-title` and tracking tokens) with `clamp()` between phone and desktop. Body text is 16px. The product description now uses the full column width.

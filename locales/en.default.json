@@ -58,6 +58,7 @@
       "carousel": "Announcements",
       "code_copied": "Code {{ code }} copied ✓",
       "close": "Close announcements",
+      "free_shipping": "Free shipping over {{ amount }}",
       "pause": "Pause announcements",
       "play": "Play announcements"
     },
@@ -99,9 +100,7 @@
     },
     "hero": {
       "play": "Play video",
-      "pause": "Pause video",
-      "play_reviews": "Play review rotation",
-      "pause_reviews": "Pause review rotation"
+      "pause": "Pause video"
     },
     "studio_note": {
       "empty": "Studio note: add a quote in the theme editor to show this section."

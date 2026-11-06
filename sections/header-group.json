@@ -24,13 +24,8 @@
           }
         },
         "message-shipping": {
-          "type": "message",
-          "disabled": true,
-          "settings": {
-            "text": "Free UK shipping over £75",
-            "link": "",
-            "code": ""
-          }
+          "type": "shipping",
+          "settings": {}
         },
         "message-fair": {
           "type": "message",
@@ -50,7 +45,7 @@
         "interval": 5,
         "dismissible": true,
         "background": "red",
-        "text_color": "white"
+        "text_color": "ink"
       }
     },
     "header": {

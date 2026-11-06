@@ -5,11 +5,23 @@
   code and briefly confirms it. Rotation pauses on hover and keyboard focus, has a pause/play
   button (2+ messages) and does not auto-rotate under reduced motion.
   Dismissal is remembered for the browser session.
+
+  Block types: "Message" (free text) and "Free shipping" (text built from
+  Theme settings > Cart > Free shipping threshold, so the amount is set in one
+  place; it hides itself when the threshold is empty). Add a shipping block and a
+  message block (for the next fair) to rotate both.
 {% endcomment %}
 {%- liquid
-  assign messages = section.blocks | where: 'type', 'message'
+  assign threshold = settings.free_shipping_threshold | default: 0 | times: 100
+  assign message_count = 0
+  for block in section.blocks
+    if block.type == 'shipping' and threshold == 0
+      continue
+    endif
+    assign message_count = message_count | plus: 1
+  endfor
 -%}
-{%- if messages.size > 0 -%}
+{%- if message_count > 0 -%}
   <announcement-bar
     class="announcement"
     data-interval="{{ section.settings.interval | times: 1000 }}"
@@ -19,7 +31,7 @@
       data-design-mode
     {% endif %}
   >
-    {%- if messages.size > 1 -%}
+    {%- if message_count > 1 -%}
       <button
         type="button"
         class="announcement__toggle"
@@ -37,15 +49,23 @@
       <span aria-hidden="true"></span>
     {%- endif -%}
     <div class="announcement__track" role="group" aria-label="{{ 'sections.announcement.carousel' | t }}" aria-live="off">
-      {%- for block in messages -%}
+      {%- assign rendered = 0 -%}
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'shipping' and threshold == 0 -%}
+          {%- continue -%}
+        {%- endif -%}
         <div
           class="announcement__slide"
-          {% unless forloop.first %}
+          {% if rendered > 0 %}
             hidden
-          {% endunless %}
+          {% endif %}
           {{ block.shopify_attributes }}
         >
-          {%- if block.settings.code != blank -%}
+          {%- assign rendered = rendered | plus: 1 -%}
+          {%- if block.type == 'shipping' -%}
+            {%- assign threshold_money = threshold | money_without_trailing_zeros -%}
+            <p class="announcement__message">{{ 'sections.announcement.free_shipping' | t: amount: threshold_money }}</p>
+          {%- elsif block.settings.code != blank -%}
             <button
               type="button"
               class="announcement__message"
@@ -241,6 +261,17 @@
           "info": "Optional. Clicking the message copies this discount code instead of following the link."
         }
       ]
+    },
+    {
+      "type": "shipping",
+      "name": "Free shipping",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Shows 'Free shipping over [amount]'. The amount is Theme settings > Cart > Free shipping threshold. Hidden when that is empty."
+        }
+      ]
     }
   ],
   "presets": [
@@ -248,7 +279,7 @@
       "name": "Announcement bar",
       "blocks": [
         { "type": "message", "settings": { "text": "10% off your first order with code 'WELCOME'", "code": "WELCOME" } },
-        { "type": "message", "settings": { "text": "Free UK shipping over £75" } },
+        { "type": "shipping" },
         { "type": "message", "settings": { "text": "Next fair: Small Press Fair, 7 Nov" } }
       ]
     }

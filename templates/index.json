@@ -11,30 +11,13 @@
   "sections": {
     "hero": {
       "type": "hero",
-      "blocks": {
-        "review_fgQwwW": {
-          "type": "review",
-          "settings": {
-            "quote": "Colour is richer than the photos. Slight blue misregistration is exactly why I bought it.",
-            "name": "Ines M.",
-            "caption": "",
-            "rating": 5,
-            "color": "blue"
-          }
-        }
-      },
-      "block_order": [
-        "review_fgQwwW"
-      ],
       "settings": {
         "video": "shopify://files/videos/video horizontal.mov",
         "image_alt": "",
         "main_ground": "blue",
-        "side_image": "shopify://shop_images/1_845a0577-2ea1-4bc0-8348-4178367af369.jpg",
-        "side_image_alt": "",
-        "side_label": "shop all books",
-        "side_link": "shopify://collections/books",
-        "side_ground": "grey",
+        "headline": "Independent publisher and risograph printer.",
+        "button_label": "Shop editions",
+        "button_link": "shopify://collections/books",
         "spacing": "none"
       }
     },
@@ -46,15 +29,15 @@
         "limit": 8,
         "quick_add": true,
         "grounds": "blue, red, grey, red, blue",
-        "label": "New & Best Sellers",
+        "label": "",
         "label_color": "red",
         "caption": "",
         "end_image": "shopify://shop_images/DSC_5456.jpg",
         "end_image_alt": "",
         "end_ground": "blue",
         "end_note": "",
-        "end_button_label": "Shop all editions →",
-        "end_button_link": "shopify://collections/new",
+        "end_button_label": "Shop all →",
+        "end_button_link": "",
         "spacing": "medium"
       }
     },
@@ -286,7 +269,7 @@
         "event-market"
       ],
       "settings": {
-        "show_border": true,
+        "show_border": false,
         "label": "Find us",
         "label_color": "blue",
         "caption": "Fairs, workshops, launches",
@@ -295,7 +278,8 @@
         "feature_image_alt": "",
         "feature_label": "Next fair",
         "empty_text": "New dates coming soon.",
-        "spacing": "medium"
+        "spacing": "medium",
+        "band": true
       }
     },
     "stories": {
@@ -369,13 +353,26 @@
     },
     "reviews": {
       "type": "reviews-strip",
-      "disabled": true,
+      "blocks": {
+        "review_hero": {
+          "type": "review",
+          "settings": {
+            "quote": "Colour is richer than the photos. Slight blue misregistration is exactly why I bought it.",
+            "name": "Ines M.",
+            "caption": "",
+            "color": "blue"
+          }
+        }
+      },
+      "block_order": [
+        "review_hero"
+      ],
       "settings": {
-        "show_border": true,
+        "show_border": false,
         "label": "Loved by buyers",
         "rating": "",
         "count_text": "",
-        "spacing": "none"
+        "spacing": "small"
       }
     },
     "on-the-press": {
@@ -473,6 +470,7 @@
   },
   "order": [
     "hero",
+    "reviews",
     "editions",
     "intro",
     "inks",
@@ -480,7 +478,6 @@
     "events",
     "stories",
     "studio-note",
-    "reviews",
     "on-the-press",
     "shop-the-studio"
   ]
