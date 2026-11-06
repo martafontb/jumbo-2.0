@@ -164,9 +164,7 @@
 
   .contact-form__hint {
     margin: 0;
-    font: 400 var(--text-label-sm) / 1.4 var(--font-mono);
-    letter-spacing: var(--tracking-label);
-    text-transform: uppercase;
+    font: 400 14px / 1.4 var(--font-display);
     opacity: var(--opacity-muted);
   }
 
@@ -243,7 +241,7 @@
   "class": "section-contact-form",
   "tag": "section",
   "settings": [
-    { "type": "checkbox", "id": "show_border", "label": "Show top border", "default": true },
+    { "type": "checkbox", "id": "show_border", "label": "Show top border", "default": false },
     { "type": "text", "id": "label", "label": "Label", "default": "Get a quote" },
     { "type": "text", "id": "heading", "label": "Heading", "default": "Send your artwork, get a price within 2 days." },
     { "type": "richtext", "id": "text", "label": "Text", "default": "<p>Tell us the size, colours and run. Share files with a WeTransfer, Drive or Dropbox link.</p>" },

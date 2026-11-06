@@ -11,12 +11,21 @@
   "type": "custom.overlay",
   "name": "Overlays",
   "sections": {
+    "shipping_pill": {
+      "type": "shipping-pill",
+      "settings": {
+        "enabled": true,
+        "text": "",
+        "link": ""
+      }
+    },
     "newsletter_popup": {
       "type": "newsletter-popup",
       "settings": {
         "enabled": true,
         "auto_open": true,
-        "delay": 3,
+        "delay": 8,
+        "style": "card",
         "show_elephant": true,
         "image_label": "Next drop: 24 Oct",
         "image_color": "blue",
@@ -32,6 +41,7 @@
     }
   },
   "order": [
+    "shipping_pill",
     "newsletter_popup"
   ]
 }

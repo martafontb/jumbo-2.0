@@ -14,9 +14,6 @@
   assign media_fit = fit | default: 'auto'
   if media_fit == 'auto'
     assign media_fit = 'cover'
-    if media.preview_image.aspect_ratio < 1
-      assign media_fit = 'contain'
-    endif
   endif
 -%}
 <div

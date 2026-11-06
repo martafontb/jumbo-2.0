@@ -93,7 +93,6 @@
     align-items: baseline;
     gap: 8px;
     padding-top: 6px;
-    border-top: var(--border);
   }
 
   .product-pairs__title {
@@ -122,7 +121,7 @@
   "class": "section-product-pairs",
   "tag": "div",
   "settings": [
-    { "type": "checkbox", "id": "show_border", "label": "Show top border", "default": true },
+    { "type": "checkbox", "id": "show_border", "label": "Show top border", "default": false },
     { "type": "paragraph", "content": "Uses the product's custom.pairs_with metafield (list of products), or this collection when that's empty." },
     { "type": "collection", "id": "collection", "label": "Fallback collection" },
     { "type": "range", "id": "limit", "label": "Products", "min": 1, "max": 6, "step": 1, "default": 3 },

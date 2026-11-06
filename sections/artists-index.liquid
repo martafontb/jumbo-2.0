@@ -170,7 +170,6 @@
     justify-content: space-between;
     align-items: baseline;
     padding-top: 6px;
-    border-top: var(--border);
   }
 
   @media screen and (max-width: 749px) {
@@ -201,7 +200,7 @@
   "name": "Artists index",
   "class": "section-artists-index",
   "settings": [
-    { "type": "checkbox", "id": "show_border", "label": "Show top border", "default": true },
+    { "type": "checkbox", "id": "show_border", "label": "Show top border", "default": false },
     { "type": "paragraph", "content": "Lists every entry of the artist metaobject (Content > Metaobjects). Turn on web pages for artists so each row links to its page." },
     { "type": "text", "id": "title", "label": "Title", "info": "Defaults to the page title." },
     { "type": "richtext", "id": "intro", "label": "Intro", "default": "<p>The people we print with. Hover a name to see their work, click to see their editions.</p>" }

@@ -16,7 +16,8 @@
           "type": "title",
           "settings": {
             "accent": false,
-            "accent_color": "blue"
+            "accent_color": "blue",
+            "show_rating": true
           }
         },
         "artist": {
@@ -71,14 +72,26 @@
             "accordion_heading": "Description",
             "accordion_open": true
           }
+        },
+        "spec_line": {
+          "type": "spec_line",
+          "settings": {
+            "fallback": ""
+          }
+        },
+        "delivery_line": {
+          "type": "delivery_line",
+          "settings": {}
         }
       },
       "block_order": [
         "title",
         "artist",
         "price",
+        "spec_line",
         "variant_picker",
         "buy_buttons",
+        "delivery_line",
         "description",
         "specs",
         "guide_link"
@@ -86,7 +99,7 @@
       "settings": {
         "gallery_layout": "two-up",
         "gallery_ground": "grey",
-        "gallery_fit": "contain",
+        "gallery_fit": "cover",
         "captions": false,
         "sticky_info": true,
         "sticky_bar": true,
@@ -103,7 +116,7 @@
     "artist": {
       "type": "artist-block",
       "settings": {
-        "show_border": true,
+        "show_border": false,
         "label": "The artist",
         "spacing": "small"
       }
@@ -111,7 +124,7 @@
     "related": {
       "type": "product-related",
       "settings": {
-        "show_border": true,
+        "show_border": false,
         "heading": "Related products",
         "limit": 6,
         "quick_add": true,
@@ -121,10 +134,10 @@
     "pairs": {
       "type": "product-pairs",
       "settings": {
-        "show_border": true,
+        "show_border": false,
         "collection": "",
         "limit": 3,
-        "label": "Pairs well with",
+        "label": "Pair with",
         "caption": "Add to the same parcel",
         "heading": "Complete the set",
         "done_text": "Everything's in your cart. Nice set.",
@@ -148,7 +161,7 @@
         "judge_me_reviews_review_widget_fAMXJr"
       ],
       "settings": {
-        "show_border": true,
+        "show_border": false,
         "label": "Reviews",
         "spacing": "medium"
       }
@@ -156,9 +169,9 @@
   },
   "order": [
     "main",
+    "pairs",
     "artist",
     "related",
-    "pairs",
     "reviews"
   ]
 }

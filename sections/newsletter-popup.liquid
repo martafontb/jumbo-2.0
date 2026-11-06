@@ -1,12 +1,17 @@
 {% comment %}
   Newsletter popup
-  Centred modal in the Overlays group. Opens once per visitor after a delay
+  A small card at the bottom of the screen (or a centred modal, see Style) in
+  the Overlays group. Opens once per visitor after a delay
   (dismissal is remembered in localStorage), and from any element with
   data-overlay-open="NewsletterPopup" (the footer "Newsletter" link).
 
   The form is Shopify's customer form, tagged "newsletter", and posts as a
   normal page load so Shopify's spam protection runs. After the post, the
   page reloads and the popup re-opens showing the success or error state.
+
+  The card style opens without a backdrop and without locking the page. It
+  waits while Shopify's cookie banner is on screen, so the two never stack.
+  Escape closes it.
 
   In the theme editor the popup never opens on its own; select the section
   to preview it.
@@ -19,9 +24,10 @@
 {%- if section.settings.enabled -%}
 <newsletter-popup
   data-delay="{{ section.settings.delay }}"
+  data-style="{{ section.settings.style }}"
   {% unless section.settings.auto_open %}data-manual{% endunless %}
 >
-  <dialog class="overlay newsletter-popup" id="NewsletterPopup" aria-labelledby="NewsletterPopup-title">
+  <dialog class="overlay newsletter-popup newsletter-popup--{{ section.settings.style }}" id="NewsletterPopup" aria-labelledby="NewsletterPopup-title">
     <div class="newsletter-popup__inner">
       <div class="media newsletter-popup__media" style="--media-bg: var(--color-{{ color }});">
         {%- if section.settings.show_elephant -%}
@@ -166,7 +172,47 @@
     padding: 0 12px;
   }
 
+  /* Card style: small, bottom of the screen, no image. */
+  .newsletter-popup--card {
+    inset: auto 16px 16px auto;
+    translate: none;
+    margin: 0;
+    width: min(380px, calc(100vw - 32px));
+    border-radius: var(--radius-lg);
+    background: var(--color-bg);
+  }
+
+  .newsletter-popup--card .newsletter-popup__inner {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 8px;
+  }
+
+  .newsletter-popup--card .newsletter-popup__media {
+    display: none;
+  }
+
+  .newsletter-popup--card .newsletter-popup__body {
+    gap: 12px;
+    padding: 12px 12px 8px;
+  }
+
+  .newsletter-popup--card .newsletter-popup__title {
+    padding-right: 44px;
+    font-size: clamp(24px, 3vw, 30px);
+    line-height: 1;
+    letter-spacing: var(--tracking-section-title);
+  }
+
+  .newsletter-popup--card .newsletter-popup__form {
+    gap: 12px;
+  }
+
   @media (max-width: 749px) {
+    .newsletter-popup--card {
+      inset: auto 10px 10px;
+      width: auto;
+    }
+
     .newsletter-popup__inner {
       grid-template-columns: minmax(0, 1fr);
     }
@@ -194,7 +240,18 @@
   "settings": [
     { "type": "checkbox", "id": "enabled", "label": "Enable popup", "default": true, "info": "When off, the popup never shows. Also hide the footer Newsletter link." },
     { "type": "checkbox", "id": "auto_open", "label": "Open automatically", "default": true, "info": "Opens once per visitor. Visitors who close it or subscribe don't see it again on that browser." },
-    { "type": "range", "id": "delay", "label": "Delay before opening", "min": 1, "max": 30, "step": 1, "unit": "s", "default": 3 },
+    { "type": "range", "id": "delay", "label": "Delay before opening", "min": 1, "max": 30, "step": 1, "unit": "s", "default": 8 },
+    {
+      "type": "select",
+      "id": "style",
+      "label": "Style",
+      "info": "Card: a small card at the bottom of the screen, no image. Modal: the centred popup with the image.",
+      "options": [
+        { "value": "card", "label": "Card" },
+        { "value": "modal", "label": "Modal" }
+      ],
+      "default": "card"
+    },
     { "type": "header", "content": "Image" },
     { "type": "checkbox", "id": "show_elephant", "label": "Show elephant instead of image", "default": true },
     { "type": "image_picker", "id": "image", "label": "Image" },

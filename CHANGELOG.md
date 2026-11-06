@@ -4,6 +4,95 @@ All notable changes to this theme are documented here. The format follows [Keep 
 
 ## [Unreleased]
 
+### Changed
+- Pill nav logo is a little larger (32px high).
+
+### Changed
+- Pill nav: logo centred, links on the left, Search and Cart on the right; the divider next to the logo is gone.
+
+### Fixed
+- Mega menu bottom corners are rounded again (the radius used a variable that was not defined on the panel).
+
+### Fixed
+- Mega menu is part of the pill: it drops straight from the bar with the same width and border, rounded bottom corners, and the pill's bottom corners square off while it is open, is limited to the window height and scrolls if needed; its rows shrink on short windows so the list is not cut off.
+
+### Changed
+- Blue pills (section labels and so on) are inverted: ink fill with white text. The accent blue stays for hovers, the cart band and small markers.
+
+### Changed
+- About page: the page colour now also sits behind the header and menu (the footer keeps the normal background).
+
+### Changed (one type voice)
+- Buttons, chips, pills, the announcement bar and the shipping pill are Inter Tight medium in sentence case. Mono (DM Mono, uppercase) stays for small facts: stock, option and quantity labels, price tables.
+- Image frames (`.media`) no longer have a border; outlines stay on clickable things.
+- 28 other small uppercase rules became sentence case sans; `.label`, `.mono` and `.link-mono` stay mono uppercase via `--font-data`.
+- Selected option value (e.g. colour) matches the other labels.
+
+### Changed (home and images)
+- Removed the Print CTA band and the proof strip from the homepage (section files kept; the Print page still uses the CTA band).
+- Product cards and the product gallery always crop to fill the frame (object-fit: cover).
+
+### Changed (nav feel)
+- Mega menu: calmer fade-and-settle instead of a clip reveal; pill uses a fixed half-height radius so its corners ease evenly.
+- Pill nav has 24px of space below it.
+
+### Changed (motion and gallery)
+- Mega menu opens and closes with a reveal that grows from the pill (switching between menus is instant); pill corners ease between round and square.
+- Product gallery: a single image fills both columns.
+- Carousels: smooth snap scrolling, and mouse drag now flicks with momentum before snapping to the nearest card.
+
+### Changed (type scale, mega menu, borders)
+- Smaller page title (34-60px), section title (24-32px); CTA band text uses the section title size.
+- Mega menu is now part of the pill: it opens straight under the bar with the same width and border, and the pill's bottom corners square off while it is open.
+- "Show top border" defaults to off in all sections; removed decorative border-tops inside list, article, artist, contact, checklist and shop-the-look sections.
+
+### Changed (fewer border-tops)
+- Removed the border-top above card titles (basic card, article card, pairs, packs, mega card).
+- Section dividers (`show_border`) are off by default on the homepage, About, Print and product templates; still available per section in the editor.
+
+### Changed (mono for small uppercase labels)
+- `--font-label` points back to DM Mono: small uppercase labels, chips and buttons are mono again. Sentence-case copy, form fields, stepper input and product-card captions stay in Inter Tight.
+
+### Changed (art direction: header and homepage)
+- Announcement bar: new "Free shipping" block built from Theme settings > Cart > Free shipping threshold (hides when empty). The header group rotates it with a text message, and the text is ink on red.
+- Product carousel: the next card peeks in, sold-out products are skipped, and the heading and end button follow the chosen collection when the label is empty.
+- Packs hide sold-out packs. The saving still shows in the red tag from the compare-at price.
+- Events ("Find us") has a "Full-width blue band" setting, on by default.
+
+### Changed (art direction: round 2 feedback)
+- Main font is Inter Tight (variable woff2, 100 to 900), replacing Instrument Sans, which replaced Outfit in the first round. Earlier entries below that say "Inter Tight" were first written for Instrument Sans.
+- The blue band on the fairs section is off again (the option stays in the editor).
+- DM Mono is now only for prices and data tables. Labels, pills, chips, captions and buttons use the main sans through a new `--font-label` token.
+- Header from 750px is one floating pill (logo, a divider, links, then Search and Cart) instead of three pills. The logo is smaller inside it, the current page is an ink fill and hover is blue, like the chips.
+
+### Added (art direction: navigation and brand line)
+- Floating pill navigation from 750px: a logo pill, a nav pill and a Search and Cart pill, grey with ink text. The current page is a page-coloured pill and hover fills blue. The header stays sticky. The phone menu is unchanged. Print in the main menu now links to `/pages/print`.
+- Theme settings > Brand and studio: the brand line (Option 1) and a short version. The home page tab title and meta description, the home intro, the footer statement (first sentence), the About intro and a new "Brand line" announcement block read it.
+- Proof strip section ("Since 2018 · 2 machines · 14 inks · 40 artists a year") with its numbers in Theme settings > Brand and studio > Studio facts.
+- "Print with us" door under the hero (the CTA band now has a detail line).
+- Bottom shipping pill (`sections/shipping-pill.liquid`, Overlays group): close button, closed state kept for the visit. Text from its setting or built from the free shipping threshold.
+- Collection chips and filter pills use the same blue hover as the header pills.
+- About page: the intro says it started in London and is now in Barcelona, and the story text leads with "publisher and risograph printer".
+
+### Added (art direction: cart, pop-ups and footer)
+- Free-shipping bar is a blue block with ink text at the top of the cart page and the cart drawer.
+- Add-on row (`snippets/cart-upsell.liquid`) on the cart page as well as the drawer, with its own collection setting. Two buttons in the empty cart and empty drawer.
+- Newsletter popup is a small card at the bottom of the screen by default (8 second delay, no backdrop, Escape closes). It waits while Shopify's cookie banner is on screen. "Modal" style keeps the old popup.
+- Footer: shipping and contact lines with icons, and payment icons. Footer links fade on hover instead of underlining.
+- `docs/client-settings-needed.md` lists every setting that needs a value from the client.
+
+### Added (art direction: collection and product pages)
+- Collection filter pills (availability, price, product type and any other Storefront filter) in `snippets/collection-filters.liquid`: a dropdown on desktop, a bottom sheet on phone, works without JS.
+- Collection: in-stock products come first when no sort is chosen; the intro shows two lines on phone with a Read more toggle; product cards show the artist name (from the `custom.artist` metaobject) in mono.
+- Product page: Spec line block (format, size, paper), Delivery line block (Theme settings > Product page), rating beside the title, and a notify-me form on sold-out variants (posts to the store's contact form). The "Pair with" row now sits right under the product.
+
+### Changed (art direction: type and colour)
+- Main font is now Inter Tight (self-hosted variable woff2, 400 to 700) in place of Outfit. DM Mono stays for labels. Variables are in `snippets/css-variables.liquid`.
+- Type scale variables (`--text-page-title`, `--text-section-title`, `--text-card-title` and tracking tokens) with `clamp()` between phone and desktop. Body text is 16px. The product description now uses the full column width.
+- Ink text on blue fills (view cart button, set reminder button). Blue and red no longer colour small text: link hover underlines, the cart count and the accent are ink.
+- Review stars (Judge.me) are ink, not teal.
+- Media frames and product cards have a 1px ink border and a 16px radius.
+
 ### Added
 - Contact page (`page.contact`, `sections/contact.liquid`): portrait image and contact rows (blocks: pill, heading, text, email or link).
 - Wholesale page (`page.wholesale`, `sections/wholesale.liquid`): statement, intro, image, reason cards (blocks, up to four) and an email call to action. Copy from the design handoff as defaults.

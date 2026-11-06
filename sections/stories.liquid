@@ -140,9 +140,8 @@
   }
 
   .stories__watch {
-    font: 400 var(--text-label) / 1.3 var(--font-mono);
-    letter-spacing: var(--tracking-label);
-    text-transform: uppercase;
+    font: 400 var(--text-label) / 1.3 var(--font-label);
+    letter-spacing: 0;
   }
 
   .stories__follow {
@@ -232,9 +231,8 @@
     align-items: center;
     gap: 8px;
     color: var(--color-white);
-    font: 400 var(--text-label-sm) / 1 var(--font-mono);
-    letter-spacing: var(--tracking-label);
-    text-transform: uppercase;
+    font: 400 var(--text-label-sm) / 1 var(--font-label);
+    letter-spacing: 0;
     text-shadow: 0 1px 3px var(--color-ink);
   }
 
@@ -254,7 +252,7 @@
     border-radius: 50%;
     background: var(--color-scrim);
     color: var(--color-white);
-    font: 400 16px / 1 var(--font-mono);
+    font: 400 16px / 1 var(--font-label);
   }
 
   .story__zone {
@@ -300,9 +298,8 @@
     border-radius: var(--radius-pill);
     background: var(--color-bg);
     color: var(--color-ink);
-    font: 400 var(--text-label-sm) / 1.2 var(--font-mono);
-    letter-spacing: var(--tracking-label);
-    text-transform: uppercase;
+    font: 400 var(--text-label-sm) / 1.2 var(--font-label);
+    letter-spacing: 0;
     text-align: center;
     text-decoration: none;
   }
@@ -346,7 +343,7 @@
   "tag": "div",
   "max_blocks": 12,
   "settings": [
-    { "type": "checkbox", "id": "show_border", "label": "Show top border", "default": true },
+    { "type": "checkbox", "id": "show_border", "label": "Show top border", "default": false },
     { "type": "text", "id": "label", "label": "Label", "default": "@jumbopress" },
     {
       "type": "select",

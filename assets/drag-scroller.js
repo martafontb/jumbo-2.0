@@ -18,6 +18,9 @@ class DragScroller extends HTMLElement {
     this.startX = event.clientX;
     this.startScroll = this.scrollLeft;
     this.moved = false;
+    this.lastX = event.clientX;
+    this.lastT = performance.now();
+    this.velocity = 0;
     window.addEventListener('pointermove', this.onMove);
     window.addEventListener('pointerup', this.onUp, { once: true });
   };
@@ -30,18 +33,28 @@ class DragScroller extends HTMLElement {
       this.classList.add('is-dragging');
     }
     this.scrollLeft = this.startScroll - dx;
+    // Smoothed pointer velocity (px per ms) for the flick on release.
+    const now = performance.now();
+    const dt = Math.max(now - this.lastT, 1);
+    this.velocity = 0.8 * this.velocity + 0.2 * ((event.clientX - this.lastX) / dt);
+    this.lastX = event.clientX;
+    this.lastT = now;
   };
 
   onUp = () => {
     window.removeEventListener('pointermove', this.onMove);
     if (!this.moved) return;
     // Re-enable snapping, then let the browser settle on the nearest card.
+    // Throw the row a little in the direction of the flick, then snap.
+    const stale = performance.now() - this.lastT > 80;
+    const throwBy = stale ? 0 : -this.velocity * 320;
     const left = this.scrollLeft;
+    const target = Math.max(0, Math.min(left + throwBy, this.scrollWidth - this.clientWidth));
     this.classList.remove('is-dragging');
     this.scrollLeft = left;
     const item = [...this.children].reduce(
       (best, child) =>
-        Math.abs(child.offsetLeft - this.offsetLeft - left) < Math.abs(best.offsetLeft - this.offsetLeft - left)
+        Math.abs(child.offsetLeft - this.offsetLeft - target) < Math.abs(best.offsetLeft - this.offsetLeft - target)
           ? child
           : best,
       this.children[0]

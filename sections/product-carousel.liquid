@@ -2,7 +2,9 @@
   Product carousel
   Horizontal scroll-snap row of product cards from a collection: three
   visible on desktop, about 1.7 on mobile. Drag to scroll with a mouse;
-  swipe on touch; arrow keys when focused. Card grounds cycle through the
+  swipe on touch; arrow keys when focused. The next card peeks in at the edge
+  so shoppers see the row scrolls. Sold-out products are skipped. With no label
+  set, the heading and the end button follow the chosen collection. Card grounds cycle through the
   "Card colours" list. An optional end card closes the row with an image, a
   short note (e.g. what's sold out or coming back) and a button.
 {% endcomment %}
@@ -23,13 +25,15 @@
   elsif collection != blank
     assign track_label = collection.title
   endif
+  assign heading = section.settings.label | default: collection.title
+  assign shown = 0
   assign has_end_card = false
   if section.settings.end_note != blank or section.settings.end_button_label != blank or section.settings.end_image != blank or section.settings.end_video != blank
     assign has_end_card = true
   endif
 -%}
 <section class="page product-carousel space-{{ section.settings.spacing }}">
-  {%- render 'section-head', label: section.settings.label, color: section.settings.label_color, caption: section.settings.caption -%}
+  {%- render 'section-head', label: heading, color: section.settings.label_color, caption: section.settings.caption -%}
 
   {%- if show_track -%}
     <drag-scroller
@@ -40,8 +44,15 @@
       aria-label="{{ track_label | escape }}"
     >
       {%- if collection != blank -%}
-        {%- for product in collection.products limit: section.settings.limit -%}
-          {%- assign ground_index = forloop.index0 | modulo: grounds.size -%}
+        {%- for product in collection.products -%}
+          {%- if product.available == false and request.design_mode == false -%}
+            {%- continue -%}
+          {%- endif -%}
+          {%- if shown >= section.settings.limit -%}
+            {%- break -%}
+          {%- endif -%}
+          {%- assign ground_index = shown | modulo: grounds.size -%}
+          {%- assign shown = shown | plus: 1 -%}
           {%- assign ground = grounds[ground_index] | strip -%}
           {%- render 'product-card', product: product, ground: ground, sizes: '(min-width: 750px) 33vw, 60vw', class: 'product-carousel__item', quick_add: section.settings.quick_add, reserve_stars: true -%}
         {%- endfor -%}
@@ -59,7 +70,7 @@
             {%- render 'image-or-video', video: section.settings.end_video, image: section.settings.end_image, sizes: '(min-width: 750px) 33vw, 60vw', alt: section.settings.end_image_alt, placeholder: 'image' -%}
           </div>
           {%- if section.settings.end_note != blank -%}
-            <div class="product-carousel__note label label--sm">{{ section.settings.end_note }}</div>
+            <div class="product-carousel__note">{{ section.settings.end_note }}</div>
           {%- endif -%}
           {%- if section.settings.end_button_label != blank -%}
             <a class="product-carousel__cta tap-target" href="{{ section.settings.end_button_link | default: collection.url | default: routes.all_products_collection_url }}">
@@ -83,7 +94,7 @@
   }
 
   .product-carousel__item {
-    width: calc((100% - var(--grid-gap) * 2) / 3);
+    width: calc((100% - var(--grid-gap) * 3) / 3.3); /* 3 cards and a peek of the 4th */
   }
 
   .product-carousel__end {
@@ -97,7 +108,7 @@
     padding: 8px;
     border: var(--border);
     border-radius: var(--radius-sm);
-    text-transform: uppercase;
+    font: 400 14px / 1.4 var(--font-display);
   }
 
   .product-carousel__cta {
@@ -105,9 +116,8 @@
     padding: 12px;
     background: var(--color-ink);
     color: var(--color-white);
-    font: 400 var(--text-label) / 1.2 var(--font-mono);
-    letter-spacing: var(--tracking-label);
-    text-transform: uppercase;
+    font: 400 var(--text-label) / 1.2 var(--font-label);
+    letter-spacing: 0;
     text-align: center;
     text-decoration: none;
   }
@@ -130,7 +140,7 @@
   "class": "section-product-carousel",
   "tag": "div",
   "settings": [
-    { "type": "checkbox", "id": "show_border", "label": "Show top border", "default": true },
+    { "type": "checkbox", "id": "show_border", "label": "Show top border", "default": false },
     { "type": "collection", "id": "collection", "label": "Collection" },
     { "type": "range", "id": "limit", "label": "Products", "min": 3, "max": 16, "step": 1, "default": 8 },
     { "type": "checkbox", "id": "quick_add", "label": "Show quick add to cart", "info": "Products with several variants link to the product page instead.", "default": true },
@@ -141,7 +151,7 @@
       "info": "Comma-separated, repeating: blue, red, grey, ink, bg.",
       "default": "blue, red, grey, red, blue"
     },
-    { "type": "text", "id": "label", "label": "Label" },
+    { "type": "text", "id": "label", "label": "Label", "info": "Leave empty to use the collection title." },
     {
       "type": "select",
       "id": "label_color",
@@ -170,7 +180,7 @@
       "default": "blue"
     },
     { "type": "richtext", "id": "end_note", "label": "Note", "default": "<p>Sold out · Bloom Fields Vol. 2<br/>Back in print: November</p>" },
-    { "type": "text", "id": "end_button_label", "label": "Button label", "default": "Shop all editions →" },
+    { "type": "text", "id": "end_button_label", "label": "Button label", "default": "Shop all →" },
     { "type": "url", "id": "end_button_link", "label": "Button link", "info": "Defaults to the collection." },
     {
       "type": "select",

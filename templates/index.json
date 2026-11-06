@@ -41,20 +41,20 @@
     "editions": {
       "type": "product-carousel",
       "settings": {
-        "show_border": true,
+        "show_border": false,
         "collection": "soft-goods",
         "limit": 8,
         "quick_add": true,
         "grounds": "blue, red, grey, red, blue",
-        "label": "New & Best Sellers",
+        "label": "",
         "label_color": "red",
         "caption": "",
         "end_image": "shopify://shop_images/DSC_5456.jpg",
         "end_image_alt": "",
         "end_ground": "blue",
         "end_note": "",
-        "end_button_label": "Shop all editions →",
-        "end_button_link": "shopify://collections/new",
+        "end_button_label": "Shop all →",
+        "end_button_link": "",
         "spacing": "medium"
       }
     },
@@ -69,7 +69,8 @@
         "button_label": "",
         "button_link": "",
         "button_style": "block",
-        "spacing": "medium"
+        "spacing": "medium",
+        "use_brand_line": true
       }
     },
     "inks": {
@@ -143,7 +144,7 @@
       ],
       "disabled": true,
       "settings": {
-        "show_border": true,
+        "show_border": false,
         "label": "Our inks",
         "label_color": "red",
         "caption": "Every colour we print",
@@ -190,7 +191,7 @@
         "pack-1"
       ],
       "settings": {
-        "show_border": true,
+        "show_border": false,
         "label": "Packs",
         "label_color": "blue",
         "caption": "Buy together, pay less",
@@ -286,7 +287,7 @@
         "event-market"
       ],
       "settings": {
-        "show_border": true,
+        "show_border": false,
         "label": "Find us",
         "label_color": "blue",
         "caption": "Fairs, workshops, launches",
@@ -295,7 +296,8 @@
         "feature_image_alt": "",
         "feature_label": "Next fair",
         "empty_text": "New dates coming soon.",
-        "spacing": "medium"
+        "spacing": "medium",
+        "band": false
       }
     },
     "stories": {
@@ -359,7 +361,7 @@
       "type": "studio-note",
       "disabled": true,
       "settings": {
-        "show_border": true,
+        "show_border": false,
         "label": "Studio note",
         "date": "09.10.2026",
         "quote": "I wanted the green to bleed into the paper a little. Jumbo let it.",
@@ -371,7 +373,7 @@
       "type": "reviews-strip",
       "disabled": true,
       "settings": {
-        "show_border": true,
+        "show_border": false,
         "label": "Loved by buyers",
         "rating": "",
         "count_text": "",
@@ -413,7 +415,7 @@
       ],
       "disabled": true,
       "settings": {
-        "show_border": true,
+        "show_border": false,
         "label": "On the press",
         "label_color": "blue",
         "caption": "Tap to play",
@@ -461,7 +463,7 @@
       ],
       "disabled": true,
       "settings": {
-        "show_border": true,
+        "show_border": false,
         "image_alt": "",
         "heading": "Get the look",
         "label": "Shop the studio",

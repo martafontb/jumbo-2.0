@@ -17,7 +17,7 @@ Part 1 holds the project rules and Part 2 the general Shopify conventions. Where
 ## Stack
 - Liquid, JSON templates, sections with `{% schema %}`, theme blocks, section groups. No build step, no frameworks, no TypeScript, no jQuery.
 - Vanilla JS as ES modules in `assets/`, using custom elements, loaded with `type="module"`. Global namespace is `window.JumboPress`. Custom events use the `jumbo:` prefix, except the cart events `cart:updated` / `cart:refresh`.
-- Fonts: Outfit (variable, display and body) and DM Mono 400 (labels), self-hosted woff2 in `assets/`, `font-display: swap`.
+- Fonts: Inter Tight (variable, display and body) and DM Mono 400 (labels), self-hosted woff2 in `assets/`, `font-display: swap`.
 
 ## Design system
 - Tokens live in `snippets/css-variables.liquid` as CSS custom properties. Colours come from theme settings. Components use tokens, never raw hex values.

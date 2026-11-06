@@ -110,9 +110,21 @@ a {
   color: var(--color-ink);
 }
 
+/* Blue text on the pale background is 2.3:1, so plain links fade on hover instead of recolouring.
+   Classed links (buttons, cards, nav) keep their own hover styles. */
+a:not([class]) {
+  transition: opacity 0.2s var(--ease-out-expo);
+}
+
 @media (hover: hover) {
-  a:hover {
-    color: var(--color-blue);
+  a:not([class]):hover {
+    opacity: 0.55;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  a:not([class]) {
+    transition: none;
   }
 }
 
@@ -157,9 +169,8 @@ a {
   border-radius: var(--radius-pill);
   background: var(--color-ink);
   color: var(--color-white);
-  font: 400 var(--text-label) var(--font-mono);
-  letter-spacing: var(--tracking-label);
-  text-transform: uppercase;
+  font: 400 var(--text-label) var(--font-label);
+  letter-spacing: 0;
   text-decoration: none;
 }
 
@@ -224,7 +235,7 @@ a {
 /* ---------- Typography ---------- */
 .mono,
 .label {
-  font-family: var(--font-mono);
+  font-family: var(--font-data);
   font-weight: 400;
   font-size: var(--text-label);
   letter-spacing: var(--tracking-label);
@@ -238,29 +249,29 @@ a {
 .title-page {
   font-weight: 500;
   font-size: var(--text-page-title);
-  line-height: 0.85;
-  letter-spacing: -0.05em;
+  line-height: 0.95;
+  letter-spacing: var(--tracking-page-title);
 }
 
 .title-product {
   font-weight: 500;
   font-size: var(--text-product-title);
   line-height: 1;
-  letter-spacing: -0.035em;
+  letter-spacing: var(--tracking-section-title);
 }
 
 .title-statement {
   font-weight: 400;
   font-size: var(--text-statement);
   line-height: 1.02;
-  letter-spacing: -0.04em;
+  letter-spacing: var(--tracking-section-title);
 }
 
 .title-card {
   font-weight: 400;
   font-size: var(--text-card-lg);
   line-height: 1.05;
-  letter-spacing: -0.02em;
+  letter-spacing: var(--tracking-card-title);
 }
 
 .title-card--sm {
@@ -274,8 +285,7 @@ a {
 }
 
 .accent {
-  color: var(--color-blue);
-  font-style: italic;
+  font-style: italic; /* colour goes in fills, not text */
 }
 
 .rte p + p {
@@ -296,13 +306,13 @@ a {
   border-radius: var(--radius-pill);
   background: var(--pill-bg, var(--color-grey));
   color: var(--pill-fg, var(--color-ink));
-  font: 400 var(--text-label-sm) / 1.35 var(--font-mono);
-  letter-spacing: var(--tracking-label);
-  text-transform: uppercase;
+  font: 500 var(--text-label-sm) / 1.35 var(--font-label);
+  letter-spacing: 0;
   white-space: nowrap;
 }
 
-.pill--blue { --pill-bg: var(--color-blue); }
+/* "Blue" pills are inverted (ink with white text): the accent blue is too light to read as a label. */
+.pill--blue { --pill-bg: var(--color-ink); --pill-fg: var(--color-white); }
 .pill--red { --pill-bg: var(--color-red); }
 .pill--grey { --pill-bg: var(--color-grey); }
 .pill--bg { --pill-bg: var(--color-bg); }
@@ -321,9 +331,8 @@ a {
   border-radius: var(--radius-pill);
   background: var(--color-ink);
   color: var(--color-white);
-  font: 400 var(--text-label) / 1 var(--font-mono);
-  letter-spacing: var(--tracking-label);
-  text-transform: uppercase;
+  font: 500 var(--text-label) / 1 var(--font-label);
+  letter-spacing: 0;
   text-decoration: none;
   text-align: center;
   cursor: pointer;
@@ -367,7 +376,7 @@ a {
 }
 
 .link-mono {
-  font: 400 var(--text-label) var(--font-mono);
+  font: 400 var(--text-label) var(--font-data);
   letter-spacing: var(--tracking-label);
   text-transform: uppercase;
   text-decoration: underline;
@@ -387,16 +396,26 @@ a {
   border-radius: var(--radius-pill);
   background: transparent;
   color: var(--color-ink);
-  font: 400 var(--text-label-sm) / 1.35 var(--font-mono);
-  letter-spacing: var(--tracking-label);
-  text-transform: uppercase;
+  font: 500 var(--text-label-sm) / 1.35 var(--font-label);
+  letter-spacing: 0;
   text-decoration: none;
   cursor: pointer;
 }
 
+.chip {
+  transition: background-color 0.15s;
+}
+
+/* Same hover as the header pills: blue fill, ink text (6.0:1). */
 .chip:hover {
-  background: var(--color-grey);
+  background: var(--color-blue);
   color: var(--color-ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chip {
+    transition: none;
+  }
 }
 
 .chip[aria-pressed='true'],
@@ -463,7 +482,7 @@ a {
   border-radius: var(--radius-pill);
   background: transparent;
   color: var(--color-ink);
-  font: 400 16px / 1 var(--font-mono);
+  font: 400 16px / 1 var(--font-label);
   cursor: pointer;
 }
 
@@ -500,7 +519,7 @@ a {
   display: grid;
   grid-template-columns: auto 1fr;
   gap: 4px 18px;
-  font: 400 var(--text-label) / 1.35 var(--font-mono);
+  font: 400 var(--text-label) / 1.35 var(--font-label);
   letter-spacing: var(--tracking-label);
   text-transform: uppercase;
 }
@@ -543,7 +562,7 @@ a {
   border: 0;
   border-radius: var(--radius-pill);
   background: transparent;
-  font: 400 14px / 1 var(--font-mono);
+  font: 400 14px / 1 var(--font-label);
 }
 
 .stepper__button:hover {
@@ -557,7 +576,7 @@ a {
   border: 0;
   background: transparent;
   text-align: center;
-  font: 400 var(--text-label) var(--font-mono);
+  font: 400 var(--text-label) var(--font-display);
   -moz-appearance: textfield;
   appearance: textfield;
 }
@@ -572,7 +591,7 @@ a {
 .media {
   position: relative;
   overflow: hidden;
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-md);
   background: var(--media-bg, var(--color-grey));
   aspect-ratio: var(--ratio, 4 / 3);
 }
@@ -629,7 +648,7 @@ a {
   border: var(--border);
   border-radius: var(--radius-pill);
   background: var(--color-bg);
-  font: 400 13px var(--font-mono);
+  font: 400 13px var(--font-display);
 }
 
 .field:focus-visible {
@@ -637,9 +656,8 @@ a {
 }
 
 .form-message {
-  font: 400 var(--text-label) / 1.4 var(--font-mono);
-  letter-spacing: var(--tracking-label);
-  text-transform: uppercase;
+  font: 400 var(--text-label) / 1.4 var(--font-label);
+  letter-spacing: 0;
 }
 
 .form-message--error::before {
@@ -764,6 +782,8 @@ html.has-overlay {
   overflow-x: auto;
   overscroll-behavior-x: contain;
   scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
 }
 
@@ -779,6 +799,7 @@ html.has-overlay {
 .scroller.is-dragging {
   cursor: grabbing;
   scroll-snap-type: none;
+  scroll-behavior: auto;
   user-select: none;
 }
 
@@ -804,8 +825,8 @@ html.has-overlay {
 
 .shopify-policy__title h1 {
   margin-bottom: 24px;
-  font: 500 var(--text-page-title) / 0.85 var(--font-display);
-  letter-spacing: -0.05em;
+  font: 500 var(--text-page-title) / 0.95 var(--font-display);
+  letter-spacing: var(--tracking-page-title);
   text-align: left;
 }
 
@@ -814,4 +835,13 @@ html.has-overlay {
   padding-top: 24px;
   border-top: var(--border);
   font: 400 17px / 1.5 var(--font-display);
+}
+
+/* ---------- Review stars ---------- */
+/* The review app (Judge.me) ships teal stars (#108474), which is not in the palette. Two-class selectors beat its single-class rule. */
+.jdgm-prev-badge .jdgm-star,
+.jdgm-widget .jdgm-star,
+.jdgm-rev-widg .jdgm-star,
+.jdgm-prev-badge__stars .jdgm-star {
+  color: var(--color-ink);
 }

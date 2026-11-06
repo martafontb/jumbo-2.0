@@ -1,0 +1,203 @@
+{% doc %}
+  Storefront filter pills for a collection (availability, price, product type
+  and any other filter set up in Shopify Search & Discovery). Each filter is a
+  mono pill that opens a panel: a dropdown on desktop and a bottom sheet on
+  phone. It is a plain GET form, so it works without JS; the JS only submits on
+  change and closes the panel on Escape or an outside click.
+
+  @param {object} collection - The collection
+  @param {string} [skip_param] - Param name of a filter already shown as chips, so it is not repeated
+{% enddoc %}
+{%- liquid
+  assign has_filters = false
+  for filter in collection.filters
+    if skip_param != blank and filter.param_name == skip_param
+      continue
+    endif
+    assign has_filters = true
+  endfor
+-%}
+{%- if has_filters -%}
+  <form class="collection-filters" method="get" action="{{ collection.url }}" data-collection-filters aria-label="{{ 'sections.collection.filter_label' | t }}">
+    {%- if collection.sort_by != blank -%}
+      <input type="hidden" name="sort_by" value="{{ collection.sort_by }}">
+    {%- endif -%}
+    {%- for filter in collection.filters -%}
+      {%- liquid
+        if skip_param != blank and filter.param_name == skip_param
+          continue
+        endif
+        assign active_count = filter.active_values.size
+        if filter.type == 'price_range'
+          if filter.min_value.value != blank or filter.max_value.value != blank
+            assign active_count = 1
+          endif
+        endif
+      -%}
+      <details class="collection-filters__item" data-filter-item>
+        <summary class="chip collection-filters__pill"{% if active_count > 0 %} aria-current="true"{% endif %}>
+          {{- filter.label | escape -}}
+          {%- if active_count > 0 %} ({{ active_count }}){% endif -%}
+        </summary>
+        <div class="collection-filters__panel">
+          {%- if filter.type == 'price_range' -%}
+            <div class="collection-filters__price">
+              <label class="collection-filters__field">
+                <span class="label label--sm">{{ 'sections.collection.price_from' | t }}</span>
+                <input type="number" inputmode="decimal" min="0" max="{{ filter.range_max | divided_by: 100.0 | ceil }}" name="{{ filter.min_value.param_name }}" value="{% if filter.min_value.value != blank %}{{ filter.min_value.value | divided_by: 100.0 }}{% endif %}" placeholder="0">
+              </label>
+              <label class="collection-filters__field">
+                <span class="label label--sm">{{ 'sections.collection.price_to' | t }}</span>
+                <input type="number" inputmode="decimal" min="0" max="{{ filter.range_max | divided_by: 100.0 | ceil }}" name="{{ filter.max_value.param_name }}" value="{% if filter.max_value.value != blank %}{{ filter.max_value.value | divided_by: 100.0 }}{% endif %}" placeholder="{{ filter.range_max | divided_by: 100.0 | ceil }}">
+              </label>
+            </div>
+          {%- else -%}
+            <ul class="collection-filters__list" role="list">
+              {%- for value in filter.values -%}
+                <li>
+                  <label class="collection-filters__option{% if value.count == 0 and value.active == false %} is-disabled{% endif %}">
+                    <input type="checkbox" name="{{ value.param_name }}" value="{{ value.value | escape }}" {% if value.active %}checked{% endif %} {% if value.count == 0 and value.active == false %}disabled{% endif %}>
+                    <span>{{ value.label | escape }}</span>
+                    <span class="label label--sm">({{ value.count }})</span>
+                  </label>
+                </li>
+              {%- endfor -%}
+            </ul>
+          {%- endif -%}
+          <div class="collection-filters__actions">
+            <button type="submit" class="button button--small">{{ 'sections.collection.apply' | t }}</button>
+            {%- if active_count > 0 -%}
+              <a class="link-mono" href="{{ filter.url_to_remove }}">{{ 'sections.collection.clear_one' | t }}</a>
+            {%- endif -%}
+          </div>
+        </div>
+      </details>
+    {%- endfor -%}
+  </form>
+  <script src="{{ 'collection-filters.js' | asset_url }}" type="module"></script>
+{%- endif -%}
+
+{% stylesheet %}
+  .collection-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .collection-filters__item {
+    position: relative;
+  }
+
+  .collection-filters__pill {
+    list-style: none;
+  }
+
+  .collection-filters__pill::-webkit-details-marker {
+    display: none;
+  }
+
+  .collection-filters__pill::after {
+    content: '+';
+  }
+
+  .collection-filters__item[open] > .collection-filters__pill::after {
+    content: '–';
+  }
+
+  .collection-filters__item[open] > .collection-filters__pill {
+    background: var(--color-grey);
+  }
+
+  .collection-filters__panel {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    z-index: 6;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    min-width: 240px;
+    max-height: 60vh;
+    padding: 16px;
+    overflow-y: auto;
+    border: var(--border);
+    border-radius: var(--radius-md);
+    background: var(--color-bg);
+  }
+
+  .collection-filters__list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .collection-filters__option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+  }
+
+  .collection-filters__option.is-disabled {
+    opacity: var(--opacity-muted);
+    cursor: default;
+  }
+
+  .collection-filters__option input {
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    accent-color: var(--color-ink);
+  }
+
+  .collection-filters__price {
+    display: flex;
+    gap: 12px;
+  }
+
+  .collection-filters__field {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .collection-filters__field input {
+    width: 100%;
+    min-height: 44px;
+    padding: 8px 12px;
+    border: var(--border);
+    border-radius: var(--radius-sm);
+    background: transparent;
+  }
+
+  .collection-filters__actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  @media screen and (max-width: 749px) {
+    .collection-filters__item {
+      position: static;
+    }
+
+    /* Bottom sheet on phone. */
+    .collection-filters__panel {
+      position: fixed;
+      top: auto;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      z-index: var(--z-drawer);
+      max-height: 70vh;
+      padding: 24px var(--page-pad-x) 32px;
+      border-width: 1px 0 0;
+      border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    }
+  }
+{% endstylesheet %}

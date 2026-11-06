@@ -61,6 +61,10 @@
           "settings": {
             "text": "<p>Each piece is printed by hand, so ink density and registration vary slightly. Ships in 3 working days.</p>"
           }
+        },
+        "delivery_line": {
+          "type": "delivery_line",
+          "settings": {}
         }
       },
       "block_order": [
@@ -70,6 +74,7 @@
         "price",
         "variant_picker",
         "buy_buttons",
+        "delivery_line",
         "specs",
         "note"
       ],

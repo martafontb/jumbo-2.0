@@ -24,21 +24,12 @@
           }
         },
         "message-shipping": {
-          "type": "message",
-          "disabled": true,
-          "settings": {
-            "text": "Free UK shipping over £75",
-            "link": "",
-            "code": ""
-          }
+          "type": "shipping",
+          "settings": {}
         },
         "message-fair": {
-          "type": "message",
-          "settings": {
-            "text": "Independent prints, zines and books. Made with artists, printed in Barcelona.",
-            "link": "",
-            "code": ""
-          }
+          "type": "position",
+          "settings": {}
         }
       },
       "block_order": [
@@ -50,7 +41,7 @@
         "interval": 5,
         "dismissible": true,
         "background": "red",
-        "text_color": "white"
+        "text_color": "ink"
       }
     },
     "header": {
@@ -91,7 +82,7 @@
           "settings": {
             "label": "Print",
             "menu": "",
-            "link": "",
+            "link": "shopify://pages/print",
             "row_colors": "blue, grey, red, grey",
             "row_pills": "Overview\nFrom £0.40\n12 inks\nPDF",
             "show_on_mobile": false,

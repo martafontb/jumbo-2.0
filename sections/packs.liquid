@@ -4,6 +4,7 @@
   picks a product (e.g. a bundle made with Shopify Bundles). The saving pill
   and struck-through price come from the product's compare-at price, so
   nothing is calculated in the theme. The button adds the pack to the cart.
+  Sold-out packs are hidden.
 {% endcomment %}
 {%- render 'section-border', section: section -%}
 {%- liquid
@@ -19,6 +20,9 @@
     {%- for block in packs -%}
       {%- liquid
         assign product = block.settings.product
+        if product != blank and product.available == false and request.design_mode == false
+          continue
+        endif
         assign variant = product.selected_or_first_available_variant
         assign ground_index = forloop.index0 | modulo: grounds.size
         assign ground = grounds[ground_index] | strip
@@ -90,7 +94,6 @@
     align-items: baseline;
     gap: 8px;
     padding-top: 6px;
-    border-top: var(--border);
   }
 
   .packs__title {
@@ -116,7 +119,7 @@
   "tag": "div",
   "max_blocks": 6,
   "settings": [
-    { "type": "checkbox", "id": "show_border", "label": "Show top border", "default": true },
+    { "type": "checkbox", "id": "show_border", "label": "Show top border", "default": false },
     { "type": "text", "id": "label", "label": "Label", "default": "Packs" },
     {
       "type": "select",

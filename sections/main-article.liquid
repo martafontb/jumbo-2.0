@@ -130,7 +130,6 @@
     align-items: center;
     gap: 12px;
     padding: 10px 0;
-    border-top: var(--border);
     border-bottom: var(--border);
   }
 
@@ -182,7 +181,6 @@
     justify-content: space-between;
     align-items: baseline;
     padding-top: 6px;
-    border-top: var(--border);
   }
 
   .main-article__text {
@@ -281,7 +279,7 @@
   "name": "Article",
   "class": "section-main-article",
   "settings": [
-    { "type": "checkbox", "id": "show_border", "label": "Show top border", "default": true },
+    { "type": "checkbox", "id": "show_border", "label": "Show top border", "default": false },
     { "type": "checkbox", "id": "show_author", "label": "Show author", "default": true },
     { "type": "paragraph", "content": "Featured product: set the article metafield custom.featured_product (product reference)." },
     { "type": "text", "id": "featured_label", "label": "Featured product label", "default": "Featured in this story" },

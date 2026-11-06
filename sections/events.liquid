@@ -7,6 +7,9 @@
   Start / end use the format YYYY-MM-DD HH:MM in the store's time zone.
   "Remind me" downloads a calendar file (.ics) for the event; nothing is
   stored or sent anywhere.
+
+  "Full-width blue band" paints the whole section in blue edge to edge (colour
+  blocking). Text stays ink on blue (6.0:1).
 {% endcomment %}
 {%- render 'section-border', section: section -%}
 {%- liquid
@@ -37,7 +40,10 @@
   endif
   assign kind_list = kinds | split: '|' | uniq
 -%}
-<section class="page events space-{{ section.settings.spacing }}">
+{%- if section.settings.band -%}
+<div class="events-band space-{{ section.settings.spacing }}">
+{%- endif -%}
+<section class="page events{% unless section.settings.band %} space-{{ section.settings.spacing }}{% endunless %}">
   {%- render 'section-head', label: section.settings.label, color: section.settings.label_color, caption: section.settings.caption -%}
   {%- if section.settings.heading != blank -%}
     <h2 class="events__heading">{{ section.settings.heading | escape }}<span class="dot">.</span></h2>
@@ -149,8 +155,21 @@
     <script src="{{ 'event-list.js' | asset_url }}" type="module"></script>
   {%- endif -%}
 </section>
+{%- if section.settings.band -%}
+</div>
+{%- endif -%}
 
 {% stylesheet %}
+  .events-band {
+    padding-block: 40px;
+    background: var(--color-blue);
+    color: var(--color-ink);
+  }
+
+  .events-band .events {
+    margin-top: 0;
+  }
+
   .events__heading {
     padding: 8px 0 14px;
     font: 500 clamp(40px, 6vw, 60px) / 0.95 var(--font-display);
@@ -218,9 +237,8 @@
   }
 
   .events__count-l {
-    font: 400 10px / 1.4 var(--font-mono);
-    letter-spacing: var(--tracking-label);
-    text-transform: uppercase;
+    font: 400 10px / 1.4 var(--font-label);
+    letter-spacing: 0;
   }
 
   .events__actions {
@@ -306,7 +324,7 @@
   [data-remind].is-set {
     background: var(--color-blue);
     border-color: var(--color-ink);
-    color: var(--color-white);
+    color: var(--color-ink); /* ink on blue is 6.0:1 */
   }
 
   @media screen and (max-width: 749px) {
@@ -328,7 +346,8 @@
   "tag": "div",
   "max_blocks": 16,
   "settings": [
-    { "type": "checkbox", "id": "show_border", "label": "Show top border", "default": true },
+    { "type": "checkbox", "id": "show_border", "label": "Show top border", "default": false },
+    { "type": "checkbox", "id": "band", "label": "Full-width blue band", "default": false },
     { "type": "text", "id": "label", "label": "Label", "default": "Find us" },
     {
       "type": "select",

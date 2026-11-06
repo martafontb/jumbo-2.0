@@ -28,7 +28,6 @@
     margin: 8px 0 0;
     padding: 0;
     list-style: none;
-    border-top: var(--border);
   }
 
   .checklist__row {
@@ -65,7 +64,7 @@
     height: 28px;
     border: var(--border);
     background: var(--color-bg);
-    font: 400 16px / 1 var(--font-mono);
+    font: 400 16px / 1 var(--font-label);
   }
 
   .checklist__toggle[aria-pressed='true'] .checklist__box::after {
@@ -96,7 +95,7 @@
   "tag": "div",
   "max_blocks": 10,
   "settings": [
-    { "type": "checkbox", "id": "show_border", "label": "Show top border", "default": true },
+    { "type": "checkbox", "id": "show_border", "label": "Show top border", "default": false },
     { "type": "text", "id": "label", "label": "Label", "default": "Prepare your file" },
     { "type": "text", "id": "caption", "label": "Caption", "default": "Tick them off" },
     {

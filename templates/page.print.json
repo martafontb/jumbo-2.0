@@ -32,7 +32,7 @@
         "tab-prices"
       ],
       "settings": {
-        "show_border": true,
+        "show_border": false,
         "title": "Print with us",
         "show_dot": true,
         "intro": "<p>A small-run risograph service for artists, publishers and festivals. Here is how it works.</p>",
@@ -164,7 +164,7 @@
         "c3"
       ],
       "settings": {
-        "show_border": true,
+        "show_border": false,
         "label": "Specs",
         "caption": "At a glance",
         "spacing": "small"
@@ -210,7 +210,7 @@
       ],
       "disabled": true,
       "settings": {
-        "show_border": true,
+        "show_border": false,
         "label": "Fig. 2 — Meet Jumbo",
         "caption": "Pick two inks, nudge the registration",
         "figure_label": "Two ink layers of an illustrated elephant overprinting each other",
@@ -256,7 +256,7 @@
         "s4"
       ],
       "settings": {
-        "show_border": true,
+        "show_border": false,
         "label": "Prepare your file",
         "caption": "Tick them off",
         "spacing": "small"
@@ -314,7 +314,7 @@
       ],
       "disabled": true,
       "settings": {
-        "show_border": true,
+        "show_border": false,
         "label": "Chapter 02 — How it is made",
         "caption": "From file to edition",
         "spacing": "small"

@@ -58,6 +58,7 @@
       "carousel": "Announcements",
       "code_copied": "Code {{ code }} copied ✓",
       "close": "Close announcements",
+      "free_shipping": "Free shipping over {{ amount }}",
       "pause": "Pause announcements",
       "play": "Play announcements"
     },
@@ -92,7 +93,12 @@
       "all": "All",
       "sort": "Sort:",
       "apply": "Apply",
-      "clear": "Clear filters"
+      "clear": "Clear filters",
+      "clear_one": "Clear",
+      "read_more": "Read more",
+      "read_less": "Read less",
+      "price_from": "From",
+      "price_to": "To"
     },
     "blog": {
       "empty": "No stories yet."
@@ -183,6 +189,28 @@
       "website": "Visit website ↗",
       "next": "Next: {{ name }}"
     },
+    "footer": {
+      "payment_methods": "Payment methods"
+    },
+    "proof": {
+      "label": "About Jumbo in numbers",
+      "since": "Since {{ year }}",
+      "machines": {
+        "one": "{{ count }} machine",
+        "other": "{{ count }} machines"
+      },
+      "inks": {
+        "one": "{{ count }} ink",
+        "other": "{{ count }} inks"
+      },
+      "artists": {
+        "one": "{{ count }} artist a year",
+        "other": "{{ count }} artists a year"
+      }
+    },
+    "shipping_pill": {
+      "close": "Close the shipping message"
+    },
     "contact": {
       "tabs": "Contact and wholesale",
       "tab_contact": "Contact",
@@ -200,6 +228,14 @@
     }
   },
   "products": {
+    "notify": {
+      "title": "Sold out. Leave your email and we will tell you if it comes back.",
+      "email": "Email",
+      "button": "Notify me",
+      "success": "Thanks. We will email you if it comes back.",
+      "error": "Please enter a valid email.",
+      "body": "Please notify me when {{ product }} ({{ variant }}) is back in stock: {{ url }}"
+    },
     "price": {
       "from": "From {{ price }}",
       "regular": "Regular price",

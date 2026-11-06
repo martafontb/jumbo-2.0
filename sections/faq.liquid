@@ -134,7 +134,7 @@
     width: 36px;
     height: 36px;
     border: var(--border);
-    font: 400 18px / 1 var(--font-mono);
+    font: 400 18px / 1 var(--font-label);
   }
 
   .faq__toggle::before {
@@ -184,9 +184,8 @@
     padding: 14px;
     background: var(--color-ink);
     color: var(--color-white);
-    font: 400 var(--text-label) / 1.2 var(--font-mono);
-    letter-spacing: var(--tracking-label);
-    text-transform: uppercase;
+    font: 400 var(--text-label) / 1.2 var(--font-label);
+    letter-spacing: 0;
     text-align: center;
     text-decoration: none;
     overflow-wrap: anywhere;
@@ -225,7 +224,7 @@
   "tag": "div",
   "max_blocks": 50,
   "settings": [
-    { "type": "checkbox", "id": "show_border", "label": "Show top border", "default": true },
+    { "type": "checkbox", "id": "show_border", "label": "Show top border", "default": false },
     { "type": "checkbox", "id": "open_first", "label": "Open the first question", "default": true },
     { "type": "header", "content": "Contact card" },
     { "type": "text", "id": "card_label", "label": "Label", "default": "Still stuck?" },

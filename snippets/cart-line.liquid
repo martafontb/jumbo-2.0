@@ -142,9 +142,8 @@
   .cart-line__variant,
   .cart-line__meta {
     margin-top: 4px;
-    font: 400 var(--text-label-sm) / 1.35 var(--font-mono);
-    letter-spacing: var(--tracking-label);
-    text-transform: uppercase;
+    font: 400 var(--text-label-sm) / 1.35 var(--font-label);
+    letter-spacing: 0;
     opacity: 0.7;
   }
 
@@ -167,8 +166,12 @@
     --stepper-size: 34px;
   }
 
+  .cart-line__remove {
+    transition: opacity 0.2s var(--ease-out-expo);
+  }
+
   .cart-line__remove:hover {
-    color: var(--color-red);
+    opacity: 0.55; /* red text on the pale background fails contrast */
   }
 
   .cart-line__price {

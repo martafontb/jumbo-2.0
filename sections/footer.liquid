@@ -8,11 +8,16 @@
 {% endcomment %}
 <footer class="site-footer">
   <div class="site-footer__top">
-    {%- if section.settings.statement != blank -%}
+    {%- if section.settings.use_brand_line and settings.position_line != blank -%}
+      {%- comment -%} Big type: only the first sentence of the brand line. {%- endcomment -%}
+      {%- assign brand_first = settings.position_line | split: '. ' | first | strip -%}
+      <div class="site-footer__statement">
+        <p><strong>{{ brand_first | escape }}{% assign last_char = brand_first | slice: -1 %}{% if last_char != '.' %}.{% endif %}</strong></p>
+      </div>
+    {%- elsif section.settings.statement != blank -%}
       <div class="site-footer__statement">
         {{ section.settings.statement }}
       </div>
-
     {%- endif -%}
 
     <div class="site-footer__columns">
@@ -60,6 +65,42 @@
     </div>
   </div>
 
+  {%- assign service_ship = section.settings.service_shipping_text -%}
+  {%- assign service_contact = section.settings.service_contact_text -%}
+  {%- if service_ship != blank or service_contact != blank or section.settings.show_payment_icons -%}
+    <div class="site-footer__service">
+      <ul class="site-footer__service-list" role="list">
+        {%- if service_ship != blank -%}
+          <li>
+            <svg class="site-footer__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="M2 6h12v10H2zM14 9h4l4 4v3h-8z"/><circle cx="7" cy="18" r="2"/><circle cx="18" cy="18" r="2"/></svg>
+            {%- if section.settings.service_shipping_link != blank -%}
+              <a href="{{ section.settings.service_shipping_link }}">{{ service_ship | escape }}</a>
+            {%- else -%}
+              <span>{{ service_ship | escape }}</span>
+            {%- endif -%}
+          </li>
+        {%- endif -%}
+        {%- if service_contact != blank -%}
+          <li>
+            <svg class="site-footer__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="M3 5h18v14H3z"/><path d="m3 6 9 7 9-7"/></svg>
+            {%- if section.settings.service_contact_link != blank -%}
+              <a href="{{ section.settings.service_contact_link }}">{{ service_contact | escape }}</a>
+            {%- else -%}
+              <span>{{ service_contact | escape }}</span>
+            {%- endif -%}
+          </li>
+        {%- endif -%}
+      </ul>
+      {%- if section.settings.show_payment_icons and shop.enabled_payment_types.size > 0 -%}
+        <ul class="site-footer__payments" role="list" aria-label="{{ 'sections.footer.payment_methods' | t }}">
+          {%- for type in shop.enabled_payment_types -%}
+            <li>{{ type | payment_type_svg_tag: class: 'site-footer__payment' }}</li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+
   <div class="site-footer__bottom">
     <ul class="site-footer__legal" role="list">
       {%- if section.settings.legal_menu.links.size > 0 -%}
@@ -92,9 +133,8 @@
     border-top: var(--border);
     background: var(--color-bg);
     color: var(--color-ink);
-    font: 400 var(--text-label) / 1.5 var(--font-mono);
-    letter-spacing: var(--tracking-label);
-    text-transform: uppercase;
+    font: 400 var(--text-label) / 1.5 var(--font-label);
+    letter-spacing: 0;
   }
 
   .site-footer a {
@@ -102,9 +142,48 @@
     text-decoration: none;
   }
 
+  .site-footer a {
+    transition: opacity 0.2s var(--ease-out-expo);
+  }
+
   .site-footer a:hover {
     color: var(--color-ink);
-    text-decoration: underline;
+    opacity: 0.55;
+  }
+
+  .site-footer__service {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px 32px;
+    padding-top: 24px;
+    border-top: var(--border);
+  }
+
+  .site-footer__service-list,
+  .site-footer__payments {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 24px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .site-footer__service-list li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .site-footer__payments {
+    gap: 6px;
+  }
+
+  .site-footer__payment {
+    width: 38px;
+    height: 24px;
   }
 
   .site-footer__top {
@@ -202,6 +281,7 @@
   "class": "section-footer",
   "max_blocks": 8,
   "settings": [
+    { "type": "checkbox", "id": "use_brand_line", "label": "Use the brand line", "info": "Shows the first sentence of the line from Theme settings > Brand and studio instead of the statement below.", "default": false },
     {
       "type": "richtext",
       "id": "statement",
@@ -219,7 +299,13 @@
       "id": "copyright",
       "label": "Copyright text",
       "info": "Leave empty for “© year store name”."
-    }
+    },
+    { "type": "header", "content": "Shipping, contact and payment" },
+    { "type": "text", "id": "service_shipping_text", "label": "Shipping text", "info": "Shown with a delivery icon. Leave empty to hide." },
+    { "type": "url", "id": "service_shipping_link", "label": "Shipping link" },
+    { "type": "text", "id": "service_contact_text", "label": "Contact text", "info": "Shown with an envelope icon, e.g. your email address. Leave empty to hide." },
+    { "type": "url", "id": "service_contact_link", "label": "Contact link", "info": "E.g. mailto:hello@yourshop.com or your Contact page." },
+    { "type": "checkbox", "id": "show_payment_icons", "label": "Show payment icons", "info": "Uses the payment methods turned on in Settings > Payments.", "default": true }
   ],
   "blocks": [
     {

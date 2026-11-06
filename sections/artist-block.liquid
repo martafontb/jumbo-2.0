@@ -92,7 +92,6 @@
     gap: 6px 24px;
     max-width: 520px;
     padding-top: 12px;
-    border-top: var(--border);
   }
 
   .artist-block__details:not(:has(dt)) {
@@ -126,7 +125,7 @@
   "class": "section-artist-block",
   "tag": "div",
   "settings": [
-    { "type": "checkbox", "id": "show_border", "label": "Show top border", "default": true },
+    { "type": "checkbox", "id": "show_border", "label": "Show top border", "default": false },
     { "type": "paragraph", "content": "Shown when the product's custom.artist metafield points to an artist." },
     { "type": "text", "id": "label", "label": "Label", "default": "The artist" },
     {
