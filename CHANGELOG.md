@@ -7,6 +7,7 @@ All notable changes to this theme are documented here. The format follows [Keep 
 ### Changed (one type voice)
 - Buttons, chips, pills, the announcement bar and the shipping pill are Inter Tight medium in sentence case. Mono (DM Mono, uppercase) stays for small facts: stock, option and quantity labels, price tables.
 - Image frames (`.media`) no longer have a border; outlines stay on clickable things.
+- 28 other small uppercase rules became sentence case sans; `.label`, `.mono` and `.link-mono` stay mono uppercase via `--font-data`.
 - Selected option value (e.g. colour) matches the other labels.
 
 ### Changed (home and images)

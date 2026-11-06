@@ -170,8 +170,7 @@ a:not([class]) {
   background: var(--color-ink);
   color: var(--color-white);
   font: 400 var(--text-label) var(--font-label);
-  letter-spacing: var(--tracking-label);
-  text-transform: uppercase;
+  letter-spacing: 0;
   text-decoration: none;
 }
 
@@ -236,7 +235,7 @@ a:not([class]) {
 /* ---------- Typography ---------- */
 .mono,
 .label {
-  font-family: var(--font-label);
+  font-family: var(--font-data);
   font-weight: 400;
   font-size: var(--text-label);
   letter-spacing: var(--tracking-label);
@@ -376,7 +375,7 @@ a:not([class]) {
 }
 
 .link-mono {
-  font: 400 var(--text-label) var(--font-label);
+  font: 400 var(--text-label) var(--font-data);
   letter-spacing: var(--tracking-label);
   text-transform: uppercase;
   text-decoration: underline;
@@ -657,8 +656,7 @@ a:not([class]) {
 
 .form-message {
   font: 400 var(--text-label) / 1.4 var(--font-label);
-  letter-spacing: var(--tracking-label);
-  text-transform: uppercase;
+  letter-spacing: 0;
 }
 
 .form-message--error::before {
