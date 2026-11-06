@@ -169,7 +169,7 @@ a:not([class]) {
   border-radius: var(--radius-pill);
   background: var(--color-ink);
   color: var(--color-white);
-  font: 400 var(--text-label) var(--font-mono);
+  font: 400 var(--text-label) var(--font-label);
   letter-spacing: var(--tracking-label);
   text-transform: uppercase;
   text-decoration: none;
@@ -236,7 +236,7 @@ a:not([class]) {
 /* ---------- Typography ---------- */
 .mono,
 .label {
-  font-family: var(--font-mono);
+  font-family: var(--font-label);
   font-weight: 400;
   font-size: var(--text-label);
   letter-spacing: var(--tracking-label);
@@ -307,7 +307,7 @@ a:not([class]) {
   border-radius: var(--radius-pill);
   background: var(--pill-bg, var(--color-grey));
   color: var(--pill-fg, var(--color-ink));
-  font: 400 var(--text-label-sm) / 1.35 var(--font-mono);
+  font: 400 var(--text-label-sm) / 1.35 var(--font-label);
   letter-spacing: var(--tracking-label);
   text-transform: uppercase;
   white-space: nowrap;
@@ -332,7 +332,7 @@ a:not([class]) {
   border-radius: var(--radius-pill);
   background: var(--color-ink);
   color: var(--color-white);
-  font: 400 var(--text-label) / 1 var(--font-mono);
+  font: 400 var(--text-label) / 1 var(--font-label);
   letter-spacing: var(--tracking-label);
   text-transform: uppercase;
   text-decoration: none;
@@ -378,7 +378,7 @@ a:not([class]) {
 }
 
 .link-mono {
-  font: 400 var(--text-label) var(--font-mono);
+  font: 400 var(--text-label) var(--font-label);
   letter-spacing: var(--tracking-label);
   text-transform: uppercase;
   text-decoration: underline;
@@ -398,7 +398,7 @@ a:not([class]) {
   border-radius: var(--radius-pill);
   background: transparent;
   color: var(--color-ink);
-  font: 400 var(--text-label-sm) / 1.35 var(--font-mono);
+  font: 400 var(--text-label-sm) / 1.35 var(--font-label);
   letter-spacing: var(--tracking-label);
   text-transform: uppercase;
   text-decoration: none;
@@ -485,7 +485,7 @@ a:not([class]) {
   border-radius: var(--radius-pill);
   background: transparent;
   color: var(--color-ink);
-  font: 400 16px / 1 var(--font-mono);
+  font: 400 16px / 1 var(--font-label);
   cursor: pointer;
 }
 
@@ -522,7 +522,7 @@ a:not([class]) {
   display: grid;
   grid-template-columns: auto 1fr;
   gap: 4px 18px;
-  font: 400 var(--text-label) / 1.35 var(--font-mono);
+  font: 400 var(--text-label) / 1.35 var(--font-label);
   letter-spacing: var(--tracking-label);
   text-transform: uppercase;
 }
@@ -565,7 +565,7 @@ a:not([class]) {
   border: 0;
   border-radius: var(--radius-pill);
   background: transparent;
-  font: 400 14px / 1 var(--font-mono);
+  font: 400 14px / 1 var(--font-label);
 }
 
 .stepper__button:hover {
@@ -579,7 +579,7 @@ a:not([class]) {
   border: 0;
   background: transparent;
   text-align: center;
-  font: 400 var(--text-label) var(--font-mono);
+  font: 400 var(--text-label) var(--font-label);
   -moz-appearance: textfield;
   appearance: textfield;
 }
@@ -652,7 +652,7 @@ a:not([class]) {
   border: var(--border);
   border-radius: var(--radius-pill);
   background: var(--color-bg);
-  font: 400 13px var(--font-mono);
+  font: 400 13px var(--font-label);
 }
 
 .field:focus-visible {
@@ -660,7 +660,7 @@ a:not([class]) {
 }
 
 .form-message {
-  font: 400 var(--text-label) / 1.4 var(--font-mono);
+  font: 400 var(--text-label) / 1.4 var(--font-label);
   letter-spacing: var(--tracking-label);
   text-transform: uppercase;
 }

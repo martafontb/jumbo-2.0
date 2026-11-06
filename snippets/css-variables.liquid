@@ -21,6 +21,8 @@
 
     /* Type */
     --font-display: 'Instrument Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
+    /* Labels, pills, chips, captions and buttons use the main sans. DM Mono is kept for prices and data tables only. */
+    --font-label: var(--font-display);
     --font-mono: 'DM Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
     /* Scale: phone to desktop (art direction, 390px to 1440px) */
     --text-body: 16px;
@@ -74,6 +76,12 @@
     --z-modal: 60;
     --z-story: 70;
     --z-search: 80;
+  }
+
+  @media screen and (min-width: 750px) {
+    :root {
+      --header-height: 72px; /* 16px gap + the 56px floating bar */
+    }
   }
 
   @media screen and (max-width: 749px) {

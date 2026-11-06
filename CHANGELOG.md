@@ -10,6 +10,11 @@ All notable changes to this theme are documented here. The format follows [Keep 
 - Packs hide sold-out packs. The saving still shows in the red tag from the compare-at price.
 - Events ("Find us") has a "Full-width blue band" setting, on by default.
 
+### Changed (art direction: round 2 feedback)
+- The blue band on the fairs section is off again (the option stays in the editor).
+- DM Mono is now only for prices and data tables. Labels, pills, chips, captions and buttons use the main sans through a new `--font-label` token.
+- Header from 750px is one floating pill (logo, a divider, links, then Search and Cart) instead of three pills. The logo is smaller inside it, the current page is an ink fill and hover is blue, like the chips.
+
 ### Added (art direction: navigation and brand line)
 - Floating pill navigation from 750px: a logo pill, a nav pill and a Search and Cart pill, grey with ink text. The current page is a page-coloured pill and hover fills blue. The header stays sticky. The phone menu is unchanged. Print in the main menu now links to `/pages/print`.
 - Theme settings > Brand and studio: the brand line (Option 1) and a short version. The home page tab title and meta description, the home intro, the footer statement (first sentence), the About intro and a new "Brand line" announcement block read it.
