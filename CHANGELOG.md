@@ -5,7 +5,7 @@ All notable changes to this theme are documented here. The format follows [Keep 
 ## [Unreleased]
 
 ### Fixed
-- Mega menu is a bordered, rounded card with an 8px gap under the pill (the pill keeps its round shape), is limited to the window height and scrolls if needed; its rows shrink on short windows so the list is not cut off.
+- Mega menu is part of the pill: it drops straight from the bar with the same width and border, rounded bottom corners, and the pill's bottom corners square off while it is open, is limited to the window height and scrolls if needed; its rows shrink on short windows so the list is not cut off.
 
 ### Changed
 - Blue pills (section labels and so on) are inverted: ink fill with white text. The accent blue stays for hovers, the cart band and small markers.
