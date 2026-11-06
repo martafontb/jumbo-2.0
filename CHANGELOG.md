@@ -5,6 +5,9 @@ All notable changes to this theme are documented here. The format follows [Keep 
 ## [Unreleased]
 
 ### Changed
+- Blue pills (section labels and so on) use a deeper blue (`--color-blue-deep`, mixed from the accent blue and ink) with white text for contrast.
+
+### Changed
 - About page: the page colour now also sits behind the header and menu (the footer keeps the normal background).
 
 ### Changed (one type voice)

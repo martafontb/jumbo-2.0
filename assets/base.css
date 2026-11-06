@@ -311,7 +311,7 @@ a:not([class]) {
   white-space: nowrap;
 }
 
-.pill--blue { --pill-bg: var(--color-blue); }
+.pill--blue { --pill-bg: var(--color-blue-deep); --pill-fg: var(--color-white); }
 .pill--red { --pill-bg: var(--color-red); }
 .pill--grey { --pill-bg: var(--color-grey); }
 .pill--bg { --pill-bg: var(--color-bg); }
