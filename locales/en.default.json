@@ -189,6 +189,9 @@
       "website": "Visit website ↗",
       "next": "Next: {{ name }}"
     },
+    "footer": {
+      "payment_methods": "Payment methods"
+    },
     "contact": {
       "tabs": "Contact and wholesale",
       "tab_contact": "Contact",

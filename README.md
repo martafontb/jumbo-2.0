@@ -155,12 +155,12 @@ All optional. Create product metafields in Settings > Custom data > Products, an
 | `custom.card_tag` | Single line text | Tag pill on collection cards and "Complete the set" cards |
 | `custom.card_span` | Integer (1, 2 or 3) | Card width in the collection grid (a "Product layout" block overrides it) |
 | `custom.card_ground` | Single line text (blue, red, grey, ink, bg) | The product's card colour (shown on hover, or always; see Theme settings > Product cards) |
-| `custom.artist` | Metaobject reference (artist) | Breadcrumb, artist line, "The artist" block, "Also from …" |
+| `custom.artist` | Metaobject reference (artist) | Breadcrumb, artist line, artist name on product cards, "The artist" block, "Also from …" |
 | `custom.year` | Integer or text | Artist line, e.g. "Mara Oyelaran · 2026" |
 | `custom.edition_size` | Integer | "38 of 120 remaining" and the stock bar (needs Shopify-tracked inventory) |
 | `custom.edition_detail` | Single line text | Edition spec, e.g. "signed and numbered" |
 | `custom.inks` | List of single line text (or ink metaobjects with `name`) | Inks spec |
-| `custom.paper`, `custom.dimensions`, `custom.format`, `custom.material` | Single line text | Spec list |
+| `custom.paper`, `custom.dimensions`, `custom.format`, `custom.material` | Single line text | Spec list and the one-line spec under the price (format, size, paper) |
 | `custom.size_chart` | Multi-line text | Merch size chart. First line is the header, e.g. `Size \| Chest \| Length \| Sleeve`, then one row per size |
 | `custom.short_title` | Single line text | Label in the merch product switcher (e.g. "Tee") |
 | `custom.pairs_with` | List of products | "Complete the set" |

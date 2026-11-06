@@ -10,6 +10,13 @@ All notable changes to this theme are documented here. The format follows [Keep 
 - Packs hide sold-out packs. The saving still shows in the red tag from the compare-at price.
 - Events ("Find us") has a "Full-width blue band" setting, on by default.
 
+### Added (art direction: cart, pop-ups and footer)
+- Free-shipping bar is a blue block with ink text at the top of the cart page and the cart drawer.
+- Add-on row (`snippets/cart-upsell.liquid`) on the cart page as well as the drawer, with its own collection setting. Two buttons in the empty cart and empty drawer.
+- Newsletter popup is a small card at the bottom of the screen by default (8 second delay, no backdrop, Escape closes). It waits while Shopify's cookie banner is on screen. "Modal" style keeps the old popup.
+- Footer: shipping and contact lines with icons, and payment icons. Footer links fade on hover instead of underlining.
+- `docs/client-settings-needed.md` lists every setting that needs a value from the client.
+
 ### Added (art direction: collection and product pages)
 - Collection filter pills (availability, price, product type and any other Storefront filter) in `snippets/collection-filters.liquid`: a dropdown on desktop, a bottom sheet on phone, works without JS.
 - Collection: in-stock products come first when no sort is chosen; the intro shows two lines on phone with a Read more toggle; product cards show the artist name (from the `custom.artist` metaobject) in mono.

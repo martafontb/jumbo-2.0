@@ -54,13 +54,34 @@ class NewsletterPopup extends HTMLElement {
   }
 
   autoOpen = () => {
-    // Don't interrupt another overlay (cart, menu, search); try again shortly.
-    if (document.querySelector('dialog[open]')) {
+    // Don't interrupt another overlay (cart, menu, search) and don't stack
+    // on Shopify's cookie banner; try again shortly.
+    if (document.querySelector('dialog[open]') || this.cookieBannerVisible()) {
       this.timer = setTimeout(this.autoOpen, 4000);
       return;
     }
     markSeen();
-    openOverlay(this.dialog, document.activeElement);
+    if (this.dataset.style === 'card') {
+      this.showCard();
+    } else {
+      openOverlay(this.dialog, document.activeElement);
+    }
+  };
+
+  cookieBannerVisible() {
+    const banner = document.getElementById('shopify-pc__banner');
+    return Boolean(banner && banner.offsetParent !== null);
+  }
+
+  // Card style: a non-modal dialog, so the page stays usable and scrollable.
+  showCard() {
+    this.dialog.show();
+    this.dialog.addEventListener('close', () => document.removeEventListener('keydown', this.onKey), { once: true });
+    document.addEventListener('keydown', this.onKey);
+  }
+
+  onKey = (event) => {
+    if (event.key === 'Escape' && this.dialog.open) this.dialog.close();
   };
 
   onEditorSelect = (event) => {
