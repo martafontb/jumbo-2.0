@@ -11,6 +11,11 @@
   @param {object} variant - Selected variant
   @param {object} block - "Buy buttons" block
   @param {string} form_id - Form id
+
+  Sold-out variants also show a notify-me form. It posts to Shopify's contact
+  form, so the message (product, variant, link and the customer's email) lands
+  in the store's contact inbox. No app needed. Swap it for a back-in-stock app
+  block later if you add one.
 {% enddoc %}
 {%- liquid
   assign rule = variant.quantity_rule
@@ -79,6 +84,35 @@
     {%- endif -%}
   {%- endform -%}
 
+  {%- if variant.available == false -%}
+    {%- assign notify_id = 'Notify-' | append: form_id -%}
+    {%- form 'contact', id: notify_id, class: 'buy-buttons__notify' -%}
+      {%- if form.posted_successfully? -%}
+        <p class="buy-buttons__notify-done" role="status">{{ 'products.notify.success' | t }}</p>
+      {%- else -%}
+        <p class="buy-buttons__notify-title">{{ 'products.notify.title' | t }}</p>
+        {%- if form.errors -%}
+          <p class="form-message form-message--error" role="alert">{{ 'products.notify.error' | t }}</p>
+        {%- endif -%}
+        <input type="hidden" name="contact[body]" value="{{ 'products.notify.body' | t: product: product.title, variant: variant.title, url: product.url | prepend: shop.url | escape }}">
+        <div class="buy-buttons__notify-row">
+          <label class="visually-hidden" for="{{ notify_id }}-email">{{ 'products.notify.email' | t }}</label>
+          <input
+            class="buy-buttons__notify-input"
+            type="email"
+            id="{{ notify_id }}-email"
+            name="contact[email]"
+            autocomplete="email"
+            required
+            placeholder="{{ 'newsletter.placeholder' | t }}"
+            value="{{ form.email | escape }}"
+          >
+          <button type="submit" class="button">{{ 'products.notify.button' | t }}</button>
+        </div>
+      {%- endif -%}
+    {%- endform -%}
+  {%- endif -%}
+
   {%- if block.settings.show_view_cart -%}
     <a class="buy-buttons__view-cart" href="{{ routes.cart_url }}" data-overlay-open="CartDrawer" data-view-cart hidden>
       {{- 'products.view_cart' | t -}} (<span data-cart-count>{{ cart.item_count }}</span>) →
@@ -119,6 +153,35 @@
 
   .buy-buttons__row {
     display: flex;
+  }
+
+  .buy-buttons__notify {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-top: 4px;
+  }
+
+  .buy-buttons__notify-title,
+  .buy-buttons__notify-done {
+    margin: 0;
+    font-size: 14px;
+  }
+
+  .buy-buttons__notify-row {
+    display: flex;
+    gap: 6px;
+  }
+
+  .buy-buttons__notify-input {
+    flex: 1;
+    min-width: 0;
+    min-height: 44px;
+    padding: 8px 16px;
+    border: var(--border);
+    border-radius: var(--radius-pill);
+    background: transparent;
+    font-size: 16px; /* 16px stops iOS zooming into the field */
   }
 
   .buy-buttons__add {

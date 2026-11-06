@@ -10,6 +10,11 @@ All notable changes to this theme are documented here. The format follows [Keep 
 - Packs hide sold-out packs. The saving still shows in the red tag from the compare-at price.
 - Events ("Find us") has a "Full-width blue band" setting, on by default.
 
+### Added (art direction: collection and product pages)
+- Collection filter pills (availability, price, product type and any other Storefront filter) in `snippets/collection-filters.liquid`: a dropdown on desktop, a bottom sheet on phone, works without JS.
+- Collection: in-stock products come first when no sort is chosen; the intro shows two lines on phone with a Read more toggle; product cards show the artist name (from the `custom.artist` metaobject) in mono.
+- Product page: Spec line block (format, size, paper), Delivery line block (Theme settings > Product page), rating beside the title, and a notify-me form on sold-out variants (posts to the store's contact form). The "Pair with" row now sits right under the product.
+
 ### Changed (art direction: type and colour)
 - Main font is now Instrument Sans (self-hosted variable woff2, 400 to 700) in place of Outfit. DM Mono stays for labels. Variables are in `snippets/css-variables.liquid`.
 - Type scale variables (`--text-page-title`, `--text-section-title`, `--text-card-title` and tracking tokens) with `clamp()` between phone and desktop. Body text is 16px. The product description now uses the full column width.

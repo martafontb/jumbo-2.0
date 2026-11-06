@@ -206,6 +206,14 @@
     }
   },
   "products": {
+    "notify": {
+      "title": "Sold out. Leave your email and we will tell you if it comes back.",
+      "email": "Email",
+      "button": "Notify me",
+      "success": "Thanks. We will email you if it comes back.",
+      "error": "Please enter a valid email.",
+      "body": "Please notify me when {{ product }} ({{ variant }}) is back in stock: {{ url }}"
+    },
     "price": {
       "from": "From {{ price }}",
       "regular": "Regular price",

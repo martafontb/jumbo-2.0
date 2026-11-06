@@ -156,6 +156,17 @@
     ]
   },
   {
+    "name": "Product page",
+    "settings": [
+      {
+        "type": "text",
+        "id": "delivery_line",
+        "label": "Delivery line",
+        "info": "One short line under the Add to cart button, e.g. the delivery time. Leave empty to hide it. Needs the Delivery line block on the product template."
+      }
+    ]
+  },
+  {
     "name": "Cart",
     "settings": [
       {

@@ -13,6 +13,11 @@
   custom.edition_detail, custom.inks, custom.paper, custom.dimensions,
   custom.format, custom.material, custom.size_chart.
 
+  Blocks added for the art direction: "Spec line" (one mono line under the
+  price from custom.format, custom.dimensions, custom.paper), "Delivery line"
+  (text from Theme settings > Product page) and a rating beside the title
+  (Title block > Show rating; needs the review app's reviews.rating metafield).
+
   "Sticky add-to-cart bar on mobile" shows a bottom bar under 750px while
   the Buy buttons block is off screen. Its button submits the main product
   form (form="…"), so quantity and variant come from the main form.
@@ -90,13 +95,23 @@
                   assign accent_color = 'blue'
                 endunless
               -%}
-              <h1 class="title-product main-product__title" {{ block.shopify_attributes }}>
-                {%- if block.settings.accent and words.size > 1 -%}
-                  {{ head_words | escape }}<em class="main-product__accent" style="--accent: var(--color-{{ accent_color }});">{{ last_word | escape }}</em>
-                {%- else -%}
-                  {{ product.title | escape }}
+              {%- assign rating_data = product.metafields.reviews.rating.value -%}
+              {%- assign rating_total = product.metafields.reviews.rating_count.value | default: 0 -%}
+              <div class="main-product__title-row" {{ block.shopify_attributes }}>
+                <h1 class="title-product main-product__title">
+                  {%- if block.settings.accent and words.size > 1 -%}
+                    {{ head_words | escape }}<em class="main-product__accent" style="--accent: var(--color-{{ accent_color }});">{{ last_word | escape }}</em>
+                  {%- else -%}
+                    {{ product.title | escape }}
+                  {%- endif -%}
+                </h1>
+                {%- if block.settings.show_rating and rating_data != blank -%}
+                  <a class="main-product__rating" href="#Reviews">
+                    {%- render 'stars', rating: rating_data.rating -%}
+                    {%- if rating_total > 0 -%}<span class="label label--sm">({{ rating_total }})</span>{%- endif -%}
+                  </a>
                 {%- endif -%}
-              </h1>
+              </div>
 
             {%- when 'artist' -%}
               {%- liquid
@@ -122,6 +137,32 @@
               <div class="main-product__price-block" id="Price-{{ section.id }}" data-dynamic {{ block.shopify_attributes }}>
                 {%- render 'product-price-block', product: product, variant: current_variant, block: block -%}
               </div>
+
+            {%- when 'spec_line' -%}
+              {%- liquid
+                assign spec_mf = product.metafields.custom
+                assign spec_parts = ''
+                assign spec_raw = spec_mf.format.value | append: '|' | append: spec_mf.dimensions.value | append: '|' | append: spec_mf.paper.value
+                assign spec_values = spec_raw | split: '|'
+                for spec_value in spec_values
+                  if spec_value != blank
+                    if spec_parts == blank
+                      assign spec_parts = spec_value
+                    else
+                      assign spec_parts = spec_parts | append: ' · ' | append: spec_value
+                    endif
+                  endif
+                endfor
+                assign spec_text = spec_parts | default: block.settings.fallback
+              -%}
+              {%- if spec_text != blank -%}
+                <p class="label main-product__spec-line" {{ block.shopify_attributes }}>{{ spec_text | escape }}</p>
+              {%- endif -%}
+
+            {%- when 'delivery_line' -%}
+              {%- if settings.delivery_line != blank -%}
+                <p class="main-product__delivery" {{ block.shopify_attributes }}>{{ settings.delivery_line | escape }}</p>
+              {%- endif -%}
 
             {%- when 'specs' -%}
               {%- capture specs_html -%}{%- render 'product-specs', product: product, block: block -%}{%- endcapture -%}
@@ -344,6 +385,31 @@
     padding: 8px;
   }
 
+  .main-product__title-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 8px 16px;
+  }
+
+  .main-product__rating {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 6px;
+    color: var(--color-ink);
+    text-decoration: none;
+  }
+
+  .main-product__info-inner > .main-product__spec-line {
+    margin-top: 8px;
+  }
+
+  .main-product__delivery {
+    margin: 0;
+    font-size: 14px;
+    opacity: var(--opacity-muted);
+  }
+
   .main-product__title {
     margin: 0;
     overflow-wrap: anywhere;
@@ -471,6 +537,7 @@
       "name": "Title",
       "limit": 1,
       "settings": [
+        { "type": "checkbox", "id": "show_rating", "label": "Show rating beside the title", "info": "Only when the review app has a rating for the product.", "default": true },
         { "type": "checkbox", "id": "accent", "label": "Accent the last word (italic, coloured)", "default": true },
         {
           "type": "select",
@@ -518,6 +585,23 @@
         { "type": "textarea", "id": "extra_rows", "label": "Extra rows", "info": "Same for every product using this template. One per line: Label | Value" },
         { "type": "text", "id": "accordion_heading", "label": "Accordion heading", "info": "Collapses this block under a heading. Leave blank to show it as plain content." },
         { "type": "checkbox", "id": "accordion_open", "label": "Accordion open by default", "default": false }
+      ]
+    },
+    {
+      "type": "spec_line",
+      "name": "Spec line",
+      "limit": 1,
+      "settings": [
+        { "type": "paragraph", "content": "One line under the price: format, size and paper, from the product metafields custom.format, custom.dimensions and custom.paper." },
+        { "type": "text", "id": "fallback", "label": "Fallback text", "info": "Shown when the product has none of those metafields. Leave empty to hide the line." }
+      ]
+    },
+    {
+      "type": "delivery_line",
+      "name": "Delivery line",
+      "limit": 1,
+      "settings": [
+        { "type": "paragraph", "content": "Shows the text from Theme settings > Product page > Delivery line. Hidden when that is empty." }
       ]
     },
     { "type": "variant_picker", "name": "Variant picker", "limit": 1, "settings": [] },

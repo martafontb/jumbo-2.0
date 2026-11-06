@@ -16,7 +16,8 @@
           "type": "title",
           "settings": {
             "accent": false,
-            "accent_color": "blue"
+            "accent_color": "blue",
+            "show_rating": true
           }
         },
         "artist": {
@@ -71,14 +72,26 @@
             "accordion_heading": "Description",
             "accordion_open": true
           }
+        },
+        "spec_line": {
+          "type": "spec_line",
+          "settings": {
+            "fallback": ""
+          }
+        },
+        "delivery_line": {
+          "type": "delivery_line",
+          "settings": {}
         }
       },
       "block_order": [
         "title",
         "artist",
         "price",
+        "spec_line",
         "variant_picker",
         "buy_buttons",
+        "delivery_line",
         "description",
         "specs",
         "guide_link"
@@ -124,7 +137,7 @@
         "show_border": true,
         "collection": "",
         "limit": 3,
-        "label": "Pairs well with",
+        "label": "Pair with",
         "caption": "Add to the same parcel",
         "heading": "Complete the set",
         "done_text": "Everything's in your cart. Nice set.",
@@ -156,9 +169,9 @@
   },
   "order": [
     "main",
+    "pairs",
     "artist",
     "related",
-    "pairs",
     "reviews"
   ]
 }
