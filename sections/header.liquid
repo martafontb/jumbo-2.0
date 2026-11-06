@@ -507,26 +507,24 @@
   @media screen and (min-width: 750px) {
     /* Sit flush under the pill (cancel its bottom margin) and never run off-screen. */
     .mega-menus {
-      margin-top: -24px;
+      margin-top: -16px; /* 8px gap under the pill */
     }
 
     .mega {
-      max-height: calc(100vh - var(--header-height) - 16px);
+      max-height: calc(100vh - var(--header-height) - 24px);
       overflow-y: auto;
       overscroll-behavior: contain;
       scrollbar-width: none;
     }
 
-    /* Mega menu is the pill opening downwards: same width, same border,
-       no gap. The pill's bottom corners square off while it is open. */
+    /* Mega menu: a bordered, rounded card under the pill, same width. */
     .mega {
       left: var(--page-pad-x);
       right: var(--page-pad-x);
       top: 0;
       padding: 8px 28px 28px;
       border: var(--border);
-      border-top: 0;
-      border-radius: 0 0 calc(var(--pill-height) / 2) calc(var(--pill-height) / 2);
+      border-radius: var(--radius-lg);
     }
 
     .mega__rows {
@@ -534,12 +532,6 @@
       --text-menu-row: clamp(26px, min(4.2vw, 6.5vh), 60px);
       margin-top: 0;
       border-top: 0;
-    }
-
-    html.mega-open .site-header {
-      border-radius: calc(var(--pill-height) / 2) calc(var(--pill-height) / 2) 0 0;
-      border-bottom-color: transparent;
-      background: var(--color-bg);
     }
 
     .site-header {
