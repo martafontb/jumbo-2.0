@@ -3,15 +3,6 @@
 
   @param {object} drawer - cart-drawer section settings
 {% enddoc %}
-{%- liquid
-  assign in_cart = cart.items | map: 'product_id' | join: ','
-  assign in_cart = ',' | append: in_cart | append: ','
-  assign threshold = settings.free_shipping_threshold
-  assign remaining = 0
-  if threshold > 0 and cart.currency.iso_code == shop.currency
-    assign remaining = threshold | times: 100 | minus: cart.total_price
-  endif
--%}
 <div class="drawer__head">
   <h2 class="drawer__title" id="CartDrawerTitle">
     {{- 'cart.title' | t -}}
@@ -21,10 +12,19 @@
 </div>
 
 <div class="cart-drawer__body">
+  {%- render 'cart-shipping-progress', variant: 'band' -%}
   <form action="{{ routes.cart_url }}" method="post" id="CartDrawerForm" novalidate>
     {%- if cart.item_count == 0 -%}
       {%- assign empty_text = 'cart.empty' | t -%}
       <p class="cart-drawer__empty">{{ drawer.empty_text | default: empty_text | escape }}</p>
+      <div class="cart-drawer__empty-links">
+        {%- if drawer.empty_link_1_label != blank -%}
+          <a class="button" href="{{ drawer.empty_link_1_url | default: routes.all_products_collection_url }}">{{ drawer.empty_link_1_label | escape }}</a>
+        {%- endif -%}
+        {%- if drawer.empty_link_2_label != blank -%}
+          <a class="button button--secondary" href="{{ drawer.empty_link_2_url | default: routes.root_url }}">{{ drawer.empty_link_2_label | escape }}</a>
+        {%- endif -%}
+      </div>
     {%- else -%}
       <ul class="cart-drawer__lines" role="list">
         {%- for item in cart.items -%}
@@ -34,51 +34,11 @@
     {%- endif -%}
   </form>
 
-    {%- if drawer.upsell_collection != blank and drawer.upsell_limit > 0 -%}
-      {%- capture upsell_rows -%}
-        {%- assign shown = 0 -%}
-        {%- for product in drawer.upsell_collection.products -%}
-          {%- assign needle = ',' | append: product.id | append: ',' -%}
-          {%- if in_cart contains needle or product.available == false or product.has_only_default_variant == false or product.id == settings.gift_wrap_product.id -%}{%- continue -%}{%- endif -%}
-          {%- if shown >= drawer.upsell_limit -%}{%- break -%}{%- endif -%}
-          {%- assign shown = shown | plus: 1 -%}
-          <li class="cart-upsell">
-            <span class="cart-upsell__thumb">
-              {%- render 'image', image: product.featured_media, sizes: '56px', widths: '56, 112, 168', decorative: true -%}
-            </span>
-            <span class="cart-upsell__info">
-              <a class="cart-upsell__title" href="{{ product.url }}">{{ product.title | escape }}</a>
-              {%- if product.metafields.custom.card_meta.value != blank -%}
-                <span class="cart-upsell__blurb">{{ product.metafields.custom.card_meta.value | escape }}</span>
-              {%- endif -%}
-              {%- if remaining > 0 and product.price >= remaining -%}
-                <span class="label label--sm cart-upsell__unlock">{{ 'cart.shipping.gets_free' | t }}</span>
-              {%- endif -%}
-            </span>
-            {%- assign upsell_price = product.price | money -%}
-            {%- assign upsell_label = 'cart.add_price' | t: price: upsell_price -%}
-            {%- render 'add-to-cart-form', product: product, label: upsell_label -%}
-          </li>
-        {%- endfor -%}
-      {%- endcapture -%}
-      {%- if upsell_rows != blank -%}
-        <div class="cart-drawer__upsells">
-          <p class="cart-drawer__upsell-heading">{{ drawer.upsell_heading | escape }}</p>
-          {%- if remaining > 0 -%}
-            {%- assign remaining_money = remaining | money -%}
-            <span class="pill pill--blue">{{ 'cart.shipping.away' | t: amount: remaining_money }}</span>
-          {%- elsif threshold > 0 and cart.currency.iso_code == shop.currency -%}
-            <span class="pill pill--blue">{{ 'cart.shipping.unlocked' | t }}</span>
-          {%- endif -%}
-          <ul class="cart-drawer__upsell-list" role="list">{{ upsell_rows }}</ul>
-        </div>
-      {%- endif -%}
-    {%- endif -%}
+    {%- render 'cart-upsell', collection: drawer.upsell_collection, limit: drawer.upsell_limit, heading: drawer.upsell_heading -%}
 </div>
 
 {%- if cart.item_count > 0 -%}
   <div class="cart-drawer__foot">
-    {%- render 'cart-shipping-progress', variant: 'light' -%}
     {%- render 'cart-gift', form_id: 'CartDrawerForm' -%}
     <p class="cart-drawer__subtotal">
       <span class="label">{{ 'cart.subtotal' | t }}</span>
@@ -112,6 +72,17 @@
     padding: 0 16px;
   }
 
+  .cart-drawer__body > .shipping-progress {
+    margin-top: 12px;
+  }
+
+  .cart-drawer__empty-links {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-bottom: 16px;
+  }
+
   .cart-drawer__lines {
     margin: 0;
     padding: 0;
@@ -122,83 +93,6 @@
     margin: 24px 0;
     font: 500 32px / 1.05 var(--font-display);
     letter-spacing: -0.03em;
-  }
-
-  .cart-drawer__upsells {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    padding: 16px 0 18px;
-  }
-
-  .cart-drawer__upsell-heading {
-    font: 500 32px / 1 var(--font-display);
-    letter-spacing: -0.04em;
-  }
-
-  .cart-drawer__upsell-list {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  .cart-upsell {
-    display: grid;
-    grid-template-columns: 56px minmax(0, 1fr) auto;
-    align-items: center;
-    gap: 10px;
-    padding: 6px;
-    border: var(--border);
-    border-radius: var(--radius-sm);
-  }
-
-  .cart-upsell:hover {
-    background: var(--color-grey);
-  }
-
-  .cart-upsell__thumb {
-    position: relative;
-    overflow: hidden;
-    aspect-ratio: 1;
-    border: var(--border);
-    border-radius: var(--radius-sm);
-    background: var(--color-blue);
-  }
-
-  .cart-upsell__thumb img {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  .cart-upsell__info {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    min-width: 0;
-  }
-
-  .cart-upsell__title {
-    font: 400 var(--text-card-sm) / 1.05 var(--font-display);
-    letter-spacing: -0.02em;
-    text-decoration: none;
-  }
-
-  .cart-upsell__blurb {
-    font: 400 13px / 1.25 var(--font-display);
-  }
-
-  .cart-upsell__unlock {
-    text-decoration: underline;
-  }
-
-  .cart-upsell .button {
-    padding: 10px 12px;
   }
 
   .cart-drawer__foot {

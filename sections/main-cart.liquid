@@ -3,7 +3,8 @@
   "Cart. (n)" title, lines across two columns (140px thumbnails, steppers,
   Remove, line totals and unit prices) and a sticky order summary card on
   ink: shipping progress, subtotal, discounts, shipping note, total and
-  Checkout. Empty state: a grey block with a message and a button.
+  Checkout. A blue free-shipping bar sits at the top and an add-on row below
+  the cart. Empty state: a grey block with a message and two buttons.
 
   Works without JS as a normal cart form (quantities post as updates[],
   Update and Checkout buttons). With JS, <cart-items> updates lines through
@@ -16,6 +17,8 @@
       <em class="main-cart__count{% if cart.item_count == 0 %} main-cart__count--empty{% endif %}">(<span data-cart-count>{{ cart.item_count }}</span>)</em>
     </h1>
   </div>
+
+  {%- render 'cart-shipping-progress', variant: 'band' -%}
 
   {%- if cart.item_count > 0 -%}
     <div class="main-cart__grid">
@@ -33,7 +36,6 @@
 
       <aside class="main-cart__summary" aria-labelledby="CartSummaryTitle">
         <h2 class="pill pill--red main-cart__summary-label" id="CartSummaryTitle">{{ section.settings.summary_label | escape }}</h2>
-        {%- render 'cart-shipping-progress', variant: 'dark' -%}
         <dl class="main-cart__rows">
           <dt>{{ 'cart.subtotal' | t }}</dt>
           <dd>{{ cart.items_subtotal_price | money }}</dd>
@@ -64,12 +66,18 @@
         {%- endif -%}
       </aside>
     </div>
+    {%- render 'cart-upsell', collection: section.settings.upsell_collection, limit: section.settings.upsell_limit, heading: section.settings.upsell_heading -%}
   {%- else -%}
     <div class="main-cart__empty">
       <p class="main-cart__empty-text">{{ section.settings.empty_text | escape }}</p>
       <a class="button main-cart__empty-button" href="{{ section.settings.empty_button_link | default: routes.all_products_collection_url }}">
         {{- section.settings.empty_button_label | escape -}}
       </a>
+      {%- if section.settings.empty_button_2_label != blank -%}
+        <a class="button button--secondary main-cart__empty-button" href="{{ section.settings.empty_button_2_link | default: routes.root_url }}">
+          {{- section.settings.empty_button_2_label | escape -}}
+        </a>
+      {%- endif -%}
     </div>
   {%- endif -%}
   <p class="visually-hidden" role="status" data-cart-status></p>
@@ -244,7 +252,13 @@
     { "type": "header", "content": "Empty cart" },
     { "type": "text", "id": "empty_text", "label": "Text", "default": "Nothing here yet. Fresh prints are waiting." },
     { "type": "text", "id": "empty_button_label", "label": "Button label", "default": "Shop editions →" },
-    { "type": "url", "id": "empty_button_link", "label": "Button link" }
+    { "type": "url", "id": "empty_button_link", "label": "Button link" },
+    { "type": "text", "id": "empty_button_2_label", "label": "Second button label", "default": "Print with us →" },
+    { "type": "url", "id": "empty_button_2_link", "label": "Second button link", "info": "E.g. your Print page." },
+    { "type": "header", "content": "Add-ons" },
+    { "type": "collection", "id": "upsell_collection", "label": "Add-on products", "info": "Shows products from this collection that aren't in the cart yet. Single-variant products only, so they can be added in one tap." },
+    { "type": "range", "id": "upsell_limit", "label": "Add-ons to show", "min": 0, "max": 3, "step": 1, "default": 3 },
+    { "type": "text", "id": "upsell_heading", "label": "Heading", "default": "Fancy a little extra?" }
   ]
 }
 {% endschema %}

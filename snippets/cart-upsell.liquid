@@ -1,0 +1,131 @@
+{% doc %}
+  Upsell row: add-on products from a collection that are not in the cart yet,
+  each with a one-click add button. Single-variant, available products only.
+  Used by the cart drawer and the cart page.
+
+  @param {object} collection - Collection to take add-ons from
+  @param {number} limit - Number of add-ons to show
+  @param {string} [heading] - Heading above the row
+{% enddoc %}
+{%- liquid
+  assign in_cart = cart.items | map: 'product_id' | join: ','
+  assign in_cart = ',' | append: in_cart | append: ','
+  assign threshold = settings.free_shipping_threshold
+  assign remaining = 0
+  if threshold > 0 and cart.currency.iso_code == shop.currency
+    assign remaining = threshold | times: 100 | minus: cart.total_price
+  endif
+-%}
+{%- if collection != blank and limit > 0 -%}
+  {%- capture upsell_rows -%}
+    {%- assign shown = 0 -%}
+    {%- for product in collection.products -%}
+      {%- assign needle = ',' | append: product.id | append: ',' -%}
+      {%- if in_cart contains needle or product.available == false or product.has_only_default_variant == false or product.id == settings.gift_wrap_product.id -%}{%- continue -%}{%- endif -%}
+      {%- if shown >= limit -%}{%- break -%}{%- endif -%}
+      {%- assign shown = shown | plus: 1 -%}
+      <li class="cart-upsell">
+        <span class="cart-upsell__thumb">
+          {%- render 'image', image: product.featured_media, sizes: '56px', widths: '56, 112, 168', decorative: true -%}
+        </span>
+        <span class="cart-upsell__info">
+          <a class="cart-upsell__title" href="{{ product.url }}">{{ product.title | escape }}</a>
+          {%- if product.metafields.custom.card_meta.value != blank -%}
+            <span class="cart-upsell__blurb">{{ product.metafields.custom.card_meta.value | escape }}</span>
+          {%- endif -%}
+          {%- if remaining > 0 and product.price >= remaining -%}
+            <span class="label label--sm cart-upsell__unlock">{{ 'cart.shipping.gets_free' | t }}</span>
+          {%- endif -%}
+        </span>
+        {%- assign upsell_price = product.price | money -%}
+        {%- assign upsell_label = 'cart.add_price' | t: price: upsell_price -%}
+        {%- render 'add-to-cart-form', product: product, label: upsell_label -%}
+      </li>
+    {%- endfor -%}
+  {%- endcapture -%}
+  {%- if upsell_rows != blank -%}
+    <div class="cart-drawer__upsells">
+      <p class="cart-drawer__upsell-heading">{{ heading | escape }}</p>
+      <ul class="cart-drawer__upsell-list" role="list">{{ upsell_rows }}</ul>
+    </div>
+  {%- endif -%}
+{%- endif -%}
+
+{% stylesheet %}
+  .cart-drawer__upsells {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 16px 0 18px;
+  }
+
+  .cart-drawer__upsell-heading {
+    font: 500 32px / 1 var(--font-display);
+    letter-spacing: -0.04em;
+  }
+
+  .cart-drawer__upsell-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .cart-upsell {
+    display: grid;
+    grid-template-columns: 56px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 10px;
+    padding: 6px;
+    border: var(--border);
+    border-radius: var(--radius-sm);
+  }
+
+  .cart-upsell:hover {
+    background: var(--color-grey);
+  }
+
+  .cart-upsell__thumb {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 1;
+    border: var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--color-blue);
+  }
+
+  .cart-upsell__thumb img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .cart-upsell__info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  .cart-upsell__title {
+    font: 400 var(--text-card-sm) / 1.05 var(--font-display);
+    letter-spacing: -0.02em;
+    text-decoration: none;
+  }
+
+  .cart-upsell__blurb {
+    font: 400 13px / 1.25 var(--font-display);
+  }
+
+  .cart-upsell__unlock {
+    text-decoration: underline;
+  }
+
+  .cart-upsell .button {
+    padding: 10px 12px;
+  }
+{% endstylesheet %}
