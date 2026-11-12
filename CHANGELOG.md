@@ -4,6 +4,9 @@ All notable changes to this theme are documented here. The format follows [Keep 
 
 ## [Unreleased]
 
+### Changed (docs)
+- `docs/client-settings-needed.md`: added the Pair with setup, the free shipping amount conflict (75 in the theme and guide, 100 from the client), the WELCOME discount check, photo reviews and the New collection.
+
 ### Added (CRO: first screen)
 - Hero: optional shop button on the main media (Hero > Button label and Button link). The two-column layout and the review card do not change. Empty label or link hides it. The homepage sets "Shop all editions" to All.
 
