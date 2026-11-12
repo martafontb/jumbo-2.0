@@ -4,6 +4,9 @@ All notable changes to this theme are documented here. The format follows [Keep 
 
 ## [Unreleased]
 
+### Added (CRO: first screen)
+- Hero: optional shop button on the main media (Hero > Button label and Button link). The two-column layout and the review card do not change. Empty label or link hides it. The homepage sets "Shop all editions" to All.
+
 ### Changed
 - Pill nav logo is a little larger (32px high).
 

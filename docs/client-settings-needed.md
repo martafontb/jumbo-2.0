@@ -14,7 +14,7 @@ Written after the art direction work (Notion: "Jumbo: Art Direction and Claude C
 - **Footer > Shipping, contact and payment.** Add the shipping text and link, the contact text and link. Payment icons come from Settings > Payments.
 - **Cart page and cart drawer > Add-ons.** Pick an add-on collection for each. Set the second empty-cart button link (for example the Print page).
 - **Newsletter popup.** Style is "Card" with an 8 second delay. Switch to "Modal" for the old centred popup.
-- **Hero.** Back to the original layout. Nothing to set.
+- **Hero.** Back to the original layout, plus one optional shop button on the main media. It says "Shop all editions" and links to All. Change the label and link, for example to the New collection, or empty the label to hide it.
 
 ## Shopify admin
 
