@@ -29,6 +29,8 @@
       "settings": {
         "video": "shopify://files/videos/video horizontal.mov",
         "image_alt": "",
+        "button_label": "Shop all editions",
+        "button_link": "shopify://collections/all",
         "main_ground": "blue",
         "side_image": "shopify://shop_images/1_845a0577-2ea1-4bc0-8348-4178367af369.jpg",
         "side_image_alt": "",

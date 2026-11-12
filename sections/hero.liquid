@@ -3,6 +3,10 @@
   Two-thirds media block (looping muted video, or an image) with an optional
   floating review card, and a one-third side image with a pill label.
 
+  "Button" (label and link) puts one shop button on the main media, so a
+  call to action shows on the first screen on phones. Empty label or link =
+  no button.
+
   "Review quote" blocks fill the floating card. They are empty by default:
   paste real reviews (e.g. from the Shop app). With more than one, the card
   cycles. With none, no card is shown.
@@ -50,6 +54,12 @@
           eager: true,
           placeholder: 'hero-apparel-1'
         -%}
+      {%- endif -%}
+
+      {%- if section.settings.button_label != blank and section.settings.button_link != blank -%}
+        <a class="button hero__cta" href="{{ section.settings.button_link }}">
+          {{- section.settings.button_label | escape -}}
+        </a>
       {%- endif -%}
 
       {%- if reviews.size > 0 -%}
@@ -143,6 +153,28 @@
     top: auto;
     bottom: 12px;
     left: 12px;
+  }
+
+  /* Page-colour fill with an ink border: readable on any video or image. */
+  .hero__cta {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    z-index: 3;
+    max-width: calc(100% - 32px);
+    background: var(--color-bg);
+    color: var(--color-ink);
+  }
+
+  .hero__cta:hover {
+    background: var(--color-blue);
+    border-color: var(--color-ink);
+    color: var(--color-ink);
+  }
+
+  .hero__cta:focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 2px;
   }
 
   .hero__play {
@@ -256,6 +288,14 @@
       ],
       "default": "ink"
     },
+    { "type": "header", "content": "Button" },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "info": "One shop button on the main media. Leave empty to hide it."
+    },
+    { "type": "url", "id": "button_link", "label": "Button link" },
     { "type": "header", "content": "Side image" },
     { "type": "image_picker", "id": "side_image", "label": "Image" },
     { "type": "video", "id": "side_video", "label": "Video", "info": "Optional. Plays muted on a loop instead of the image; the image becomes its poster." },
