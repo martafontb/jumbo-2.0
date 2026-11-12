@@ -4,6 +4,9 @@ All notable changes to this theme are documented here. The format follows [Keep 
 
 ## [Unreleased]
 
+### Changed (collection page size)
+- Collection > Products per page goes up to 240 (was 50), in steps of 12. The saved value stays 48, so nothing changes until it is raised. A page size above the collection size puts sold-out products at the end of the full collection.
+
 ### Added (CRO: first screen)
 - Hero: optional shop button on the main media (Hero > Button label and Button link). The two-column layout and the review card do not change. Empty label or link hides it. The homepage sets "Shop all editions" to All.
 
