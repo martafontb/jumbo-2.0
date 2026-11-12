@@ -19,7 +19,10 @@
     filters set up in Shopify Search & Discovery. A bottom sheet on phone.
   - In-stock products come first when no sort is chosen (the collection's
     default order). Choosing a sort keeps that sort. This applies within each
-    page of results.
+    page of results: Liquid only sees the products of the current page. To
+    put sold-out products at the end of the full collection, set "Products
+    per page" above the collection size (up to 240), or reorder the
+    collection itself with an app.
   Filtering and sorting use Shopify's URL parameters, so they work without JS.
 {% endcomment %}
 {%- render 'section-border', section: section -%}
@@ -502,7 +505,7 @@
       "info": "Comma-separated, repeating: blue, red, grey, ink, bg. A product's custom.card_ground metafield overrides this.",
       "default": "blue, grey, red, ink, blue, red"
     },
-    { "type": "range", "id": "per_page", "label": "Products per page", "min": 6, "max": 50, "step": 1, "default": 24, "info": "Shopify allows at most 50 per page. Multiples of 3 fill the grid rows." },
+    { "type": "range", "id": "per_page", "label": "Products per page", "min": 12, "max": 240, "step": 12, "default": 24, "info": "Shopify allows at most 250 per page. Sold-out products move to the end of each page, so a page size above the collection size puts them at the end of the full collection. Large pages load more slowly." },
     {
       "type": "checkbox",
       "id": "fill_last_row",
