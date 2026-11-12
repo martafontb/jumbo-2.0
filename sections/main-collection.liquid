@@ -192,11 +192,11 @@
 
             case span
               when 2
-                assign ratio = '3 / 2'
+                assign ratio = '12 / 7'
               when 3
-                assign ratio = '9 / 4'
+                assign ratio = '18 / 7'
               else
-                assign ratio = '3 / 4'
+                assign ratio = '6 / 7'
             endcase
 
             assign ground = product.metafields.custom.card_ground.value | strip | downcase
@@ -461,7 +461,7 @@
     }
 
     .main-collection__item .product-card__media {
-      --ratio: 3 / 4;
+      --ratio: 6 / 7;
     }
 
     .main-collection__note,
@@ -471,10 +471,6 @@
 
     .main-collection__media {
       aspect-ratio: 3 / 2;
-    }
-
-    .main-collection .product-card__title {
-      font-size: var(--text-card-sm);
     }
   }
 {% endstylesheet %}
