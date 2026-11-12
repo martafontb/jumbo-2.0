@@ -4,6 +4,11 @@ All notable changes to this theme are documented here. The format follows [Keep 
 
 ## [Unreleased]
 
+### Changed (product cards and small text)
+- Product card titles are 14px bold at every screen size. The artist name and the caption (`custom.card_meta`) under the title are 14px regular.
+- Product card images are 6 / 7 (were 3 / 4) in collections, carousels, related products, artist pages and packs. Wide collection tiles are 12 / 7 and 18 / 7 so rows keep one height.
+- No text below 14px outside the footer: `--text-label` and `--text-label-sm` are 14px, and the 10px to 13px one-off sizes are 14px. The footer keeps 12px and 11px. Icon glyphs (pause and play) keep their size.
+
 ### Changed (docs)
 - `docs/client-settings-needed.md`: added the Pair with setup, the free shipping amount conflict (75 in the theme and guide, 100 from the client), the WELCOME discount check, photo reviews and the New collection.
 

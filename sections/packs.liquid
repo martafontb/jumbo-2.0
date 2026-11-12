@@ -38,7 +38,7 @@
       -%}
       <div class="packs__card quick-add-host" {{ block.shopify_attributes }}>
         <a class="packs__link" href="{{ product.url | default: '#' }}">
-          <div class="media" style="--ratio: 3 / 4; --media-bg: var(--color-{{ ground }});">
+          <div class="media" style="--ratio: 6 / 7; --media-bg: var(--color-{{ ground }});">
             {%- render 'image',
               image: pack_image,
               sizes: '(min-width: 750px) 33vw, 100vw',
@@ -59,7 +59,7 @@
           <p class="packs__blurb">{{ blurb | escape }}</p>
         {%- endif -%}
         {%- if product != blank -%}
-          {%- render 'quick-add', product: product, ratio: '3 / 4', label: section.settings.button_label, choose_options: false -%}
+          {%- render 'quick-add', product: product, ratio: '6 / 7', label: section.settings.button_label, choose_options: false -%}
         {%- endif -%}
       </div>
     {%- endfor -%}

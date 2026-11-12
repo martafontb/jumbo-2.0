@@ -1,14 +1,15 @@
 {% doc %}
-  Product card: coloured-ground image, then title and price, then the artist
-  name in mono, then an optional mono caption. The artist comes from the
+  Product card: coloured-ground image, then title (14px bold) and price, then
+  up to two lines of 14px regular text: the artist name and an optional
+  caption. The artist comes from the
   product's `custom.artist` metaobject (its `name` field) and hides when empty.
   The caption and tag come from the product metafields `custom.card_meta` and
   `custom.card_tag` unless passed in.
 
   @param {object} [product] - Product. Omit to render a placeholder card (theme editor only).
   @param {string} [ground] - Image background token: blue | red | grey | ink | bg
-  @param {string} [ratio] - CSS aspect ratio, default '3 / 4'
-  @param {string} [scale] - 'lg' (26px title, default) or 'sm' (20px)
+  @param {string} [ratio] - CSS aspect ratio, default '6 / 7'
+  @param {string} [scale] - Kept for callers; the title is 14px at every scale
   @param {boolean} [show_tag] - Show the tag pill on the image
   @param {string} [sizes] - Image `sizes` attribute
   @param {boolean} [eager] - Load the image eagerly
@@ -21,7 +22,7 @@
 {% enddoc %}
 {%- liquid
   assign ground = ground | default: 'grey'
-  assign ratio = ratio | default: '3 / 4'
+  assign ratio = ratio | default: '6 / 7'
   assign card_size = scale | default: 'lg'
   assign sizes = sizes | default: '(min-width: 750px) 33vw, 60vw'
   assign caption = product.metafields.custom.card_meta.value
@@ -129,8 +130,8 @@
   .product-card__title {
     margin: 0;
     min-width: 0;
-    font: 500 var(--text-card-title) / 1.2 var(--font-display);
-    letter-spacing: var(--tracking-card-title);
+    font: 700 var(--text-card-title) / 1.3 var(--font-display);
+    letter-spacing: 0;
   }
 
   .product-card--sm .product-card__title {
@@ -144,7 +145,7 @@
 
   .product-card__caption {
     font: 400 var(--text-label-sm) / 1.35 var(--font-display);
-    letter-spacing: var(--tracking-label);
+    letter-spacing: 0;
   }
 
   .product-card--upper .product-card__caption {
@@ -152,11 +153,11 @@
   }
 
   .product-card__stars {
-    font-size: 12px;
+    font-size: 14px;
   }
 
   .product-card__stars--empty {
     display: block;
-    height: 12px;
+    height: 14px;
   }
 {% endstylesheet %}
