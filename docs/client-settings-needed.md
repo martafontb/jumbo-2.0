@@ -39,7 +39,6 @@ Written after the art direction work (Notion: "Jumbo: Art Direction and Claude C
 
 - Free shipping amount: one amount for the cart bar, the announcement, the shipping pill and the shipping guide.
 - Delivery time, for the delivery line under Add to cart.
-
 - Opening hours on the About page: the page says Monday to Friday 10:00 to 16:00 and also "appointments required". Make it one line.
 - Studio name: the visit section is captioned "Canal Yard", which is also a fair venue.
 - Name for apparel and objects (not "PrintWorks").
